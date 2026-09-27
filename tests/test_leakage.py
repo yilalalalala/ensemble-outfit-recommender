@@ -36,3 +36,21 @@ def test_baselines_ignore_label_week(fn):
         return f(con, WEEK, [0, 1]) if fn == "repeat_purchase" else f(con, WEEK)
 
     assert call(make_db(99)) == call(make_db(77))
+
+
+def test_retrieval_ignores_label_week():
+    from ensemble.candidates.retrieval import build_candidates
+    from ensemble.config import Config, load_config
+
+    r = Config({**dict(load_config().retrieval), "cf_min_count": 1})
+
+    def cands(future_article):
+        con = make_db(future_article)
+        con.execute("""CREATE TABLE articles AS SELECT * FROM (VALUES
+            (1, 10, 1), (2, 10, 1), (3, 30, 2), (77, 70, 1), (99, 90, 1))
+            t(article_id, product_code, index_group_no)""")
+        con.execute("CREATE TABLE _users AS SELECT * FROM (VALUES (0), (1)) t(customer_idx)")
+        build_candidates(con, WEEK, r)
+        return con.execute("SELECT * FROM cand ORDER BY ALL").fetchall()
+
+    assert cands(99) == cands(77)
