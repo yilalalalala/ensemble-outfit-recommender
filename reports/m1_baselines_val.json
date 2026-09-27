@@ -1,0 +1,42 @@
+{
+  "popularity_global": {
+    "map@12": 0.006604104344810826,
+    "map@12_returning": 0.006621204535266309,
+    "map@12_new_customers": 0.0063929304636418886,
+    "recall@12": 0.018704751875740423,
+    "recall@12_cold_items": 0.0,
+    "n_customers": 72019,
+    "share_new_customers": 0.07491078743109457,
+    "share_purchases_cold_items": 0.04995392918257207
+  },
+  "popularity_by_age": {
+    "map@12": 0.007559416820283333,
+    "map@12_returning": 0.0074994952785567785,
+    "map@12_new_customers": 0.008299400656426181,
+    "recall@12": 0.02089421262779167,
+    "recall@12_cold_items": 0.0,
+    "n_customers": 72019,
+    "share_new_customers": 0.07491078743109457,
+    "share_purchases_cold_items": 0.04995392918257207
+  },
+  "repeat_purchase+popularity": {
+    "map@12": 0.024589018044358854,
+    "map@12_returning": 0.026062479447126165,
+    "map@12_new_customers": 0.0063929304636418886,
+    "recall@12": 0.03710675266552586,
+    "recall@12_cold_items": 0.0,
+    "n_customers": 72019,
+    "share_new_customers": 0.07491078743109457,
+    "share_purchases_cold_items": 0.04995392918257207
+  },
+  "repeat_purchase+popularity_by_age": {
+    "map@12": 0.02524085701621966,
+    "map@12_returning": 0.0266127223659598,
+    "map@12_new_customers": 0.008299400656426181,
+    "recall@12": 0.03853714185424071,
+    "recall@12_cold_items": 0.0,
+    "n_customers": 72019,
+    "share_new_customers": 0.07491078743109457,
+    "share_purchases_cold_items": 0.04995392918257207
+  }
+}
