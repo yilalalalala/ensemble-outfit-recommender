@@ -1,0 +1,19 @@
+{
+  "source_rows": {
+    "transactions_train": 31788324,
+    "customers": 1371980,
+    "articles": 105542
+  },
+  "db_rows": {
+    "transactions_train": 31788324,
+    "customers": 1371980,
+    "articles": 105542
+  },
+  "orphan_articles": 0,
+  "orphan_customers": 0,
+  "duplicate_article_ids": 0,
+  "min_date": "2018-09-20",
+  "max_date": "2020-09-22",
+  "missing_days": [],
+  "seconds": 8.1
+}

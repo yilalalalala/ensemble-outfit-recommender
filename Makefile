@@ -8,7 +8,7 @@ setup:  ## create the venv and install dependencies
 data:   ## download the CSVs from Kaggle (see README for credentials)
 	./scripts/download_data.sh
 
-ingest: ## load the CSVs into DuckDB and build the temporal splits
+ingest: ## load the CSVs into DuckDB and run integrity checks
 	.venv/bin/python -m ensemble.data.ingest
 
 test:   ## run the test suite
