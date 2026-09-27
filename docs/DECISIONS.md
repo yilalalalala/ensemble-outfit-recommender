@@ -266,8 +266,8 @@ association rules (support ≥ 3, NPMI) and the two-tower model, weight 0.5.
 
 **Why (validation week, 97,651 queries).** Two-tower Recall@12 on a sample
 rose from 0.060 to 0.114 with the popularity bucket. On the full validation
-set the relative lift vs popularity was +49% for the two-tower, +47% for
-association, and +60% for the RRF hybrid (`reports/m4_track_b_val.json`).
+set the relative lift vs popularity was +51% for the two-tower, +47% for
+association, and +61% for the RRF hybrid (`reports/m4_track_b_val.json`).
 
 This departs from the design's content-only towers. Popularity is a
 legitimate item attribute known at serving time. logQ correction still stops
@@ -291,11 +291,11 @@ Recorded as findings (D-005), not worked around:
   relative lift). NPMI recovers more tail items. NPMI is kept, because the
   hybrid adds its tail coverage and the difference is within noise.
 - **logQ correction is what makes the two-tower work.** In-batch negatives
-  alone score −16% vs popularity; adding logQ gives +29% (1-epoch ablation).
-  Popularity-based and hard negatives add under one point on top. An apparent
-  jewellery gain from hard negatives in a first run (1.0% → 1.5%) did not
-  replicate (0.82% → 0.75%): MPS training is not bit-reproducible, and
-  single-run differences below about one point are noise.
-- **Jewellery and item cold start remain weak** (jewellery Recall@12 1.5% for
-  the hybrid; cold ≈ 0%). Metadata-only towers cannot tell one new earring from another.
+  alone score −12% vs popularity; adding logQ gives +36% (1-epoch ablation,
+  final run). Popularity-based and hard negatives add nothing measurable on
+  top. An apparent jewellery gain from hard negatives in a first run (1.0% →
+  1.5%) did not replicate: MPS training is not bit-reproducible, and
+  single-run differences of a few points of relative lift are noise.
+- **Jewellery and item cold start remain weak** (jewellery Recall@12 1.3% for
+  the hybrid on test; cold ≈ 0%). Metadata-only towers cannot tell one new earring from another.
   CLIP image features (M7a) are the planned remedy.

@@ -1,0 +1,108 @@
+{
+  "funnel": {
+    "baskets_all": 1517034,
+    "baskets_size_2_6": 870270,
+    "baskets_multi_slot": 489233,
+    "pairs_cross_slot": 1325563.0,
+    "pairs_support_ge_3": 38275.0,
+    "pairs_support_ge_3_lift_gt_1": 37971.0,
+    "pairs_support_ge_10": 1599.0,
+    "pairs_support_ge_10_lift_gt_1": 1597.0,
+    "pairs_support_ge_10_lift_ge_2": 1564.0
+  },
+  "selected": {
+    "min_support": 3,
+    "rrf_weight": 0.5
+  },
+  "results": {
+    "popularity": {
+      "recall@12": 0.08373596405030306,
+      "recall@5": 0.045457155160040195,
+      "ndcg@12": 0.043739520499569695,
+      "recall@12_tail": 0.01200375196471125,
+      "n_truth_tail": 78892,
+      "recall@12_cold": 0.0,
+      "n_truth_cold": 6451,
+      "recall@12_jewellery": 0.0,
+      "n_truth_jewellery": 2737,
+      "catalog_coverage@12": 0.002984014209591474,
+      "novelty": 11.897782452876756,
+      "n_queries": 90571
+    },
+    "association_npmi_support3": {
+      "recall@12": 0.11396878323819619,
+      "recall@5": 0.0723695590567989,
+      "ndcg@12": 0.07089694080869682,
+      "recall@12_tail": 0.04110682958981899,
+      "n_truth_tail": 78892,
+      "recall@12_cold": 0.0,
+      "n_truth_cold": 6451,
+      "recall@12_jewellery": 0.00036536353671903543,
+      "n_truth_jewellery": 2737,
+      "catalog_coverage@12": 0.20785079928952044,
+      "novelty": 12.226895283877527,
+      "n_queries": 90571,
+      "relative_lift_recall@12_vs_popularity": 0.36104939533187
+    },
+    "ablation_association_rawcount_support3": {
+      "recall@12": 0.1180707216805968,
+      "recall@5": 0.07668146168935604,
+      "ndcg@12": 0.0743778317848383,
+      "recall@12_tail": 0.038039344927242306,
+      "n_truth_tail": 78892,
+      "recall@12_cold": 0.0,
+      "n_truth_cold": 6451,
+      "recall@12_jewellery": 0.00036536353671903543,
+      "n_truth_jewellery": 2737,
+      "catalog_coverage@12": 0.1808170515097691,
+      "novelty": 12.027517636322653,
+      "n_queries": 90571,
+      "relative_lift_recall@12_vs_popularity": 0.4100359746221788
+    },
+    "two_tower": {
+      "recall@12": 0.12141597936057531,
+      "recall@5": 0.07678156731551306,
+      "ndcg@12": 0.07310115037348451,
+      "recall@12_tail": 0.04745728337474015,
+      "n_truth_tail": 78892,
+      "recall@12_cold": 0.0001550147263990079,
+      "n_truth_cold": 6451,
+      "recall@12_jewellery": 0.015345268542199489,
+      "n_truth_jewellery": 2737,
+      "catalog_coverage@12": 0.19158081705150976,
+      "novelty": 12.088930701017071,
+      "n_queries": 90571,
+      "relative_lift_recall@12_vs_popularity": 0.4499860452748424
+    },
+    "two_tower_content_only": {
+      "recall@12": 0.09740774272854076,
+      "recall@5": 0.06114852804245656,
+      "ndcg@12": 0.058436419776841504,
+      "recall@12_tail": 0.03418597576433605,
+      "n_truth_tail": 78892,
+      "recall@12_cold": 0.0,
+      "n_truth_cold": 6451,
+      "recall@12_jewellery": 0.00401899890390939,
+      "n_truth_jewellery": 2737,
+      "catalog_coverage@12": 0.19602131438721138,
+      "novelty": 12.233363529573854,
+      "n_queries": 90571,
+      "relative_lift_recall@12_vs_popularity": 0.1632724819412671
+    },
+    "hybrid_rrf_w0.5": {
+      "recall@12": 0.1290839967171243,
+      "recall@5": 0.0813715206854291,
+      "ndcg@12": 0.07857641861261973,
+      "recall@12_tail": 0.04419966536530954,
+      "n_truth_tail": 78892,
+      "recall@12_cold": 0.0,
+      "n_truth_cold": 6451,
+      "recall@12_jewellery": 0.01278772378516624,
+      "n_truth_jewellery": 2737,
+      "catalog_coverage@12": 0.1997513321492007,
+      "novelty": 11.96204294586081,
+      "n_queries": 90571,
+      "relative_lift_recall@12_vs_popularity": 0.54155980863347
+    }
+  }
+}
