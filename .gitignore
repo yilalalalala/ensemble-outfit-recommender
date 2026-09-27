@@ -1,0 +1,30 @@
+# Data — acquired from Kaggle, never committed
+data/raw/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+
+# Databases and caches
+*.duckdb
+*.sqlite
+*.sqlite3
+*.parquet
+*.npy
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Credentials
+kaggle.json
+.env
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

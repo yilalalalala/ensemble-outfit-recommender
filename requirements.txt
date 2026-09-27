@@ -1,0 +1,25 @@
+# Data
+duckdb>=1.1
+pandas>=2.2
+pyarrow>=17
+numpy>=1.26
+
+# Models
+lightgbm>=4.5
+scikit-learn>=1.5
+implicit>=0.7
+torch>=2.4
+
+# Images (Track B, from M4)
+pillow>=10.4
+transformers>=4.44
+
+# Serving
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.9
+
+# Tooling
+kaggle>=1.6
+pytest>=8.3
+tqdm>=4.66
