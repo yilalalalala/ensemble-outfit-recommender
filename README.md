@@ -25,7 +25,28 @@ Full specification in [docs/DESIGN.md](docs/DESIGN.md); vocabulary in
 
 ## Status
 
-Scaffolding. No results yet. See the milestones in the design document.
+MVP complete (M0–M6). Results: [reports/MVP_REPORT.md](reports/MVP_REPORT.md). Next: M7a
+visual search, M7b conversational assistant (D-011, D-012).
+
+## Running it
+
+```bash
+brew install libomp            # macOS: LightGBM's OpenMP runtime
+make setup                     # Python 3.11 venv via uv
+make data                      # full dataset from Kaggle (see below)
+make mvp                       # ingest → baselines → retrieval → ranker → Track B → submission → serving → tests
+make serve                     # http://localhost:8010
+make mlflow                    # experiment runs at http://localhost:5000
+```
+
+`make mvp` takes about 1.5 hours on an M-series laptop with 16 GB RAM. Each
+stage can also be run on its own (`make help`).
+
+**Troubleshooting.** If `import ensemble` fails inside the venv on macOS, the
+editable-install `.pth` file may have been given the "hidden" flag (common in
+synced folders), and Python skips hidden `.pth` files. The Makefile sets
+`PYTHONPATH=src`, so it is unaffected; to fix the venv itself, run
+`chflags nohidden .venv/lib/python3.11/site-packages/*.pth`.
 
 ## Getting the data
 
@@ -51,8 +72,8 @@ kaggle auth login           # browser-based login, credentials cached locally
 ./scripts/download_data.sh --images   # adds ~30 GB of article images
 ```
 
-Start without images. They are only needed from M4, and the CSVs are enough to
-reach the first benchmarked score.
+The MVP needs only the CSVs. Images are shown in the web UI (with a placeholder
+if missing) and are used for visual search from M7a.
 
 ## Layout
 
@@ -65,8 +86,10 @@ src/ensemble/
   ranking/           Track A ranker
   completion/        Track B pair mining and two-tower model
   evaluation/        MAP@12, Recall@K, NDCG@K, relative lift vs. popularity
-  api/               serving
-scripts/             data acquisition and pipeline entry points
+  api/               serving store builder, FastAPI app, web UI
+configs/             all tunables (default.yaml)
+reports/             evaluation readouts, model cards, submission.csv
+scripts/             data acquisition
 tests/
 data/                gitignored; raw / interim / processed
 ```

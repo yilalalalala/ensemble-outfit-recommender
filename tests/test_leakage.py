@@ -54,3 +54,28 @@ def test_retrieval_ignores_label_week():
         return con.execute("SELECT * FROM cand ORDER BY ALL").fetchall()
 
     assert cands(99) == cands(77)
+
+
+def test_track_b_training_pairs_precede_week():
+    """Pairs mined for a week come only from baskets before its start."""
+    from datetime import timedelta
+
+    from ensemble.completion.data import mine_pairs
+    from ensemble.config import Config, load_config
+
+    base = load_config()
+    cfg = Config({**base, "completion": {**dict(base.completion), "min_support": 1}})
+
+    def pairs(future_article):
+        con = make_db(future_article)
+        con.execute("""CREATE TABLE articles AS SELECT * FROM (VALUES
+            (1, 'upper'), (2, 'lower'), (3, 'accessories'), (77, 'shoes'), (99, 'shoes'))
+            t(article_id, slot)""")
+        # Same-day basket before the week, and a cross-slot basket inside it.
+        con.execute("INSERT INTO transactions VALUES ('2020-09-10', 0, 3, 0.1, 2)")
+        con.execute("INSERT INTO transactions VALUES ('2020-09-17', 0, 1, 0.1, 2)")
+        mine_pairs(con, WEEK, cfg)
+        return con.execute("SELECT src, dst, co FROM pairs_all ORDER BY ALL").fetchall()
+
+    assert pairs(99) == pairs(77)
+    assert (1, 3, 1) in pairs(99)  # the pre-week basket is mined

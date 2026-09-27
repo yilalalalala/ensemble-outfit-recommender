@@ -5,6 +5,7 @@ Browse with: mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db
 from __future__ import annotations
 
 import os
+import re
 from contextlib import contextmanager
 
 os.environ.setdefault("MLFLOW_DISABLE_AGENT_HINT", "1")
@@ -31,5 +32,6 @@ def log_metrics(metrics: dict, prefix: str = "") -> None:
     clean = {}
     for k, v in metrics.items():
         if isinstance(v, (int, float)) and v == v:  # drop NaN
-            clean[f"{prefix}{k}".replace("@", "_at_")] = float(v)
+            name = f"{prefix}{k}".replace("@", "_at_").replace("+", "_plus_")
+            clean[re.sub(r"[^\w\-. :/]", "_", name)] = float(v)
     mlflow.log_metrics(clean)

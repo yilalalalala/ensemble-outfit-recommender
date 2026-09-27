@@ -221,3 +221,81 @@ evaluated on grounding (hallucination rate), tool-call accuracy, LLM-as-judge
 quality, latency and cost. The Polyvore co-wear vs co-purchase experiment is
 optional (M8).
 
+
+---
+
+### D-013 — Track B is evaluated against the live catalogue
+**Date:** 2026-09-27 · **Status:** active
+
+For each target week, the candidate set for a slot is every article sold in the
+4 weeks before the week or during it, i.e. the assortment a retailer knows is
+on sale. Popularity and all model inputs are still computed strictly before
+the week.
+
+**Why.** Scoring against all 105k articles would include years of discontinued
+stock that no real surface would show. Knowing the current assortment is not a
+leak about *pairs*: every model, including the popularity baseline, gets the
+same universe.
+
+**Revisit if:** the project gains real stock data.
+
+---
+
+### D-014 — Track A evaluation and training population
+**Date:** 2026-09-27 · **Status:** active
+
+MAP@12 is averaged over customers who purchase in the label week (the metric
+is undefined for the rest). Retrieval and features are built for those
+customers during evaluation. The ranker is trained on (week, customer) groups
+that contain at least one retrieved positive, because a group with no
+positive gives LambdaRank no gradient. Submission inference ranks every
+customer.
+
+**Why.** Standard practice for this benchmark. It keeps a training week at
+about 2.8M rows instead of 8.3M, which fits in 16 GB of RAM with four
+training weeks.
+
+---
+
+### D-015 — Two-tower towers see a popularity bucket; hybrid is the Track B model
+**Date:** 2026-09-27 · **Status:** active
+
+The item encoder includes the article's recent-sales decile within its slot.
+The shipped Track B model is weighted reciprocal rank fusion (RRF) of
+association rules (support ≥ 3, NPMI) and the two-tower model, weight 0.5.
+
+**Why (validation week, 97,651 queries).** Two-tower Recall@12 on a sample
+rose from 0.060 to 0.114 with the popularity bucket. On the full validation
+set the relative lift vs popularity was +51% for the two-tower, +47% for
+association, and +61% for the RRF hybrid (`reports/m4_track_b_val.json`).
+
+This departs from the design's content-only towers. Popularity is a
+legitimate item attribute known at serving time. logQ correction still stops
+the loss from rewarding popularity for its own sake.
+
+**Revisit if:** the cross-feature ranker (DESIGN §5.3) is built; it would
+replace RRF.
+
+---
+
+### D-016 — Findings that change the design's expectations
+**Date:** 2026-09-27 · **Status:** active
+
+Recorded as findings (D-005), not worked around:
+
+- **Support, not lift, is the binding filter.** 1.36M cross-slot pairs; 39.8k
+  with support ≥ 3; 1,562 with support ≥ 10. Among pairs with support ≥ 10,
+  99.9% have lift > 1 and 98% have lift ≥ 2. The co-purchase signal is real,
+  but sparse.
+- **Raw co-count ranks slightly better than NPMI** (Recall@12 +50% vs +47%
+  relative lift). NPMI recovers more tail items. NPMI is kept, because the
+  hybrid adds its tail coverage and the difference is within noise.
+- **logQ correction is what makes the two-tower work.** In-batch negatives
+  alone score −12% vs popularity; adding logQ gives +36% (1-epoch ablation,
+  final run). Popularity-based and hard negatives add nothing measurable on
+  top. An apparent jewellery gain from hard negatives in a first run (1.0% →
+  1.5%) did not replicate: MPS training is not bit-reproducible, and
+  single-run differences of a few points of relative lift are noise.
+- **Jewellery and item cold start remain weak** (jewellery Recall@12 1.3% for
+  the hybrid on test; cold ≈ 0%). Metadata-only towers cannot tell one new earring from another.
+  CLIP image features (M7a) are the planned remedy.
