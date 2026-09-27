@@ -5,8 +5,8 @@
 #   ./scripts/download_data.sh            CSVs only  (~3.5 GB)
 #   ./scripts/download_data.sh --images   CSVs + article images (~30 GB)
 #
-# Requires a Kaggle account, acceptance of the competition rules, and an API
-# token at ~/.kaggle/kaggle.json. See the README.
+# Requires a Kaggle account, acceptance of the competition rules, and a logged-in
+# kaggle CLI (`kaggle auth login`). See the README.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -20,11 +20,21 @@ if ! command -v kaggle >/dev/null 2>&1; then
   exit 1
 fi
 
-if [[ ! -f "$HOME/.kaggle/kaggle.json" ]]; then
-  echo "error: ~/.kaggle/kaggle.json not found." >&2
-  echo "  Kaggle -> Settings -> API -> Create New Token, then:" >&2
-  echo "  mkdir -p ~/.kaggle && mv ~/Downloads/kaggle.json ~/.kaggle/" >&2
-  echo "  chmod 600 ~/.kaggle/kaggle.json" >&2
+# Probe the API rather than looking for a credentials file: the CLI accepts an
+# OAuth login (`kaggle auth login`), ~/.kaggle/access_token, KAGGLE_API_TOKEN,
+# or the legacy ~/.kaggle/kaggle.json. The probe also catches unaccepted rules.
+if ! probe="$(kaggle competitions files -c "$COMPETITION" 2>&1)"; then
+  if grep -qi "authentication required" <<<"$probe"; then
+    echo "error: not authenticated with Kaggle. Either:" >&2
+    echo "  kaggle auth login                  (browser login, recommended)" >&2
+    echo "  or save a token from https://www.kaggle.com/settings/api to ~/.kaggle/access_token" >&2
+  elif grep -qiE "403|forbidden|rules" <<<"$probe"; then
+    echo "error: Kaggle refused access. Accept the competition rules first:" >&2
+    echo "  https://www.kaggle.com/competitions/$COMPETITION/rules" >&2
+  else
+    echo "error: Kaggle API check failed:" >&2
+    echo "$probe" >&2
+  fi
   exit 1
 fi
 

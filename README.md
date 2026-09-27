@@ -12,14 +12,16 @@ Personalized Fashion Recommendations competition, adopted unchanged: predict the
 means the result is checkable against 3,006 competing teams rather than against
 a number of our own making.
 
-**Track B — accessory completion.** Given a garment, which piece of jewellery or
-accessory completes it? The competition never asks this: it models *what will
+**Track B — outfit completion ("Complete the Look").** Given a garment, which
+bottoms, shoes, bag or accessory completes it? Jewellery is the showcase slice.
+The competition never asks this: it models *what will
 this person buy next*, not *what goes with what*. The signal comes from basket
 structure — items one customer bought on one day — filtered by Pointwise Mutual
 Information so that "these two are both popular" cannot masquerade as "these two
 go together".
 
-Full specification in [docs/DESIGN.md](docs/DESIGN.md).
+Full specification in [docs/DESIGN.md](docs/DESIGN.md); vocabulary in
+[docs/GLOSSARY.md](docs/GLOSSARY.md).
 
 ## Status
 
@@ -31,14 +33,16 @@ The dataset requires a Kaggle account and acceptance of the competition rules.
 
 1. Open the competition and accept the rules:
    <https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations>
-2. Get an API token: Kaggle → your profile → Settings → API → **Create New
-   Token**. This downloads `kaggle.json`.
-3. Install it:
+2. Install the Kaggle CLI (v2+) and log in:
 
 ```bash
-mkdir -p ~/.kaggle && mv ~/Downloads/kaggle.json ~/.kaggle/ && chmod 600 ~/.kaggle/kaggle.json
-pip install kaggle
+uv tool install kaggle      # or: pip install kaggle
+kaggle auth login           # browser-based login, credentials cached locally
 ```
+
+3. Alternatively, generate a token at <https://www.kaggle.com/settings/api> and
+   save it to `~/.kaggle/access_token` (or export `KAGGLE_API_TOKEN`). The legacy
+   `~/.kaggle/kaggle.json` also still works.
 
 4. Download:
 
@@ -60,7 +64,7 @@ src/ensemble/
   candidates/        Track A candidate generation
   ranking/           Track A ranker
   completion/        Track B pair mining and two-tower model
-  evaluation/        MAP@12, Recall@K, NDCG@K, lift over popularity
+  evaluation/        MAP@12, Recall@K, NDCG@K, relative lift vs. popularity
   api/               serving
 scripts/             data acquisition and pipeline entry points
 tests/

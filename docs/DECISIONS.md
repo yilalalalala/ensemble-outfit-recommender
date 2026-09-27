@@ -1,6 +1,6 @@
 # Decisions
 
-Numbered, dated, with the reasoning and the revisit condition. A decision whose
+Architecture Decision Records (ADRs): numbered, dated, with the reasoning and the revisit condition. A decision whose
 justification is not written down gets relitigated every time someone new reads
 the code.
 
@@ -27,14 +27,24 @@ dropped rather than quietly retained.
 
 ---
 
-### D-002 — Accessory focus is a question, not a data filter
-**Date:** 2026-09-27 · **Status:** active
+### D-002 — Track B is outfit completion on the full catalogue; jewellery is a showcase slice
+**Date:** 2026-09-27 · **Status:** active (revised 2026-09-27)
 
-Track B trains on the full catalogue and only *presents* accessories.
+Track B trains on the full catalogue and recommends complementary articles for
+any missing slot (bottoms, shoes, bag, accessories…). Jewellery is demoed and
+reported as its own segment.
 
-**Why.** The interesting question — which accessory completes this garment —
-requires garments in the training data by definition. Filtering to accessories
-first removes the anchors.
+**Why.** The original version presented only accessories. Measured on the
+16-week window, only 26k of 898k baskets (2.9%) pair a garment with jewellery,
+spread over ~2,000 jewellery articles. After support and lift filtering almost
+no jewellery pairs would survive, which would make Track B fail for lack of data
+rather than because the idea is wrong. Broadening the slots uses the same model
+and pipeline; only the complementary-pair rule changes. It also matches the
+industry product (Complete the Look covers all categories) and the photo feature,
+where a user's outfit can be missing any slot.
+
+**Revisit if:** jewellery-segment metrics are strong enough to justify a
+jewellery-specific model.
 
 ---
 
@@ -56,7 +66,7 @@ rather than a defaulted one, and a test asserts no feature reads beyond it.
 **Date:** 2026-09-27 · **Status:** active
 
 Every result is reported alongside a popularity baseline, and Track B reports
-lift over popularity before any other number.
+relative lift vs. the popularity baseline before any other number.
 
 **Why.** In recommender systems a popularity ranker is far stronger than people
 expect, and the most common way to produce a convincing-looking result is to
@@ -108,3 +118,106 @@ different date cutoffs, is past the point where file scanning is reasonable.
 DuckDB is columnar, runs in-process, reads Parquet directly and handles
 multi-GB joins without a server. The serving path has the opposite shape — a few
 indexed point lookups per request — which SQLite does with no operational cost.
+
+---
+
+### D-008 — Industry-standard vocabulary and methods
+**Date:** 2026-09-27 · **Status:** active
+
+All docs, code identifiers, reports and plots use the terms recommender teams
+use in industry, defined in `docs/GLOSSARY.md`. Where the original design used
+a home-made term, it is replaced:
+
+| was | now | why |
+| --- | --- | --- |
+| candidate generation strategies | retrieval channels | Standard two-stage vocabulary (retrieval → ranking) |
+| candidate provenance | retrieval-source features | Common feature-group name |
+| repurchase / same product, other colour | repeat purchase ("buy it again") / variant | Product-facing names |
+| popularity-matched negatives | popularity-based negative sampling (∝ pop^0.75) + logQ correction on in-batch negatives | Published, widely deployed methods (word2vec; Yi et al., RecSys 2019) instead of an ad-hoc scheme |
+| lift over popularity (ratio) | relative lift vs. popularity baseline (%) | How improvements are reported in reviews and A/B readouts |
+| de-popularised Recall@K | tail-item recall | Standard popularity-bias diagnostic |
+| PMI (alone) | association lift / PMI, scored as NPMI | "Lift" is the analytics/PM term; NPMI is the standard rare-pair-robust variant |
+
+**Why.** The project doubles as training for industry work. A term that only
+exists in this repository cannot be discussed with a colleague or an
+interviewer, and an ad-hoc method cannot be compared with published results.
+
+**Rule going forward.** Prefer the method an industry team would reach for
+first; deviate only with a measured reason, recorded as a new ADR. A term with
+no industry equivalent is marked *(project-specific)*.
+
+---
+
+### D-009 — LLM as interface layer, not ranker; MVP ships without it
+**Date:** 2026-09-27 · **Status:** active
+
+The MVP (through M6) contains no LLM. An LLM-based conversational assistant is
+added afterwards (M7b) as an orchestration layer that calls the trained models
+as tools. It never ranks or invents products.
+
+**Why.**
+- Accuracy on this task comes from behavioural data. The top competition
+  solutions used GBDT rankers, and LLM rankers have not been shown to beat a
+  tuned GBDT on large-catalog purchase prediction.
+- Scoring 1.37M customers × 105k articles with an LLM is infeasible in cost and
+  latency.
+- The industry pattern (e.g. Amazon Rufus, Zalando's assistant) puts the LLM in
+  front of an existing recommender for query understanding, explanation and
+  conversation.
+- The one place an LLM may raise accuracy is **content enrichment**
+  (LLM-generated attributes such as style or occasion) for item cold start. It
+  is treated as a hypothesis and tested by ablation, not assumed.
+
+**Revisit if:** the enrichment ablation shows a large relative lift, which would
+justify moving LLM features into the core pipeline.
+
+---
+
+### D-010 — Three entry points on one backend; photo input via visual search
+**Date:** 2026-09-27 · **Status:** active
+
+Passive modules (M6), visual search from a photo (M7a) and a conversational
+assistant (M7b) all call the same Track A / Track B services. A photo is first
+mapped to catalog articles, with the user confirming the match, before Track B
+runs.
+
+**Why.** Track B is trained on catalog articles, so a photo is only useful once
+it is grounded to one. User garment selection plus a confirmation step is more
+reliable than automatic detection at MVP scale, and keeps every
+recommendation traceable to a real article.
+
+**Amendment (2026-09-27).** Visual search and the assistant are combined:
+visual search is both a standalone, LLM-free feature and a tool the assistant
+calls, with shared session state and hand-off in both directions (DESIGN §7.5).
+Visual search is built first (M7a) because the assistant depends on it.
+
+---
+
+### D-011 — Flagship journey: "snap your outfit, fill the gap"
+**Date:** 2026-09-27 · **Status:** active
+
+The post-MVP product is built around one journey. The user photographs an
+outfit. A vision-language model (VLM) lists the pieces, visual search maps each
+piece to catalogue articles, and gap detection finds the missing slots. Track B
+fills each gap, re-ranked by the customer's Track A profile. The explanation
+cites association lift from basket data.
+
+**How vision and LLM combine:** hybrid (pattern C). Embedding retrieval handles
+visual similarity; VLM-extracted attributes (colour, occasion) become filters.
+Offline VLM enrichment of the catalogue is tested by ablation.
+
+**Evaluation:** leave-one-out on held-out multi-slot baskets (fill-in-the-blank,
+FITB) for gap filling; match accuracy on a hand-labelled photo set for visual
+search.
+
+---
+
+### D-012 — The conversational assistant (M7b) is required
+**Date:** 2026-09-27 · **Status:** active
+
+M7b is in scope as a must-do milestone after M7a, as decided by the project
+owner. It remains an interface and orchestration layer (D-009) and is
+evaluated on grounding (hallucination rate), tool-call accuracy, LLM-as-judge
+quality, latency and cost. The Polyvore co-wear vs co-purchase experiment is
+optional (M8).
+
