@@ -1,0 +1,25 @@
+# Pipeline configuration. Sampling and model parameters live here, not in code
+# (DATA.md "Sampling", D-006). A full-data run changes values, not code.
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  database: data/processed/ensemble.duckdb
+  serving_db: data/processed/serving.sqlite
+  reports: reports
+  mlruns: mlruns
+
+duckdb:
+  memory_limit: 9GB
+  threads: 8
+
+splits:
+  week_days: 7
+  # Weeks of history used for features and retrieval (D-006).
+  window_weeks: 16
+
+sampling:
+  min_basket_size: 2
+  max_basket_size: 6
+  min_pair_support: 10
