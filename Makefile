@@ -14,8 +14,9 @@ data:       ## download the full dataset from Kaggle (see README for credentials
 ingest:     ## M0: load the CSVs into DuckDB and run integrity checks
 	$(PY) -m ensemble.data.ingest
 
-baselines:  ## M1: popularity and repeat-purchase baselines on validation
+baselines:  ## M1: popularity and repeat-purchase baselines on validation and test
 	$(PY) -m ensemble.baselines val
+	$(PY) -m ensemble.baselines test
 
 retrieval:  ## M2: recall per retrieval channel on validation
 	$(PY) -m ensemble.candidates.evaluate val
