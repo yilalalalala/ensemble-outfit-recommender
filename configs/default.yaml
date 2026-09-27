@@ -41,3 +41,47 @@ retrieval:
   cf_seed_weeks: 16      # a customer's items from this window seed CF and variants
   cf_k: 50
   variant_k: 20
+
+ranker:
+  train_weeks: 4           # label weeks preceding the evaluation week
+  params:
+    objective: lambdarank
+    metric: map
+    eval_at: [12]
+    learning_rate: 0.05
+    num_leaves: 63
+    min_child_samples: 100
+    feature_fraction: 0.8
+    bagging_fraction: 0.8
+    bagging_freq: 1
+    lambdarank_truncation_level: 20
+    verbosity: -1
+    num_threads: 8
+  num_boost_round: 200     # MAP@12 on validation plateaus at 200 (reports/m3_ranker_val.json)
+
+completion:
+  window_weeks: 16          # baskets mined from this window before the target week
+  universe_weeks: 4         # "live catalogue": sold in this window, or in the target week (D-013)
+  pop_days: 7
+  head_share: 0.10          # top 10% of each slot by sales = popularity head (tail-item recall)
+  k: 12
+  min_support: 3            # recommender threshold, chosen on validation (the funnel also reports 10)
+  two_tower:
+    dim: 64
+    emb_dim: 16
+    hidden: 256
+    temperature: 0.05
+    batch_size: 2048
+    epochs: 3
+    lr: 0.002
+    id_dropout: 0.5         # drop article-ID embedding so the content path learns cold start
+    pop_negatives: 64       # per slot per batch, drawn ∝ popularity^0.75
+    hard_negatives: 4       # per positive: same product type and price tier
+    negatives: [in_batch, logq, pop, hard]
+
+serving:
+  demo_returning: 300       # customers with rich recent history
+  demo_new: 30              # customers with no purchases (user cold start)
+  ctl_per_slot: 8
+  max_per_product_type: 2   # diversity re-ranking inside a Complete the Look module
+  trending_k: 24

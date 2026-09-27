@@ -32,3 +32,7 @@ kaggle.json
 .DS_Store
 .idea/
 .vscode/
+
+# Large or noisy pipeline outputs (JSON readouts are committed)
+reports/submission.csv
+reports/*.log

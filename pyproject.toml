@@ -13,4 +13,5 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 markers = ["data: requires the raw dataset and built database"]
