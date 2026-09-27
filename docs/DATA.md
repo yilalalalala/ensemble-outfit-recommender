@@ -23,9 +23,14 @@ by day and a customer rarely shops twice in a day.
 relative comparisons and price tiers, meaningless as an absolute figure — so it
 is never displayed as money.
 
-**Accessories.** `product_group_name == "Accessories"`, roughly 2,160 articles,
-containing jewellery alongside bags and other categories. Track B's accessory
-side is drawn from here; the anchor side is everything else.
+**Accessories.** `product_group_name == "Accessories"`: 11,158 articles, of
+which ~2,000 are jewellery (`Earring`, `Necklace`, `Ring`, `Bracelet`). An
+earlier draft quoted ~2,160 for the whole group, which was the jewellery count.
+
+**Slots.** Track B groups articles into wearable slots by `product_group_name`
+(DESIGN §5.1). Measured on the 16 weeks to 2020-09-22: 1.51M baskets, 898k with
+2–6 items, 98k pairing a garment with an accessory, 26k pairing a garment with
+jewellery.
 
 ## Splits
 

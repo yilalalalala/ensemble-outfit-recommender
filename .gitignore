@@ -11,6 +11,10 @@ data/processed/*
 *.parquet
 *.npy
 
+# Experiment tracking
+mlruns/
+mlartifacts/
+
 # Python
 __pycache__/
 *.py[cod]
