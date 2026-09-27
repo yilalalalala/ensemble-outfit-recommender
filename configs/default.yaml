@@ -23,3 +23,21 @@ sampling:
   min_basket_size: 2
   max_basket_size: 6
   min_pair_support: 10
+
+retrieval:
+  # Sizes chosen on the validation week (reports/m2_retrieval_val.json):
+  # ~110 candidates per customer, the point past which recall gains flatten
+  # relative to ranker training cost.
+  repeat_weeks: 52       # repeat purchase: customer's own articles in this window
+  repeat_k: 50
+  pop_days: 7            # popularity window
+  pop_k: 40
+  pop_age_k: 30
+  new_arrival_k: 10      # first sold within the popularity window
+  cf_weeks: 8            # item-to-item co-purchase window
+  cf_recent_items: 30    # most recent distinct items per customer used to build pairs
+  cf_neighbors: 50       # neighbours kept per article
+  cf_min_count: 3
+  cf_seed_weeks: 16      # a customer's items from this window seed CF and variants
+  cf_k: 50
+  variant_k: 20
