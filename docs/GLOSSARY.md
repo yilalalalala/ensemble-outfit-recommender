@@ -142,3 +142,34 @@ industry standard and are named as such wherever they appear.
 | **Session state** / **conversation memory** | Context carried across turns (confirmed item, constraints, items already shown) | Both |
 | **Graceful degradation** / **fallback** | The product still works in reduced form when one component (here, the LLM) fails | Both |
 
+
+## Evaluation practice (added with the improvement plan)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Rolling backtest** / **walk-forward validation** | Re-run the same recipe on several consecutive past weeks and report mean ± std, so a decision does not rest on one week | DS |
+| **Multi-seed evaluation** | Repeat a stochastic training run with different random seeds; differences smaller than the seed spread are noise | DS |
+| **Offline–online alignment** | Checking that the offline metric tracks the external or online one (here: local test MAP vs Kaggle private LB) | Both |
+| **Fallback policy** / **segment routing** | Serving a different model or rule to a segment where the main model is weak (e.g. new customers → age-band popularity) | Both |
+
+## Vision
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **FashionCLIP** | CLIP fine-tuned on fashion product images and text (Chia et al., 2022); image and text share one embedding space | DS |
+| **Frozen embeddings** | Pre-trained vectors used as fixed input features, not updated during training | DS |
+| **Typographic attack** | CLIP-family models over-weight text visible in an image (a label reading "iPod" on an apple) | DS |
+| **Grounding (vision)** | Localising an object in an image, usually as a bounding box | DS |
+| **Precision@K (relevance-judged)** | Share of the top-K results judged relevant; used when there is no single correct answer | DS |
+
+## LLM engineering
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **LLM abstraction layer** / **LLM gateway** | One internal interface over several model providers, so the model can be swapped (local for development, hosted for production) | DS / Eng |
+| **Tool-call accuracy / argument accuracy** | Did the model call the right tool, with the right arguments? | DS |
+| **Constraint satisfaction** | Do the recommended items meet the request's constraints (colour, category, price), checked against catalogue metadata | Both |
+| **Prompt caching** | Re-using the processed prefix of a prompt (system prompt, tool definitions) across calls at a fraction of the price | DS / Eng |
+| **Batch API** | Asynchronous bulk requests at a discount (50% on Anthropic), for work that need not be real time | DS / Eng |
+| **Self-preference bias** | An LLM judge tends to rate outputs from its own model family higher; report judge scores next to objective metrics | DS |
+| **Budget guard** | A hard spending cap enforced in code before each paid call | Eng |
