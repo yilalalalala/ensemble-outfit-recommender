@@ -252,12 +252,12 @@ async function stylist(anchor) {
 }
 
 // ---- Human gold labels for the visual-search judge ---------------------------------------------------
-async function labeller() {
-  const tasks = await api("/api/label/tasks");
+async function labeller(round = 2) {
+  const tasks = await api(`/api/label/tasks?round=${round}`);
   const todo = tasks.filter(t => !t.done);
   if (!todo.length) { $("#app").innerHTML = `<h1>Labelling done</h1><p class="sub">All ${tasks.length} tasks labelled. Thank you!</p>`; return; }
   const t = todo[0], sel = t.candidates.map(() => 0);
-  $("#app").innerHTML = `<h1>Is it a reasonable substitute?</h1>
+  $("#app").innerHTML = `<h1>Is it a reasonable substitute? <span class="sub">(round ${round})</span></h1>
     <p class="sub">Task ${tasks.length - todo.length + 1} of ${tasks.length}. For each product, click it if a shopper looking for the item on the left would accept it
     (same type of item, similar colour and style). Unclicked = not relevant.</p>
     <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:12px">
@@ -268,8 +268,8 @@ async function labeller() {
   document.querySelectorAll("#lab .card").forEach(el => el.onclick = () => {
     const i = +el.dataset.i; sel[i] = 1 - sel[i]; el.style.outline = sel[i] ? "3px solid var(--good)" : "3px solid transparent"; });
   $("#labsave").onclick = async () => {
-    await fetch("/api/label", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({task_id: t.task_id, relevant: sel})});
-    labeller();
+    await fetch("/api/label", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({task_id: t.task_id, relevant: sel, round})});
+    labeller(round);
   };
 }
 
@@ -282,7 +282,7 @@ async function route() {
   try {
     if (h.startsWith("#/product/")) await product(h.split("/")[2]);
     else if (h.startsWith("#/ds")) await ds();
-    else if (h.startsWith("#/label")) await labeller();
+    else if (h.startsWith("#/label")) await labeller(+(new URLSearchParams(h.split("?")[1] || "").get("round") || 2));
     else if (h.startsWith("#/assistant")) await stylist(new URLSearchParams(h.split("?")[1] || "").get("anchor"));
     else await home();
   } catch (e) { $("#app").innerHTML = `<p class="sub">Could not load (${esc(e)}).</p>`; }

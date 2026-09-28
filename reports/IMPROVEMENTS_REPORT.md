@@ -93,8 +93,19 @@ by Claude Haiku 4.5, which sees pixels and the category only.
 - **Background removal hurts** on both datasets.
 - **Hardest category:** jewellery (0.46–0.48 at best).
 - **Text in photos does not hurt** (0.65 with text vs 0.63 without).
-- **Judge reliability.** 71% agreement with a reviewer spot check labelled by Claude, not a human.
-  **Human gold labels:** open the *Label* page (20 tasks, about 10 minutes).
+- **Judge reliability (D-025).** The Haiku batch judge agrees with the owner's 100 human labels
+  on only 58% of judgements (κ 0.16). The earlier 71% came from a Claude reviewer, not a human,
+  and overstated reliability. The ranking of modes holds under human labels:
+  - text retrieve → image rerank: 0.54 [0.34, 0.74];
+  - crop + adapter: 0.34 [0.18, 0.50].
+
+  Read the absolute judge numbers above as relative. Opus 5 with the written guideline agrees best
+  (0.75, κ 0.48). A stratified held-out round 2 is pending.
+- **95% intervals** (photo-level bootstrap) for judged Precision@5:
+  - crop 0.357 [0.33, 0.39];
+  - crop + adapter 0.477 [0.45, 0.51];
+  - text 0.642 [0.61, 0.67];
+  - text → image rerank 0.635 [0.60, 0.67].
 
 **Garment detection** (30 photos):
 
@@ -173,7 +184,8 @@ The web app (`make serve`, http://localhost:8010) now has:
 
 ## 8. Next steps
 
-1. **Human labels** on the Label page, to validate the judge. This is the owner's action.
+1. **Round 2 human labels** (held-out, stratified), to confirm the chosen judge. Round 1 is done
+   (D-025).
 2. **Exact-match benchmark from the owner's street↔product pairs:** 3 composite images so far;
    about 30 more gives about 150 pairs, with jewellery close-ups prioritised.
 3. **Jewellery-specific adaptation:** DeepFashion2 has no jewellery. A jewellery pair set would

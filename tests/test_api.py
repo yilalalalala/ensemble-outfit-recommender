@@ -66,7 +66,7 @@ def test_image_fallback(client):
 
 
 def test_label_tasks_are_blind_and_complete(client):
-    tasks = client.get("/api/label/tasks").json()
+    tasks = client.get("/api/label/tasks?round=1").json()
     assert len(tasks) == 20 and all(len(t["candidates"]) == 5 for t in tasks)
     assert all("mode" not in t for t in tasks)          # the labeller cannot see which mode produced a list
     r = client.get(tasks[0]["crop"])
@@ -78,3 +78,10 @@ def test_complete_the_look_rejects_fabricated_anchor():
     tb = Toolbox({"grounded": set()})
     r = tb.complete_the_look(12345)
     assert r["results"] == [] and "search_catalog" in r["error"]
+
+
+def test_round2_is_disjoint_and_stratified(client):
+    r1 = {t["task_id"].rsplit("|", 1)[0] for t in client.get("/api/label/tasks?round=1").json()}
+    r2 = client.get("/api/label/tasks?round=2").json()
+    assert len(r2) == 20 and not r1 & {t["task_id"].rsplit("|", 1)[0] for t in r2}
+    assert sum(t["category"] == "jewellery" for t in r2) == 6   # 3 garments x 2 modes

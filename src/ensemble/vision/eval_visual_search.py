@@ -157,6 +157,16 @@ def stage_report() -> dict:
 
     out = {"n_queries_per_mode": {m: sum(r["mode"] == m for r in rows) for m in MODES}}
     out["precision@5"] = {m: p5([r for r in rows if r["mode"] == m]) for m in MODES}
+    # 95% intervals by bootstrapping photos (garments of one photo are correlated).
+    photos = sorted({r["file"] for r in rows})
+    rng = np.random.default_rng(0)
+    boots = {m: [] for m in MODES}
+    by_photo = {f: [r for r in rows if r["file"] == f] for f in photos}
+    for _ in range(1000):
+        sample = [r for i in rng.choice(len(photos), len(photos)) for r in by_photo[photos[i]]]
+        for m in MODES:
+            boots[m].append(p5([r for r in sample if r["mode"] == m]))
+    out["precision@5_ci95"] = {m: [float(np.nanpercentile(v, 2.5)), float(np.nanpercentile(v, 97.5))] for m, v in boots.items()}
     out["precision@1"] = {m: float(np.mean([r["relevant"][0] for r in rows if r["mode"] == m])) for m in MODES}
     seg = {}
     for key, fn in {"source": lambda r: man[r["file"]]["source"], "photo_type": lambda r: man[r["file"]]["type"],
@@ -202,6 +212,14 @@ def stage_report() -> dict:
             if j:
                 flat += list(zip(lab, j))
             human_p5.setdefault(m, []).append(sum(lab) / 5)
+        # Human-measured Precision@5 per mode, with a garment-level bootstrap interval.
+        hl_rows = [(tid.split("|"), lab) for tid, lab in json.loads(hl.read_text()).items()]
+        human_ci = {}
+        for m in {t[0][2] for t in hl_rows}:
+            vals = np.asarray([sum(lab) / 5 for (f, g, mm), lab in hl_rows if mm == m])
+            bs = [float(np.mean(vals[rng.integers(0, len(vals), len(vals))])) for _ in range(2000)]
+            human_ci[m] = [float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))]
+        out["human_precision@5_ci95"] = human_ci
         out["judge_vs_human"] = {"labeller": "project owner", "items": len(flat),
                                  "agreement": float(np.mean([a == b for a, b in flat])) if flat else None,
                                  "human_p5": {m: float(np.mean(v)) for m, v in human_p5.items()}}

@@ -216,10 +216,15 @@ def assistant_message(sid: str, text: str = Form(...), photo: UploadFile | None 
 
 # --- Human gold labels for the visual-search judge (D-019) -------------------------------------------
 LABEL_MODES = ("crop_adapter", "text_rerank_image")
-LABELS_FILE = cfg.path("reports") / "m7a" / "human_labels.json"
+# Round 2 is a held-out set, stratified by category (jewellery weighted up), disjoint from round 1.
+ROUND2_QUOTA = {"jewellery": 3, "bag": 2, "shoes": 1, "outerwear": 1, "bottom": 1, "top": 1, "sunglasses": 1}
 
 
-def _label_tasks() -> list[dict]:
+def labels_file(round_: int):
+    return cfg.path("reports") / "m7a" / ("human_labels.json" if round_ == 1 else f"human_labels_round{round_}.json")
+
+
+def _label_tasks(round_: int = 2) -> list[dict]:
     import json as _json
     import random
     rows = _json.loads((cfg.path("reports") / "m7a" / "matches_judged.json").read_text())
@@ -229,8 +234,16 @@ def _label_tasks() -> list[dict]:
             by.setdefault((r["file"], r["garment"]), {})[r["mode"]] = r
     keys = sorted(k for k, v in by.items() if len(v) == len(LABEL_MODES))
     random.Random(11).shuffle(keys)
+    if round_ == 1:
+        chosen = keys[:10]
+    else:
+        used = set(keys[:10])
+        cat = {k: by[k][LABEL_MODES[0]]["category"] for k in keys}
+        chosen = []
+        for c, n in ROUND2_QUOTA.items():
+            chosen += [k for k in keys if k not in used and cat[k] == c][:n]
     tasks = []
-    for f, g in keys[:10]:
+    for f, g in chosen:
         for m in LABEL_MODES:
             r = by[(f, g)][m]
             tasks.append({"task_id": f"{f}|{g}|{m}", "file": f, "garment": g, "mode": m,
@@ -240,21 +253,22 @@ def _label_tasks() -> list[dict]:
 
 
 @app.get("/api/label/tasks")
-def label_tasks():
+def label_tasks(round: int = 2):
     import json as _json
-    done = _json.loads(LABELS_FILE.read_text()) if LABELS_FILE.exists() else {}
-    return [{**{k: t[k] for k in ("task_id", "category")}, "crop": f"/api/label/crop/{i}.jpg",
-             "candidates": _cards(t["candidates"]), "done": t["task_id"] in done}
-            for i, t in enumerate(_label_tasks())]
+    f = labels_file(round)
+    done = _json.loads(f.read_text()) if f.exists() else {}
+    return [{**{k: t[k] for k in ("task_id", "category")}, "crop": f"/api/label/crop/{i}.jpg?round={round}",
+             "candidates": _cards(t["candidates"]), "done": t["task_id"] in done, "round": round}
+            for i, t in enumerate(_label_tasks(round))]
 
 
 @app.get("/api/label/crop/{i}.jpg")
-def label_crop(i: int):
+def label_crop(i: int, round: int = 2):
     import json as _json
     from fastapi.responses import Response
     from PIL import Image as _Image
     from ensemble.vision.outfit import _resize_bytes
-    t = _label_tasks()[i]
+    t = _label_tasks(round)[i]
     det = _json.loads((cfg.path("reports") / "m7a" / "detections_ollama.json").read_text())
     _, small = _resize_bytes(_Image.open(cfg.path("raw") / "outfit_photos" / t["file"]))
     crop = small.crop(det[t["file"]]["items"][t["garment"]]["box"])
@@ -266,14 +280,16 @@ def label_crop(i: int):
 class LabelIn(BaseModel):
     task_id: str
     relevant: list[int]
+    round: int = 2
 
 
 @app.post("/api/label")
 def save_label(body: LabelIn):
     import json as _json
-    done = _json.loads(LABELS_FILE.read_text()) if LABELS_FILE.exists() else {}
+    f = labels_file(body.round)
+    done = _json.loads(f.read_text()) if f.exists() else {}
     done[body.task_id] = body.relevant
-    LABELS_FILE.write_text(_json.dumps(done, indent=1))
+    f.write_text(_json.dumps(done, indent=1))
     return {"ok": True, "labelled": len(done)}
 
 
