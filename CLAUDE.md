@@ -4,7 +4,7 @@ Guidance for Claude working in this repository. The specs live in `docs/`:
 
 - `docs/DESIGN.md`: system design (Track A / Track B, evaluation protocol, milestones M0–M6)
 - `docs/DATA.md`: data sources, derived concepts, splits, sampling parameters, integrity checks
-- `docs/DECISIONS.md`: Architecture Decision Records (ADRs) D-001 … D-012
+- `docs/DECISIONS.md`: Architecture Decision Records (ADRs) D-001 … D-024
 - `docs/GLOSSARY.md`: industry vocabulary. **Every term used in code, reports and replies must come from here** (see D-008)
 
 Read all three before starting any milestone. When the docs and this file disagree
@@ -26,7 +26,7 @@ on *what* to build, the docs win. This file governs *how* to work.
 4. **选择更好的方法。** 如果发现文档中的某个做法在实际数据上效果差、跑不动或有更优方案，
    Claude 应当自行评估并采用更好的方法，以达到更好的效果。条件是：
    - 用验证周（validation week）的数字证明它更好，而不是凭感觉；
-   - 在 `docs/DECISIONS.md` 追加一条新 ADR（D-013 起），写明日期、原做法、新做法、
+   - 在 `docs/DECISIONS.md` 追加一条新 ADR（D-025 起），写明日期、原做法、新做法、
      依据（含对比数字）和 revisit 条件；
    - 不得违背以下不可妥协的原则：时间切分（D-003）、流行度基线（D-004）、
      测试周只碰一次、不做 customer 下采样（D-006）。

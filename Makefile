@@ -1,4 +1,4 @@
-.PHONY: help setup data ingest test baselines retrieval ranker track-b submission serving serve mvp mlflow
+.PHONY: help setup data ingest test baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval
 PYTHON := .venv/bin/python
 PY := PYTHONPATH=src $(PYTHON)
 PORT ?= 8010
@@ -44,6 +44,29 @@ mvp: ingest baselines retrieval ranker track-b submission serving test  ## the f
 
 test:       ## run the test suite
 	$(PY) -m pytest -q
+
+backtest:   ## 4-week rolling backtest for Track A (D-017)
+	$(PY) -m ensemble.evaluation.backtest 4
+
+clip:       ## FashionCLIP embeddings for every article image (M7a)
+	$(PY) -m ensemble.vision.clip
+
+df2:        ## DeepFashion2 street-to-shop adapters: manifest, embeddings, learning curve, evaluation (D-020)
+	$(PY) -m ensemble.vision.deepfashion2 manifest
+	$(PY) -m ensemble.vision.deepfashion2 embed validation
+	$(PY) -m ensemble.vision.deepfashion2 embed train
+	$(PY) -m ensemble.vision.deepfashion2 curve nobg
+	$(PY) -m ensemble.vision.deepfashion2 train crop
+	$(PY) -m ensemble.vision.deepfashion2 evaluate
+
+visual-eval: ## detect garments (local VLM), match every query mode, judge (paid, Batch API), report
+	$(PY) -m ensemble.vision.eval_visual_search detect ollama
+	$(PY) -m ensemble.vision.eval_visual_search match
+	$(PY) -m ensemble.vision.eval_visual_search judge
+	$(PY) -m ensemble.vision.eval_visual_search report
+
+assistant-eval: ## assistant eval set on the local model (free); run with `claude` for the paid comparison
+	$(PY) -m ensemble.assistant.eval ollama
 
 mlflow:     ## browse experiment runs
 	.venv/bin/mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db

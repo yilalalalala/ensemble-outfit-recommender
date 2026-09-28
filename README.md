@@ -25,8 +25,10 @@ Full specification in [docs/DESIGN.md](docs/DESIGN.md); vocabulary in
 
 ## Status
 
-MVP complete (M0–M6). Results: [reports/MVP_REPORT.md](reports/MVP_REPORT.md). Next: M7a
-visual search, M7b conversational assistant (D-011, D-012).
+MVP complete (M0–M6): [reports/MVP_REPORT.md](reports/MVP_REPORT.md). Kaggle private MAP@12 0.0319.
+Post-MVP (rolling backtest, M7a FashionCLIP + DeepFashion2 visual search, M7b assistant):
+[reports/IMPROVEMENTS_REPORT.md](reports/IMPROVEMENTS_REPORT.md). Next: human gold labels, owner pair
+benchmark, optional M8.
 
 ## Running it
 

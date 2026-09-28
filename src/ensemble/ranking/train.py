@@ -113,16 +113,18 @@ def run_eval(mode: str) -> dict:
     m["map@12_by_rounds"] = {str(k): v["map@12"] for k, v in by_rounds.items()}
     m["train_seconds"] = round(train_secs, 1)
     imp = importance(booster, features)
-    with tracking.run("track_a", f"m3/lgbm_lambdarank/{mode}", {**dict(cfg.ranker.params), "train_weeks": cfg.ranker.train_weeks,
+    with tracking.run("track_a", f"m3/lgbm_lambdarank/{mode}/{__import__('os').environ.get('ENSEMBLE_CONFIG', 'default')}", {**dict(cfg.ranker.params), "train_weeks": cfg.ranker.train_weeks,
                                                                "num_boost_round": cfg.ranker.num_boost_round}):
         tracking.log_metrics({k: v for k, v in m.items() if not isinstance(v, dict)})
     print(f"{mode}: MAP@12={m['map@12']:.5f} returning={m['map@12_returning']:.5f} new={m['map@12_new_customers']:.5f} "
           f"recall@12={m['recall@12']:.4f} ({m['train_seconds']}s train)")
     print("top features:", [(f, round(g, 3)) for f, g in imp[:15]])
+    import os
+    tag = "" if os.environ.get("ENSEMBLE_CONFIG", "default") == "default" else "_" + os.environ["ENSEMBLE_CONFIG"]
     models = cfg.path("processed") / "models"
     models.mkdir(parents=True, exist_ok=True)
-    booster.save_model(str(models / f"ranker_{mode}.txt"))
-    (cfg.path("reports") / f"m3_ranker_{mode}.json").write_text(json.dumps({"metrics": m, "importance": imp}, indent=2))
+    booster.save_model(str(models / f"ranker_{mode}{tag}.txt"))
+    (cfg.path("reports") / f"m3_ranker_{mode}{tag}.json").write_text(json.dumps({"metrics": m, "importance": imp}, indent=2))
     return m
 
 

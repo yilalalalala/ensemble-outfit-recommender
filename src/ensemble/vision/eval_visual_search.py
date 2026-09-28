@@ -26,7 +26,7 @@ from ensemble.config import load_config
 from ensemble.llm.client import ClaudeClient, OllamaClient, _record, api_key
 from ensemble.vision.outfit import CATEGORIES, detect, match
 
-MODES = ["photo", "crop", "text", "crop+text", "text+0.3crop"]
+MODES = ["photo", "crop", "text", "crop+text", "text+0.3crop", "crop_nobg", "crop_adapter", "crop_nobg_adapter", "text_rerank_image"]
 cfg = load_config()
 PHOTOS = cfg.path("raw") / "outfit_photos"
 OUT = cfg.path("reports") / "m7a"
@@ -192,6 +192,19 @@ def stage_report() -> dict:
                                     "agreement": float(np.mean([a == b for a, b in flat])),
                                     "reviewer_p5": {m: float(np.mean([sum(h["label"]) / 5 for h in json.loads(hs.read_text()) if h["mode"] == m]))
                                                     for m in ("crop", "text")}}
+    hl = OUT / "human_labels.json"
+    if hl.exists():
+        judged = {(r["file"], r["garment"], r["mode"]): r["relevant"] for r in rows}
+        flat, human_p5 = [], {}
+        for tid, lab in json.loads(hl.read_text()).items():
+            f, g, m = tid.split("|")
+            j = judged.get((f, int(g), m))
+            if j:
+                flat += list(zip(lab, j))
+            human_p5.setdefault(m, []).append(sum(lab) / 5)
+        out["judge_vs_human"] = {"labeller": "project owner", "items": len(flat),
+                                 "agreement": float(np.mean([a == b for a, b in flat])) if flat else None,
+                                 "human_p5": {m: float(np.mean(v)) for m, v in human_p5.items()}}
     (cfg.path("reports") / "m7a_visual_search.json").write_text(json.dumps(out, indent=2))
     print(json.dumps(out, indent=2))
     return out

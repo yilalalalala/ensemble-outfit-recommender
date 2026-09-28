@@ -71,6 +71,8 @@ def cases(f: dict) -> list[dict]:
             {"text": "Recommend me a top.", "tools": ["recommend_for_customer", "search_catalog"], "any_tool": True},
             {"text": "I like the first one. What bottoms go with it?", "tools": ["complete_the_look"], "args": {"slot": "lower"},
              "cons": {"slot": ["lower"]}}]},
+        {"id": "ctl_described", "turns": [{"text": "What shoes go with wide-leg jeans?",
+          "tools": ["search_catalog", "complete_the_look"], "any_tool": True, "cons": {"slot": ["shoes"]}}]},
         {"id": "ctl_top", "turns": [{"text": f"Help me style article {U[0]} for the office.", "tools": ["complete_the_look"]}]},
         {"id": "photo_missing", "photo": "full_07.jpg", "turns": [{"text": "What's missing from this outfit?",
           "tools": ["analyze_outfit_photo"]}]},

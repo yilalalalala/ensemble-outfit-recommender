@@ -140,6 +140,12 @@ class Toolbox:
 
     def complete_the_look(self, article_id: int, slot: str | None = None, product_type: str | None = None,
                           colour: str | None = None, max_results: int = 6) -> dict:
+        # Guard against fabricated arguments: the anchor must come from a tool result or the customer.
+        known = self.session["grounded"] | self.session.get("user_ids", set())
+        if int(article_id) not in known:
+            return {"results": [], "error": "Unknown article_id. Only use ids returned by a tool or given by the "
+                                            "customer. If the customer only described the item, call search_catalog "
+                                            "first to find it, then call complete_the_look with a returned id."}
         rows = self._q("""SELECT c.article_id, c.slot, c.source, c.lift, a.product_type_name, a.colour_group_name
                           FROM complete_the_look c JOIN articles a USING (article_id)
                           WHERE c.anchor = ? ORDER BY c.slot, c.rank""", (article_id,))
