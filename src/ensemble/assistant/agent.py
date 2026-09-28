@@ -21,6 +21,8 @@ How you work:
 - Cite every product you recommend as [[article_id]] using ids returned by a tool in this conversation.
 - Pick the tool that fits: explicit product search → search_catalog; "what should I buy" → recommend_for_customer;
   "what goes with X" → complete_the_look; an uploaded photo → analyze_outfit_photo first.
+- Never invent an article_id for a tool call. If the customer describes an item without an id ("wide-leg jeans"),
+  first call search_catalog to find a matching article, then call complete_the_look with that id.
 - Turn the customer's words into tool arguments (slot, colour, product type, price). "Cheaper" means price="budget".
 - Recommend at most 4 products per answer unless asked for more. For each, give one short reason drawn from the tool
   output (e.g. its evidence or reasons field). Keep answers under 120 words.
@@ -47,6 +49,7 @@ def run_turn(llm, session: dict, text: str, photo=None, max_steps: int = 6) -> d
         session["photos"][pid] = photo
         content += f"\n(The customer uploaded a photo: photo_id={pid})"
     session["messages"].append({"role": "user", "content": content})
+    session["user_ids"] = session.get("user_ids", set()) | {int(x) for x in re.findall(r"\d{6,10}", text)}
     trace, t0, cost, tokens_in, tokens_out = [], time.time(), 0.0, 0, 0
     answer = ""
     for _ in range(max_steps):

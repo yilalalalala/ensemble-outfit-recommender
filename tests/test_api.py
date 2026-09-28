@@ -63,3 +63,18 @@ def test_explain_and_events(client, demo):
 
 def test_image_fallback(client):
     assert client.get("/images/1.jpg").status_code == 200
+
+
+def test_label_tasks_are_blind_and_complete(client):
+    tasks = client.get("/api/label/tasks").json()
+    assert len(tasks) == 20 and all(len(t["candidates"]) == 5 for t in tasks)
+    assert all("mode" not in t for t in tasks)          # the labeller cannot see which mode produced a list
+    r = client.get(tasks[0]["crop"])
+    assert r.status_code == 200 and r.headers["content-type"] == "image/jpeg"
+
+
+def test_complete_the_look_rejects_fabricated_anchor():
+    from ensemble.assistant.tools import Toolbox
+    tb = Toolbox({"grounded": set()})
+    r = tb.complete_the_look(12345)
+    assert r["results"] == [] and "search_catalog" in r["error"]

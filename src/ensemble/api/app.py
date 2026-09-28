@@ -169,7 +169,7 @@ def visual_search(photo: UploadFile = File(...), category: str = Form(...), box:
         g["box"] = [int(x1 * img.width), int(y1 * img.height), int(x2 * img.width), int(y2 * img.height)]
         if g["box"][2] - g["box"][0] < 10 or g["box"][3] - g["box"][1] < 10:
             g["box"] = None
-    m = match(g, img, "crop", 8)
+    m = match(g, img, "crop_adapter", 8)  # best image-only mode (D-021)
     items = _cards(m.article_id.tolist())
     for it, sim in zip(items, m.similarity.tolist()):
         it["reasons"] = [{"key": "visual", "text": f"Visual match {sim:.2f}"}]
@@ -212,6 +212,69 @@ def assistant_message(sid: str, text: str = Form(...), photo: UploadFile | None 
     r = run_turn(s["llm"], s, text, _image(photo) if photo is not None and photo.filename else None)
     return {**{k: r[k] for k in ("answer", "trace", "latency_s", "cost_usd", "hallucinated")},
             "cards": _cards(r["cited"])}
+
+
+# --- Human gold labels for the visual-search judge (D-019) -------------------------------------------
+LABEL_MODES = ("crop_adapter", "text_rerank_image")
+LABELS_FILE = cfg.path("reports") / "m7a" / "human_labels.json"
+
+
+def _label_tasks() -> list[dict]:
+    import json as _json
+    import random
+    rows = _json.loads((cfg.path("reports") / "m7a" / "matches_judged.json").read_text())
+    by = {}
+    for r in rows:
+        if r["mode"] in LABEL_MODES and r["box"]:
+            by.setdefault((r["file"], r["garment"]), {})[r["mode"]] = r
+    keys = sorted(k for k, v in by.items() if len(v) == len(LABEL_MODES))
+    random.Random(11).shuffle(keys)
+    tasks = []
+    for f, g in keys[:10]:
+        for m in LABEL_MODES:
+            r = by[(f, g)][m]
+            tasks.append({"task_id": f"{f}|{g}|{m}", "file": f, "garment": g, "mode": m,
+                          "category": r["category"], "candidates": r["candidates"]})
+    random.Random(12).shuffle(tasks)   # modes interleaved, so the labeller cannot tell them apart
+    return tasks
+
+
+@app.get("/api/label/tasks")
+def label_tasks():
+    import json as _json
+    done = _json.loads(LABELS_FILE.read_text()) if LABELS_FILE.exists() else {}
+    return [{**{k: t[k] for k in ("task_id", "category")}, "crop": f"/api/label/crop/{i}.jpg",
+             "candidates": _cards(t["candidates"]), "done": t["task_id"] in done}
+            for i, t in enumerate(_label_tasks())]
+
+
+@app.get("/api/label/crop/{i}.jpg")
+def label_crop(i: int):
+    import json as _json
+    from fastapi.responses import Response
+    from PIL import Image as _Image
+    from ensemble.vision.outfit import _resize_bytes
+    t = _label_tasks()[i]
+    det = _json.loads((cfg.path("reports") / "m7a" / "detections_ollama.json").read_text())
+    _, small = _resize_bytes(_Image.open(cfg.path("raw") / "outfit_photos" / t["file"]))
+    crop = small.crop(det[t["file"]]["items"][t["garment"]]["box"])
+    buf = io.BytesIO()
+    crop.save(buf, format="JPEG", quality=90)
+    return Response(buf.getvalue(), media_type="image/jpeg")
+
+
+class LabelIn(BaseModel):
+    task_id: str
+    relevant: list[int]
+
+
+@app.post("/api/label")
+def save_label(body: LabelIn):
+    import json as _json
+    done = _json.loads(LABELS_FILE.read_text()) if LABELS_FILE.exists() else {}
+    done[body.task_id] = body.relevant
+    LABELS_FILE.write_text(_json.dumps(done, indent=1))
+    return {"ok": True, "labelled": len(done)}
 
 
 @app.get("/images/{article_id}.jpg")

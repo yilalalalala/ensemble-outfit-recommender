@@ -75,7 +75,7 @@ dialog::backdrop { background: rgba(0,0,0,.35); }
 <body>
 <header>
   <span class="brand">Ensemble</span>
-  <nav><a href="#/" id="nav-shop">Shop</a><a href="#/assistant" id="nav-assistant">Style assistant</a><a href="#/ds" id="nav-ds">DS view</a></nav>
+  <nav><a href="#/" id="nav-shop">Shop</a><a href="#/assistant" id="nav-assistant">Style assistant</a><a href="#/ds" id="nav-ds">DS view</a><a href="#/label" id="nav-label">Label</a></nav>
   <span class="spacer"></span>
   <label class="sub" for="cust">Demo customer</label>
   <select id="cust"></select>
@@ -251,15 +251,38 @@ async function stylist(anchor) {
   if (anchor) send(`What goes with article ${anchor}?`);
 }
 
+// ---- Human gold labels for the visual-search judge ---------------------------------------------------
+async function labeller() {
+  const tasks = await api("/api/label/tasks");
+  const todo = tasks.filter(t => !t.done);
+  if (!todo.length) { $("#app").innerHTML = `<h1>Labelling done</h1><p class="sub">All ${tasks.length} tasks labelled. Thank you!</p>`; return; }
+  const t = todo[0], sel = t.candidates.map(() => 0);
+  $("#app").innerHTML = `<h1>Is it a reasonable substitute?</h1>
+    <p class="sub">Task ${tasks.length - todo.length + 1} of ${tasks.length}. For each product, click it if a shopper looking for the item on the left would accept it
+    (same type of item, similar colour and style). Unclicked = not relevant.</p>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:12px">
+      <div><p class="sub">Street photo · ${esc(t.category)}</p><img src="${t.crop}" style="width:220px;max-height:340px;object-fit:contain;background:var(--chip);border-radius:8px"></div>
+      <div class="row" id="lab">${t.candidates.map((c, i) => `<div class="card" data-i="${i}" style="cursor:pointer;outline:3px solid transparent">
+        <img src="${c.image}" alt=""><div class="body"><div class="name">${esc(c.prod_name)}</div><div class="meta">${esc(c.product_type_name)} · ${esc(c.colour_group_name)}</div></div></div>`).join("")}</div>
+    </div><p style="margin-top:16px"><button class="btn primary" id="labsave">Save and next →</button></p>`;
+  document.querySelectorAll("#lab .card").forEach(el => el.onclick = () => {
+    const i = +el.dataset.i; sel[i] = 1 - sel[i]; el.style.outline = sel[i] ? "3px solid var(--good)" : "3px solid transparent"; });
+  $("#labsave").onclick = async () => {
+    await fetch("/api/label", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({task_id: t.task_id, relevant: sel})});
+    labeller();
+  };
+}
+
 async function route() {
   const h = location.hash || "#/";
-  $("#nav-shop").classList.toggle("active", !h.startsWith("#/ds"));
+  $("#nav-shop").classList.toggle("active", !/^#\/(ds|assistant|label)/.test(h));
+  $("#nav-label").classList.toggle("active", h.startsWith("#/label"));
   $("#nav-ds").classList.toggle("active", h.startsWith("#/ds"));
   $("#nav-assistant").classList.toggle("active", h.startsWith("#/assistant"));
-  if (h.startsWith("#/assistant")) $("#nav-shop").classList.remove("active");
   try {
     if (h.startsWith("#/product/")) await product(h.split("/")[2]);
     else if (h.startsWith("#/ds")) await ds();
+    else if (h.startsWith("#/label")) await labeller();
     else if (h.startsWith("#/assistant")) await stylist(new URLSearchParams(h.split("?")[1] || "").get("anchor"));
     else await home();
   } catch (e) { $("#app").innerHTML = `<p class="sub">Could not load (${esc(e)}).</p>`; }
