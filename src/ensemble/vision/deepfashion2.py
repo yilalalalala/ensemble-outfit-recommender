@@ -122,8 +122,10 @@ def _mask_crop(im: Image.Image, row, masked: bool) -> Image.Image:
 
 
 class ItemCrops(Dataset):
-    def __init__(self, frame: pd.DataFrame, processor, masked: bool):
-        self.frame, self.processor, self.masked = frame, processor, masked
+    """Decodes each image once and returns both views (plain crop, background removed)."""
+
+    def __init__(self, frame: pd.DataFrame, processor):
+        self.frame, self.processor = frame, processor
 
     def __len__(self):
         return len(self.frame)
@@ -131,10 +133,13 @@ class ItemCrops(Dataset):
     def __getitem__(self, i):
         r = self.frame.iloc[i]
         with Image.open(r.image_path) as im:
-            crop = pad_square(_mask_crop(im, r, self.masked))
-            crop.thumbnail((336, 336))
-            px = self.processor(images=crop, return_tensors="pt")["pixel_values"][0]
-        return i, px
+            im = im.convert("RGB")
+            views = []
+            for masked in (False, True):
+                crop = pad_square(_mask_crop(im, r, masked))
+                crop.thumbnail((336, 336))
+                views.append(self.processor(images=crop, return_tensors="pt")["pixel_values"][0])
+        return i, views[0], views[1]
 
 
 @torch.no_grad()
@@ -143,24 +148,22 @@ def embed_split(split: str) -> dict:
     df = pd.read_parquet(out / f"{split}_manifest.parquet")
     model, proc = load_clip()
     dev = clip_device()
-    stats = {}
-    for masked, name in ((False, "crop"), (True, "nobg")):
-        target = out / f"{split}_{name}_emb.npy"
-        dim = int(model.config.projection_dim)
-        arr = np.lib.format.open_memmap(target, mode="w+", dtype=np.float16, shape=(len(df), dim))
-        dl = DataLoader(ItemCrops(df, proc, masked), batch_size=192, num_workers=4,
-                        shuffle=False, persistent_workers=True)
-        t0 = time.time()
-        for step, (idx, px) in enumerate(dl):
+    dim = int(model.config.projection_dim)
+    arrs = {name: np.lib.format.open_memmap(out / f"{split}_{name}_emb.npy", mode="w+", dtype=np.float16,
+                                            shape=(len(df), dim)) for name in ("crop", "nobg")}
+    dl = DataLoader(ItemCrops(df, proc), batch_size=192, num_workers=6, shuffle=False, persistent_workers=True)
+    t0 = time.time()
+    for step, (idx, px_crop, px_nobg) in enumerate(dl):
+        for name, px in (("crop", px_crop), ("nobg", px_nobg)):
             z = model.get_image_features(pixel_values=px.to(dev))
             z = getattr(z, "pooler_output", z)
-            z = F.normalize(z, dim=-1).float().cpu().numpy().astype(np.float16)
-            arr[idx.numpy()] = z
-            if step % 100 == 0:
-                print(f"  {split}/{name}: {min((step + 1) * 192, len(df)):,}/{len(df):,}", flush=True)
-        arr.flush()
-        stats[name] = {"records": len(df), "seconds": round(time.time() - t0, 1)}
-    return stats
+            arrs[name][idx.numpy()] = F.normalize(z, dim=-1).float().cpu().numpy().astype(np.float16)
+        if step % 100 == 0:
+            done = min((step + 1) * 192, len(df))
+            print(f"  {split}: {done:,}/{len(df):,} ({time.time() - t0:.0f}s)", flush=True)
+    for a in arrs.values():
+        a.flush()
+    return {"records": len(df), "seconds": round(time.time() - t0, 1)}
 
 
 class ResidualAdapter(nn.Module):
@@ -189,13 +192,16 @@ def _identity_groups(df: pd.DataFrame):
     return groups
 
 
-def train_adapter(view: str = "crop") -> dict:
+def train_adapter(view: str = "crop", fraction: float = 1.0) -> dict:
     cfg = load_config()
     _, out = paths(cfg)
     tc = cfg.visual_adapter
     df = pd.read_parquet(out / "train_manifest.parquet")
     emb = np.load(out / f"train_{view}_emb.npy", mmap_mode="r")
     groups = _identity_groups(df)
+    if fraction < 1.0:  # learning curve: a fixed random subset of identities
+        keep = np.random.default_rng(0).permutation(len(groups))[: max(2, int(len(groups) * fraction))]
+        groups = [groups[i] for i in sorted(keep)]
     by_cat = defaultdict(list)
     for g in groups:
         by_cat[g[0]].append(g)
@@ -225,10 +231,10 @@ def train_adapter(view: str = "crop") -> dict:
         mean = float(np.mean(losses))
         history.append(mean)
         print(f"  {view} epoch {epoch + 1}: loss={mean:.5f}", flush=True)
-    target = out / f"adapter_{view}.pt"
+    target = out / (f"adapter_{view}.pt" if fraction >= 1.0 else f"adapter_{view}_f{fraction:g}.pt")
     torch.save({"state_dict": model.state_dict(), "dim": emb.shape[1], "hidden": int(tc.hidden),
                 "view": view, "history": history}, target)
-    return {"view": view, "identities": len(groups), "history": history, "artifact": str(target)}
+    return {"view": view, "fraction": fraction, "identities": len(groups), "history": history, "artifact": str(target)}
 
 
 @torch.no_grad()
@@ -291,6 +297,28 @@ def evaluate() -> dict:
     return report
 
 
+def learning_curve(view: str = "nobg", fractions=(0.1, 0.25, 0.5, 1.0)) -> dict:
+    """Validation Recall@K as a function of training identities (data-scaling curve)."""
+    _, out = paths()
+    df = pd.read_parquet(out / "validation_manifest.parquet")
+    user = df.source.eq("user").to_numpy(); shop = df.source.eq("shop").to_numpy()
+    emb = np.load(out / f"validation_{view}_emb.npy", mmap_mode="r")
+    args = (df.identity.values[user], df.identity.values[shop],
+            df.category_id.to_numpy()[user], df.category_id.to_numpy()[shop])
+    curve = {"0 (no adapter)": _metrics(emb[user], emb[shop], *args)["overall"]}
+    dev = "mps" if torch.backends.mps.is_available() else "cpu"
+    for f in fractions:
+        info = train_adapter(view, f)
+        ckpt = torch.load(info["artifact"], map_location="cpu")
+        mdl = DomainAdapters(ckpt["dim"], ckpt["hidden"]).to(dev)
+        mdl.load_state_dict(ckpt["state_dict"]); mdl.eval()
+        m = _metrics(_adapt(mdl, emb[user], "user"), _adapt(mdl, emb[shop], "shop"), *args)["overall"]
+        curve[f"{f:g} ({info['identities']:,} identities)"] = m
+        print(f"  fraction {f}: {m}", flush=True)
+    (out / f"learning_curve_{view}.json").write_text(json.dumps(curve, indent=2))
+    return curve
+
+
 def run_all():
     t0 = time.time()
     manifest = build_manifest()
@@ -310,7 +338,9 @@ if __name__ == "__main__":
     if stage == "manifest": build_manifest((sys.argv[2],) if len(sys.argv) > 2 else ("train", "validation"))
     elif stage == "embed":
         embed_split(sys.argv[2] if len(sys.argv) > 2 else "train")
-    elif stage == "train": train_adapter(sys.argv[2] if len(sys.argv) > 2 else "crop")
+    elif stage == "train": train_adapter(sys.argv[2] if len(sys.argv) > 2 else "crop",
+                                         float(sys.argv[3]) if len(sys.argv) > 3 else 1.0)
+    elif stage == "curve": learning_curve(sys.argv[2] if len(sys.argv) > 2 else "nobg")
     elif stage == "evaluate": evaluate()
     elif stage == "all": run_all()
     else: raise SystemExit(f"unknown stage: {stage}")

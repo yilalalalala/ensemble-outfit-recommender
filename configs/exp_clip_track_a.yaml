@@ -1,0 +1,6 @@
+# Experiment: Track A with FashionCLIP retrieval channel and ranker features (M7a).
+extends: default
+retrieval:
+  use_visual: true
+features:
+  use_clip: true

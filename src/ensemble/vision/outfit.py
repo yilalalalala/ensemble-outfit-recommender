@@ -109,8 +109,56 @@ def catalogue() -> tuple[pd.DataFrame, np.ndarray]:
     return live, emb[row[live.article_id].values].astype(np.float32)
 
 
+@lru_cache(maxsize=1)
+def _rembg_session():
+    from rembg import new_session
+    return new_session("u2net")
+
+
+def remove_background(img: Image.Image) -> Image.Image:
+    """Cut the garment out (U²-Net via rembg) and paste it on white, to look like a product shot."""
+    from rembg import remove
+    cut = remove(img.convert("RGB"), session=_rembg_session())
+    bg = Image.new("RGB", cut.size, (255, 255, 255))
+    bg.paste(cut, mask=cut.split()[-1])
+    return bg
+
+
+@lru_cache(maxsize=2)
+def adapter(view: str = "crop"):
+    """Street↔shop domain adapters trained on DeepFashion2 (None until trained). The plain-crop
+    adapter is the default: on DeepFashion2 validation it beats the background-removed one
+    (Recall@1 0.585 vs 0.545)."""
+    import torch
+    from ensemble.vision.deepfashion2 import DomainAdapters, paths
+    path = paths()[1] / f"adapter_{view}.pt"
+    if not path.exists():
+        return None
+    ck = torch.load(path, map_location="cpu")
+    m = DomainAdapters(ck["dim"], ck["hidden"])
+    m.load_state_dict(ck["state_dict"])
+    return m.eval()
+
+
+def _adapt(x: np.ndarray, domain: str, view: str = "crop") -> np.ndarray:
+    import torch
+    with torch.no_grad():
+        return getattr(adapter(view), domain)(torch.as_tensor(np.atleast_2d(x), dtype=torch.float32)).numpy()
+
+
+@lru_cache(maxsize=2)
+def catalogue_shop_adapted(view: str = "crop") -> np.ndarray:
+    return _adapt(catalogue()[1], "shop", view)
+
+
 def query_vector(mode: str, garment: dict, photo: Image.Image) -> np.ndarray:
     crop = photo.crop(garment["box"]) if garment.get("box") else photo
+    if mode == "crop_nobg":
+        return clip.embed_images([remove_background(crop)])[0]
+    if mode == "crop_nobg_adapter":
+        return _adapt(clip.embed_images([remove_background(crop)])[0], "user", "nobg")[0]
+    if mode == "crop_adapter":
+        return _adapt(clip.embed_images([crop])[0], "user", "crop")[0]
     text = f"{garment['colour']} {garment['description']}".strip()
     if mode == "photo":
         return clip.embed_images([photo])[0]
@@ -127,6 +175,11 @@ def query_vector(mode: str, garment: dict, photo: Image.Image) -> np.ndarray:
 
 def match(garment: dict, photo: Image.Image, mode: str = "crop+text", k: int = 5) -> pd.DataFrame:
     live, emb = catalogue()
+    if mode.endswith("_adapter"):
+        view = "nobg" if mode == "crop_nobg_adapter" else "crop"
+        if adapter(view) is None:
+            raise RuntimeError("DeepFashion2 adapter not trained")
+        emb = catalogue_shop_adapted(view)
     slot, types = CATEGORIES[garment["category"]]
     mask = (live.slot == slot).to_numpy(copy=True)  # pandas 3: .values is read-only
     if types:
@@ -134,6 +187,18 @@ def match(garment: dict, photo: Image.Image, mode: str = "crop+text", k: int = 5
     if not mask.any():
         return live.head(0)
     idx = np.flatnonzero(mask)
+    if mode == "text_rerank_image":
+        # Two stages: text retrieves 50 candidates in the right category, image similarity reranks
+        # them (street-to-shop adapted when available), so visual detail decides among good candidates.
+        t = emb[idx] @ query_vector("text", garment, photo)
+        cand = idx[np.argsort(-t)[:50]]
+        if adapter("crop") is not None:
+            img = catalogue_shop_adapted("crop")[cand] @ query_vector("crop_adapter", garment, photo)
+        else:
+            img = emb[cand] @ query_vector("crop_nobg", garment, photo)
+        s = 0.5 * (emb[cand] @ query_vector("text", garment, photo)) + 0.5 * img
+        order = np.argsort(-s)[:k]
+        return live.iloc[cand[order]].assign(similarity=s[order])
     s = emb[idx] @ query_vector(mode, garment, photo)
     top = idx[np.argsort(-s)[:k]]
     return live.iloc[top].assign(similarity=np.sort(s)[::-1][:k])
@@ -154,7 +219,7 @@ def gaps(garments: list[dict]) -> list[str]:
     return missing
 
 
-def snap(image: Image.Image, llm, mode: str = "crop+text", k: int = 5) -> dict:
+def snap(image: Image.Image, llm, mode: str = "text_rerank_image", k: int = 5) -> dict:
     """The full journey for one photo."""
     garments, photo = detect(image, llm)
     for g in garments:

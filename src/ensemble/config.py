@@ -23,6 +23,21 @@ class Config(dict):
         return ROOT / self["paths"][key]
 
 
-def load_config(name: str = "default") -> Config:
+def _merge(base: dict, over: dict) -> dict:
+    out = dict(base)
+    for k, v in over.items():
+        out[k] = _merge(base[k], v) if isinstance(v, dict) and isinstance(base.get(k), dict) else v
+    return out
+
+
+def load_config(name: str | None = None) -> Config:
+    """Load configs/<name>.yaml (default: $ENSEMBLE_CONFIG or "default"). An experiment config may
+    set ``extends: default`` and override only the keys it changes."""
+    import os
+    name = name or os.environ.get("ENSEMBLE_CONFIG", "default")
     with open(ROOT / "configs" / f"{name}.yaml") as f:
-        return Config(yaml.safe_load(f))
+        data = yaml.safe_load(f)
+    parent = data.pop("extends", None)
+    if parent:
+        data = _merge(dict(load_config(parent)), data)
+    return Config(data)

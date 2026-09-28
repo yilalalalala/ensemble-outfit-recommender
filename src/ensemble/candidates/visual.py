@@ -81,12 +81,11 @@ def add_clip_features(con, week: Week, cfg, df: pd.DataFrame) -> pd.DataFrame:
     hist = hist[hist.article_id.isin(row.index)]
     hist = hist[has[row[hist.article_id].values]]
     groups = {c: emb[row[g.article_id].values] for c, g in hist.groupby("customer_idx")}
-    cand_rows = row.reindex(df.article_id.values).values
+    # Per-customer gather: never materialise a (candidates × 512) matrix (≈20 GB for one week).
+    cand_rows = row.reindex(df.article_id.values).to_numpy(dtype=np.float64)
     ok = ~np.isnan(cand_rows)
-    cand_emb = np.zeros((len(df), emb.shape[1]), dtype=np.float32)
-    cand_emb[ok] = emb[cand_rows[ok].astype(int)]
-    cand_has = np.zeros(len(df), dtype=bool)
-    cand_has[ok] = has[cand_rows[ok].astype(int)]
+    rows_int = np.where(ok, cand_rows, 0).astype(np.int64)
+    usable = ok & has[rows_int]
     mx = np.full(len(df), np.nan, dtype=np.float32)
     mean = np.full(len(df), np.nan, dtype=np.float32)
     cust = df.customer_idx.values
@@ -95,7 +94,9 @@ def add_clip_features(con, week: Week, cfg, df: pd.DataFrame) -> pd.DataFrame:
         H = groups.get(cust[s])
         if H is None:
             continue
-        S = cand_emb[s:e] @ H.T
-        mx[s:e], mean[s:e] = S.max(axis=1), S.mean(axis=1)
-    mx[~cand_has], mean[~cand_has] = np.nan, np.nan
+        sel = np.flatnonzero(usable[s:e]) + s
+        if not len(sel):
+            continue
+        S = emb[rows_int[sel]] @ H.T
+        mx[sel], mean[sel] = S.max(axis=1), S.mean(axis=1)
     return df.assign(ca_clip_sim_max=mx, ca_clip_sim_mean=mean)
