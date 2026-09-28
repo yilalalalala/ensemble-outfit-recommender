@@ -99,8 +99,10 @@ by Claude Haiku 4.5, which sees pixels and the category only.
   - text retrieve → image rerank: 0.54 [0.34, 0.74];
   - crop + adapter: 0.34 [0.18, 0.50].
 
-  Read the absolute judge numbers above as relative. Opus 5 with the written guideline agrees best
-  (0.75, κ 0.48). A stratified held-out round 2 is pending.
+  Read the absolute judge numbers above as relative. Opus 5 with the written guideline agrees best:
+  0.75 (κ 0.48) on the calibration round and **0.81 (κ 0.57) on the held-out round 2**, so it is
+  the default judge from now on. Round 2 human P@5 (jewellery- and bag-heavy): text → image rerank
+  0.44, crop + adapter 0.28, the same ranking.
 - **95% intervals** (photo-level bootstrap) for judged Precision@5:
   - crop 0.357 [0.33, 0.39];
   - crop + adapter 0.477 [0.45, 0.51];
@@ -184,7 +186,7 @@ The web app (`make serve`, http://localhost:8010) now has:
 
 ## 8. Next steps
 
-1. **Round 2 human labels** (held-out, stratified), to confirm the chosen judge. Round 1 is done
+1. Human labels are done: 2 rounds, 200 judgements; the judge choice is confirmed on held-out data
    (D-025).
 2. **Exact-match benchmark from the owner's street↔product pairs:** 3 composite images so far;
    about 30 more gives about 150 pairs, with jewellery close-ups prioritised.

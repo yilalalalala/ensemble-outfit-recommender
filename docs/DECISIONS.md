@@ -513,7 +513,7 @@ per turn. That trade-off is the owner's product call.
 ---
 
 ### D-025 — Human gold labels and judge calibration
-**Date:** 2026-09-28 · **Status:** active (round 2 pending)
+**Date:** 2026-09-28 · **Status:** active (confirmed on held-out round 2)
 
 The owner labelled 100 judgements (10 garments × 2 modes × 5 results) on the blind Label page,
 following a written guideline: same type, similar colour, similar style; all three required; if
@@ -547,3 +547,20 @@ Rerunning the same Haiku judge moved agreement from 0.58 to 0.67, so single judg
   held-out set: 3 jewellery, 2 bag and 1 each of shoes, outerwear, bottom, top, sunglasses). Round 1
   is the calibration set, used to choose; round 2 is only for reporting.
 - **No full re-judge:** a full Opus re-judge (≈$15 with Batch) exceeds the budget.
+
+**Round 2 (held-out)** — 100 judgements, stratified by category (3 jewellery, 2 bag and 1 each of
+shoes, outerwear, bottom, top, sunglasses), disjoint from round 1. Owner self-consistency: 87.5%
+(14 of 16).
+
+| judge | agreement | κ |
+| --- | ---: | ---: |
+| Haiku batch (stored) | 0.64 [0.55, 0.75] | 0.30 |
+| Haiku, short prompt (rerun) | 0.72 [0.62, 0.82] | 0.43 |
+| **Opus 5 + guideline** | **0.81 [0.72, 0.90]** | **0.57** |
+
+Human Precision@5: text retrieve → image rerank 0.44; crop + adapter 0.28. The ranking matches
+round 1, with lower absolute scores on this jewellery- and bag-heavy set.
+
+**Confirmed:** Opus 5 + the written guideline is the default judge for future visual-search
+evaluations. It costs about $0.007 per judged list.
+
