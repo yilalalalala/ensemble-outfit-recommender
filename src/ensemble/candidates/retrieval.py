@@ -12,7 +12,12 @@ from datetime import timedelta
 from ensemble.baselines import AGE_BINS
 from ensemble.data.splits import Week
 
-CHANNELS = ("repeat", "pop", "pop_age", "new_arrival", "cf", "variant")
+CHANNELS = ("repeat", "pop", "pop_age", "new_arrival", "cf", "variant", "visual")
+
+
+def r_cfg():
+    from ensemble.config import load_config
+    return load_config()
 
 
 def _d(x) -> str:
@@ -53,6 +58,11 @@ def build_candidates(con, week: Week, r, users_table: str = "_users") -> None:
     pop_lo = _d(week.start - timedelta(days=int(r.pop_days)))
 
     build_item_pairs(con, week, r)
+    if r.get("use_visual"):
+        from ensemble.candidates.visual import build_visual_channel
+        build_visual_channel(con, week, r_cfg(), users_table)
+    else:
+        con.execute("CREATE OR REPLACE TEMP TABLE _visual (customer_idx INTEGER, article_id INTEGER, score DOUBLE)")
     con.execute(f"""
         CREATE OR REPLACE TEMP TABLE _hist AS
         SELECT t.customer_idx, t.article_id, t.t_dat
@@ -99,6 +109,9 @@ def build_candidates(con, week: Week, r, users_table: str = "_users") -> None:
         JOIN item_pairs ip ON ip.src = s.article_id
         GROUP BY 1, 2
 
+        UNION ALL  -- visual similarity to recent purchases (FashionCLIP; empty table if disabled)
+        SELECT customer_idx, article_id, 'visual', score FROM _visual
+
         UNION ALL  -- variants: same product_code, other colourway, ranked by recent sales
         SELECT s.customer_idx, a2.article_id, 'variant', max(coalesce(p.n, 0))
         FROM (SELECT DISTINCT customer_idx, article_id FROM _hist WHERE t_dat >= {seed_lo}) s
@@ -107,7 +120,7 @@ def build_candidates(con, week: Week, r, users_table: str = "_users") -> None:
         JOIN _pop p ON p.article_id = a2.article_id
         GROUP BY 1, 2
     """)
-    caps = {"repeat": r.repeat_k, "pop": r.pop_k, "pop_age": r.pop_age_k,
+    caps = {"visual": r.get("visual_k", 0), "repeat": r.repeat_k, "pop": r.pop_k, "pop_age": r.pop_age_k,
             "new_arrival": r.new_arrival_k, "cf": r.cf_k, "variant": r.variant_k}
     cap_case = " ".join(f"WHEN '{c}' THEN {int(k)}" for c, k in caps.items())
     pivots = ",\n".join(

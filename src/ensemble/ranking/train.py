@@ -31,6 +31,9 @@ def week_frame(con, cfg, week: Week, users_sql: str, with_labels: bool, positive
     con.execute(f"CREATE OR REPLACE TEMP TABLE _users AS {users_sql}")
     build_candidates(con, week, cfg.retrieval)
     df = build_features(con, week, with_labels)
+    if cfg.get("features", {}).get("use_clip"):
+        from ensemble.candidates.visual import add_clip_features
+        df = add_clip_features(con, week, cfg, df)
     if positives_only:
         keep = df.groupby("customer_idx")["label"].transform("max") > 0
         df = df[keep].reset_index(drop=True)

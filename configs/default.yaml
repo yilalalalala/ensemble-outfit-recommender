@@ -41,6 +41,22 @@ retrieval:
   cf_seed_weeks: 16      # a customer's items from this window seed CF and variants
   cf_k: 50
   variant_k: 20
+  use_visual: false      # FashionCLIP channel (M7a); enabled after validation, see D-017
+  visual_k: 20
+  visual_pool_days: 14
+  visual_profile_items: 20
+
+features:
+  use_clip: false        # ca_clip_sim_max / ca_clip_sim_mean ranker features (M7a)
+
+visual_adapter:
+  hidden: 256
+  batch_size: 512
+  epochs: 12
+  lr: 0.0003
+  weight_decay: 0.0001
+  temperature: 0.05
+  seed: 42
 
 ranker:
   train_weeks: 4           # label weeks preceding the evaluation week
