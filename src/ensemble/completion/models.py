@@ -62,6 +62,49 @@ def association(con, q: pd.DataFrame, uni: pd.DataFrame, k: int, min_support: in
     return out
 
 
+def association_backoff(con, q: pd.DataFrame, uni: pd.DataFrame, k: int, min_support: int) -> list[np.ndarray]:
+    """Hierarchical backoff: article-level pairs first, then style-level pairs (all colourways of
+    the anchor's product_code pooled), then popularity. Fights sparsity for rare anchors."""
+    live = set(uni.article_id)
+    art = association(con, q, uni, 4 * k, min_support, "npmi")
+    rows = con.execute(f"""
+        SELECT src_code, dst_slot, dst FROM style_pairs
+        WHERE co >= {int(min_support)} AND lift > 1
+          AND src_code IN (SELECT DISTINCT product_code FROM articles WHERE article_id IN (SELECT anchor FROM _q_anchors))
+        QUALIFY row_number() OVER (PARTITION BY src_code, dst_slot ORDER BY npmi DESC, dst) <= {4 * k}
+        ORDER BY src_code, dst_slot, npmi DESC, dst""").fetchall()
+    style: dict[tuple, list[int]] = defaultdict(list)
+    for code, slot, dst in rows:
+        if dst in live:
+            style[(code, slot)].append(dst)
+    code_of = dict(con.execute("SELECT article_id, product_code FROM articles").fetchall())
+    pop = slot_lists(uni)
+    # Article-level lists were back-filled by popularity; keep only their pair-backed prefix.
+    pair_backed = association_pairs_only(con, q, uni, 4 * k, min_support)
+    out = []
+    for i, (a, s) in enumerate(zip(q.anchor.values, q.target_slot.values)):
+        merged = list(dict.fromkeys(list(pair_backed[i]) + style.get((code_of.get(a), s), [])))
+        if len(merged) < k:
+            seen = set(merged)
+            merged += [x for x in pop[s][: 2 * k] if x not in seen][: k - len(merged)]
+        out.append(np.asarray(merged[:k]))
+    return out
+
+
+def association_pairs_only(con, q, uni, k, min_support) -> list[np.ndarray]:
+    live = set(uni.article_id)
+    rows = con.execute(f"""
+        SELECT src, dst_slot, dst FROM pairs_all
+        WHERE co >= {int(min_support)} AND lift > 1 AND src IN (SELECT DISTINCT anchor FROM _q_anchors)
+        QUALIFY row_number() OVER (PARTITION BY src, dst_slot ORDER BY npmi DESC, dst) <= {k}
+        ORDER BY src, dst_slot, npmi DESC, dst""").fetchall()
+    nbrs: dict[tuple, list[int]] = defaultdict(list)
+    for src, slot, dst in rows:
+        if dst in live:
+            nbrs[(src, slot)].append(dst)
+    return [np.asarray(nbrs.get((a, s), []), dtype=np.int64) for a, s in zip(q.anchor.values, q.target_slot.values)]
+
+
 def rrf(lists: list[list[np.ndarray]], weights: list[float], k: int, c: float = 60.0) -> list[np.ndarray]:
     """Weighted reciprocal rank fusion, a standard way to merge ranked lists."""
     out = []
@@ -86,7 +129,7 @@ class ItemEncoder:
     """Maps article ids to integer feature codes (index 0 = unknown)."""
 
     def __init__(self, items: pd.DataFrame, tiers: dict[int, int], id_articles: np.ndarray,
-                 pop_buckets: dict[int, int] | None = None):
+                 pop_buckets: dict[int, int] | None = None, clip: tuple[np.ndarray, np.ndarray] | None = None):
         items = items.copy()
         items["price_tier"] = items.article_id.map(tiers).fillna(0).astype(int)
         # Recent-sales decile within the slot (0 = no sales before the cutoff), so the
@@ -104,22 +147,41 @@ class ItemEncoder:
         codes.append(items.article_id.map(id_map).fillna(0).astype(int).values)
         self.cardinality.append(len(id_articles) + 1)
         self.codes = torch.as_tensor(np.stack(codes, axis=1), dtype=torch.long)
+        # Frozen FashionCLIP image vectors (zeros where an article has no image).
+        self.clip = None
+        if clip is not None:
+            ids, emb = clip
+            pos = {a: i for i, a in enumerate(ids)}
+            m = np.zeros((len(items), emb.shape[1]), dtype=np.float32)
+            for a, r in self.row.items():
+                j = pos.get(a)
+                if j is not None:
+                    m[r] = emb[j]
+            self.clip = torch.as_tensor(m)
 
     def __call__(self, article_ids) -> torch.Tensor:
         return self.codes[[self.row[a] for a in article_ids]]
 
+    def clip_of(self, article_ids) -> torch.Tensor | None:
+        return None if self.clip is None else self.clip[[self.row[a] for a in article_ids]]
+
 
 class Tower(nn.Module):
-    def __init__(self, cardinality: list[int], emb_dim: int, hidden: int, dim: int, extra: int = 0, id_dim: int = 32):
+    def __init__(self, cardinality: list[int], emb_dim: int, hidden: int, dim: int, extra: int = 0, id_dim: int = 32,
+                 clip_dim: int = 0):
         super().__init__()
         self.embs = nn.ModuleList(nn.Embedding(n, emb_dim) for n in cardinality[:-1])
         self.id_emb = nn.Embedding(cardinality[-1], id_dim, padding_idx=0)
         self.extra = nn.Embedding(extra, emb_dim) if extra else None
-        d_in = emb_dim * (len(cardinality) - 1) + id_dim + (emb_dim if extra else 0)
+        self.clip_proj = nn.Linear(clip_dim, 64) if clip_dim else None
+        d_in = emb_dim * (len(cardinality) - 1) + id_dim + (emb_dim if extra else 0) + (64 if clip_dim else 0)
         self.mlp = nn.Sequential(nn.Linear(d_in, hidden), nn.ReLU(), nn.Linear(hidden, dim))
 
-    def forward(self, codes: torch.Tensor, id_keep: torch.Tensor | None = None, extra: torch.Tensor | None = None):
+    def forward(self, codes: torch.Tensor, id_keep: torch.Tensor | None = None, extra: torch.Tensor | None = None,
+                clip: torch.Tensor | None = None):
         parts = [e(codes[:, i]) for i, e in enumerate(self.embs)]
+        if self.clip_proj is not None:
+            parts.append(self.clip_proj(clip))
         ids = self.id_emb(codes[:, -1])
         if id_keep is not None:
             ids = ids * id_keep.unsqueeze(1)
@@ -132,11 +194,19 @@ class Tower(nn.Module):
 class TwoTower(nn.Module):
     """Anchor tower (conditioned on the target slot) and complement tower."""
 
-    def __init__(self, cardinality, tt):
+    def __init__(self, cardinality, tt, clip_dim: int = 0):
         super().__init__()
-        self.query = Tower(cardinality, int(tt.emb_dim), int(tt.hidden), int(tt.dim), extra=len(SLOT_IDS))
-        self.item = Tower(cardinality, int(tt.emb_dim), int(tt.hidden), int(tt.dim))
+        self.query = Tower(cardinality, int(tt.emb_dim), int(tt.hidden), int(tt.dim), extra=len(SLOT_IDS), clip_dim=clip_dim)
+        self.item = Tower(cardinality, int(tt.emb_dim), int(tt.hidden), int(tt.dim), clip_dim=clip_dim)
         self.tau = float(tt.temperature)
+
+    def encode_query(self, enc, anchors, keep, slots, device):
+        c = enc.clip_of(anchors)
+        return self.query(enc(anchors).to(device), keep, slots, None if c is None else c.to(device))
+
+    def encode_item(self, enc, arts, keep, device):
+        c = enc.clip_of(arts)
+        return self.item(enc(arts).to(device), keep, clip=None if c is None else c.to(device))
 
 
 def train_two_tower(pos: pd.DataFrame, enc: ItemEncoder, uni_items: pd.DataFrame, tiers: dict, tt,
@@ -153,7 +223,7 @@ def train_two_tower(pos: pd.DataFrame, enc: ItemEncoder, uni_items: pd.DataFrame
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     neg = set(tt.negatives)
-    model = TwoTower(enc.cardinality, tt).to(device)
+    model = TwoTower(enc.cardinality, tt, 0 if enc.clip is None else enc.clip.shape[1]).to(device)
     opt = torch.optim.Adam(model.parameters(), lr=float(tt.lr))
 
     src_codes = enc(pos.src.values)
@@ -184,8 +254,9 @@ def train_two_tower(pos: pd.DataFrame, enc: ItemEncoder, uni_items: pd.DataFrame
             s_codes, d_codes, sl = src_codes[idx], dst_codes[idx], slot_ids[idx]
             keep_q = (torch.rand(len(idx)) > float(tt.id_dropout)).float()
             keep_d = (torch.rand(len(idx)) > float(tt.id_dropout)).float()
-            q = model.query(s_codes.to(device), keep_q.to(device), sl.to(device))
-            d = model.item(d_codes.to(device), keep_d.to(device))
+            src_ids, dst_ids = pos.src.values[idx.numpy()], pos.dst.values[idx.numpy()]
+            q = model.encode_query(enc, src_ids, keep_q.to(device), sl.to(device), device)
+            d = model.encode_item(enc, dst_ids, keep_d.to(device), device)
             logits = [q @ d.T / model.tau]
             if "logq" in neg:
                 logits[0] = logits[0] - logq_dst[idx].to(device).unsqueeze(0)
@@ -203,7 +274,7 @@ def train_two_tower(pos: pd.DataFrame, enc: ItemEncoder, uni_items: pd.DataFrame
                 for s_id in sl.unique().tolist():
                     arts, p = pools[s_id]
                     sample = rng.choice(len(arts), size=m, p=p)
-                    e = model.item(enc(arts[sample]).to(device), torch.zeros(m, device=device))
+                    e = model.encode_item(enc, arts[sample], torch.zeros(m, device=device), device)
                     rows = (sl == s_id).nonzero().squeeze(1).to(device)
                     sc = q[rows] @ e.T / model.tau
                     if "logq" in neg:
@@ -216,7 +287,7 @@ def train_two_tower(pos: pd.DataFrame, enc: ItemEncoder, uni_items: pd.DataFrame
                 for a in pos.dst.values[idx.numpy()]:
                     g = groups.get(key_of.get(a), None)
                     hard_ids.extend(rng.choice(g, size=h) if g is not None and len(g) > 1 else [a] * h)
-                e = model.item(enc(hard_ids).to(device), torch.zeros(len(hard_ids), device=device)).view(len(idx), h, -1)
+                e = model.encode_item(enc, hard_ids, torch.zeros(len(hard_ids), device=device), device).view(len(idx), h, -1)
                 hs = (q.unsqueeze(1) * e).sum(-1) / model.tau
                 same = torch.as_tensor(np.asarray(hard_ids).reshape(len(idx), h) == pos.dst.values[idx.numpy()][:, None], device=device)
                 logits.append(hs.masked_fill(same, -1e9))
@@ -246,15 +317,14 @@ def two_tower_recs(model: TwoTower, enc: ItemEncoder, q: pd.DataFrame, uni: pd.D
     out: list[np.ndarray | None] = [None] * len(q)
     for s, g in uni.groupby("slot"):
         arts = g.article_id.values
-        e = torch.cat([model.item(enc(arts[i:i + 8192]).to(device),
-                                  torch.full((len(arts[i:i + 8192]),), float(use_ids), device=device))
+        e = torch.cat([model.encode_item(enc, arts[i:i + 8192],
+                                         torch.full((len(arts[i:i + 8192]),), float(use_ids), device=device), device)
                        for i in range(0, len(arts), 8192)])
         rows = np.flatnonzero(q.target_slot.values == s)
         for b in range(0, len(rows), 4096):
             r = rows[b:b + 4096]
-            qe = model.query(enc(q.anchor.values[r]).to(device),
-                             torch.full((len(r),), float(use_ids), device=device),
-                             torch.full((len(r),), SLOT_IDS[s], dtype=torch.long, device=device))
+            qe = model.encode_query(enc, q.anchor.values[r], torch.full((len(r),), float(use_ids), device=device),
+                                    torch.full((len(r),), SLOT_IDS[s], dtype=torch.long, device=device), device)
             top = torch.topk(qe @ e.T, min(k, len(arts)), dim=1).indices.cpu().numpy()
             for i, t in zip(r, top):
                 out[i] = arts[t]

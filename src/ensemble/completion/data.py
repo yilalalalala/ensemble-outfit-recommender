@@ -63,6 +63,22 @@ def mine_pairs(con, week: Week, cfg) -> dict:
         FROM co JOIN na ns ON ns.article_id = src JOIN na nd ON nd.article_id = dst
     """)
     funnel["pairs_cross_slot"] = con.execute("SELECT count(*) / 2 FROM pairs_all").fetchone()[0]
+    # Style-level pairs (hierarchical backoff): the anchor side pooled over all colourways of a
+    # product_code, counted once per basket.
+    con.execute(f"""
+        CREATE OR REPLACE TEMP TABLE style_pairs AS
+        WITH bk AS (SELECT b.*, a.product_code FROM _bk b JOIN articles a USING (article_id)),
+        ns AS (SELECT product_code, count(DISTINCT (customer_idx, t_dat)) AS n FROM bk GROUP BY 1),
+        nd AS (SELECT article_id, count(*) AS n FROM _bk GROUP BY 1),
+        co AS (SELECT x.product_code AS src_code, y.article_id AS dst, y.slot AS dst_slot,
+                      count(DISTINCT (x.customer_idx, x.t_dat)) AS co
+               FROM bk x JOIN _bk y ON x.customer_idx = y.customer_idx AND x.t_dat = y.t_dat AND x.slot <> y.slot
+               GROUP BY 1, 2, 3)
+        SELECT co.*, co * {n}.0 / (ns.n * nd.n) AS lift,
+               ln(co * {n}.0 / (ns.n * nd.n)) / -ln(co / {n}.0) AS npmi
+        FROM co JOIN ns ON ns.product_code = src_code JOIN nd ON nd.article_id = dst
+    """)
+    funnel["style_pairs_support_ge_3"] = con.execute("SELECT count(*) FROM style_pairs WHERE co >= 3").fetchone()[0]
     for t in sorted({3, 10, int(c.min_support), int(s.min_pair_support)}):
         funnel[f"pairs_support_ge_{t}"] = con.execute(f"SELECT count(*) / 2 FROM pairs_all WHERE co >= {t}").fetchone()[0]
         funnel[f"pairs_support_ge_{t}_lift_gt_1"] = con.execute(

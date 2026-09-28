@@ -69,8 +69,9 @@ def test_track_b_training_pairs_precede_week():
     def pairs(future_article):
         con = make_db(future_article)
         con.execute("""CREATE TABLE articles AS SELECT * FROM (VALUES
-            (1, 'upper'), (2, 'lower'), (3, 'accessories'), (77, 'shoes'), (99, 'shoes'))
-            t(article_id, slot)""")
+            (1, 10, 'upper'), (2, 20, 'lower'), (3, 30, 'accessories'),
+            (77, 770, 'shoes'), (99, 990, 'shoes'))
+            t(article_id, product_code, slot)""")
         # Same-day basket before the week, and a cross-slot basket inside it.
         con.execute("INSERT INTO transactions VALUES ('2020-09-10', 0, 3, 0.1, 2)")
         con.execute("INSERT INTO transactions VALUES ('2020-09-17', 0, 1, 0.1, 2)")
