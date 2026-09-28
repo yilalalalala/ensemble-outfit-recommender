@@ -1,12 +1,13 @@
 .PHONY: help setup data ingest test baselines retrieval ranker track-b submission serving serve mvp mlflow
-PY := PYTHONPATH=src .venv/bin/python
+PYTHON := .venv/bin/python
+PY := PYTHONPATH=src $(PYTHON)
 PORT ?= 8010
 
 help:
 	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-12s %s\n", $$1, $$2}'
 
 setup:      ## create the venv (Python 3.11) and install dependencies; macOS also needs `brew install libomp`
-	uv venv -p 3.11 .venv && uv pip install -p $(PY) -r requirements.txt -e .
+	uv venv -p 3.11 .venv && uv pip install -p $(PYTHON) -r requirements.txt -e .
 
 data:       ## download the full dataset from Kaggle (see README for credentials)
 	./scripts/download_data.sh --images
