@@ -1,0 +1,576 @@
+{
+  "summary": {
+    "backend": "ollama",
+    "model": "qwen3-vl:8b-instruct",
+    "turns": 23,
+    "tool_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "constraint_pass": 0.9130434782608695,
+    "hallucination_rate": 0.0,
+    "no_product_pass": [
+      true,
+      true
+    ],
+    "turns_with_products": 0.8695652173913043,
+    "latency_median_s": 27.74,
+    "latency_p90_s": 40.54,
+    "cost_usd_total": 0.0,
+    "errors": 0
+  },
+  "turns": [
+    {
+      "case": "reco_open",
+      "turn": 1,
+      "text": "Recommend me something new to wear.",
+      "answer": "Here are some new items based on your past purchases:\n\n1. **New York Pile Waistcoat** \u2013 A stylish outdoor blazer in yellowish brown, perfect for layering. [[884668002]]\n\n2. **Coachella Push Melbourne Bra** \u2013 A light blue bra, ideal for expressive lingerie looks. [[829618004]]\n\n3. **Greta Thong Mynta Low 3p** \u2013 Dark grey underwear, a comfortable and classic choice. [[464297031]]\n\n4. **Charlotte SP Andes Bra** \u2013 A sleek black bra, great for versatile styling. [[429313002]]\n\nLet me know if you\u2019d like more suggestions!",
+      "tools_called": [
+        "recommend_for_customer"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        884668002,
+        829618004,
+        464297031,
+        429313002
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 27.74,
+      "cost_usd": 0.0,
+      "input_tokens": 2546,
+      "output_tokens": 190,
+      "error": null
+    },
+    {
+      "case": "reco_slot",
+      "turn": 1,
+      "text": "Any trousers or skirts for me?",
+      "answer": "Here are some trousers for you:\n\n1. **Sky HW jogger (Blue)** \u2013 Trending this week, a style you bought in another colour [[759814036]].\n2. **Mom Fit Ultra HW (Blue)** \u2013 Trending this week, from sections you shop [[714790020]].\n3. **Victorville HW Pull-on TRS (Black)** \u2013 Trending this week, a style you bought in another colour [[760084003]].\n4. **Sky HW jogger (Black)** \u2013 Trending this week, a style you bought in another colour [[759814009]].\n\nLet me know if you\u2019d like more options or something specific!",
+      "tools_called": [
+        "recommend_for_customer"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        759814036,
+        714790020,
+        760084003,
+        759814009
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 25.69,
+      "cost_usd": 0.0,
+      "input_tokens": 2543,
+      "output_tokens": 199,
+      "error": null
+    },
+    {
+      "case": "reco_new_customer",
+      "turn": 1,
+      "text": "I'm new here, what should I buy?",
+      "answer": "Here are some popular picks for you:\n\n1. **Perrie Slim Mom Denim TRS** \u2013 Loved by customers your age. [[448509014]]\n2. **Sadie Shirt** \u2013 A classic white shirt, trending with your peers. [[850917001]]\n3. **LANA seamless HW tigths** \u2013 Stylish black leggings for versatile wear. [[866731001]]\n4. **Jackie cable vest** \u2013 A cozy off-white sweater for everyday style. [[918522001]]\n\nLet me know if you\u2019d like more suggestions!",
+      "tools_called": [
+        "recommend_for_customer"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        448509014,
+        850917001,
+        866731001,
+        918522001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 21.79,
+      "cost_usd": 0.0,
+      "input_tokens": 2515,
+      "output_tokens": 170,
+      "error": null
+    },
+    {
+      "case": "search_earrings",
+      "turn": 1,
+      "text": "I'm looking for gold hoop earrings.",
+      "answer": "Here are some gold hoop earrings you can consider:\n\n1. **Small thin hoops** \u2013 minimalist and versatile for everyday wear [[532954002]].  \n2. **Class Cilla hoop** \u2013 classic design with a bold gold finish [[718982001]].  \n3. **Cool Blair Hoop** \u2013 trendy and stylish for a modern look [[909552001]].  \n4. **Cool Talia hoop** \u2013 slightly larger hoops for a statement vibe [[885118001]].  \n\nLet me know if you'd like more options or need help with something else!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        532954002,
+        718982001,
+        909552001,
+        885118001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 40.54,
+      "cost_usd": 0.0,
+      "input_tokens": 2540,
+      "output_tokens": 159,
+      "error": null
+    },
+    {
+      "case": "search_boots",
+      "turn": 1,
+      "text": "Show me black ankle boots.",
+      "answer": "Here are some black ankle boots:\n\n1. **TURIN** \u2013 Stylish and versatile for everyday wear [[589268002]].  \n2. **Allie WL boot** \u2013 Classic design with a modern edge [[748588001]].  \n3. **Megan buckle boot** \u2013 Adds a chic detail with its buckle [[877389001]].  \n4. **Cashie Boot(1)** \u2013 Comfortable and sleek for casual outings [[686027001]].  \n\nLet me know if you\u2019d like more options or details!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        589268002,
+        748588001,
+        877389001,
+        686027001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 29.19,
+      "cost_usd": 0.0,
+      "input_tokens": 2435,
+      "output_tokens": 173,
+      "error": null
+    },
+    {
+      "case": "search_hoodie",
+      "turn": 1,
+      "text": "Men's grey hoodie please.",
+      "answer": "Here are some grey hoodies for you:\n\n1. **Becka Hoodie** \u2013 Classic and versatile for everyday wear [[715624013]].  \n2. **Sascha Pullover Hoodie** \u2013 Soft and comfortable, great for casual looks [[794575007]].  \n3. **BOSSE Basic OH Hoodie** \u2013 Ideal for kids or teens, durable and stylish [[542551002]].  \n4. **LW (J) CANDLE Consc Hoodie** \u2013 Perfect for loungewear or relaxed outings [[909914001]].  \n\nLet me know if you\u2019d like more options or specific styles!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        715624013,
+        794575007,
+        542551002,
+        909914001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 28.26,
+      "cost_usd": 0.0,
+      "input_tokens": 2559,
+      "output_tokens": 183,
+      "error": null
+    },
+    {
+      "case": "search_wedding",
+      "turn": 1,
+      "text": "I need an elegant dress to wear as a wedding guest.",
+      "answer": "Here are elegant wedding guest dresses:\n\n1. **Can't Resist Dress** \u2013 Dark blue, perfect for a sophisticated look [[623745002]].  \n2. **Reagan maxi dress** \u2013 Light pink, soft and chic [[727937005]].  \n3. **Corvette maxi dress** \u2013 Dark blue, jersey fabric for comfort [[893053001]].  \n4. **Lufsen** \u2013 Light pink, timeless style [[766434001]].  \n\nLet me know if you\u2019d like to refine the color or style!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        623745002,
+        727937005,
+        893053001,
+        766434001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 29.69,
+      "cost_usd": 0.0,
+      "input_tokens": 2448,
+      "output_tokens": 174,
+      "error": null
+    },
+    {
+      "case": "search_swim",
+      "turn": 1,
+      "text": "A swimsuit for my summer holiday?",
+      "answer": "Here are some budget-friendly swimsuits for your summer holiday:\n\n1. **MAMA Bondi Babe Swimsuit** \u2013 Classic black design, perfect for a chic look. [[758990001]]\n2. **C Jackpot Swimsuit** \u2013 Sleek black style with a modern cut. [[742933003]]\n3. **Epic Padded Swimsuit** \u2013 Vibrant blue, offers great support and comfort. [[698276001]]\n4. **Xtina Swimsuit** \u2013 Dark green, stylish and versatile for beach or pool. [[736584001]]\n\nLet me know if you'd like more options or specific styles!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        758990001,
+        742933003,
+        698276001,
+        736584001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 33.3,
+      "cost_usd": 0.0,
+      "input_tokens": 2463,
+      "output_tokens": 200,
+      "error": null
+    },
+    {
+      "case": "refine_cheaper",
+      "turn": 1,
+      "text": "Show me white sneakers.",
+      "answer": "Here are some white sneakers:\n\n1. **Victoria sneaker** \u2013 Classic and versatile for everyday wear [[574752003]].  \n2. **Zenit highlift sneaker** \u2013 Stylish with a modern design [[736489003]].  \n3. **Sesam sneaker (1)** \u2013 Comfortable and casual [[655287002]].  \n4. **Amba Sneaker** \u2013 Sleek and minimalist look [[843498001]].  \n\nLet me know if you\u2019d like more options or details!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        574752003,
+        736489003,
+        655287002,
+        843498001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 28.98,
+      "cost_usd": 0.0,
+      "input_tokens": 2443,
+      "output_tokens": 169,
+      "error": null
+    },
+    {
+      "case": "refine_cheaper",
+      "turn": 2,
+      "text": "Cheaper ones please.",
+      "answer": "Here are budget-friendly white sneakers:\n\n1. **Victoria sneaker** \u2013 Classic and versatile for everyday wear [[574752003]].  \n2. **Sesam sneaker (1)** \u2013 Comfortable and casual [[655287002]].  \n3. **Vaughan sneaker** \u2013 Lightweight and stylish [[470985003]].  \n4. **Enrique sneaker** \u2013 Modern and trendy design [[633813005]].  \n\nLet me know if you\u2019d like more suggestions or details!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        574752003,
+        655287002,
+        470985003,
+        633813005
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 27.72,
+      "cost_usd": 0.0,
+      "input_tokens": 3326,
+      "output_tokens": 171,
+      "error": null
+    },
+    {
+      "case": "ctl_open",
+      "turn": 1,
+      "text": "What goes with the 'MAX jersey pants SB' (article 326885054)?",
+      "answer": "Here are items that match well with the 'MAX jersey pants SB':\n\n1. **TP JACK hood SB** \u2013 Style match for a casual, coordinated look.  \n2. **SHANE HOOD TP** \u2013 Warm, earthy tone for a trendy vibe.  \n3. **BEN crewneck SB 2-p** \u2013 Bright yellow for a playful contrast.  \n4. **HAPPY low price tee TP** \u2013 Dark yellow tee for a bold, youthful style.  \n\nThese tops complement the pants\u2019 relaxed fit and jersey texture.",
+      "tools_called": [
+        "complete_the_look"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 20.93,
+      "cost_usd": 0.0,
+      "input_tokens": 2665,
+      "output_tokens": 147,
+      "error": null
+    },
+    {
+      "case": "ctl_shoes",
+      "turn": 1,
+      "text": "Which shoes would go with article 326885054?",
+      "answer": "Here are shoes that match article 326885054:\n\n1. **Blake boot BG (896147001)** \u2013 Style match for a cohesive look.  \n2. **Blake boot SG (887552002)** \u2013 Style match, ideal for a youthful vibe.  \n3. **Ebba Low Sneaker SB (855847004)** \u2013 Style match, casual and trendy.  \n4. **Ted Sock Runner BB (862201001)** \u2013 Style match, sporty and comfortable.  \n\nLet me know if you\u2019d like more options or adjustments!",
+      "tools_called": [
+        "complete_the_look"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        326885054,
+        896147001,
+        887552002,
+        855847004,
+        862201001
+      ],
+      "hallucinated": [],
+      "constraint_ok": false,
+      "no_products_ok": null,
+      "latency_s": 23.98,
+      "cost_usd": 0.0,
+      "input_tokens": 2642,
+      "output_tokens": 179,
+      "error": null
+    },
+    {
+      "case": "ctl_accessories",
+      "turn": 1,
+      "text": "I bought the 'HLW SB Full Suit Own' (article 519192001). What accessories complete it?",
+      "answer": "Here are accessories that complete your 'HLW SB Full Suit Own':\n\n1. **BELT PU (935003001)** \u2013 Matches the suit\u2019s style.  \n2. **Ringo hipbelt (673396002)** \u2013 Stylish black belt for a trendy look.  \n3. **Suzuki shopper (552716001)** \u2013 A chic black bag to complement.  \n4. **Dolphin camera (843380004)** \u2013 A fun, functional accessory.  \n\nLet me know if you\u2019d like more suggestions!",
+      "tools_called": [
+        "complete_the_look"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        935003001,
+        673396002,
+        552716001,
+        843380004
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 22.69,
+      "cost_usd": 0.0,
+      "input_tokens": 2667,
+      "output_tokens": 169,
+      "error": null
+    },
+    {
+      "case": "ctl_followup",
+      "turn": 1,
+      "text": "Recommend me a top.",
+      "answer": "Here are top recommendations for you:\n\n1. **New York Pile Waistcoat** [[884668002]] \u2013 You bought this before, and it\u2019s a stylish outdoor option.  \n2. **Ida Basic Sweater TVP (White)** [[902518006]] \u2013 Trending this week and matches your past purchases.  \n3. **Ida Basic Sweater TVP (Black)** [[902518007]] \u2013 Also trending, with a classic black option you\u2019ve liked before.  \n\nLet me know if you\u2019d like more suggestions!",
+      "tools_called": [
+        "recommend_for_customer"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        884668002,
+        902518006,
+        902518007
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 21.21,
+      "cost_usd": 0.0,
+      "input_tokens": 2465,
+      "output_tokens": 166,
+      "error": null
+    },
+    {
+      "case": "ctl_followup",
+      "turn": 2,
+      "text": "I like the first one. What bottoms go with it?",
+      "answer": "Here are bottoms that match your **New York Pile Waistcoat** [[884668002]]:\n\n1. **Brentwood HW Mom Twill TRS** [[894668002]] \u2013 Matches the waistcoat\u2019s earthy tone for a cohesive look.  \n2. **Pluto RW slacks (1)** [[751471001]] \u2013 Classic black slacks that complement the waistcoat\u2019s style.  \n3. **Freja leggings** [[857163001]] \u2013 Sleek black leggings for a modern, casual vibe.  \n4. **STRONG HW seamless tights** [[918292001]] \u2013 Sporty black tights for comfort and style.  \n\nLet me know if you\u2019d like to refine the match!",
+      "tools_called": [
+        "complete_the_look"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        884668002,
+        894668002,
+        751471001,
+        857163001,
+        918292001
+      ],
+      "hallucinated": [],
+      "constraint_ok": false,
+      "no_products_ok": null,
+      "latency_s": 27.94,
+      "cost_usd": 0.0,
+      "input_tokens": 3413,
+      "output_tokens": 221,
+      "error": null
+    },
+    {
+      "case": "ctl_top",
+      "turn": 1,
+      "text": "Help me style article 630525048 for the office.",
+      "answer": "To style article 630525048 for the office, consider these accessories:\n\n1. **H-string basic scrunchy 3P** \u2013 Light pink hair tie for a soft touch [[871664001]].  \n2. **H-pins 4pk FANCY Seashell** \u2013 Gold hair clip for elegance [[891238001]].  \n3. **BELT LEATHER** \u2013 Black leather belt to accentuate your outfit [[717180001]].  \n4. **Velvet scrunchie** \u2013 Black velvet hair tie for a chic finish [[556539001]].  \n\nThese items complement the anchor piece while keeping a professional look.",
+      "tools_called": [
+        "complete_the_look"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        630525048,
+        871664001,
+        891238001,
+        717180001,
+        556539001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 25.01,
+      "cost_usd": 0.0,
+      "input_tokens": 2544,
+      "output_tokens": 204,
+      "error": null
+    },
+    {
+      "case": "photo_missing",
+      "turn": 1,
+      "text": "What's missing from this outfit?",
+      "answer": "Your outfit is missing shoes. Here are some stylish options to complete it:\n\n1. **Lange Loafer (article_id 713934002)** \u2013 Classic black loafers for a chic, casual look.  \n2. **GLASSIG ESPADRILLE (article_id 349301001)** \u2013 Comfortable black ballerinas perfect for relaxed outings.  \n3. **Chris Crepe Shoe (article_id 802078001)** \u2013 Sleek black crepe shoes for a modern edge.  \n4. **Sonny loafer (article_id 622141005)** \u2013 Stylish black loafers with a contemporary design.  \n\nLet me know if you\u2019d like to refine the selection!",
+      "tools_called": [
+        "analyze_outfit_photo"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        713934002,
+        349301001,
+        802078001,
+        622141005
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 128.26,
+      "cost_usd": 0.0,
+      "input_tokens": 4109,
+      "output_tokens": 192,
+      "error": null
+    },
+    {
+      "case": "photo_bag",
+      "turn": 1,
+      "text": "What bag would complete this look?",
+      "answer": "Here are bag options to complete your look:\n\n1. **Savannah shopper (1)** [[684238003]] \u2014 Matches your black outfit with a sleek, structured design.  \n2. **Polly shopper** [[643588007]] \u2014 A stylish, minimalist bag that complements your monochrome aesthetic.  \n3. **Johanna canvas shopper** [[856847001]] \u2014 Offers a casual, versatile look with a dark grey tone.  \n\nLet me know if you\u2019d like to refine the match!",
+      "tools_called": [
+        "analyze_outfit_photo"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        684238003,
+        643588007,
+        856847001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 104.25,
+      "cost_usd": 0.0,
+      "input_tokens": 3654,
+      "output_tokens": 148,
+      "error": null
+    },
+    {
+      "case": "photo_similar",
+      "turn": 1,
+      "text": "Find me a coat like the one in this photo.",
+      "answer": "The closest match to your leopard print coat is the **Haven fur jacket** [[780955001]]. It\u2019s a stylish, brown-toned outerwear piece. Let me know if you\u2019d like alternatives or items to complete the look!",
+      "tools_called": [
+        "analyze_outfit_photo"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        780955001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 99.48,
+      "cost_usd": 0.0,
+      "input_tokens": 3469,
+      "output_tokens": 80,
+      "error": null
+    },
+    {
+      "case": "photo_similar",
+      "turn": 2,
+      "text": "What shoes would you wear with it?",
+      "answer": "Here are stylish shoe options to pair with your Haven fur jacket:\n\n1. **Marian sandalette** (Gold) \u2013 elegant and matches the jacket\u2019s vibe [[808028006]].  \n2. **Glossy Sandal** (Light Beige) \u2013 chic and versatile [[805308002]].  \n3. **Elsa PQ espadrille** (Dark Orange) \u2013 trendy and comfortable [[808663001]].  \n\nLet me know if you\u2019d like more suggestions!",
+      "tools_called": [
+        "complete_the_look"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        808028006,
+        805308002,
+        808663001
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 19.82,
+      "cost_usd": 0.0,
+      "input_tokens": 5370,
+      "output_tokens": 153,
+      "error": null
+    },
+    {
+      "case": "offtopic",
+      "turn": 1,
+      "text": "What's the weather in Stockholm tomorrow?",
+      "answer": "I can only assist with shopping in this catalogue. For weather information, please check a weather service or app.",
+      "tools_called": [],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": true,
+      "latency_s": 3.47,
+      "cost_usd": 0.0,
+      "input_tokens": 1076,
+      "output_tokens": 23,
+      "error": null
+    },
+    {
+      "case": "unknown_id",
+      "turn": 1,
+      "text": "Tell me about article 123456789.",
+      "answer": "I can't provide details for article 123456789 because it wasn't returned by any previous tool call. Please let me know if you'd like me to search for a specific item or recommend something else!",
+      "tools_called": [
+        "get_article_details"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": true,
+      "latency_s": 8.79,
+      "cost_usd": 0.0,
+      "input_tokens": 2230,
+      "output_tokens": 80,
+      "error": null
+    },
+    {
+      "case": "brand",
+      "turn": 1,
+      "text": "Do you have Gucci loafers?",
+      "answer": "I found several loafers, but none are explicitly Gucci. Here are some black loafers from the catalogue:\n\n1. **Prince Mule** \u2013 A stylish black mule shoe [[769673004]].  \n2. **Millo PQ Loafer** \u2013 A premium black loafer [[903487001]].  \n3. **Lange Loafer** \u2013 A classic black loafer [[713934008]].  \n\nLet me know if you\u2019d like me to refine the search or suggest alternatives!",
+      "tools_called": [
+        "search_catalog"
+      ],
+      "tool_ok": true,
+      "args_ok": true,
+      "cited": [
+        769673004,
+        903487001,
+        713934008
+      ],
+      "hallucinated": [],
+      "constraint_ok": true,
+      "no_products_ok": null,
+      "latency_s": 31.83,
+      "cost_usd": 0.0,
+      "input_tokens": 2579,
+      "output_tokens": 177,
+      "error": null
+    }
+  ]
+}

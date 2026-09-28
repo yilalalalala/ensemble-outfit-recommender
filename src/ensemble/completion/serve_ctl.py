@@ -40,9 +40,10 @@ def complete_the_look(cfg) -> pd.DataFrame:
     with open(models / "two_tower_encoder.pkl", "rb") as f:
         art = pickle.load(f)
     enc = art["enc"]
-    model = M.TwoTower(enc.cardinality, Config(art["tt"]))
+    model = M.TwoTower(enc.cardinality, Config(art["tt"]), art.get("clip_dim", 0))
     model.load_state_dict(torch.load(models / "two_tower.pt", map_location="cpu"))
-    w = json.loads((cfg.path("reports") / "m4_selected.json").read_text())["rrf_weight"]
+    sel = json.loads((cfg.path("reports") / "m4_selected.json").read_text())
+    w = sel["rrf_weight"]
     k, per = int(cfg.completion.k), int(cfg.serving.ctl_per_slot)
 
     anchors = uni[["article_id", "slot"]]
@@ -53,12 +54,19 @@ def complete_the_look(cfg) -> pd.DataFrame:
     live = set(uni.article_id)
     assoc = {key: g.dst.values[:4 * k] for key, g in pairs[pairs.dst.isin(live)].groupby(["src", "dst_slot"], sort=False)}
     lift = {(a, b): l for a, b, l in pairs[["src", "dst", "lift"]].itertuples(index=False)}
+    style_lists = {}
+    if sel.get("use_backoff"):
+        sp = pd.read_parquet(models / "completion_style_pairs.parquet").sort_values(["src_code", "dst_slot", "npmi"], ascending=[True, True, False])
+        style_lists = {key: g.dst.values[:4 * k] for key, g in sp[sp.dst.isin(live)].groupby(["src_code", "dst_slot"], sort=False)}
     ptype = dict(zip(uni.article_id, enc.codes[[enc.row[a] for a in uni.article_id], 0].tolist()))
     style = dict(duckdb.sql(f"SELECT CAST(article_id AS INTEGER), product_code FROM read_csv('{cfg.path('raw') / 'articles.csv'}', "
                             "types={'article_id': 'VARCHAR'})").fetchall())
     rows = []
     for (a, s), t in zip(q[["anchor", "target_slot"]].itertuples(index=False), tt):
-        lists = [assoc.get((a, s), np.array([], dtype=int)), t]
+        base = assoc.get((a, s), np.array([], dtype=int))
+        if style_lists:
+            base = np.asarray(list(dict.fromkeys(list(base) + list(style_lists.get((style.get(a), s), [])))))
+        lists = [base, t]
         fused = M.rrf([[lists[0]], [lists[1]]], [w, 1 - w], 4 * k)[0].tolist()
         for r, b in enumerate(diversify(fused, ptype, style, per, int(cfg.serving.max_per_product_type)), 1):
             l = lift.get((a, b))

@@ -1,0 +1,314 @@
+[
+ {
+  "file": "IMG_1540.jpg",
+  "garment": 2,
+  "mode": "crop",
+  "label": [
+   1,
+   0,
+   0,
+   0,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1540.jpg",
+  "garment": 2,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1519.jpg",
+  "garment": 6,
+  "mode": "crop",
+  "label": [
+   1,
+   1,
+   0,
+   0,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1519.jpg",
+  "garment": 6,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "full_04.jpg",
+  "garment": 4,
+  "mode": "crop",
+  "label": [
+   1,
+   1,
+   1,
+   0,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "full_04.jpg",
+  "garment": 4,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1506.jpg",
+  "garment": 2,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1506.jpg",
+  "garment": 2,
+  "mode": "text",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1509.jpg",
+  "garment": 0,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1509.jpg",
+  "garment": 0,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "half_05.jpg",
+  "garment": 1,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "half_05.jpg",
+  "garment": 1,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1513.jpg",
+  "garment": 0,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   1,
+   1,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1513.jpg",
+  "garment": 0,
+  "mode": "text",
+  "label": [
+   0,
+   1,
+   0,
+   0,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "full_01.jpg",
+  "garment": 3,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "full_01.jpg",
+  "garment": 3,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "item_07.jpg",
+  "garment": 1,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "item_07.jpg",
+  "garment": 1,
+  "mode": "text",
+  "label": [
+   0,
+   0,
+   0,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1507.jpg",
+  "garment": 1,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1507.jpg",
+  "garment": 1,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "full_20.jpg",
+  "garment": 0,
+  "mode": "crop",
+  "label": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "full_20.jpg",
+  "garment": 0,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1528.jpg",
+  "garment": 2,
+  "mode": "crop",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "labeller": "claude"
+ },
+ {
+  "file": "IMG_1528.jpg",
+  "garment": 2,
+  "mode": "text",
+  "label": [
+   1,
+   1,
+   1,
+   1,
+   0
+  ],
+  "labeller": "claude"
+ }
+]

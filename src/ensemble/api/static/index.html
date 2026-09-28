@@ -51,13 +51,31 @@ dialog::backdrop { background: rgba(0,0,0,.35); }
 .bar .track { height: 10px; position: relative; background: var(--chip); border-radius: 3px; }
 .bar .fill { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
 .note { background: var(--chip); color: var(--chip-ink); padding: 10px 12px; border-radius: 8px; font-size: 13px; }
+.stylist { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.chatlog { height: 56vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px; }
+.msg { max-width: 92%; padding: 9px 12px; border-radius: 12px; font-size: 14px; white-space: pre-wrap; }
+.msg.user { align-self: flex-end; background: var(--accent); color: #fff; }
+.msg.bot { align-self: flex-start; background: var(--chip); color: var(--ink); }
+.msg .row { grid-auto-columns: minmax(120px, 130px); margin-top: 8px; white-space: normal; }
+.msg .card .body { padding: 6px 8px; }
+.trace { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.composer { display: flex; gap: 8px; margin-top: 10px; }
+.composer input[type=text] { flex: 1; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.btn { font-size: 13px; padding: 7px 12px; border-radius: 8px; }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.canvaswrap { position: relative; display: inline-block; max-width: 100%; }
+#vsimg { max-width: 100%; max-height: 46vh; display: block; border-radius: 8px; cursor: crosshair; }
+#vsbox { position: absolute; border: 2px solid var(--accent); background: rgba(180,67,47,.12); display: none; pointer-events: none; }
+.vsctl { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; align-items: center; }
+@media (max-width: 900px) { .stylist { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .product { grid-template-columns: 1fr; } header { padding: 10px 16px; } .grid2 { grid-template-columns: 1fr; } .bar { grid-template-columns: 120px 1fr 50px; } }
 </style>
 </head>
 <body>
 <header>
   <span class="brand">Ensemble</span>
-  <nav><a href="#/" id="nav-shop">Shop</a><a href="#/ds" id="nav-ds">DS view</a></nav>
+  <nav><a href="#/" id="nav-shop">Shop</a><a href="#/assistant" id="nav-assistant">Style assistant</a><a href="#/ds" id="nav-ds">DS view</a></nav>
   <span class="spacer"></span>
   <label class="sub" for="cust">Demo customer</label>
   <select id="cust"></select>
@@ -110,7 +128,8 @@ async function product(id) {
     : `<p class="sub">No outfit suggestions: this item is outside the wearable slots or not in the live catalogue.</p>`;
   $("#app").innerHTML = `<div class="product"><img src="${a.image}" alt="${esc(a.prod_name)}">
     <div><h1>${esc(a.prod_name)}</h1><p class="sub">${esc(a.product_type_name)} · ${esc(a.colour_group_name)} · ${esc(a.department_name)} · ${esc(a.index_group_name)}</p>
-    <p>${esc(a.detail_desc)}</p><button onclick="history.back()">← Back</button></div></div>
+    <p>${esc(a.detail_desc)}</p><button onclick="history.back()">← Back</button>
+    <button onclick="location.hash='#/assistant?anchor=${a.article_id}'">Ask the stylist about this →</button></div></div>
     <h2>Complete the Look</h2><div class="look">${look}</div>` +
     rowHTML("Other colours", d.other_colours, "other_colours") + rowHTML("Similar items", d.similar, "similar");
   window.scrollTo(0, 0);
@@ -156,13 +175,92 @@ async function ds() {
     <table><tr><th>model</th><th>relative lift vs popularity</th><th>Recall@12</th><th>NDCG@12</th><th>tail-item</th><th>item cold start</th><th>jewellery</th><th>coverage</th></tr>${tbRows}</table>`;
 }
 
+// ---- Style assistant (M7b) + visual search (M7a) ----------------------------------------------------
+let sid = null, pendingPhoto = null, vsFile = null, vsBox = null;
+
+function renderAnswer(r) {
+  let n = 0; const order = {};
+  const text = esc(r.answer).replace(/\[\[(\d+)\]\]/g, (_, id) => `(${order[id] ??= ++n})`);
+  const cards = r.cards.map(c => cardHTML(c, "assistant")).join("");
+  const tools = r.trace.map(t => t.tool).join(" → ") || "no tools";
+  return `<div class="msg bot">${text}${cards ? `<div class="row">${cards}</div>` : ""}
+    <div class="trace">${tools} · ${r.latency_s}s${r.cost_usd ? ` · $${r.cost_usd.toFixed(4)}` : ""}${r.hallucinated.length ? ` · removed ${r.hallucinated.length} ungrounded id(s)` : ""}</div></div>`;
+}
+
+async function send(text) {
+  if (!text.trim() && !pendingPhoto) return;
+  const log = $("#chatlog");
+  log.insertAdjacentHTML("beforeend", `<div class="msg user">${esc(text)}${pendingPhoto ? " 📷" : ""}</div><div class="msg bot" id="typing">…</div>`);
+  log.scrollTop = log.scrollHeight;
+  const fd = new FormData(); fd.append("text", text); if (pendingPhoto) fd.append("photo", pendingPhoto);
+  pendingPhoto = null; $("#attach").textContent = "📷";
+  try {
+    const r = await fetch(`/api/assistant/${sid}/message`, {method: "POST", body: fd}).then(x => x.json());
+    $("#typing").outerHTML = renderAnswer(r);
+  } catch (e) { $("#typing").outerHTML = `<div class="msg bot">Something went wrong (${esc(e)}).</div>`; }
+  log.scrollTop = log.scrollHeight;
+}
+
+async function stylist(anchor) {
+  const cats = ["top", "outerwear", "knitwear", "bottom", "dress", "jumpsuit", "shoes", "bag", "jewellery", "hat", "scarf", "belt", "sunglasses"];
+  $("#app").innerHTML = `<h1>Style assistant</h1><p class="sub">Ask in plain language, attach an outfit photo, or search by photo on the right. Products come only from the recommender's tools.</p>
+  <div class="stylist" style="margin-top:14px">
+    <div class="panel"><div class="chatlog" id="chatlog"></div>
+      <div class="composer"><button class="btn" id="attach" title="Attach a photo">📷</button><input type="file" id="chatfile" accept="image/*" hidden>
+      <input type="text" id="chatin" placeholder="e.g. What shoes go with wide-leg jeans?"><button class="btn primary" id="chatsend">Send</button></div></div>
+    <div class="panel"><strong>Visual search</strong><p class="sub">Upload a photo, drag a box around one item, pick its category.</p>
+      <input type="file" id="vsfile" accept="image/*">
+      <div class="canvaswrap" style="margin-top:8px"><img id="vsimg" alt=""><div id="vsbox"></div></div>
+      <div class="vsctl"><select id="vscat">${cats.map(c => `<option>${c}</option>`).join("")}</select>
+        <button class="btn primary" id="vsgo">Find similar</button><button class="btn" id="vssnap">Analyse whole outfit</button></div>
+      <div id="vsout"></div></div>
+  </div>`;
+  const s = await fetch("/api/assistant/session", {method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({customer_idx: customer})}).then(x => x.json());
+  sid = s.session_id;
+  $("#chatlog").innerHTML = `<div class="msg bot">Hi! I can find pieces, style an item you own, or complete an outfit from a photo. (model: ${esc(s.backend)})</div>`;
+  $("#chatsend").onclick = () => { const v = $("#chatin").value; $("#chatin").value = ""; send(v); };
+  $("#chatin").onkeydown = e => { if (e.key === "Enter") $("#chatsend").click(); };
+  $("#attach").onclick = () => $("#chatfile").click();
+  $("#chatfile").onchange = e => { pendingPhoto = e.target.files[0]; $("#attach").textContent = "📷✓"; };
+  $("#vsfile").onchange = e => { vsFile = e.target.files[0]; vsBox = null; $("#vsbox").style.display = "none";
+    $("#vsimg").src = URL.createObjectURL(vsFile); };
+  let start = null; const img = $("#vsimg"), box = $("#vsbox");
+  img.onmousedown = e => { const r = img.getBoundingClientRect(); start = [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; e.preventDefault(); };
+  window.onmouseup = e => { if (!start) return; const r = img.getBoundingClientRect();
+    const end = [Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1), Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1)];
+    vsBox = [Math.min(start[0], end[0]), Math.min(start[1], end[1]), Math.max(start[0], end[0]), Math.max(start[1], end[1])];
+    Object.assign(box.style, {display: "block", left: vsBox[0] * 100 + "%", top: vsBox[1] * 100 + "%",
+      width: (vsBox[2] - vsBox[0]) * 100 + "%", height: (vsBox[3] - vsBox[1]) * 100 + "%"}); start = null; };
+  $("#vsgo").onclick = async () => {
+    if (!vsFile) return; $("#vsout").innerHTML = `<p class="sub">Searching…</p>`;
+    const fd = new FormData(); fd.append("photo", vsFile); fd.append("category", $("#vscat").value); fd.append("box", vsBox ? vsBox.join(",") : "");
+    const r = await fetch("/api/visual-search", {method: "POST", body: fd}).then(x => x.json());
+    $("#vsout").innerHTML = rowHTML("Closest catalogue items", r.matches, "visual_search", {}) +
+      (r.matches.length ? `<button class="btn" id="askthis">Ask about this look →</button>` : "");
+    if (r.matches.length) $("#askthis").onclick = () => send(`What goes with the ${r.matches[0].prod_name} (article ${r.matches[0].article_id})?`);
+  };
+  $("#vssnap").onclick = async () => {
+    if (!vsFile) return; $("#vsout").innerHTML = `<p class="sub">Analysing the outfit with the vision model… (about a minute on a laptop)</p>`;
+    const fd = new FormData(); fd.append("photo", vsFile);
+    const r = await fetch("/api/snap", {method: "POST", body: fd}).then(x => x.json());
+    $("#vsout").innerHTML = `<p class="sub">Detected: ${r.garments.map(g => esc(g.colour + " " + g.category)).join(", ") || "nothing"} · missing: ${r.missing_slots.join(", ") || "nothing"}</p>` +
+      r.garments.map(g => rowHTML(`${esc(g.description)}`, g.matches.slice(0, 5), "snap", {})).join("") +
+      r.complete_the_look.map(m => rowHTML(`Fill the gap: ${m.title}`, m.items, "complete_the_look", {})).join("");
+  };
+  if (anchor) send(`What goes with article ${anchor}?`);
+}
+
 async function route() {
   const h = location.hash || "#/";
   $("#nav-shop").classList.toggle("active", !h.startsWith("#/ds"));
   $("#nav-ds").classList.toggle("active", h.startsWith("#/ds"));
+  $("#nav-assistant").classList.toggle("active", h.startsWith("#/assistant"));
+  if (h.startsWith("#/assistant")) $("#nav-shop").classList.remove("active");
   try {
     if (h.startsWith("#/product/")) await product(h.split("/")[2]);
     else if (h.startsWith("#/ds")) await ds();
+    else if (h.startsWith("#/assistant")) await stylist(new URLSearchParams(h.split("?")[1] || "").get("anchor"));
     else await home();
   } catch (e) { $("#app").innerHTML = `<p class="sub">Could not load (${esc(e)}).</p>`; }
 }

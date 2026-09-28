@@ -8,7 +8,10 @@ import json
 import sqlite3
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+import io
+import os
+
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -131,6 +134,84 @@ def log_event(e: Event):
     con.commit()
     con.close()
     return {"ok": True}
+
+
+# --- M7a visual search and M7b assistant --------------------------------------------------------------
+# These endpoints load PyTorch (FashionCLIP) lazily. This process never imports LightGBM (see api/build.py).
+SESSIONS: dict[str, dict] = {}
+
+
+def _cards(ids: list[int]) -> list[dict]:
+    if not ids:
+        return []
+    rows = {r["article_id"]: card(r) for r in q(
+        f"SELECT {ART_COLS} FROM articles a WHERE a.article_id IN ({','.join('?' * len(ids))})", ids)}
+    return [rows[a] for a in ids if a in rows]
+
+
+def _image(upload: UploadFile):
+    from PIL import Image, ImageOps
+    return ImageOps.exif_transpose(Image.open(io.BytesIO(upload.file.read()))).convert("RGB")
+
+
+@app.post("/api/visual-search")
+def visual_search(photo: UploadFile = File(...), category: str = Form(...), box: str = Form("")):
+    """Standalone visual search: no LLM. The user picks the category and (optionally) drags a box,
+    given as fractions x1,y1,x2,y2 of the displayed image."""
+    from ensemble.vision.outfit import CATEGORIES, match
+    if category not in CATEGORIES:
+        raise HTTPException(400, f"category must be one of {sorted(CATEGORIES)}")
+    img = _image(photo)
+    img.thumbnail((1024, 1024))
+    g = {"category": category, "colour": "", "description": category, "box": None}
+    if box:
+        x1, y1, x2, y2 = (float(v) for v in box.split(","))
+        g["box"] = [int(x1 * img.width), int(y1 * img.height), int(x2 * img.width), int(y2 * img.height)]
+        if g["box"][2] - g["box"][0] < 10 or g["box"][3] - g["box"][1] < 10:
+            g["box"] = None
+    m = match(g, img, "crop", 8)
+    items = _cards(m.article_id.tolist())
+    for it, sim in zip(items, m.similarity.tolist()):
+        it["reasons"] = [{"key": "visual", "text": f"Visual match {sim:.2f}"}]
+    return {"matches": items}
+
+
+@app.post("/api/snap")
+def snap_outfit(photo: UploadFile = File(...)):
+    """Snap your outfit, fill the gap (D-011). Garment detection uses the configured VLM (local by default)."""
+    from ensemble.llm.client import get_client
+    from ensemble.vision.outfit import snap
+    res = snap(_image(photo), get_client("vision"))
+    garments = [{"category": g["category"], "colour": g["colour"], "description": g["description"],
+                 "matches": _cards([m["article_id"] for m in g["matches"]])} for g in res["garments"]]
+    look = [{"slot": s, "title": SLOT_TITLES[s], "items": _cards(ids[:6])} for s, ids in res["complete_the_look"].items()]
+    return {"garments": garments, "missing_slots": res["missing_slots"],
+            "anchor": res["anchor"]["article_id"] if res["anchor"] else None, "complete_the_look": look}
+
+
+class SessionIn(BaseModel):
+    customer_idx: int | None = None
+
+
+@app.post("/api/assistant/session")
+def assistant_session(body: SessionIn):
+    from ensemble.assistant.agent import new_session
+    from ensemble.llm.client import get_client
+    s = new_session(body.customer_idx, get_client("vision"))
+    s["llm"] = get_client("assistant")
+    SESSIONS[s["id"]] = s
+    return {"session_id": s["id"], "backend": os.environ.get("ENSEMBLE_LLM", "ollama")}
+
+
+@app.post("/api/assistant/{sid}/message")
+def assistant_message(sid: str, text: str = Form(...), photo: UploadFile | None = File(None)):
+    from ensemble.assistant.agent import run_turn
+    s = SESSIONS.get(sid)
+    if s is None:
+        raise HTTPException(404, "unknown session")
+    r = run_turn(s["llm"], s, text, _image(photo) if photo is not None and photo.filename else None)
+    return {**{k: r[k] for k in ("answer", "trace", "latency_s", "cost_usd", "hallucinated")},
+            "cards": _cards(r["cited"])}
 
 
 @app.get("/images/{article_id}.jpg")
