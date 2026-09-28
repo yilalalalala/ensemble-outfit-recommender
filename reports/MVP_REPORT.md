@@ -13,9 +13,10 @@ All results are **offline**. A launch decision would need an online A/B test
 
 1. **Track A (next purchase): MAP@12 0.0370 on the test week, +37.5% relative
    lift over the best baseline** (repeat purchase + age-band popularity, 0.0269).
-   Validation: 0.0355, +40.5%. For context, the private leaderboard's 1st place
-   scored 0.0379 and silver about 0.0300, on the following week. The directly
-   comparable number is a Kaggle late submission of `reports/submission.csv`.
+   Validation: 0.0355, +40.5%.
+   **Kaggle late submission (2026-09-28): private MAP@12 0.03189, public 0.03102.**
+   That is above the ~0.0300 score of about 45th place of 3,006 (silver), and
+   16% below 1st place (0.0379). Late submissions are scored but not ranked.
 2. **Track B (Complete the Look): Recall@12 0.129 on the test week, +54.1%
    relative lift over popularity.** The shipped model fuses association rules
    and a two-tower model. Each component alone is +36% to +45%.
@@ -168,9 +169,9 @@ channel (0.16% unique recall).
 
 ## 7. Risks and next steps
 
-1. **Submit `reports/submission.csv` to Kaggle** (late submission) for the
-   externally checkable private-leaderboard score. *This needs your Kaggle
-   account.*
+1. **Done: Kaggle private 0.03189.** Local-to-leaderboard ratio is 0.86
+   (0.03189 / 0.03699 local test). Use it to translate future local gains, and
+   re-check it with every submission.
 2. **Item cold start and jewellery:** CLIP image embeddings in both tracks
    (M7a). This is also a content-based retrieval channel for Track A.
 3. **New customers:** a segment-level fallback (age-band popularity) is a

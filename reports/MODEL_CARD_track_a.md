@@ -26,10 +26,10 @@ intended for new customers without a fallback: see limitations.
 Segments (test): returning customers 0.03951; new customers 0.00831 (vs 0.00909
 for age-band popularity); item cold-start Recall@12 is 0 for every system.
 
-Published context: private leaderboard 1st place 0.0379, silver (~45th) 0.0300,
-on the following week. Local validation scores typically run a little above
-leaderboard scores, so the external check is the Kaggle late submission
-(`reports/submission.csv`).
+**External check — Kaggle late submission (2026-09-28):** private MAP@12
+**0.03189**, public 0.03102. For reference, private leaderboard 1st place scored
+0.0379 and ~45th place (silver) 0.0300. The local test score (0.0370) runs about
+14% above the leaderboard.
 
 ## Top features (gain share)
 
