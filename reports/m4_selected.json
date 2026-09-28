@@ -1,1 +1,1 @@
-{"min_support": 3, "rrf_weight": 0.5}
+{"min_support": 3, "rrf_weight": 0.5, "use_clip": true, "use_backoff": false}

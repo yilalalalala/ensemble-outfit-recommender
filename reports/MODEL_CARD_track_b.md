@@ -43,3 +43,18 @@ coverage 20.0% (popularity 0.3%), jewellery recall 1.3%, item cold-start recall
   D-011.
 - The cross-feature ranker in DESIGN §5.3 is not built; RRF stands in for it.
 - Offline only.
+
+## Update 2026-09-28 — FashionCLIP towers (D-022)
+
+The shipped model now feeds frozen FashionCLIP image vectors (projected to 64 dims) into both
+towers.
+
+| model | relative lift, validation | relative lift, test |
+| --- | ---: | ---: |
+| hybrid RRF, previous (MVP) | +58.6% | +51.6% |
+| **hybrid RRF, with CLIP** | **+62.0%** | **+55.6%** |
+| two-tower content-only, with CLIP | +38.8% (was +17.3%) | +37.7% (was +15.2%) |
+
+The larger content-only gain means the model now leans less on article IDs, which matters for
+new items. Item cold-start recall is still ≈ 0% because never-sold items rarely enter the live
+catalogue in time (D-013). Jewellery recall on validation rose from 1.6% to 2.0%.
