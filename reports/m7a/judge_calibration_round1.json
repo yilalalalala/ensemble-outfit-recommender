@@ -1,0 +1,1175 @@
+{
+ "results": {
+  "stored_haiku_batch": {
+   "agreement": 0.57,
+   "agreement_ci95": [
+    0.4,
+    0.73
+   ],
+   "kappa": 0.13376309427880723,
+   "kappa_ci95": [
+    -0.2116906666134812,
+    0.4471249637295673
+   ],
+   "judgements": 100
+  },
+  "haiku_short": {
+   "agreement": 0.67,
+   "agreement_ci95": [
+    0.53,
+    0.8
+   ],
+   "kappa": 0.34158020750199525,
+   "kappa_ci95": [
+    0.04471544715447159,
+    0.5948626287447062
+   ],
+   "judgements": 100,
+   "cost_usd": 0.0164
+  },
+  "haiku_guideline": {
+   "agreement": 0.61,
+   "agreement_ci95": [
+    0.52,
+    0.7
+   ],
+   "kappa": 0.2143432715551973,
+   "kappa_ci95": [
+    0.031861510203496,
+    0.3857594556153885
+   ],
+   "judgements": 100,
+   "cost_usd": 0.0406
+  },
+  "sonnet_guideline": {
+   "agreement": 0.69,
+   "agreement_ci95": [
+    0.54,
+    0.85
+   ],
+   "kappa": 0.34377646062658745,
+   "kappa_ci95": [
+    0.04080247267446308,
+    0.656982672406941
+   ],
+   "judgements": 100,
+   "cost_usd": 0.0521
+  },
+  "opus_guideline": {
+   "agreement": 0.75,
+   "agreement_ci95": [
+    0.64,
+    0.85
+   ],
+   "kappa": 0.48389760528488845,
+   "kappa_ci95": [
+    0.288091004697756,
+    0.6673003802281369
+   ],
+   "judgements": 100,
+   "cost_usd": 0.1797
+  }
+ },
+ "tasks": [
+  {
+   "task_id": "IMG_1502.JPG|2|crop_adapter",
+   "file": "IMG_1502.JPG",
+   "garment": 2,
+   "category": "shoes",
+   "candidates": [
+    631878001,
+    843213001,
+    808021008,
+    796156001,
+    721287002
+   ],
+   "human": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "stored_judge": [
+    0,
+    0,
+    1,
+    1,
+    1
+   ],
+   "haiku_short": [
+    0,
+    0,
+    1,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    0,
+    1,
+    1,
+    1
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1527.jpg|2|text_rerank_image",
+   "file": "IMG_1527.jpg",
+   "garment": 2,
+   "category": "bag",
+   "candidates": [
+    765308009,
+    858880001,
+    798903008,
+    637149001,
+    856847001
+   ],
+   "human": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "stored_judge": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1541.jpg|0|crop_adapter",
+   "file": "IMG_1541.jpg",
+   "garment": 0,
+   "category": "outerwear",
+   "candidates": [
+    688326005,
+    912615001,
+    867240002,
+    804809001,
+    849643001
+   ],
+   "human": [
+    0,
+    0,
+    1,
+    1,
+    0
+   ],
+   "stored_judge": [
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ],
+   "haiku_guideline": [
+    1,
+    0,
+    1,
+    1,
+    0
+   ],
+   "sonnet_guideline": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    1,
+    1,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1531.jpg|2|crop_adapter",
+   "file": "IMG_1531.jpg",
+   "garment": 2,
+   "category": "jewellery",
+   "candidates": [
+    907613001,
+    910220002,
+    910960001,
+    655869001,
+    892927001
+   ],
+   "human": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "stored_judge": [
+    0,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    1,
+    0,
+    1,
+    0
+   ],
+   "sonnet_guideline": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "task_id": "full_20.jpg|3|text_rerank_image",
+   "file": "full_20.jpg",
+   "garment": 3,
+   "category": "jewellery",
+   "candidates": [
+    763084002,
+    743037001,
+    835595001,
+    835576001,
+    896557001
+   ],
+   "human": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    1,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "task_id": "IMG_1542.jpg|6|crop_adapter",
+   "file": "IMG_1542.jpg",
+   "garment": 6,
+   "category": "belt",
+   "candidates": [
+    347200001,
+    933607001,
+    904734001,
+    337991001,
+    853239001
+   ],
+   "human": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "stored_judge": [
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    1,
+    0,
+    0,
+    1,
+    1
+   ],
+   "haiku_guideline": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sonnet_guideline": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1507.jpg|0|crop_adapter",
+   "file": "IMG_1507.jpg",
+   "garment": 0,
+   "category": "top",
+   "candidates": [
+    458882004,
+    903084002,
+    926433002,
+    876339002,
+    902229003
+   ],
+   "human": [
+    0,
+    1,
+    1,
+    1,
+    0
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "haiku_short": [
+    0,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    1,
+    0,
+    0,
+    1
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1507.jpg|0|text_rerank_image",
+   "file": "IMG_1507.jpg",
+   "garment": 0,
+   "category": "top",
+   "candidates": [
+    458882004,
+    870290001,
+    721275001,
+    737236003,
+    828533002
+   ],
+   "human": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ],
+   "stored_judge": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ],
+   "haiku_short": [
+    0,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1502.JPG|2|text_rerank_image",
+   "file": "IMG_1502.JPG",
+   "garment": 2,
+   "category": "shoes",
+   "candidates": [
+    843213005,
+    861547002,
+    891902006,
+    870281001,
+    821338001
+   ],
+   "human": [
+    0,
+    0,
+    1,
+    0,
+    0
+   ],
+   "stored_judge": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    1,
+    1,
+    0,
+    1
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "full_16.jpg|0|text_rerank_image",
+   "file": "full_16.jpg",
+   "garment": 0,
+   "category": "top",
+   "candidates": [
+    521062009,
+    678624012,
+    592773001,
+    824733001,
+    784247002
+   ],
+   "human": [
+    0,
+    1,
+    1,
+    1,
+    1
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "haiku_short": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "haiku_guideline": [
+    1,
+    0,
+    1,
+    0,
+    0
+   ],
+   "sonnet_guideline": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "task_id": "IMG_1531.jpg|2|text_rerank_image",
+   "file": "IMG_1531.jpg",
+   "garment": 2,
+   "category": "jewellery",
+   "candidates": [
+    907613001,
+    868382001,
+    872535001,
+    823827001,
+    817855001
+   ],
+   "human": [
+    1,
+    1,
+    1,
+    0,
+    1
+   ],
+   "stored_judge": [
+    0,
+    0,
+    1,
+    1,
+    0
+   ],
+   "haiku_short": [
+    0,
+    1,
+    1,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    0,
+    1,
+    0,
+    1
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "task_id": "IMG_1513.jpg|1|text_rerank_image",
+   "file": "IMG_1513.jpg",
+   "garment": 1,
+   "category": "bottom",
+   "candidates": [
+    607761001,
+    735578001,
+    601784003,
+    925664002,
+    808954001
+   ],
+   "human": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "stored_judge": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "haiku_guideline": [
+    0,
+    1,
+    1,
+    1,
+    0
+   ],
+   "sonnet_guideline": [
+    1,
+    0,
+    1,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1514.jpg|3|text_rerank_image",
+   "file": "IMG_1514.jpg",
+   "garment": 3,
+   "category": "bag",
+   "candidates": [
+    732059001,
+    888642001,
+    852465001,
+    843380004,
+    817053001
+   ],
+   "human": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    1,
+    1,
+    1,
+    0,
+    1
+   ],
+   "sonnet_guideline": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ]
+  },
+  {
+   "task_id": "full_20.jpg|3|crop_adapter",
+   "file": "full_20.jpg",
+   "garment": 3,
+   "category": "jewellery",
+   "candidates": [
+    903924002,
+    910954002,
+    933928002,
+    868410002,
+    915015002
+   ],
+   "human": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "stored_judge": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "haiku_short": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "haiku_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1513.jpg|1|crop_adapter",
+   "file": "IMG_1513.jpg",
+   "garment": 1,
+   "category": "bottom",
+   "candidates": [
+    607761001,
+    601784003,
+    710876034,
+    794216001,
+    399256037
+   ],
+   "human": [
+    1,
+    1,
+    1,
+    0,
+    1
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "haiku_guideline": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    1,
+    1,
+    1
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1514.jpg|3|crop_adapter",
+   "file": "IMG_1514.jpg",
+   "garment": 3,
+   "category": "bag",
+   "candidates": [
+    732059001,
+    888642001,
+    843380004,
+    852465001,
+    818355005
+   ],
+   "human": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "stored_judge": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ],
+   "haiku_short": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ],
+   "haiku_guideline": [
+    1,
+    1,
+    1,
+    1,
+    0
+   ],
+   "sonnet_guideline": [
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1542.jpg|6|text_rerank_image",
+   "file": "IMG_1542.jpg",
+   "garment": 6,
+   "category": "belt",
+   "candidates": [
+    347200001,
+    464610002,
+    759465004,
+    717180001,
+    458083005
+   ],
+   "human": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "stored_judge": [
+    1,
+    1,
+    1,
+    0,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    1,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "sonnet_guideline": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    0,
+    1,
+    1
+   ]
+  },
+  {
+   "task_id": "full_16.jpg|0|crop_adapter",
+   "file": "full_16.jpg",
+   "garment": 0,
+   "category": "top",
+   "candidates": [
+    521062009,
+    902800001,
+    678624012,
+    592773001,
+    870519004
+   ],
+   "human": [
+    0,
+    0,
+    1,
+    1,
+    0
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    1,
+    0
+   ],
+   "haiku_short": [
+    1,
+    1,
+    0,
+    1,
+    0
+   ],
+   "haiku_guideline": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "sonnet_guideline": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    1,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1527.jpg|2|crop_adapter",
+   "file": "IMG_1527.jpg",
+   "garment": 2,
+   "category": "bag",
+   "candidates": [
+    765308009,
+    871270001,
+    798903008,
+    643588001,
+    843906001
+   ],
+   "human": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "stored_judge": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "haiku_short": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "haiku_guideline": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "sonnet_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "task_id": "IMG_1541.jpg|0|text_rerank_image",
+   "file": "IMG_1541.jpg",
+   "garment": 0,
+   "category": "outerwear",
+   "candidates": [
+    688326005,
+    602673021,
+    821118006,
+    783126002,
+    804809001
+   ],
+   "human": [
+    0,
+    0,
+    1,
+    1,
+    1
+   ],
+   "stored_judge": [
+    1,
+    1,
+    0,
+    0,
+    1
+   ],
+   "haiku_short": [
+    1,
+    1,
+    1,
+    0,
+    1
+   ],
+   "haiku_guideline": [
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "sonnet_guideline": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "opus_guideline": [
+    1,
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ]
+}

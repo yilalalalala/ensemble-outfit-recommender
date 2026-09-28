@@ -1,0 +1,142 @@
+{
+ "IMG_1502.JPG|2|crop_adapter": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "IMG_1527.jpg|2|text_rerank_image": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "IMG_1541.jpg|0|crop_adapter": [
+  0,
+  0,
+  1,
+  1,
+  0
+ ],
+ "IMG_1531.jpg|2|crop_adapter": [
+  1,
+  0,
+  0,
+  1,
+  0
+ ],
+ "full_20.jpg|3|text_rerank_image": [
+  1,
+  1,
+  0,
+  0,
+  1
+ ],
+ "IMG_1542.jpg|6|crop_adapter": [
+  1,
+  0,
+  0,
+  1,
+  0
+ ],
+ "IMG_1507.jpg|0|crop_adapter": [
+  0,
+  1,
+  1,
+  1,
+  0
+ ],
+ "IMG_1507.jpg|0|text_rerank_image": [
+  0,
+  0,
+  0,
+  1,
+  0
+ ],
+ "IMG_1502.JPG|2|text_rerank_image": [
+  0,
+  0,
+  1,
+  0,
+  0
+ ],
+ "full_16.jpg|0|text_rerank_image": [
+  0,
+  1,
+  1,
+  1,
+  1
+ ],
+ "IMG_1531.jpg|2|text_rerank_image": [
+  1,
+  1,
+  1,
+  0,
+  1
+ ],
+ "IMG_1513.jpg|1|text_rerank_image": [
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "IMG_1514.jpg|3|text_rerank_image": [
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "full_20.jpg|3|crop_adapter": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "IMG_1513.jpg|1|crop_adapter": [
+  1,
+  1,
+  1,
+  0,
+  1
+ ],
+ "IMG_1514.jpg|3|crop_adapter": [
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "IMG_1542.jpg|6|text_rerank_image": [
+  1,
+  1,
+  0,
+  1,
+  1
+ ],
+ "full_16.jpg|0|crop_adapter": [
+  0,
+  0,
+  1,
+  1,
+  0
+ ],
+ "IMG_1527.jpg|2|crop_adapter": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "IMG_1541.jpg|0|text_rerank_image": [
+  0,
+  0,
+  1,
+  1,
+  1
+ ]
+}

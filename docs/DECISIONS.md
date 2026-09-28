@@ -509,3 +509,41 @@ with valid boxes 85% vs 80%, at 6 s vs 42 s per photo. Slot-level agreement
 the objective metrics. Claude is one environment variable away
 (`ENSEMBLE_LLM=claude`) for better answer quality and latency at about $0.02
 per turn. That trade-off is the owner's product call.
+
+---
+
+### D-025 — Human gold labels and judge calibration
+**Date:** 2026-09-28 · **Status:** active (round 2 pending)
+
+The owner labelled 100 judgements (10 garments × 2 modes × 5 results) on the blind Label page,
+following a written guideline: same type, similar colour, similar style; all three required; if
+unsure, 0.
+- **Self-consistency:** 94% (15 of 16 repeated pairs). The one conflict was resolved by the owner.
+
+**Result.** The Haiku batch judge used for all visual-search numbers agrees with the human on only
+**58% (κ 0.16)** of judgements. The earlier 71% came from a Claude reviewer, not a human, and
+overstated reliability. Human and judge agree on the ranking of modes:
+
+| mode | human Precision@5 | Haiku judge Precision@5 |
+| --- | ---: | ---: |
+| text retrieve → image rerank | 0.54 [0.34, 0.74] | 0.64 |
+| crop + adapter | 0.34 [0.18, 0.50] | 0.48 |
+
+**Judge calibration** (the same 100 human labels; garment-level bootstrap 95% intervals):
+
+| judge | agreement | κ |
+| --- | ---: | ---: |
+| Haiku, short prompt (rerun) | 0.67 [0.53, 0.80] | 0.34 |
+| Haiku + guideline | 0.61 [0.52, 0.70] | 0.21 |
+| Sonnet 5 + guideline | 0.69 [0.54, 0.85] | 0.34 |
+| **Opus 5 + guideline** | **0.75 [0.64, 0.85]** | **0.48** |
+
+Rerunning the same Haiku judge moved agreement from 0.58 to 0.67, so single judge runs are noisy.
+
+**Decisions.**
+- **Conclusions about modes** rest on human labels where available, and on relative (not absolute)
+  judge numbers otherwise.
+- **Default judge:** Opus 5 + guideline, subject to confirmation on round 2 (a stratified, disjoint,
+  held-out set: 3 jewellery, 2 bag and 1 each of shoes, outerwear, bottom, top, sunglasses). Round 1
+  is the calibration set, used to choose; round 2 is only for reporting.
+- **No full re-judge:** a full Opus re-judge (≈$15 with Batch) exceeds the budget.
