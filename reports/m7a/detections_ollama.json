@@ -1,0 +1,4455 @@
+{
+ "IMG_1501.JPG": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "black V-neck sweater",
+    "box": [
+     220,
+     254,
+     520,
+     585
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     218,
+     578,
+     483,
+     1185
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black loafers",
+    "box": [
+     327,
+     1159,
+     392,
+     1248
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "brown shoulder bag",
+    "box": [
+     210,
+     254,
+     315,
+     544
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   700,
+   1288
+  ],
+  "seconds": 47.5
+ },
+ "IMG_1502.JPG": {
+  "items": [
+   {
+    "category": "knitwear",
+    "colour": "black",
+    "description": "long-sleeved sweater",
+    "box": [
+     222,
+     210,
+     560,
+     576
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "wide-leg pants",
+    "box": [
+     248,
+     555,
+     609,
+     1055
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "flat shoes",
+    "box": [
+     278,
+     1018,
+     483,
+     1072
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "shoulder bag",
+    "box": [
+     203,
+     230,
+     375,
+     509
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 39.8
+ },
+ "IMG_1503.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "beige",
+    "description": "oversized sweatshirt",
+    "box": [
+     60,
+     218,
+     543,
+     662
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     177,
+     530,
+     445,
+     1248
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "pointed-toe flats",
+    "box": null
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "large shoulder bag",
+    "box": [
+     388,
+     215,
+     554,
+     650
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   672,
+   1344
+  ],
+  "seconds": 41.3
+ },
+ "IMG_1504.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "striped button-up shirt",
+    "box": [
+     147,
+     238,
+     543,
+     550
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "gray",
+    "description": "sweatshirt vest",
+    "box": [
+     150,
+     219,
+     525,
+     734
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     214,
+     575,
+     501,
+     1364
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "brown loafers",
+    "box": [
+     137,
+     1376,
+     430,
+     1465
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "brown leather tote bag",
+    "box": [
+     49,
+     244,
+     305,
+     776
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "red",
+    "description": "red baseball cap",
+    "box": [
+     305,
+     37,
+     512,
+     139
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "earrings",
+    "box": null
+   }
+  ],
+  "size": [
+   616,
+   1484
+  ],
+  "seconds": 39.8
+ },
+ "IMG_1505.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "navy",
+    "description": "navy blazer",
+    "box": [
+     28,
+     225,
+     540,
+     853
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white t-shirt",
+    "box": [
+     222,
+     244,
+     330,
+     625
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     155,
+     615,
+     427,
+     1365
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black ankle boots",
+    "box": [
+     219,
+     1320,
+     326,
+     1503
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black handbag with chain strap",
+    "box": [
+     402,
+     352,
+     483,
+     600
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "earrings",
+    "box": null
+   }
+  ],
+  "size": [
+   588,
+   1512
+  ],
+  "seconds": 43.5
+ },
+ "IMG_1506.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "plain white t-shirt",
+    "box": [
+     235,
+     275,
+     430,
+     578
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "blue",
+    "description": "light blue striped button-up shirt",
+    "box": [
+     0,
+     210,
+     611,
+     748
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     208,
+     528,
+     523,
+     1360
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black flip-flops",
+    "box": [
+     246,
+     1199,
+     500,
+     1395
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black shoulder bag",
+    "box": [
+     60,
+     225,
+     260,
+     665
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "black baseball cap",
+    "box": [
+     285,
+     35,
+     416,
+     145
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   616,
+   1428
+  ],
+  "seconds": 50.5
+ },
+ "IMG_1507.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "floral patterned blouse",
+    "box": [
+     105,
+     222,
+     520,
+     737
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "wide-leg cargo pants",
+    "box": [
+     178,
+     697,
+     598,
+     1353
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "white",
+    "description": "open-toe sandals",
+    "box": [
+     252,
+     1310,
+     638,
+     1359
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "small handbag with pearl embellishments",
+    "box": [
+     56,
+     723,
+     194,
+     882
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "earrings",
+    "box": null
+   }
+  ],
+  "size": [
+   644,
+   1400
+  ],
+  "seconds": 38.5
+ },
+ "IMG_1508.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "black blazer",
+    "box": [
+     125,
+     298,
+     487,
+     777
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white t-shirt",
+    "box": [
+     245,
+     338,
+     345,
+     533
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "beige",
+    "description": "beige wide-leg trousers",
+    "box": [
+     205,
+     555,
+     481,
+     1145
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "beige",
+    "description": "beige flat shoes with bow",
+    "box": [
+     260,
+     1108,
+     528,
+     1256
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black shoulder bag with chain strap",
+    "box": [
+     162,
+     315,
+     240,
+     600
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "bracelet",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black sunglasses",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "black",
+    "description": "black belt",
+    "box": null
+   }
+  ],
+  "size": [
+   672,
+   1316
+  ],
+  "seconds": 53.2
+ },
+ "IMG_1509.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "crepe short-sleeved top",
+    "box": [
+     192,
+     322,
+     452,
+     640
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "high-waisted wide-leg trousers",
+    "box": [
+     232,
+     585,
+     469,
+     1190
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "pointed-toe heels",
+    "box": null
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "leather tote bag",
+    "box": [
+     396,
+     468,
+     588,
+     690
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "earrings",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   700,
+   1288
+  ],
+  "seconds": 47.5
+ },
+ "IMG_1510.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "light blue",
+    "description": "button-down shirt",
+    "box": [
+     303,
+     182,
+     598,
+     420
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "dark grey",
+    "description": "high-waisted wide-leg pants",
+    "box": [
+     347,
+     390,
+     567,
+     1014
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "pointed-toe heels",
+    "box": [
+     392,
+     988,
+     559,
+     1081
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "shoulder bag",
+    "box": [
+     291,
+     217,
+     379,
+     494
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "bracelet",
+    "box": null
+   }
+  ],
+  "size": [
+   812,
+   1120
+  ],
+  "seconds": 116.9
+ },
+ "IMG_1511.jpg": {
+  "items": [
+   {
+    "category": "jumpsuit",
+    "colour": "black",
+    "description": "form-fitting sleeveless jumpsuit",
+    "box": [
+     222,
+     465,
+     459,
+     1171
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "pointed-toe heels",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "earrings",
+    "box": null
+   }
+  ],
+  "size": [
+   700,
+   1288
+  ],
+  "seconds": 35.5
+ },
+ "IMG_1512.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "long-sleeved button-down shirt",
+    "box": [
+     193,
+     348,
+     482,
+     620
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "high-waisted wide-leg pants",
+    "box": [
+     225,
+     598,
+     483,
+     1242
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "bracelet",
+    "box": null
+   },
+   {
+    "category": "scarf",
+    "colour": "black",
+    "description": "tie with patterned scarf",
+    "box": [
+     298,
+     382,
+     382,
+     665
+    ]
+   }
+  ],
+  "size": [
+   700,
+   1288
+  ],
+  "seconds": 313.7
+ },
+ "IMG_1513.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "brown",
+    "description": "short-sleeved polo shirt",
+    "box": [
+     337,
+     285,
+     592,
+     570
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "straight-leg trousers",
+    "box": [
+     323,
+     540,
+     535,
+     1032
+    ]
+   },
+   {
+    "category": "belt",
+    "colour": "black",
+    "description": "thin belt",
+    "box": [
+     365,
+     555,
+     530,
+     587
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "low-top sneakers",
+    "box": [
+     341,
+     1013,
+     460,
+     1065
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 89.3
+ },
+ "IMG_1514.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "navy",
+    "description": "polo shirt",
+    "box": [
+     98,
+     0,
+     588,
+     508
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "jeans",
+    "box": [
+     208,
+     483,
+     495,
+     994
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "dress shoes",
+    "box": [
+     229,
+     935,
+     352,
+     1073
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "crossbody bag",
+    "box": [
+     210,
+     0,
+     477,
+     492
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": [
+     277,
+     107,
+     337,
+     270
+    ]
+   },
+   {
+    "category": "belt",
+    "colour": "brown",
+    "description": "leather belt",
+    "box": [
+     218,
+     483,
+     445,
+     530
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "watch",
+    "box": null
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 291.9
+ },
+ "IMG_1515.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "brown",
+    "description": "short-sleeved polo shirt",
+    "box": [
+     229,
+     537,
+     433,
+     739
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "beige",
+    "description": "high-waisted wide-leg trousers",
+    "box": [
+     198,
+     718,
+     435,
+     1205
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "polished leather shoes",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "black",
+    "description": "leather belt",
+    "box": null
+   },
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "jacket",
+    "box": [
+     475,
+     732,
+     636,
+     940
+    ]
+   }
+  ],
+  "size": [
+   700,
+   1260
+  ],
+  "seconds": 40.2
+ },
+ "IMG_1516.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "striped short-sleeved shirt",
+    "box": [
+     233,
+     348,
+     514,
+     593
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "wide-leg trousers",
+    "box": [
+     245,
+     585,
+     440,
+     1114
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "polished loafers",
+    "box": [
+     253,
+     1058,
+     408,
+     1161
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "necklace",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "dark sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   728,
+   1232
+  ],
+  "seconds": 40.5
+ },
+ "IMG_1517.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "black zip-up bomber jacket",
+    "box": [
+     109,
+     245,
+     662,
+     910
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "white and blue",
+    "description": "striped shirt with orange collar",
+    "box": [
+     337,
+     265,
+     485,
+     733
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     198,
+     728,
+     605,
+     1092
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 36.3
+ },
+ "IMG_1518.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "light grey",
+    "description": "light grey blazer",
+    "box": [
+     184,
+     232,
+     600,
+     575
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white button-up shirt",
+    "box": [
+     355,
+     273,
+     472,
+     508
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     204,
+     502,
+     635,
+     942
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black dress shoes",
+    "box": [
+     348,
+     813,
+     546,
+     1036
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black woven handbag",
+    "box": [
+     574,
+     481,
+     715,
+     627
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "silver watch",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "silver ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "silver bracelet",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black aviator sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   868,
+   1036
+  ],
+  "seconds": 60.7
+ },
+ "IMG_1519.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "light blue",
+    "description": "button-down shirt",
+    "box": [
+     219,
+     265,
+     702,
+     632
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     195,
+     479,
+     622,
+     1063
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "loafer shoes",
+    "box": [
+     28,
+     738,
+     205,
+     852
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "watch",
+    "box": null
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "baseball cap",
+    "box": [
+     333,
+     90,
+     543,
+     215
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "glasses",
+    "box": [
+     342,
+     181,
+     470,
+     227
+    ]
+   },
+   {
+    "category": "socks",
+    "colour": "white",
+    "description": "socks",
+    "box": [
+     120,
+     688,
+     260,
+     798
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 51.3
+ },
+ "IMG_1520.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "beige",
+    "description": "creamy beige blazer",
+    "box": [
+     282,
+     267,
+     741,
+     754
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "light blue denim jeans",
+    "box": [
+     329,
+     468,
+     723,
+     900
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "brown leather loafers",
+    "box": [
+     388,
+     924,
+     464,
+     1045
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "brown woven shoulder bag",
+    "box": [
+     54,
+     403,
+     275,
+     632
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "black baseball cap with white logo",
+    "box": [
+     396,
+     159,
+     559,
+     277
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "brown",
+    "description": "brown aviator sunglasses",
+    "box": [
+     458,
+     227,
+     556,
+     280
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "black watch",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "black bracelet",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "black bracelet",
+    "box": null
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 64.3
+ },
+ "IMG_1521.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "plain t-shirt",
+    "box": [
+     367,
+     342,
+     498,
+     548
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "double-breasted blazer",
+    "box": [
+     272,
+     313,
+     588,
+     655
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "cuffed jeans",
+    "box": [
+     282,
+     490,
+     560,
+     855
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "red",
+    "description": "sneakers",
+    "box": [
+     360,
+     737,
+     453,
+     957
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "leather tote bag",
+    "box": [
+     37,
+     432,
+     225,
+     680
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "baseball cap",
+    "box": [
+     455,
+     194,
+     546,
+     278
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "aviator sunglasses",
+    "box": null
+   },
+   {
+    "category": "socks",
+    "colour": "white",
+    "description": "cotton socks",
+    "box": null
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 58.1
+ },
+ "IMG_1522.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "yellow",
+    "description": "buttoned cardigan",
+    "box": [
+     294,
+     299,
+     573,
+     598
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "denim shorts",
+    "box": [
+     322,
+     578,
+     515,
+     780
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "loafer shoes",
+    "box": [
+     362,
+     945,
+     512,
+     1063
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "large shoulder bag",
+    "box": [
+     452,
+     312,
+     600,
+     617
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "green",
+    "description": "baseball cap",
+    "box": [
+     323,
+     194,
+     430,
+     245
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   },
+   {
+    "category": "socks",
+    "colour": "white",
+    "description": "ankle socks",
+    "box": [
+     399,
+     889,
+     490,
+     986
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "tattoos",
+    "box": null
+   }
+  ],
+  "size": [
+   868,
+   1064
+  ],
+  "seconds": 60.3
+ },
+ "IMG_1523.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "light grey",
+    "description": "light grey blazer",
+    "box": [
+     257,
+     315,
+     525,
+     558
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "blue striped button-up shirt",
+    "box": [
+     380,
+     345,
+     470,
+     572
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "white wide-leg trousers",
+    "box": [
+     315,
+     555,
+     485,
+     951
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black loafers",
+    "box": null
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "black cap",
+    "box": [
+     386,
+     221,
+     472,
+     277
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black sunglasses",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "black",
+    "description": "black belt",
+    "box": null
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 49.6
+ },
+ "IMG_1524.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white tank top",
+    "box": [
+     0,
+     817,
+     770,
+     1092
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 19.9
+ },
+ "IMG_1525.jpg": {
+  "items": [
+   {
+    "category": "knitwear",
+    "colour": "black",
+    "description": "high-necked black top",
+    "box": [
+     0,
+     938,
+     839,
+     1092
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 18.4
+ },
+ "IMG_1526.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "long-sleeved ribbed top",
+    "box": [
+     0,
+     0,
+     448,
+     652
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "two rings on the hand",
+    "box": [
+     282,
+     450,
+     435,
+     719
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 22.8
+ },
+ "IMG_1527.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "sleeveless black top",
+    "box": [
+     75,
+     100,
+     839,
+     1092
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "starfish necklace",
+    "box": [
+     352,
+     182,
+     475,
+     375
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "blue and white",
+    "description": "polka dot bag",
+    "box": [
+     592,
+     628,
+     710,
+     1092
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 30.7
+ },
+ "IMG_1528.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "maroon",
+    "description": "leather jacket",
+    "box": [
+     0,
+     315,
+     737,
+     1036
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "maroon",
+    "description": "suede cap",
+    "box": [
+     0,
+     0,
+     716,
+     325
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "multiple rings",
+    "box": [
+     302,
+     260,
+     478,
+     327
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "multiple bracelets",
+    "box": [
+     420,
+     626,
+     593,
+     797
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "multiple bracelets",
+    "box": [
+     699,
+     987,
+     802,
+     1036
+    ]
+   }
+  ],
+  "size": [
+   868,
+   1036
+  ],
+  "seconds": 40.4
+ },
+ "IMG_1529.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "plain white t-shirt",
+    "box": [
+     153,
+     0,
+     839,
+     472
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "white wide-leg pants",
+    "box": [
+     77,
+     542,
+     775,
+     1092
+    ]
+   },
+   {
+    "category": "belt",
+    "colour": "black and white",
+    "description": "polka dot belt with black stripe",
+    "box": [
+     118,
+     338,
+     695,
+     703
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "black bangles",
+    "box": [
+     35,
+     463,
+     163,
+     575
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "pendant necklace",
+    "box": [
+     551,
+     0,
+     623,
+     260
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black handbag with strap",
+    "box": [
+     437,
+     882,
+     677,
+     1092
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 45.4
+ },
+ "IMG_1530.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "black spaghetti strap top",
+    "box": [
+     208,
+     0,
+     612,
+     525
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "white flowing skirt",
+    "box": [
+     130,
+     445,
+     573,
+     1039
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black ankle boots",
+    "box": [
+     129,
+     968,
+     299,
+     1030
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black shoulder bag",
+    "box": [
+     123,
+     0,
+     277,
+     564
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "necklace with pendant",
+    "box": [
+     351,
+     0,
+     520,
+     200
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "ring",
+    "box": null
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 49.2
+ },
+ "IMG_1531.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white lace-trimmed camisole",
+    "box": [
+     138,
+     502,
+     578,
+     1117
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted denim jeans",
+    "box": [
+     148,
+     1010,
+     645,
+     1252
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "cross necklace",
+    "box": [
+     298,
+     500,
+     413,
+     657
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "earrings",
+    "box": [
+     199,
+     348,
+     442,
+     402
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "bracelets",
+    "box": [
+     626,
+     728,
+     722,
+     790
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "rings",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "bracelet",
+    "box": [
+     46,
+     788,
+     140,
+     870
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "green",
+    "description": "NY Yankees cap",
+    "box": [
+     179,
+     79,
+     445,
+     268
+    ]
+   }
+  ],
+  "size": [
+   728,
+   1260
+  ],
+  "seconds": 68.2
+ },
+ "IMG_1532.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "gray",
+    "description": "short-sleeved t-shirt",
+    "box": [
+     265,
+     325,
+     505,
+     555
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "gray",
+    "description": "wide-leg pants",
+    "box": [
+     269,
+     528,
+     482,
+     1091
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "woven tote bag",
+    "box": [
+     415,
+     712,
+     519,
+     986
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "necklace with tassel",
+    "box": [
+     357,
+     325,
+     423,
+     510
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "dark sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 42.5
+ },
+ "IMG_1533.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "oversized white t-shirt",
+    "box": [
+     209,
+     175,
+     660,
+     616
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     259,
+     598,
+     602,
+     1007
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown and gold",
+    "description": "studded crossbody bag",
+    "box": [
+     518,
+     225,
+     666,
+     612
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "multiple gold bracelets",
+    "box": [
+     289,
+     542,
+     345,
+     632
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "large gold necklace",
+    "box": [
+     380,
+     168,
+     490,
+     407
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "large gold ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "small white flower ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "large gold ring",
+    "box": null
+   }
+  ],
+  "size": [
+   896,
+   1008
+  ],
+  "seconds": 57.7
+ },
+ "IMG_1534.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "gray",
+    "description": "long-sleeved knit top",
+    "box": [
+     376,
+     352,
+     607,
+     622
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "gray",
+    "description": "wide-leg trousers",
+    "box": [
+     405,
+     578,
+     609,
+     1040
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "closed-toe shoes",
+    "box": null
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "shoulder bag",
+    "box": [
+     388,
+     372,
+     442,
+     548
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "necklace",
+    "box": [
+     454,
+     360,
+     515,
+     492
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 46.7
+ },
+ "IMG_1535.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "dark denim jacket",
+    "box": [
+     91,
+     372,
+     743,
+     900
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "brown",
+    "description": "button-up shirt",
+    "box": [
+     293,
+     400,
+     553,
+     832
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "jeans",
+    "box": [
+     163,
+     812,
+     795,
+     940
+    ]
+   },
+   {
+    "category": "knitwear",
+    "colour": "beige",
+    "description": "knitted beanie",
+    "box": [
+     323,
+     159,
+     515,
+     300
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "white",
+    "description": "pearl necklace",
+    "box": [
+     375,
+     398,
+     487,
+     500
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "watch",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": [
+     370,
+     277,
+     503,
+     315
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 55.1
+ },
+ "IMG_1536.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "long black coat",
+    "box": [
+     125,
+     330,
+     725,
+     992
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "black trousers",
+    "box": [
+     125,
+     720,
+     725,
+     1036
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "bracelet",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black sunglasses",
+    "box": [
+     340,
+     323,
+     500,
+     367
+    ]
+   }
+  ],
+  "size": [
+   868,
+   1036
+  ],
+  "seconds": 47.3
+ },
+ "IMG_1537.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "leather jacket",
+    "box": [
+     114,
+     307,
+     652,
+     615
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "tapered trousers",
+    "box": [
+     235,
+     555,
+     728,
+     860
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "leather brogues",
+    "box": [
+     288,
+     860,
+     405,
+     1002
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "leather brogues",
+    "box": [
+     639,
+     819,
+     818,
+     939
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "watch",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "hat",
+    "colour": "red",
+    "description": "baseball cap",
+    "box": [
+     365,
+     199,
+     485,
+     293
+    ]
+   }
+  ],
+  "size": [
+   868,
+   1036
+  ],
+  "seconds": 63.6
+ },
+ "IMG_1538.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "light blue",
+    "description": "denim shirt",
+    "box": [
+     0,
+     92,
+     839,
+     1063
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "necklace with square pendant",
+    "box": [
+     199,
+     182,
+     633,
+     552
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 28.2
+ },
+ "IMG_1539.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "tank top",
+    "box": [
+     0,
+     378,
+     607,
+     1036
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "necklace",
+    "box": [
+     315,
+     375,
+     509,
+     652
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "necklace",
+    "box": [
+     332,
+     600,
+     509,
+     820
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": [
+     448,
+     209,
+     785,
+     420
+    ]
+   }
+  ],
+  "size": [
+   868,
+   1036
+  ],
+  "seconds": 38.6
+ },
+ "IMG_1540.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "beige",
+    "description": "long, double-breasted coat",
+    "box": [
+     52,
+     320,
+     867,
+     970
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "high-waisted wide-leg trousers",
+    "box": [
+     40,
+     720,
+     855,
+     1064
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "shoulder bag",
+    "box": [
+     58,
+     371,
+     338,
+     905
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "necklace",
+    "box": [
+     405,
+     388,
+     487,
+     514
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "watch",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "brown",
+    "description": "belt",
+    "box": [
+     385,
+     709,
+     558,
+     755
+    ]
+   }
+  ],
+  "size": [
+   868,
+   1064
+  ],
+  "seconds": 49.2
+ },
+ "IMG_1541.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "brown",
+    "description": "brown leather jacket",
+    "box": [
+     130,
+     432,
+     698,
+     890
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white button-up shirt",
+    "box": [
+     275,
+     445,
+     545,
+     845
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "pendant necklace",
+    "box": [
+     365,
+     500,
+     427,
+     592
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "black trousers",
+    "box": [
+     260,
+     755,
+     592,
+     1036
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "brown",
+    "description": "brown-framed sunglasses",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "brown",
+    "description": "brown leather belt",
+    "box": [
+     260,
+     755,
+     592,
+     1036
+    ]
+   }
+  ],
+  "size": [
+   868,
+   1036
+  ],
+  "seconds": 48.4
+ },
+ "IMG_1542.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "olive green",
+    "description": "oversized t-shirt",
+    "box": [
+     118,
+     232,
+     490,
+     685
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "high-waisted wide-leg pants",
+    "box": [
+     149,
+     675,
+     407,
+     1193
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "high-top sneakers",
+    "box": [
+     188,
+     1238,
+     357,
+     1428
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "shoulder bag",
+    "box": [
+     0,
+     264,
+     242,
+     675
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "long chain necklace",
+    "box": [
+     269,
+     224,
+     412,
+     405
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "watch",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "black",
+    "description": "belt with silver buckle",
+    "box": [
+     150,
+     675,
+     407,
+     725
+    ]
+   },
+   {
+    "category": "socks",
+    "colour": "white",
+    "description": "socks with red logo",
+    "box": [
+     188,
+     1193,
+     298,
+     1250
+    ]
+   }
+  ],
+  "size": [
+   616,
+   1456
+  ],
+  "seconds": 59.3
+ },
+ "IMG_1543.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "beige",
+    "description": "beige button-up vest",
+    "box": [
+     0,
+     0,
+     839,
+     1092
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "purple",
+    "description": "purple turtleneck sweater",
+    "box": [
+     0,
+     0,
+     839,
+     1092
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "silver necklace with circular pendant",
+    "box": [
+     265,
+     0,
+     573,
+     386
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "gold bracelet with square links",
+    "box": [
+     492,
+     752,
+     667,
+     942
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "gold ring",
+    "box": null
+   }
+  ],
+  "size": [
+   840,
+   1092
+  ],
+  "seconds": 41.7
+ },
+ "full_01.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "padded vest",
+    "box": [
+     208,
+     209,
+     440,
+     652
+    ]
+   },
+   {
+    "category": "knitwear",
+    "colour": "red",
+    "description": "long-sleeved shirt",
+    "box": [
+     372,
+     279,
+     503,
+     600
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "pants",
+    "box": [
+     220,
+     628,
+     450,
+     1062
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "white",
+    "description": "sneakers",
+    "box": [
+     248,
+     939,
+     463,
+     1096
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "backpack",
+    "box": [
+     352,
+     264,
+     508,
+     615
+    ]
+   }
+  ],
+  "size": [
+   756,
+   1176
+  ],
+  "seconds": 42.4
+ },
+ "full_02.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "light blue t-shirt",
+    "box": [
+     452,
+     365,
+     505,
+     520
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "blue",
+    "description": "blue denim jacket",
+    "box": [
+     354,
+     352,
+     645,
+     708
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "blue denim shorts",
+    "box": [
+     412,
+     522,
+     595,
+     679
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black ankle boots",
+    "box": [
+     250,
+     931,
+     337,
+     1028
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black ankle boots",
+    "box": [
+     482,
+     926,
+     540,
+     1023
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black backpack",
+    "box": [
+     540,
+     438,
+     679,
+     664
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 47.1
+ },
+ "full_03.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "yellow",
+    "description": "short-sleeved, loose-fitting",
+    "box": [
+     438,
+     147,
+     661,
+     465
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "short",
+    "box": [
+     473,
+     428,
+     635,
+     465
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "strappy sandals",
+    "box": [
+     509,
+     712,
+     606,
+     774
+    ]
+   }
+  ],
+  "size": [
+   1176,
+   784
+  ],
+  "seconds": 32.5
+ },
+ "full_04.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "brown",
+    "description": "leopard print coat",
+    "box": [
+     245,
+     362,
+     625,
+     946
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "t-shirt with 'RIP' text",
+    "box": [
+     316,
+     385,
+     485,
+     618
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     428,
+     599,
+     635,
+     1020
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "ankle boots",
+    "box": [
+     490,
+     990,
+     573,
+     1126
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "flat cap",
+    "box": [
+     248,
+     222,
+     384,
+     330
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "shoulder bag",
+    "box": null
+   }
+  ],
+  "size": [
+   784,
+   1176
+  ],
+  "seconds": 46.7
+ },
+ "full_05.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "navy",
+    "description": "graphic sweatshirt",
+    "box": [
+     290,
+     195,
+     512,
+     385
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     312,
+     372,
+     546,
+     749
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "sneakers",
+    "box": null
+   }
+  ],
+  "size": [
+   784,
+   1176
+  ],
+  "seconds": 35.6
+ },
+ "full_06.jpg": {
+  "items": [],
+  "size": [
+   952,
+   952
+  ],
+  "seconds": 160.0
+ },
+ "full_07.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "black coat with decorative buttons",
+    "box": [
+     307,
+     232,
+     553,
+     615
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "black and white striped skirt",
+    "box": [
+     308,
+     555,
+     491,
+     835
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "red",
+    "description": "red handbag with silver buckle",
+    "box": [
+     308,
+     474,
+     422,
+     587
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "green",
+    "description": "green cap",
+    "box": [
+     362,
+     95,
+     470,
+     168
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "ring",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black-rimmed glasses",
+    "box": null
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "brown shoulder bag",
+    "box": [
+     217,
+     257,
+     495,
+     486
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "bracelet",
+    "box": null
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 55.5
+ },
+ "full_08.jpg": {
+  "items": [],
+  "size": [
+   1008,
+   896
+  ],
+  "seconds": 156.8
+ },
+ "full_09.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "striped tank top",
+    "box": [
+     401,
+     293,
+     558,
+     548
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "gray",
+    "description": "long sweatpants",
+    "box": [
+     343,
+     505,
+     630,
+     1045
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "blue",
+    "description": "sporty sneakers with neon green laces",
+    "box": [
+     299,
+     1003,
+     421,
+     1107
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "blue",
+    "description": "sporty sneakers with neon green laces",
+    "box": [
+     453,
+     1003,
+     654,
+     1135
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 36.0
+ },
+ "full_10.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black/white",
+    "description": "patterned sweater with stars and logos",
+    "box": [
+     254,
+     294,
+     520,
+     588
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted wide-leg denim jeans",
+    "box": [
+     239,
+     610,
+     501,
+     1027
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "white",
+    "description": "low-top sneakers",
+    "box": [
+     165,
+     995,
+     295,
+     1078
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "red",
+    "description": "baseball cap",
+    "box": [
+     382,
+     130,
+     503,
+     236
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   },
+   {
+    "category": "belt",
+    "colour": "black",
+    "description": "belt with patterned buckle",
+    "box": [
+     241,
+     610,
+     483,
+     674
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 46.8
+ },
+ "full_11.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "short-sleeved t-shirt with graphic design",
+    "box": [
+     245,
+     327,
+     542,
+     685
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "camouflage-patterned pants",
+    "box": [
+     345,
+     653,
+     521,
+     995
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black and beige",
+    "description": "high-top sneakers",
+    "box": [
+     427,
+     987,
+     566,
+     1084
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 30.6
+ },
+ "full_12.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black and white",
+    "description": "plaid coat",
+    "box": [
+     338,
+     420,
+     583,
+     1006
+    ]
+   },
+   {
+    "category": "knitwear",
+    "colour": "white",
+    "description": "sweater",
+    "box": [
+     418,
+     390,
+     583,
+     495
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "ankle boots",
+    "box": [
+     373,
+     978,
+     635,
+     1145
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black and white",
+    "description": "plastic bag",
+    "box": [
+     338,
+     655,
+     493,
+     970
+    ]
+   }
+  ],
+  "size": [
+   756,
+   1204
+  ],
+  "seconds": 36.3
+ },
+ "full_13.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "long black coat",
+    "box": [
+     323,
+     228,
+     625,
+     847
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "short black shorts",
+    "box": [
+     323,
+     228,
+     625,
+     847
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "black top",
+    "box": [
+     323,
+     228,
+     625,
+     847
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black ankle boots",
+    "box": [
+     309,
+     958,
+     543,
+     1157
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black handbag with fur lining",
+    "box": [
+     246,
+     258,
+     400,
+     739
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "necklace",
+    "box": null
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "wide-brimmed black hat",
+    "box": [
+     387,
+     68,
+     609,
+     215
+    ]
+   }
+  ],
+  "size": [
+   756,
+   1204
+  ],
+  "seconds": 55.4
+ },
+ "full_14.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "purple",
+    "description": "colorful patterned jacket with purple accents",
+    "box": [
+     219,
+     278,
+     643,
+     745
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "green",
+    "description": "high-waisted wide-leg shorts",
+    "box": [
+     283,
+     648,
+     561,
+     868
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "red",
+    "description": "high-top sneakers",
+    "box": [
+     329,
+     1009,
+     566,
+     1137
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "gold",
+    "description": "statement necklace",
+    "box": null
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 40.5
+ },
+ "full_15.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "floral patterned coat",
+    "box": [
+     229,
+     230,
+     579,
+     798
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "black skirt with ruffles",
+    "box": [
+     234,
+     620,
+     579,
+     817
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "black boots",
+    "box": [
+     352,
+     978,
+     470,
+     1071
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "white",
+    "description": "backpack",
+    "box": [
+     705,
+     184,
+     811,
+     388
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 40.6
+ },
+ "full_16.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "hooded sweatshirt with pink trim",
+    "box": [
+     160,
+     0,
+     666,
+     999
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "short skirt",
+    "box": [
+     160,
+     699,
+     550,
+     1092
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "necklace with charms",
+    "box": [
+     365,
+     275,
+     425,
+     448
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "dark sunglasses",
+    "box": [
+     242,
+     156,
+     395,
+     233
+    ]
+   },
+   {
+    "category": "socks",
+    "colour": "black and pink",
+    "description": "striped socks",
+    "box": [
+     156,
+     960,
+     410,
+     1092
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "pink and black",
+    "description": "small bag with heart-shaped design",
+    "box": [
+     319,
+     707,
+     483,
+     865
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "chain bag",
+    "box": [
+     519,
+     0,
+     719,
+     320
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 59.0
+ },
+ "full_17.jpg": {
+  "items": [
+   {
+    "category": "knitwear",
+    "colour": "white",
+    "description": "knitted sweater",
+    "box": [
+     475,
+     232,
+     905,
+     565
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "green",
+    "description": "cotton cargo pants",
+    "box": [
+     382,
+     445,
+     922,
+     743
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "brown",
+    "description": "leather ankle boots",
+    "box": [
+     214,
+     516,
+     515,
+     858
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "brown",
+    "description": "shoulder bag",
+    "box": [
+     718,
+     299,
+     934,
+     590
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "herringbone pattern beanie",
+    "box": [
+     588,
+     75,
+     794,
+     290
+    ]
+   }
+  ],
+  "size": [
+   1008,
+   896
+  ],
+  "seconds": 47.0
+ },
+ "full_18.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "short-sleeved t-shirt",
+    "box": [
+     344,
+     398,
+     528,
+     590
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted denim shorts",
+    "box": [
+     340,
+     577,
+     496,
+     697
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "black",
+    "description": "ankle boots",
+    "box": [
+     378,
+     882,
+     456,
+     1044
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "beige",
+    "description": "shoulder bag",
+    "box": [
+     319,
+     394,
+     392,
+     532
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1120
+  ],
+  "seconds": 38.3
+ },
+ "full_19.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "pink",
+    "description": "fluffy faux fur coat",
+    "box": [
+     86,
+     372,
+     353,
+     725
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "short leather skirt",
+    "box": [
+     182,
+     595,
+     290,
+     717
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "silver",
+    "description": "high-heeled shoes",
+    "box": [
+     328,
+     912,
+     395,
+     1008
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "small crossbody bag",
+    "box": [
+     192,
+     595,
+     290,
+     717
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1120
+  ],
+  "seconds": 40.3
+ },
+ "full_20.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white lace-up top",
+    "box": [
+     199,
+     428,
+     418,
+     662
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "white",
+    "description": "white cropped pants",
+    "box": [
+     200,
+     650,
+     357,
+     816
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "pink",
+    "description": "high-heeled pink shoes",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "necklace with pendant",
+    "box": [
+     262,
+     430,
+     325,
+     520
+    ]
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "sunglasses",
+    "box": null
+   },
+   {
+    "category": "bag",
+    "colour": "black",
+    "description": "black crossbody bag",
+    "box": null
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 50.7
+ },
+ "half_01.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "graphic t-shirt with red and white design",
+    "box": [
+     395,
+     627,
+     783,
+     1038
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "skirt",
+    "box": [
+     378,
+     1017,
+     745,
+     1176
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1176
+  ],
+  "seconds": 29.1
+ },
+ "half_02.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "short-sleeved, loose-fitting",
+    "box": [
+     298,
+     259,
+     633,
+     598
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "brown",
+    "description": "high-waisted pencil skirt",
+    "box": [
+     345,
+     555,
+     600,
+     952
+    ]
+   },
+   {
+    "category": "hat",
+    "colour": "black",
+    "description": "peaked cap",
+    "box": [
+     385,
+     55,
+     584,
+     164
+    ]
+   }
+  ],
+  "size": [
+   952,
+   952
+  ],
+  "seconds": 34.5
+ },
+ "half_03.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "Calvin Klein logo crop top",
+    "box": [
+     450,
+     278,
+     672,
+     490
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "blue",
+    "description": "multi-coloured jacket",
+    "box": [
+     338,
+     385,
+     777,
+     784
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "high-waisted denim shorts",
+    "box": [
+     468,
+     490,
+     665,
+     698
+    ]
+   },
+   {
+    "category": "belt",
+    "colour": "brown",
+    "description": "leather belt",
+    "box": [
+     487,
+     486,
+     665,
+     535
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "brown",
+    "description": "bracelet",
+    "box": null
+   }
+  ],
+  "size": [
+   1176,
+   784
+  ],
+  "seconds": 44.9
+ },
+ "half_04.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "plain white t-shirt with a graphic on the chest",
+    "box": [
+     277,
+     338,
+     610,
+     931
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "brown",
+    "description": "dark brown pants",
+    "box": [
+     258,
+     900,
+     536,
+     1148
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "bracelet on the left wrist",
+    "box": null
+   },
+   {
+    "category": "jewellery",
+    "colour": "black",
+    "description": "watch on the left wrist",
+    "box": null
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 40.0
+ },
+ "half_05.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "black jacket with hood",
+    "box": [
+     0,
+     450,
+     839,
+     1064
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "white t-shirt",
+    "box": [
+     189,
+     550,
+     570,
+     1064
+    ]
+   },
+   {
+    "category": "knitwear",
+    "colour": "red",
+    "description": "red beanie",
+    "box": [
+     285,
+     83,
+     622,
+     416
+    ]
+   },
+   {
+    "category": "bag",
+    "colour": "red",
+    "description": "red backpack with white logo",
+    "box": [
+     158,
+     678,
+     522,
+     1064
+    ]
+   }
+  ],
+  "size": [
+   840,
+   1064
+  ],
+  "seconds": 40.1
+ },
+ "half_06.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "graphic t-shirt with 'LOVE & CHAOS' text and image",
+    "box": [
+     124,
+     465,
+     669,
+     1147
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "black",
+    "description": "semi-transparent cardigan",
+    "box": [
+     124,
+     465,
+     669,
+     1147
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "necklace with cross pendant",
+    "box": [
+     290,
+     480,
+     435,
+     647
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 33.9
+ },
+ "half_07.jpg": {
+  "items": [
+   {
+    "category": "outerwear",
+    "colour": "red",
+    "description": "red plaid blazer",
+    "box": [
+     10,
+     542,
+     811,
+     1119
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "beige",
+    "description": "beige ruffled blouse",
+    "box": [
+     253,
+     538,
+     580,
+     1119
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "silver watch",
+    "box": [
+     667,
+     1040,
+     747,
+     1120
+    ]
+   },
+   {
+    "category": "jewellery",
+    "colour": "silver",
+    "description": "silver ring",
+    "box": null
+   },
+   {
+    "category": "sunglasses",
+    "colour": "black",
+    "description": "black oversized sunglasses",
+    "box": [
+     288,
+     286,
+     551,
+     378
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1120
+  ],
+  "seconds": 45.3
+ },
+ "half_08.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "yellow",
+    "description": "yellow t-shirt with cartoon character print",
+    "box": [
+     0,
+     474,
+     765,
+     1148
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 22.5
+ },
+ "half_09.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "black",
+    "description": "black t-shirt with 'The North Face' logo",
+    "box": [
+     242,
+     469,
+     951,
+     951
+    ]
+   }
+  ],
+  "size": [
+   952,
+   952
+  ],
+  "seconds": 22.5
+ },
+ "item_01.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "teal",
+    "description": "t-shirt with text design",
+    "box": [
+     0,
+     152,
+     585,
+     1052
+    ]
+   }
+  ],
+  "size": [
+   784,
+   1148
+  ],
+  "seconds": 25.2
+ },
+ "item_02.jpg": {
+  "items": [
+   {
+    "category": "bottom",
+    "colour": "blue",
+    "description": "wide-leg denim jeans",
+    "box": [
+     189,
+     50,
+     582,
+     1042
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "t-shirt",
+    "box": [
+     200,
+     0,
+     512,
+     142
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 29.0
+ },
+ "item_03.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "patterned t-shirt with abstract design",
+    "box": [
+     30,
+     0,
+     1005,
+     812
+    ]
+   }
+  ],
+  "size": [
+   1092,
+   812
+  ],
+  "seconds": 23.1
+ },
+ "item_04.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "gray",
+    "description": "sleeveless hoodie with 'Los Angeles South Camp' text",
+    "box": [
+     244,
+     154,
+     537,
+     645
+    ]
+   },
+   {
+    "category": "bottom",
+    "colour": "black",
+    "description": "shorts",
+    "box": [
+     260,
+     638,
+     442,
+     807
+    ]
+   },
+   {
+    "category": "shoes",
+    "colour": "white",
+    "description": "white sneakers",
+    "box": [
+     241,
+     1037,
+     418,
+     1194
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "blue",
+    "description": "denim jacket",
+    "box": [
+     0,
+     467,
+     263,
+     961
+    ]
+   }
+  ],
+  "size": [
+   700,
+   1260
+  ],
+  "seconds": 36.7
+ },
+ "item_05.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "white",
+    "description": "graphic t-shirt with cartoon rabbit design",
+    "box": [
+     242,
+     262,
+     500,
+     975
+    ]
+   },
+   {
+    "category": "outerwear",
+    "colour": "olive",
+    "description": "button-up jacket",
+    "box": [
+     135,
+     200,
+     709,
+     985
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 26.3
+ },
+ "item_06.jpg": {
+  "items": [
+   {
+    "category": "bottom",
+    "colour": "gray",
+    "description": "gray sweatpants with a ship graphic",
+    "box": [
+     0,
+     62,
+     811,
+     1092
+    ]
+   }
+  ],
+  "size": [
+   812,
+   1092
+  ],
+  "seconds": 25.4
+ },
+ "item_07.jpg": {
+  "items": [
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "Polo Sport Ralph Lauren sweatshirt",
+    "box": [
+     0,
+     0,
+     762,
+     442
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "Hard Rock Cafe sweatshirt",
+    "box": [
+     0,
+     244,
+     810,
+     742
+    ]
+   },
+   {
+    "category": "top",
+    "colour": "blue",
+    "description": "Denver Broncos NFL sweatshirt",
+    "box": [
+     0,
+     528,
+     840,
+     952
+    ]
+   }
+  ],
+  "size": [
+   952,
+   952
+  ],
+  "seconds": 32.7
+ }
+}
