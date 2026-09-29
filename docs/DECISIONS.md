@@ -564,3 +564,47 @@ round 1, with lower absolute scores on this jewellery- and bag-heavy set.
 **Confirmed:** Opus 5 + the written guideline is the default judge for future visual-search
 evaluations. It costs about $0.007 per judged list.
 
+
+---
+
+### D-026 — Exact-match benchmark from the owner's street↔product composites
+**Date:** 2026-09-28 · **Status:** active
+
+**Data.** 113 owner images (local only). A curated `MANIFEST.csv` types each one:
+- 53 left|right outfit-breakdown composites;
+- 6 top|bottom earring posts;
+- 5 collages (skipped);
+- 49 jewellery close-ups without a product.
+
+**Extraction.** Composites are split by a non-white pixel-profile cut, with the axis taken from the
+manifest.
+- Qwen2.5-VL boxes garments in the photo and products in the panel.
+- A pair is kept only when its category occurs exactly once on both sides.
+- Earring posts use the panel's non-white box plus a targeted earring prompt; 1 of 6 was dropped
+  after a visual check.
+- Result: **154 pairs** (bottom 35, shoes 34, bag 22, top 22, outerwear 16, jewellery 6, …).
+- A visual check of the first 10 pairs was all correct.
+
+**Benchmark.** For each street crop, the rank of its true product among same-slot candidates;
+Recall@K with bootstrap 95% intervals. No judge: the composite is the ground truth.
+
+| mode | R@1, full gallery (H&M live + extracted; median 7,276) | R@1, extracted-only gallery (median 35) |
+| --- | ---: | ---: |
+| crop | 0.34 | 0.40 |
+| crop, background removed | 0.25 | 0.29 |
+| **crop + DeepFashion2 adapter** | **0.42 [0.34, 0.49]** | **0.59 [0.51, 0.66]** |
+| text | 0.08 | 0.49 |
+| **text retrieve → image rerank** | 0.36 | **0.62 [0.54, 0.69]** |
+
+The extracted-only gallery removes a style shortcut: the owner's product shots share a white
+background and a watermark, unlike H&M images, which can make the full-gallery numbers optimistic.
+
+**Findings.**
+1. The DeepFashion2 adapter improves exact-item retrieval in both settings: +23% R@1 (full) and
+   +47% (extracted-only), with non-overlapping intervals in the fair setting.
+2. Exact-item search and substitute search are different tasks. Text alone finds substitutes
+   (D-021) but not the exact item in a large gallery (0.08). Image + adapter finds the exact item.
+   This supports the two product surfaces: standalone image search (crop + adapter, "find this")
+   and the snap flow (text → image rerank, "find something like this").
+3. Background removal hurts in every evaluation (DeepFashion2, judged relevance, exact match).
+4. Jewellery exact match (n = 6): R@10 0.17 raw vs 0.50 with the adapter. Directional only.

@@ -1,0 +1,2147 @@
+{
+ "summary": {
+  "pairs": 154,
+  "overall": {
+   "crop": {
+    "recall@1": 0.34415584415584416,
+    "recall@5": 0.551948051948052,
+    "recall@10": 0.6233766233766234,
+    "median_rank": 4.0,
+    "n": 154
+   },
+   "crop_nobg": {
+    "recall@1": 0.2532467532467532,
+    "recall@5": 0.4155844155844156,
+    "recall@10": 0.5194805194805194,
+    "median_rank": 9.0,
+    "n": 154
+   },
+   "crop_adapter": {
+    "recall@1": 0.42207792207792205,
+    "recall@5": 0.564935064935065,
+    "recall@10": 0.6103896103896104,
+    "median_rank": 3.0,
+    "n": 154
+   },
+   "text": {
+    "recall@1": 0.08441558441558442,
+    "recall@5": 0.2597402597402597,
+    "recall@10": 0.35064935064935066,
+    "median_rank": 23.0,
+    "n": 154
+   },
+   "text_rerank_image": {
+    "recall@1": 0.36363636363636365,
+    "recall@5": 0.5194805194805194,
+    "recall@10": 0.577922077922078,
+    "median_rank": 4.0,
+    "n": 154
+   }
+  },
+  "by_category": {
+   "bag": {
+    "crop": {
+     "recall@1": 0.4090909090909091,
+     "recall@5": 0.5,
+     "recall@10": 0.5909090909090909,
+     "median_rank": 6.5,
+     "n": 22
+    },
+    "crop_nobg": {
+     "recall@1": 0.22727272727272727,
+     "recall@5": 0.45454545454545453,
+     "recall@10": 0.5,
+     "median_rank": 9.5,
+     "n": 22
+    },
+    "crop_adapter": {
+     "recall@1": 0.5,
+     "recall@5": 0.5454545454545454,
+     "recall@10": 0.6363636363636364,
+     "median_rank": 3.0,
+     "n": 22
+    },
+    "text": {
+     "recall@1": 0.18181818181818182,
+     "recall@5": 0.36363636363636365,
+     "recall@10": 0.5454545454545454,
+     "median_rank": 8.5,
+     "n": 22
+    },
+    "text_rerank_image": {
+     "recall@1": 0.5,
+     "recall@5": 0.6363636363636364,
+     "recall@10": 0.6818181818181818,
+     "median_rank": 1.5,
+     "n": 22
+    }
+   },
+   "belt": {
+    "crop": {
+     "recall@1": 0.0,
+     "recall@5": 0.8,
+     "recall@10": 0.8,
+     "median_rank": 4.0,
+     "n": 5
+    },
+    "crop_nobg": {
+     "recall@1": 0.2,
+     "recall@5": 0.4,
+     "recall@10": 0.6,
+     "median_rank": 8.0,
+     "n": 5
+    },
+    "crop_adapter": {
+     "recall@1": 0.2,
+     "recall@5": 0.8,
+     "recall@10": 0.8,
+     "median_rank": 2.0,
+     "n": 5
+    },
+    "text": {
+     "recall@1": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "median_rank": 55.0,
+     "n": 5
+    },
+    "text_rerank_image": {
+     "recall@1": 0.0,
+     "recall@5": 0.4,
+     "recall@10": 0.4,
+     "median_rank": 51.0,
+     "n": 5
+    }
+   },
+   "bottom": {
+    "crop": {
+     "recall@1": 0.34285714285714286,
+     "recall@5": 0.5428571428571428,
+     "recall@10": 0.6857142857142857,
+     "median_rank": 3.0,
+     "n": 35
+    },
+    "crop_nobg": {
+     "recall@1": 0.2857142857142857,
+     "recall@5": 0.42857142857142855,
+     "recall@10": 0.5714285714285714,
+     "median_rank": 9.0,
+     "n": 35
+    },
+    "crop_adapter": {
+     "recall@1": 0.4,
+     "recall@5": 0.5714285714285714,
+     "recall@10": 0.6,
+     "median_rank": 5.0,
+     "n": 35
+    },
+    "text": {
+     "recall@1": 0.14285714285714285,
+     "recall@5": 0.2857142857142857,
+     "recall@10": 0.34285714285714286,
+     "median_rank": 24.0,
+     "n": 35
+    },
+    "text_rerank_image": {
+     "recall@1": 0.3142857142857143,
+     "recall@5": 0.6,
+     "recall@10": 0.6857142857142857,
+     "median_rank": 2.0,
+     "n": 35
+    }
+   },
+   "hat": {
+    "crop": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    },
+    "crop_nobg": {
+     "recall@1": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "median_rank": 304.0,
+     "n": 1
+    },
+    "crop_adapter": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    },
+    "text": {
+     "recall@1": 0.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 3.0,
+     "n": 1
+    },
+    "text_rerank_image": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    }
+   },
+   "jewellery": {
+    "crop": {
+     "recall@1": 0.0,
+     "recall@5": 0.16666666666666666,
+     "recall@10": 0.16666666666666666,
+     "median_rank": 43.0,
+     "n": 6
+    },
+    "crop_nobg": {
+     "recall@1": 0.0,
+     "recall@5": 0.16666666666666666,
+     "recall@10": 0.16666666666666666,
+     "median_rank": 47.0,
+     "n": 6
+    },
+    "crop_adapter": {
+     "recall@1": 0.16666666666666666,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "median_rank": 16.0,
+     "n": 6
+    },
+    "text": {
+     "recall@1": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "median_rank": 389.5,
+     "n": 6
+    },
+    "text_rerank_image": {
+     "recall@1": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "median_rank": 51.0,
+     "n": 6
+    }
+   },
+   "knitwear": {
+    "crop": {
+     "recall@1": 0.3333333333333333,
+     "recall@5": 0.5,
+     "recall@10": 0.6666666666666666,
+     "median_rank": 4.5,
+     "n": 6
+    },
+    "crop_nobg": {
+     "recall@1": 0.3333333333333333,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "median_rank": 8.5,
+     "n": 6
+    },
+    "crop_adapter": {
+     "recall@1": 0.3333333333333333,
+     "recall@5": 0.3333333333333333,
+     "recall@10": 0.3333333333333333,
+     "median_rank": 32.5,
+     "n": 6
+    },
+    "text": {
+     "recall@1": 0.0,
+     "recall@5": 0.0,
+     "recall@10": 0.16666666666666666,
+     "median_rank": 33.0,
+     "n": 6
+    },
+    "text_rerank_image": {
+     "recall@1": 0.3333333333333333,
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "median_rank": 7.0,
+     "n": 6
+    }
+   },
+   "outerwear": {
+    "crop": {
+     "recall@1": 0.375,
+     "recall@5": 0.5,
+     "recall@10": 0.5625,
+     "median_rank": 6.0,
+     "n": 16
+    },
+    "crop_nobg": {
+     "recall@1": 0.3125,
+     "recall@5": 0.375,
+     "recall@10": 0.5625,
+     "median_rank": 8.0,
+     "n": 16
+    },
+    "crop_adapter": {
+     "recall@1": 0.375,
+     "recall@5": 0.4375,
+     "recall@10": 0.5625,
+     "median_rank": 6.5,
+     "n": 16
+    },
+    "text": {
+     "recall@1": 0.0625,
+     "recall@5": 0.3125,
+     "recall@10": 0.375,
+     "median_rank": 18.5,
+     "n": 16
+    },
+    "text_rerank_image": {
+     "recall@1": 0.3125,
+     "recall@5": 0.4375,
+     "recall@10": 0.4375,
+     "median_rank": 19.5,
+     "n": 16
+    }
+   },
+   "scarf": {
+    "crop": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    },
+    "crop_nobg": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    },
+    "crop_adapter": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    },
+    "text": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    },
+    "text_rerank_image": {
+     "recall@1": 1.0,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "median_rank": 1.0,
+     "n": 1
+    }
+   },
+   "shoes": {
+    "crop": {
+     "recall@1": 0.38235294117647056,
+     "recall@5": 0.5882352941176471,
+     "recall@10": 0.6176470588235294,
+     "median_rank": 3.5,
+     "n": 34
+    },
+    "crop_nobg": {
+     "recall@1": 0.17647058823529413,
+     "recall@5": 0.35294117647058826,
+     "recall@10": 0.47058823529411764,
+     "median_rank": 13.5,
+     "n": 34
+    },
+    "crop_adapter": {
+     "recall@1": 0.47058823529411764,
+     "recall@5": 0.7058823529411765,
+     "recall@10": 0.7352941176470589,
+     "median_rank": 2.0,
+     "n": 34
+    },
+    "text": {
+     "recall@1": 0.058823529411764705,
+     "recall@5": 0.29411764705882354,
+     "recall@10": 0.4411764705882353,
+     "median_rank": 20.0,
+     "n": 34
+    },
+    "text_rerank_image": {
+     "recall@1": 0.5,
+     "recall@5": 0.6470588235294118,
+     "recall@10": 0.7058823529411765,
+     "median_rank": 1.5,
+     "n": 34
+    }
+   },
+   "sunglasses": {
+    "crop": {
+     "recall@1": 0.3333333333333333,
+     "recall@5": 0.5,
+     "recall@10": 0.6666666666666666,
+     "median_rank": 4.5,
+     "n": 6
+    },
+    "crop_nobg": {
+     "recall@1": 0.5,
+     "recall@5": 0.6666666666666666,
+     "recall@10": 0.6666666666666666,
+     "median_rank": 1.5,
+     "n": 6
+    },
+    "crop_adapter": {
+     "recall@1": 0.5,
+     "recall@5": 0.6666666666666666,
+     "recall@10": 0.6666666666666666,
+     "median_rank": 3.0,
+     "n": 6
+    },
+    "text": {
+     "recall@1": 0.0,
+     "recall@5": 0.16666666666666666,
+     "recall@10": 0.16666666666666666,
+     "median_rank": 63.0,
+     "n": 6
+    },
+    "text_rerank_image": {
+     "recall@1": 0.16666666666666666,
+     "recall@5": 0.16666666666666666,
+     "recall@10": 0.3333333333333333,
+     "median_rank": 51.0,
+     "n": 6
+    }
+   },
+   "top": {
+    "crop": {
+     "recall@1": 0.3181818181818182,
+     "recall@5": 0.6363636363636364,
+     "recall@10": 0.6363636363636364,
+     "median_rank": 4.0,
+     "n": 22
+    },
+    "crop_nobg": {
+     "recall@1": 0.2727272727272727,
+     "recall@5": 0.45454545454545453,
+     "recall@10": 0.5454545454545454,
+     "median_rank": 7.5,
+     "n": 22
+    },
+    "crop_adapter": {
+     "recall@1": 0.4090909090909091,
+     "recall@5": 0.4090909090909091,
+     "recall@10": 0.45454545454545453,
+     "median_rank": 26.0,
+     "n": 22
+    },
+    "text": {
+     "recall@1": 0.0,
+     "recall@5": 0.18181818181818182,
+     "recall@10": 0.22727272727272727,
+     "median_rank": 57.5,
+     "n": 22
+    },
+    "text_rerank_image": {
+     "recall@1": 0.3181818181818182,
+     "recall@5": 0.36363636363636365,
+     "recall@10": 0.45454545454545453,
+     "median_rank": 51.0,
+     "n": 22
+    }
+   }
+  }
+ },
+ "rows": [
+  {
+   "file": "IMG_1547.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 54,
+   "crop_nobg": 111,
+   "crop_adapter": 126,
+   "text": 21,
+   "text_rerank_image": 44
+  },
+  {
+   "file": "IMG_1547.jpg",
+   "k": 1,
+   "category": "belt",
+   "gallery": 228,
+   "crop": 4,
+   "crop_nobg": 12,
+   "crop_adapter": 1,
+   "text": 57,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1547.jpg",
+   "k": 2,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 2,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 169,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1547.jpg",
+   "k": 3,
+   "category": "knitwear",
+   "gallery": 13162,
+   "crop": 2,
+   "crop_nobg": 2,
+   "crop_adapter": 29,
+   "text": 141,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1547.jpg",
+   "k": 4,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 9,
+   "crop_nobg": 16,
+   "crop_adapter": 3,
+   "text": 37,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1547.jpg",
+   "k": 5,
+   "category": "sunglasses",
+   "gallery": 241,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 4,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1548.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 37,
+   "crop_nobg": 70,
+   "crop_adapter": 33,
+   "text": 5,
+   "text_rerank_image": 7
+  },
+  {
+   "file": "IMG_1548.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 4,
+   "crop_nobg": 3,
+   "crop_adapter": 1,
+   "text": 52,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1549.jpg",
+   "k": 0,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 42,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1549.jpg",
+   "k": 1,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 82,
+   "crop_nobg": 71,
+   "crop_adapter": 479,
+   "text": 527,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1592.jpg",
+   "k": 0,
+   "category": "jewellery",
+   "gallery": 835,
+   "crop": 44,
+   "crop_nobg": 62,
+   "crop_adapter": 29,
+   "text": 460,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1594.jpg",
+   "k": 0,
+   "category": "jewellery",
+   "gallery": 835,
+   "crop": 286,
+   "crop_nobg": 715,
+   "crop_adapter": 272,
+   "text": 449,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1595.jpg",
+   "k": 0,
+   "category": "jewellery",
+   "gallery": 835,
+   "crop": 38,
+   "crop_nobg": 4,
+   "crop_adapter": 3,
+   "text": 330,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1596.jpg",
+   "k": 0,
+   "category": "jewellery",
+   "gallery": 835,
+   "crop": 42,
+   "crop_nobg": 19,
+   "crop_adapter": 3,
+   "text": 307,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1597.jpg",
+   "k": 0,
+   "category": "jewellery",
+   "gallery": 835,
+   "crop": 2,
+   "crop_nobg": 64,
+   "crop_adapter": 1,
+   "text": 309,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1617.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 62,
+   "crop_nobg": 52,
+   "crop_adapter": 172,
+   "text": 354,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1617.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 7,
+   "crop_nobg": 54,
+   "crop_adapter": 36,
+   "text": 66,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1617.jpg",
+   "k": 2,
+   "category": "knitwear",
+   "gallery": 13162,
+   "crop": 15,
+   "crop_nobg": 935,
+   "crop_adapter": 1073,
+   "text": 1175,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1617.jpg",
+   "k": 3,
+   "category": "scarf",
+   "gallery": 248,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1617.jpg",
+   "k": 4,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 46,
+   "crop_nobg": 19,
+   "crop_adapter": 39,
+   "text": 29,
+   "text_rerank_image": 15
+  },
+  {
+   "file": "IMG_1618.jpg",
+   "k": 0,
+   "category": "hat",
+   "gallery": 557,
+   "crop": 1,
+   "crop_nobg": 304,
+   "crop_adapter": 1,
+   "text": 3,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1618.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 19,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1618.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 3,
+   "crop_adapter": 1,
+   "text": 88,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1618.jpg",
+   "k": 3,
+   "category": "sunglasses",
+   "gallery": 241,
+   "crop": 7,
+   "crop_nobg": 1,
+   "crop_adapter": 5,
+   "text": 102,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1618.jpg",
+   "k": 4,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 106,
+   "crop_nobg": 1795,
+   "crop_adapter": 166,
+   "text": 5824,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1619.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 236,
+   "crop_nobg": 326,
+   "crop_adapter": 34,
+   "text": 101,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1619.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 11,
+   "text": 1,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1619.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 8,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1620.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 123,
+   "crop_nobg": 223,
+   "crop_adapter": 1402,
+   "text": 39,
+   "text_rerank_image": 23
+  },
+  {
+   "file": "IMG_1620.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 4,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1620.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 36,
+   "crop_nobg": 16,
+   "crop_adapter": 71,
+   "text": 46,
+   "text_rerank_image": 23
+  },
+  {
+   "file": "IMG_1621.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 7,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1621.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 5,
+   "text": 110,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1621.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 11,
+   "crop_nobg": 9,
+   "crop_adapter": 17,
+   "text": 33,
+   "text_rerank_image": 8
+  },
+  {
+   "file": "IMG_1621.jpg",
+   "k": 3,
+   "category": "sunglasses",
+   "gallery": 241,
+   "crop": 11,
+   "crop_nobg": 60,
+   "crop_adapter": 14,
+   "text": 33,
+   "text_rerank_image": 6
+  },
+  {
+   "file": "IMG_1622.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 6,
+   "crop_nobg": 7,
+   "crop_adapter": 7,
+   "text": 1,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1622.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 48,
+   "crop_nobg": 60,
+   "crop_adapter": 3,
+   "text": 61,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1623.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 14,
+   "crop_adapter": 1,
+   "text": 121,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1623.jpg",
+   "k": 1,
+   "category": "knitwear",
+   "gallery": 13162,
+   "crop": 7,
+   "crop_nobg": 78,
+   "crop_adapter": 43,
+   "text": 12,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1623.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 103,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1624.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 4,
+   "crop_nobg": 9,
+   "crop_adapter": 2,
+   "text": 104,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1624.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 14,
+   "crop_nobg": 207,
+   "crop_adapter": 1,
+   "text": 13,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1624.jpg",
+   "k": 2,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 2,
+   "crop_nobg": 2,
+   "crop_adapter": 38,
+   "text": 4,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1625.jpg",
+   "k": 0,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 8,
+   "crop_nobg": 813,
+   "crop_adapter": 97,
+   "text": 96,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1625.jpg",
+   "k": 1,
+   "category": "sunglasses",
+   "gallery": 241,
+   "crop": 11,
+   "crop_nobg": 75,
+   "crop_adapter": 23,
+   "text": 128,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1626.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 16,
+   "crop_nobg": 482,
+   "crop_adapter": 25,
+   "text": 13,
+   "text_rerank_image": 6
+  },
+  {
+   "file": "IMG_1626.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 5,
+   "text": 3,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1626.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 240,
+   "crop_nobg": 256,
+   "crop_adapter": 312,
+   "text": 944,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1628.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 4,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1628.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 7,
+   "crop_nobg": 9,
+   "crop_adapter": 2,
+   "text": 7,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1628.jpg",
+   "k": 2,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 14,
+   "crop_nobg": 35,
+   "crop_adapter": 116,
+   "text": 22,
+   "text_rerank_image": 27
+  },
+  {
+   "file": "IMG_1628.jpg",
+   "k": 3,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 576,
+   "crop_nobg": 667,
+   "crop_adapter": 60,
+   "text": 123,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1629.jpg",
+   "k": 0,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 8,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1630.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 37,
+   "crop_nobg": 183,
+   "crop_adapter": 13,
+   "text": 97,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1630.jpg",
+   "k": 1,
+   "category": "belt",
+   "gallery": 228,
+   "crop": 3,
+   "crop_nobg": 8,
+   "crop_adapter": 3,
+   "text": 55,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1630.jpg",
+   "k": 2,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 15,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1630.jpg",
+   "k": 3,
+   "category": "jewellery",
+   "gallery": 835,
+   "crop": 219,
+   "crop_nobg": 32,
+   "crop_adapter": 526,
+   "text": 797,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1630.jpg",
+   "k": 4,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 2,
+   "crop_nobg": 6,
+   "crop_adapter": 2,
+   "text": 5,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1630.jpg",
+   "k": 5,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 22,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1631.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 5,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1631.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 2,
+   "crop_nobg": 105,
+   "crop_adapter": 5,
+   "text": 20,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1631.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 4,
+   "crop_adapter": 1,
+   "text": 5,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1632.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 9,
+   "crop_nobg": 52,
+   "crop_adapter": 56,
+   "text": 22,
+   "text_rerank_image": 32
+  },
+  {
+   "file": "IMG_1632.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 16,
+   "crop_adapter": 1,
+   "text": 17,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1633.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 3,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1633.jpg",
+   "k": 1,
+   "category": "belt",
+   "gallery": 228,
+   "crop": 23,
+   "crop_nobg": 1,
+   "crop_adapter": 117,
+   "text": 188,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1633.jpg",
+   "k": 2,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 11,
+   "crop_nobg": 23,
+   "crop_adapter": 925,
+   "text": 186,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1633.jpg",
+   "k": 3,
+   "category": "knitwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 36,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1633.jpg",
+   "k": 4,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 5,
+   "crop_nobg": 275,
+   "crop_adapter": 2,
+   "text": 2,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1635.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 17,
+   "crop_nobg": 75,
+   "crop_adapter": 42,
+   "text": 14,
+   "text_rerank_image": 17
+  },
+  {
+   "file": "IMG_1635.jpg",
+   "k": 1,
+   "category": "belt",
+   "gallery": 228,
+   "crop": 2,
+   "crop_nobg": 2,
+   "crop_adapter": 2,
+   "text": 12,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1635.jpg",
+   "k": 2,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 3,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 32,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1635.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 5,
+   "crop_nobg": 6,
+   "crop_adapter": 197,
+   "text": 121,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1636.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 13,
+   "crop_nobg": 80,
+   "crop_adapter": 71,
+   "text": 33,
+   "text_rerank_image": 7
+  },
+  {
+   "file": "IMG_1636.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 25,
+   "crop_nobg": 26,
+   "crop_adapter": 134,
+   "text": 5,
+   "text_rerank_image": 3
+  },
+  {
+   "file": "IMG_1637.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 13,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1637.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 49,
+   "crop_nobg": 89,
+   "crop_adapter": 493,
+   "text": 34,
+   "text_rerank_image": 43
+  },
+  {
+   "file": "IMG_1637.jpg",
+   "k": 2,
+   "category": "sunglasses",
+   "gallery": 241,
+   "crop": 2,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 63,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1637.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 66,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1638.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 4,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1638.jpg",
+   "k": 1,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 2,
+   "crop_nobg": 3,
+   "crop_adapter": 10,
+   "text": 20,
+   "text_rerank_image": 6
+  },
+  {
+   "file": "IMG_1639.jpg",
+   "k": 0,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 2,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1640.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 8,
+   "crop_nobg": 105,
+   "crop_adapter": 13,
+   "text": 24,
+   "text_rerank_image": 4
+  },
+  {
+   "file": "IMG_1640.jpg",
+   "k": 1,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 4,
+   "crop_nobg": 363,
+   "crop_adapter": 1,
+   "text": 2,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1641.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 6,
+   "crop_nobg": 17,
+   "crop_adapter": 34,
+   "text": 1387,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1641.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 149,
+   "crop_nobg": 577,
+   "crop_adapter": 681,
+   "text": 1016,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1641.jpg",
+   "k": 2,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 5,
+   "crop_nobg": 2,
+   "crop_adapter": 210,
+   "text": 115,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1642.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 34,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1642.jpg",
+   "k": 1,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 2,
+   "crop_nobg": 9,
+   "crop_adapter": 1,
+   "text": 30,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1643.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 17,
+   "crop_nobg": 11,
+   "crop_adapter": 14,
+   "text": 9,
+   "text_rerank_image": 10
+  },
+  {
+   "file": "IMG_1643.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 3,
+   "crop_nobg": 2,
+   "crop_adapter": 2,
+   "text": 25,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1643.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 3,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1643.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 87,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1644.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 2,
+   "crop_nobg": 5,
+   "crop_adapter": 1,
+   "text": 28,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1644.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 16,
+   "crop_nobg": 83,
+   "crop_adapter": 33,
+   "text": 5,
+   "text_rerank_image": 3
+  },
+  {
+   "file": "IMG_1644.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 3,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1644.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 92,
+   "crop_nobg": 177,
+   "crop_adapter": 14,
+   "text": 15,
+   "text_rerank_image": 10
+  },
+  {
+   "file": "IMG_1645.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 4,
+   "crop_adapter": 1,
+   "text": 17,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1647.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 9,
+   "crop_nobg": 8,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1647.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1647.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 25,
+   "crop_nobg": 729,
+   "crop_adapter": 3,
+   "text": 6,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1647.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 812,
+   "crop_nobg": 99,
+   "crop_adapter": 39,
+   "text": 9415,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1648.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 85,
+   "crop_nobg": 27,
+   "crop_adapter": 43,
+   "text": 77,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1648.jpg",
+   "k": 1,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 128,
+   "crop_nobg": 215,
+   "crop_adapter": 104,
+   "text": 147,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1649.jpg",
+   "k": 0,
+   "category": "belt",
+   "gallery": 228,
+   "crop": 4,
+   "crop_nobg": 48,
+   "crop_adapter": 2,
+   "text": 47,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1649.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 2,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 7,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1649.jpg",
+   "k": 2,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 2,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1650.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 39,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1650.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 38,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1651.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 14,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1651.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 13,
+   "crop_adapter": 1,
+   "text": 38,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1651.jpg",
+   "k": 2,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 3,
+   "crop_adapter": 1,
+   "text": 6,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1652.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 4,
+   "crop_nobg": 67,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1652.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 13,
+   "crop_nobg": 7,
+   "crop_adapter": 7,
+   "text": 10,
+   "text_rerank_image": 4
+  },
+  {
+   "file": "IMG_1652.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 14,
+   "crop_adapter": 1,
+   "text": 8,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1652.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 112,
+   "crop_nobg": 284,
+   "crop_adapter": 92,
+   "text": 52,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1653.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1653.jpg",
+   "k": 1,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 13,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1654.jpg",
+   "k": 0,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 3,
+   "crop_nobg": 8,
+   "crop_adapter": 1,
+   "text": 19,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1655.jpg",
+   "k": 0,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 30,
+   "crop_nobg": 7,
+   "crop_adapter": 16,
+   "text": 96,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1655.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 4,
+   "crop_adapter": 72,
+   "text": 398,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1656.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 18,
+   "crop_nobg": 43,
+   "crop_adapter": 1,
+   "text": 22,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1657.jpg",
+   "k": 0,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 15,
+   "crop_nobg": 11,
+   "crop_adapter": 6,
+   "text": 4,
+   "text_rerank_image": 5
+  },
+  {
+   "file": "IMG_1657.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 77,
+   "crop_nobg": 398,
+   "crop_adapter": 3,
+   "text": 57,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1658.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 32,
+   "crop_nobg": 7,
+   "crop_adapter": 21,
+   "text": 47,
+   "text_rerank_image": 23
+  },
+  {
+   "file": "IMG_1658.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 2,
+   "crop_nobg": 3,
+   "crop_adapter": 2,
+   "text": 38,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1658.jpg",
+   "k": 2,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 47,
+   "crop_nobg": 52,
+   "crop_adapter": 159,
+   "text": 73,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1659.jpg",
+   "k": 0,
+   "category": "knitwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 8,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1659.jpg",
+   "k": 1,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 5,
+   "crop_nobg": 53,
+   "crop_adapter": 2,
+   "text": 21,
+   "text_rerank_image": 6
+  },
+  {
+   "file": "IMG_1660.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 17,
+   "crop_nobg": 61,
+   "crop_adapter": 5,
+   "text": 1587,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1660.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 2,
+   "crop_nobg": 9,
+   "crop_adapter": 740,
+   "text": 1188,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1660.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 4,
+   "crop_nobg": 6,
+   "crop_adapter": 7,
+   "text": 2,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1661.jpg",
+   "k": 0,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 30,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1661.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 74,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1661.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 14,
+   "crop_nobg": 66,
+   "crop_adapter": 1,
+   "text": 3,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1662.jpg",
+   "k": 0,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 3,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1662.jpg",
+   "k": 1,
+   "category": "sunglasses",
+   "gallery": 241,
+   "crop": 1,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 63,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1662.jpg",
+   "k": 2,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 612,
+   "crop_nobg": 81,
+   "crop_adapter": 1377,
+   "text": 63,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1663.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 120,
+   "crop_nobg": 94,
+   "crop_adapter": 5,
+   "text": 8,
+   "text_rerank_image": 3
+  },
+  {
+   "file": "IMG_1663.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 1,
+   "crop_nobg": 3,
+   "crop_adapter": 18,
+   "text": 2,
+   "text_rerank_image": 2
+  },
+  {
+   "file": "IMG_1663.jpg",
+   "k": 2,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 34,
+   "crop_nobg": 40,
+   "crop_adapter": 2248,
+   "text": 1,
+   "text_rerank_image": 19
+  },
+  {
+   "file": "IMG_1663.jpg",
+   "k": 3,
+   "category": "top",
+   "gallery": 13162,
+   "crop": 4,
+   "crop_nobg": 108,
+   "crop_adapter": 253,
+   "text": 296,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1664.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 9,
+   "text": 8,
+   "text_rerank_image": 5
+  },
+  {
+   "file": "IMG_1664.jpg",
+   "k": 1,
+   "category": "knitwear",
+   "gallery": 13162,
+   "crop": 11,
+   "crop_nobg": 15,
+   "crop_adapter": 36,
+   "text": 30,
+   "text_rerank_image": 12
+  },
+  {
+   "file": "IMG_1665.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 74,
+   "crop_nobg": 184,
+   "crop_adapter": 9,
+   "text": 5,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1665.jpg",
+   "k": 1,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 39,
+   "crop_nobg": 29,
+   "crop_adapter": 1160,
+   "text": 289,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1665.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 4,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1666.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 1,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1666.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 11,
+   "crop_nobg": 10,
+   "crop_adapter": 24,
+   "text": 2,
+   "text_rerank_image": 3
+  },
+  {
+   "file": "IMG_1666.jpg",
+   "k": 2,
+   "category": "outerwear",
+   "gallery": 13162,
+   "crop": 21,
+   "crop_nobg": 39,
+   "crop_adapter": 100,
+   "text": 18,
+   "text_rerank_image": 20
+  },
+  {
+   "file": "IMG_1666.jpg",
+   "k": 3,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 318,
+   "crop_nobg": 704,
+   "crop_adapter": 333,
+   "text": 1143,
+   "text_rerank_image": 51
+  },
+  {
+   "file": "IMG_1667.jpg",
+   "k": 0,
+   "category": "bag",
+   "gallery": 402,
+   "crop": 1,
+   "crop_nobg": 1,
+   "crop_adapter": 1,
+   "text": 5,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1667.jpg",
+   "k": 1,
+   "category": "bottom",
+   "gallery": 7276,
+   "crop": 2,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 11,
+   "text_rerank_image": 1
+  },
+  {
+   "file": "IMG_1667.jpg",
+   "k": 2,
+   "category": "shoes",
+   "gallery": 1641,
+   "crop": 2,
+   "crop_nobg": 2,
+   "crop_adapter": 1,
+   "text": 9,
+   "text_rerank_image": 1
+  }
+ ]
+}
