@@ -119,6 +119,22 @@ by Claude Haiku 4.5, which sees pixels and the category only.
 
 Slot agreement (Jaccard) is 0.83.
 
+### 3.3 Exact-match benchmark from the owner's composites (D-026)
+
+154 street↔product pairs were extracted automatically from outfit-breakdown posts. The task is to
+find the exact product. No judge is needed.
+
+| mode | R@1, full gallery | R@1, same-style gallery | R@10, same-style |
+| --- | ---: | ---: | ---: |
+| crop | 0.34 | 0.40 | 0.88 |
+| crop, background removed | 0.25 | 0.29 | 0.75 |
+| **crop + adapter** | **0.42** | **0.59** | 0.94 |
+| text | 0.08 | 0.49 | 0.94 |
+| **text → image rerank** | 0.36 | **0.62** | **0.96** |
+
+Exact-item search favours image + adapter. Substitute search favours text-led retrieval. Both
+product surfaces are therefore kept, each with its own default.
+
 ## 4. Complete the Look with FashionCLIP (D-022)
 
 | model | validation lift | test lift |
@@ -188,8 +204,8 @@ The web app (`make serve`, http://localhost:8010) now has:
 
 1. Human labels are done: 2 rounds, 200 judgements; the judge choice is confirmed on held-out data
    (D-025).
-2. **Exact-match benchmark from the owner's street↔product pairs:** 3 composite images so far;
-   about 30 more gives about 150 pairs, with jewellery close-ups prioritised.
+2. Exact-match benchmark: done (154 pairs, D-026). Next: more jewellery pairs; 6 is too few to
+   conclude.
 3. **Jewellery-specific adaptation:** DeepFashion2 has no jewellery. A jewellery pair set would
    extend the adapters to jewellery.
 4. **Online:**

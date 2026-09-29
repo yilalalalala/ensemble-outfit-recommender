@@ -1,0 +1,5181 @@
+{
+ "IMG_1547.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1597
+   ],
+   [
+    725,
+    0,
+    1206,
+    1597
+   ]
+  ],
+  "garments": 7,
+  "products": 6,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "shoulder bag",
+     "box": [
+      111,
+      405,
+      267,
+      778
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "black handbag with silver hardware",
+     "box": [
+      366,
+      1219,
+      500,
+      1402
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "belt",
+    "street": {
+     "category": "belt",
+     "colour": "black",
+     "description": "belt",
+     "box": [
+      192,
+      685,
+      428,
+      819
+     ]
+    },
+    "product": {
+     "category": "belt",
+     "colour": "black",
+     "description": "black belt with silver hardware",
+     "box": [
+      44,
+      1315,
+      185,
+      1380
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      143,
+      685,
+      428,
+      1299
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "blue cargo pants",
+     "box": [
+      185,
+      708,
+      367,
+      1076
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "knitwear",
+    "street": {
+     "category": "knitwear",
+     "colour": "black",
+     "description": "cropped ribbed turtleneck sweater",
+     "box": [
+      177,
+      368,
+      505,
+      700
+     ]
+    },
+    "product": {
+     "category": "knitwear",
+     "colour": "black",
+     "description": "black ribbed knit cardigan",
+     "box": [
+      169,
+      269,
+      367,
+      515
+     ]
+    }
+   },
+   {
+    "k": 4,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "flat shoes",
+     "box": [
+      219,
+      1265,
+      354,
+      1357
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black low-heeled shoes",
+     "box": [
+      169,
+      1541,
+      351,
+      1653
+     ]
+    }
+   },
+   {
+    "k": 5,
+    "category": "sunglasses",
+    "street": {
+     "category": "sunglasses",
+     "colour": "blue",
+     "description": "sunglasses",
+     "box": [
+      257,
+      182,
+      387,
+      238
+     ]
+    },
+    "product": {
+     "category": "sunglasses",
+     "colour": "blue",
+     "description": "blue rectangular sunglasses",
+     "box": [
+      185,
+      23,
+      362,
+      80
+     ]
+    }
+   }
+  ],
+  "seconds": 40.2
+ },
+ "IMG_1548.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    601,
+    1596
+   ],
+   [
+    601,
+    0,
+    1206,
+    1596
+   ]
+  ],
+  "garments": 6,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      249,
+      1295,
+      391,
+      1539
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "A beige pair of trousers with a high waist and a straight leg.",
+     "box": [
+      225,
+      483,
+      345,
+      795
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "navy",
+     "description": "long, loose-fitting coat",
+     "box": [
+      180,
+      965,
+      440,
+      1337
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "A black coat with a high collar and a belt.",
+     "box": [
+      199,
+      28,
+      379,
+      285
+     ]
+    }
+   }
+  ],
+  "seconds": 32.7
+ },
+ "IMG_1549.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    885,
+    1593
+   ],
+   [
+    885,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 11,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black loafers with gold logo",
+     "box": [
+      455,
+      1155,
+      674,
+      1250
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "CHANEL loafers",
+     "box": [
+      89,
+      1882,
+      305,
+      2038
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "loose-fitting white blouse",
+     "box": [
+      75,
+      350,
+      349,
+      768
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "COTEMP Nupe Cargo Mini Skirt",
+     "box": [
+      75,
+      304,
+      357,
+      575
+     ]
+    }
+   }
+  ],
+  "seconds": 46.3
+ },
+ "IMG_1592.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1206,
+    1116
+   ],
+   [
+    0,
+    1116,
+    1206,
+    1509
+   ]
+  ],
+  "garments": 3,
+  "products": 1,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "jewellery",
+    "street": {
+     "colour": "",
+     "description": "earrings",
+     "box": [
+      351,
+      403,
+      427,
+      477
+     ]
+    },
+    "product": {
+     "box": null
+    }
+   }
+  ],
+  "seconds": 22.1
+ },
+ "IMG_1593.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1206,
+    1140
+   ],
+   [
+    0,
+    1140,
+    1206,
+    1561
+   ]
+  ],
+  "garments": 3,
+  "products": 2,
+  "pairs": [],
+  "seconds": 25.3,
+  "note": "earring box missed the earring (visual check); dropped"
+ },
+ "IMG_1594.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1206,
+    1118
+   ],
+   [
+    0,
+    1118,
+    1206,
+    1489
+   ]
+  ],
+  "garments": 1,
+  "products": 1,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "jewellery",
+    "street": {
+     "colour": "",
+     "description": "earrings",
+     "box": [
+      188,
+      314,
+      324,
+      452
+     ]
+    },
+    "product": {
+     "box": null
+    }
+   }
+  ],
+  "seconds": 16.9
+ },
+ "IMG_1595.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1206,
+    1118
+   ],
+   [
+    0,
+    1118,
+    1206,
+    1503
+   ]
+  ],
+  "garments": 3,
+  "products": 2,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "jewellery",
+    "street": {
+     "colour": "",
+     "description": "earrings",
+     "box": [
+      336,
+      341,
+      385,
+      420
+     ]
+    },
+    "product": {
+     "box": null
+    }
+   }
+  ],
+  "seconds": 22.8
+ },
+ "IMG_1596.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1206,
+    1095
+   ],
+   [
+    0,
+    1095,
+    1206,
+    1477
+   ]
+  ],
+  "garments": 2,
+  "products": 2,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "jewellery",
+    "street": {
+     "colour": "",
+     "description": "earrings",
+     "box": [
+      396,
+      326,
+      444,
+      387
+     ]
+    },
+    "product": {
+     "box": null
+    }
+   }
+  ],
+  "seconds": 21.5
+ },
+ "IMG_1597.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1206,
+    1096
+   ],
+   [
+    0,
+    1096,
+    1206,
+    1494
+   ]
+  ],
+  "garments": 1,
+  "products": 2,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "jewellery",
+    "street": {
+     "colour": "",
+     "description": "earrings",
+     "box": [
+      890,
+      143,
+      1008,
+      363
+     ]
+    },
+    "product": {
+     "box": null
+    }
+   }
+  ],
+  "seconds": 18.1
+ },
+ "IMG_1617.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1502
+   ],
+   [
+    725,
+    0,
+    1206,
+    1502
+   ]
+  ],
+  "garments": 6,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "large brown paper bag",
+     "box": [
+      0,
+      437,
+      230,
+      948
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "Black Coach wallet",
+     "box": [
+      17,
+      660,
+      226,
+      768
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      168,
+      805,
+      617,
+      1303
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "Black wide-leg trousers",
+     "box": [
+      47,
+      888,
+      260,
+      1447
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "knitwear",
+    "street": {
+     "category": "knitwear",
+     "colour": "grey",
+     "description": "long-sleeved, loose-fitting knit sweater",
+     "box": [
+      92,
+      208,
+      535,
+      828
+     ]
+    },
+    "product": {
+     "category": "knitwear",
+     "colour": "black",
+     "description": "Black knit sweater with ribbed cuffs and hem",
+     "box": [
+      64,
+      12,
+      447,
+      470
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "scarf",
+    "street": {
+     "category": "scarf",
+     "colour": "brown and black",
+     "description": "leopard print scarf",
+     "box": [
+      180,
+      180,
+      580,
+      855
+     ]
+    },
+    "product": {
+     "category": "scarf",
+     "colour": "brown",
+     "description": "Brown and black leopard print scarf",
+     "box": [
+      294,
+      550,
+      500,
+      954
+     ]
+    }
+   },
+   {
+    "k": 4,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "flat shoes",
+     "box": [
+      205,
+      1185,
+      295,
+      1311
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Black flat shoes",
+     "box": [
+      325,
+      1140,
+      531,
+      1196
+     ]
+    }
+   }
+  ],
+  "seconds": 36.3
+ },
+ "IMG_1618.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    605,
+    1583
+   ],
+   [
+    605,
+    0,
+    1206,
+    1583
+   ]
+  ],
+  "garments": 8,
+  "products": 7,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "hat",
+    "street": {
+     "category": "hat",
+     "colour": "black",
+     "description": "baseball cap with 'NY' logo",
+     "box": [
+      216,
+      17,
+      366,
+      137
+     ]
+    },
+    "product": {
+     "category": "hat",
+     "colour": "black",
+     "description": "baseball cap",
+     "box": [
+      354,
+      592,
+      535,
+      780
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "long quilted puffer jacket",
+     "box": [
+      50,
+      218,
+      501,
+      913
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "quilted jacket",
+     "box": [
+      0,
+      103,
+      382,
+      521
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown/white",
+     "description": "high-top sneakers",
+     "box": [
+      196,
+      1350,
+      392,
+      1524
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "sneakers",
+     "box": [
+      39,
+      1236,
+      287,
+      1345
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "sunglasses",
+    "street": {
+     "category": "sunglasses",
+     "colour": "black",
+     "description": "dark sunglasses",
+     "box": [
+      222,
+      109,
+      354,
+      144
+     ]
+    },
+    "product": {
+     "category": "sunglasses",
+     "colour": "gold",
+     "description": "rectangular sunglasses",
+     "box": [
+      313,
+      135,
+      560,
+      200
+     ]
+    }
+   },
+   {
+    "k": 4,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "t-shirt",
+     "box": [
+      280,
+      254,
+      342,
+      385
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "black",
+     "description": "polo shirt",
+     "box": [
+      19,
+      705,
+      286,
+      1085
+     ]
+    }
+   }
+  ],
+  "seconds": 43.9
+ },
+ "IMG_1619.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    665,
+    1571
+   ],
+   [
+    665,
+    0,
+    1206,
+    1571
+   ]
+  ],
+  "garments": 6,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "large tote bag",
+     "box": [
+      33,
+      204,
+      351,
+      598
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "brown leather handbag",
+     "box": [
+      25,
+      715,
+      275,
+      995
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "wide-leg pants",
+     "box": [
+      165,
+      685,
+      557,
+      1456
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "black wide-leg pants",
+     "box": [
+      302,
+      786,
+      527,
+      1373
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "red",
+     "description": "low-heeled shoes",
+     "box": [
+      285,
+      1312,
+      457,
+      1456
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "red",
+     "description": "red flat shoes",
+     "box": [
+      39,
+      1197,
+      247,
+      1285
+     ]
+    }
+   }
+  ],
+  "seconds": 35.1
+ },
+ "IMG_1620.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    625,
+    1593
+   ],
+   [
+    625,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 4,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      185,
+      1280,
+      410,
+      1460
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "blue denim jeans",
+     "box": [
+      312,
+      832,
+      485,
+      1361
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "light grey",
+     "description": "long trench coat",
+     "box": [
+      63,
+      290,
+      505,
+      1330
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "light grey",
+     "description": "long, light grey coat with pockets",
+     "box": [
+      0,
+      65,
+      335,
+      648
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "flat shoes",
+     "box": [
+      187,
+      1420,
+      440,
+      1512
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black flat shoes",
+     "box": [
+      30,
+      1347,
+      270,
+      1446
+     ]
+    }
+   }
+  ],
+  "seconds": 42.3
+ },
+ "IMG_1621.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    607,
+    1597
+   ],
+   [
+    607,
+    0,
+    1186,
+    1597
+   ]
+  ],
+  "garments": 7,
+  "products": 7,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "large brown woven bag",
+     "box": [
+      329,
+      248,
+      587,
+      768
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "A woven, tote-style bag with a large opening.",
+     "box": [
+      0,
+      766,
+      275,
+      1100
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "black wide-leg pants",
+     "box": [
+      141,
+      800,
+      462,
+      1339
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "A pair of black pants.",
+     "box": [
+      56,
+      505,
+      280,
+      580
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black slip-on shoes",
+     "box": [
+      265,
+      1443,
+      357,
+      1535
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "A pair of black, low-heeled shoes.",
+     "box": [
+      15,
+      1303,
+      285,
+      1400
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "sunglasses",
+    "street": {
+     "category": "sunglasses",
+     "colour": "black",
+     "description": "black sunglasses",
+     "box": [
+      165,
+      119,
+      304,
+      164
+     ]
+    },
+    "product": {
+     "category": "sunglasses",
+     "colour": "black",
+     "description": "A pair of black sunglasses.",
+     "box": [
+      384,
+      133,
+      560,
+      193
+     ]
+    }
+   }
+  ],
+  "seconds": 50.7
+ },
+ "IMG_1622.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1597
+   ],
+   [
+    725,
+    0,
+    1206,
+    1597
+   ]
+  ],
+  "garments": 6,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      182,
+      625,
+      518,
+      1371
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "black wide-leg pants",
+     "box": [
+      269,
+      832,
+      512,
+      1463
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "sandals",
+     "box": [
+      182,
+      1345,
+      460,
+      1399
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black flip-flops",
+     "box": [
+      27,
+      1337,
+      255,
+      1387
+     ]
+    }
+   }
+  ],
+  "seconds": 107.9
+ },
+ "IMG_1623.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    937,
+    1593
+   ],
+   [
+    937,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 9,
+  "products": 7,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      122,
+      510,
+      357,
+      1019
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "brown skirt",
+     "box": [
+      133,
+      1036,
+      382,
+      1462
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "knitwear",
+    "street": {
+     "category": "knitwear",
+     "colour": "gray",
+     "description": "buttoned cardigan",
+     "box": [
+      158,
+      230,
+      416,
+      539
+     ]
+    },
+    "product": {
+     "category": "knitwear",
+     "colour": "gray",
+     "description": "gray cardigan with buttons",
+     "box": [
+      0,
+      325,
+      185,
+      775
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "leopard print flats",
+     "box": [
+      126,
+      1154,
+      315,
+      1232
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown leopard print shoes",
+     "box": [
+      129,
+      1642,
+      382,
+      1752
+     ]
+    }
+   }
+  ],
+  "seconds": 737.2
+ },
+ "IMG_1624.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    613,
+    1577
+   ],
+   [
+    613,
+    0,
+    1206,
+    1577
+   ]
+  ],
+  "garments": 3,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "high-waisted wide-leg black pants",
+     "box": [
+      123,
+      752,
+      443,
+      1491
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "A pair of black trousers with a straight leg.",
+     "box": [
+      179,
+      574,
+      437,
+      1002
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black flat shoes",
+     "box": [
+      110,
+      1465,
+      300,
+      1512
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "A pair of black square-toe flats.",
+     "box": [
+      169,
+      1149,
+      448,
+      1391
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "oversized white button-up shirt",
+     "box": [
+      116,
+      165,
+      535,
+      902
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "A white blouse with a collar and long sleeves.",
+     "box": [
+      159,
+      38,
+      455,
+      406
+     ]
+    }
+   }
+  ],
+  "seconds": 85.4
+ },
+ "IMG_1625.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    805,
+    1499
+   ],
+   [
+    805,
+    0,
+    1206,
+    1499
+   ]
+  ],
+  "garments": 6,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "jacket",
+     "box": [
+      0,
+      280,
+      699,
+      980
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "Long, buttoned, quilted jacket",
+     "box": [
+      82,
+      234,
+      410,
+      625
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "sunglasses",
+    "street": {
+     "category": "sunglasses",
+     "colour": "brown",
+     "description": "round",
+     "box": [
+      345,
+      120,
+      547,
+      208
+     ]
+    },
+    "product": {
+     "category": "sunglasses",
+     "colour": "transparent",
+     "description": "Round sunglasses with gradient lenses",
+     "box": [
+      109,
+      0,
+      380,
+      95
+     ]
+    }
+   }
+  ],
+  "seconds": 1766.2
+ },
+ "IMG_1626.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    629,
+    1597
+   ],
+   [
+    629,
+    0,
+    1206,
+    1597
+   ]
+  ],
+  "garments": 4,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "wide-leg pants",
+     "box": [
+      153,
+      1097,
+      415,
+      1443
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "Wide-leg corduroy pants",
+     "box": [
+      324,
+      788,
+      543,
+      1336
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "double-breasted coat",
+     "box": [
+      69,
+      245,
+      496,
+      1108
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "light brown",
+     "description": "Double-breasted coat with buttons",
+     "box": [
+      148,
+      82,
+      426,
+      565
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "flat shoes",
+     "box": [
+      189,
+      1430,
+      367,
+      1512
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Black ankle boots with chunky sole",
+     "box": [
+      60,
+      1180,
+      278,
+      1404
+     ]
+    }
+   }
+  ],
+  "seconds": 380.1
+ },
+ "IMG_1627.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    909,
+    1595
+   ],
+   [
+    909,
+    0,
+    1206,
+    1595
+   ]
+  ],
+  "garments": 8,
+  "products": 3,
+  "pairs": [],
+  "seconds": 83.0
+ },
+ "IMG_1628.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    589,
+    1593
+   ],
+   [
+    589,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 6,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "large, brown tote bag",
+     "box": [
+      0,
+      222,
+      228,
+      912
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "suede tote bag",
+     "box": [
+      21,
+      762,
+      260,
+      1107
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "corduroy pants",
+     "box": [
+      312,
+      579,
+      490,
+      1418
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "wide-leg trousers",
+     "box": [
+      293,
+      752,
+      567,
+      1380
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "long, loose-fitting trench coat",
+     "box": [
+      75,
+      245,
+      548,
+      1299
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "long trench coat",
+     "box": [
+      21,
+      76,
+      313,
+      647
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "blue",
+     "description": "low-top sneakers",
+     "box": [
+      68,
+      1238,
+      158,
+      1393
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "blue",
+     "description": "low-top sneakers",
+     "box": [
+      21,
+      1251,
+      275,
+      1358
+     ]
+    }
+   }
+  ],
+  "seconds": 89.5
+ },
+ "IMG_1629.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    812,
+    1600
+   ],
+   [
+    812,
+    0,
+    1176,
+    1600
+   ]
+  ],
+  "garments": 5,
+  "products": 1,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "knee-high boots",
+     "box": [
+      349,
+      915,
+      547,
+      1304
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "Brown knee-high boots.",
+     "box": [
+      145,
+      1447,
+      298,
+      1742
+     ]
+    }
+   }
+  ],
+  "seconds": 766.1
+ },
+ "IMG_1630.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    505,
+    1597
+   ],
+   [
+    505,
+    0,
+    1206,
+    1597
+   ]
+  ],
+  "garments": 9,
+  "products": 6,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "small crossbody bag",
+     "box": [
+      28,
+      808,
+      100,
+      1182
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "black wristlet bag",
+     "box": [
+      76,
+      722,
+      278,
+      874
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "belt",
+    "street": {
+     "category": "belt",
+     "colour": "black",
+     "description": "wide belt",
+     "box": [
+      138,
+      644,
+      342,
+      684
+     ]
+    },
+    "product": {
+     "category": "belt",
+     "colour": "black",
+     "description": "black belt",
+     "box": [
+      350,
+      492,
+      576,
+      523
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      0,
+      672,
+      440,
+      1642
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "light blue jeans",
+     "box": [
+      359,
+      682,
+      557,
+      1232
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "jewellery",
+    "street": {
+     "category": "jewellery",
+     "colour": "gold",
+     "description": "bracelet",
+     "box": [
+      25,
+      810,
+      100,
+      883
+     ]
+    },
+    "product": {
+     "category": "jewellery",
+     "colour": "silver",
+     "description": "pearl earrings",
+     "box": [
+      423,
+      149,
+      526,
+      272
+     ]
+    }
+   },
+   {
+    "k": 4,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "blue",
+     "description": "low-heeled shoes",
+     "box": [
+      0,
+      1628,
+      362,
+      1679
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "blue",
+     "description": "blue mules",
+     "box": [
+      81,
+      1056,
+      280,
+      1259
+     ]
+    }
+   },
+   {
+    "k": 5,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "blue",
+     "description": "button-down shirt",
+     "box": [
+      20,
+      282,
+      470,
+      728
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "blue",
+     "description": "light blue button-down shirt",
+     "box": [
+      1,
+      68,
+      330,
+      364
+     ]
+    }
+   }
+  ],
+  "seconds": 328.5
+ },
+ "IMG_1631.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    681,
+    1599
+   ],
+   [
+    681,
+    0,
+    1206,
+    1599
+   ]
+  ],
+  "garments": 7,
+  "products": 6,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "brown leather tote bag",
+     "box": [
+      46,
+      239,
+      292,
+      763
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "suede tote bag",
+     "box": [
+      339,
+      689,
+      500,
+      957
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      206,
+      560,
+      485,
+      1329
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted jeans",
+     "box": [
+      88,
+      979,
+      245,
+      1446
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown loafers",
+     "box": [
+      133,
+      1346,
+      415,
+      1427
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "tassel loafers",
+     "box": [
+      337,
+      1063,
+      509,
+      1244
+     ]
+    }
+   }
+  ],
+  "seconds": 1020.5
+ },
+ "IMG_1632.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    629,
+    1596
+   ],
+   [
+    629,
+    0,
+    1206,
+    1596
+   ]
+  ],
+  "garments": 6,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "large tote bag",
+     "box": [
+      288,
+      828,
+      587,
+      1283
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "Black tote bag with a long strap",
+     "box": [
+      299,
+      408,
+      533,
+      697
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "long, buttoned coat",
+     "box": [
+      25,
+      158,
+      554,
+      1178
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "Long black coat with a collar",
+     "box": [
+      10,
+      92,
+      323,
+      572
+     ]
+    }
+   }
+  ],
+  "seconds": 82.4
+ },
+ "IMG_1633.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    777,
+    1596
+   ],
+   [
+    777,
+    0,
+    1206,
+    1596
+   ]
+  ],
+  "garments": 7,
+  "products": 7,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "red",
+     "description": "leather handbag",
+     "box": [
+      443,
+      695,
+      646,
+      990
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "red",
+     "description": "Red shoulder bag with gold hardware",
+     "box": [
+      0,
+      740,
+      195,
+      1053
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "belt",
+    "street": {
+     "category": "belt",
+     "colour": "black",
+     "description": "leather belt",
+     "box": [
+      295,
+      490,
+      455,
+      543
+     ]
+    },
+    "product": {
+     "category": "belt",
+     "colour": "black",
+     "description": "Black leather belt",
+     "box": [
+      0,
+      1182,
+      236,
+      1220
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      208,
+      490,
+      519,
+      1285
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "navy",
+     "description": "Navy pinstriped wide-leg pants",
+     "box": [
+      258,
+      1002,
+      450,
+      1593
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "knitwear",
+    "street": {
+     "category": "knitwear",
+     "colour": "gray",
+     "description": "oversized cardigan",
+     "box": [
+      209,
+      217,
+      639,
+      696
+     ]
+    },
+    "product": {
+     "category": "knitwear",
+     "colour": "gray",
+     "description": "Gray button-up cardigan",
+     "box": [
+      198,
+      483,
+      497,
+      860
+     ]
+    }
+   },
+   {
+    "k": 4,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "polished loafers",
+     "box": [
+      166,
+      1238,
+      465,
+      1314
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "Brown leather loafers",
+     "box": [
+      0,
+      1398,
+      204,
+      1519
+     ]
+    }
+   }
+  ],
+  "seconds": 2133.0
+ },
+ "IMG_1634.jpg": {
+  "layout": null
+ },
+ "IMG_1635.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1608
+   ],
+   [
+    725,
+    0,
+    1206,
+    1608
+   ]
+  ],
+  "garments": 7,
+  "products": 6,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "black shoulder bag",
+     "box": [
+      69,
+      435,
+      203,
+      613
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "Black handbag with a long strap",
+     "box": [
+      36,
+      1497,
+      186,
+      1653
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "belt",
+    "street": {
+     "category": "belt",
+     "colour": "black",
+     "description": "black belt with silver buckle",
+     "box": [
+      198,
+      692,
+      406,
+      782
+     ]
+    },
+    "product": {
+     "category": "belt",
+     "colour": "black",
+     "description": "Black leather belt with a decorative buckle",
+     "box": [
+      96,
+      1311,
+      419,
+      1360
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "high-waisted wide-leg beige pants",
+     "box": [
+      162,
+      692,
+      423,
+      1360
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "Beige wide-leg pants with decorative buttons",
+     "box": [
+      140,
+      741,
+      382,
+      1143
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "black",
+     "description": "cropped black t-shirt",
+     "box": [
+      175,
+      408,
+      467,
+      685
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "black",
+     "description": "Black T-shirt with text on the front",
+     "box": [
+      119,
+      295,
+      396,
+      561
+     ]
+    }
+   }
+  ],
+  "seconds": 139.0
+ },
+ "IMG_1636.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    605,
+    1612
+   ],
+   [
+    605,
+    0,
+    1206,
+    1612
+   ]
+  ],
+  "garments": 6,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      115,
+      598,
+      325,
+      762
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "wide-leg trousers with button details",
+     "box": [
+      179,
+      605,
+      419,
+      1005
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "red",
+     "description": "pointed-toe high heels",
+     "box": [
+      115,
+      1242,
+      355,
+      1500
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "pointed-toe wedge heels",
+     "box": [
+      339,
+      1199,
+      569,
+      1390
+     ]
+    }
+   }
+  ],
+  "seconds": 98.3
+ },
+ "IMG_1637.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    605,
+    1581
+   ],
+   [
+    605,
+    0,
+    1206,
+    1581
+   ]
+  ],
+  "garments": 5,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "quilted, shoulder bag with chain strap",
+     "box": [
+      213,
+      995,
+      448,
+      1440
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "quilted bucket bag with a chain strap",
+     "box": [
+      339,
+      793,
+      525,
+      1018
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "wide-leg, high-waisted",
+     "box": [
+      138,
+      580,
+      422,
+      770
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "brown",
+     "description": "wide-leg pants with a drawstring waist",
+     "box": [
+      60,
+      563,
+      248,
+      1015
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "sunglasses",
+    "street": {
+     "category": "sunglasses",
+     "colour": "brown",
+     "description": "sunglasses",
+     "box": [
+      319,
+      828,
+      442,
+      900
+     ]
+    },
+    "product": {
+     "category": "sunglasses",
+     "colour": "brown",
+     "description": "rectangular sunglasses with a brown frame",
+     "box": [
+      337,
+      563,
+      555,
+      622
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "beige",
+     "description": "long-sleeved, oversized, loose-fitting",
+     "box": [
+      159,
+      195,
+      402,
+      614
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "beige",
+     "description": "long-sleeved top with embroidered details on the sleeves",
+     "box": [
+      55,
+      15,
+      265,
+      362
+     ]
+    }
+   }
+  ],
+  "seconds": 2165.9
+ },
+ "IMG_1638.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1564
+   ],
+   [
+    725,
+    0,
+    1206,
+    1564
+   ]
+  ],
+  "garments": 4,
+  "products": 2,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "pleated skirt",
+     "box": [
+      194,
+      859,
+      473,
+      1179
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "A beige pleated skirt with a white top underneath.",
+     "box": [
+      42,
+      956,
+      462,
+      1254
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "blue",
+     "description": "long-sleeved crop top",
+     "box": [
+      265,
+      630,
+      445,
+      986
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "blue",
+     "description": "A navy blue long-sleeved top with a unique cut-out design on the front.",
+     "box": [
+      42,
+      185,
+      442,
+      613
+     ]
+    }
+   }
+  ],
+  "seconds": 155.2
+ },
+ "IMG_1639.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1021,
+    1615
+   ],
+   [
+    1021,
+    0,
+    1206,
+    1615
+   ]
+  ],
+  "garments": 4,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "blue",
+     "description": "graphic t-shirt with palm trees and stick figures",
+     "box": [
+      289,
+      608,
+      756,
+      1145
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "blue",
+     "description": "T-shirt with palm tree and people design",
+     "box": [
+      0,
+      73,
+      144,
+      338
+     ]
+    }
+   }
+  ],
+  "seconds": 92.0
+ },
+ "IMG_1640.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1021,
+    1589
+   ],
+   [
+    1021,
+    0,
+    1206,
+    1589
+   ]
+  ],
+  "garments": 4,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "wide-leg pants",
+     "box": [
+      42,
+      485,
+      355,
+      1176
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "beige",
+     "description": "Beige wide-leg trousers",
+     "box": [
+      0,
+      445,
+      222,
+      861
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "pink",
+     "description": "striped button-up shirt",
+     "box": [
+      240,
+      492,
+      756,
+      1176
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "pink",
+     "description": "Pink striped shirt with a pocket",
+     "box": [
+      0,
+      24,
+      242,
+      314
+     ]
+    }
+   }
+  ],
+  "seconds": 199.9
+ },
+ "IMG_1641.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    829,
+    1608
+   ],
+   [
+    829,
+    0,
+    1206,
+    1608
+   ]
+  ],
+  "garments": 5,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "high-waisted, straight-leg pants",
+     "box": [
+      262,
+      539,
+      482,
+      1090
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "Black pleated skirt with white trim",
+     "box": [
+      120,
+      723,
+      338,
+      1052
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "beige",
+     "description": "closed-toe heels",
+     "box": [
+      343,
+      1085,
+      446,
+      1311
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Black leather tabi shoes",
+     "box": [
+      94,
+      1239,
+      402,
+      1373
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "cropped, long-sleeved button-down shirt",
+     "box": [
+      138,
+      208,
+      615,
+      715
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "White button-up shirt",
+     "box": [
+      80,
+      272,
+      332,
+      537
+     ]
+    }
+   }
+  ],
+  "seconds": 26.9
+ },
+ "IMG_1642.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    953,
+    1586
+   ],
+   [
+    953,
+    0,
+    1191,
+    1586
+   ]
+  ],
+  "garments": 3,
+  "products": 2,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "dark blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      10,
+      423,
+      255,
+      1133
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "black jeans",
+     "box": [
+      113,
+      1257,
+      264,
+      1583
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "light blue",
+     "description": "button-down shirt with rolled-up sleeves",
+     "box": [
+      28,
+      207,
+      304,
+      470
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "light blue",
+     "description": "light blue striped shirt",
+     "box": [
+      73,
+      757,
+      315,
+      1062
+     ]
+    }
+   }
+  ],
+  "seconds": 21.2
+ },
+ "IMG_1643.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1581
+   ],
+   [
+    725,
+    0,
+    1206,
+    1581
+   ]
+  ],
+  "garments": 6,
+  "products": 7,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "large brown tote bag",
+     "box": [
+      265,
+      795,
+      552,
+      1317
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "brown leather shoulder bag with a long strap",
+     "box": [
+      75,
+      1433,
+      228,
+      1687
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      58,
+      672,
+      409,
+      1277
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "wide-leg jeans with a tie at the waist",
+     "box": [
+      171,
+      950,
+      372,
+      1284
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown moccasin-style shoes",
+     "box": [
+      10,
+      1192,
+      400,
+      1357
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown leather moccasin-style shoes with laces",
+     "box": [
+      305,
+      1482,
+      496,
+      1644
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "strappy one-shoulder top",
+     "box": [
+      217,
+      364,
+      405,
+      683
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "white sleeveless top with drawstring at the neck",
+     "box": [
+      189,
+      402,
+      359,
+      692
+     ]
+    }
+   }
+  ],
+  "seconds": 38.8
+ },
+ "IMG_1644.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1570
+   ],
+   [
+    725,
+    0,
+    1206,
+    1570
+   ]
+  ],
+  "garments": 6,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "black crossbody bag with silver hardware",
+     "box": [
+      123,
+      482,
+      383,
+      804
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "Chanel bag with chain strap",
+     "box": [
+      170,
+      114,
+      382,
+      295
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "black velvet mini skirt with ruffled hem",
+     "box": [
+      230,
+      625,
+      450,
+      785
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "Trinite black mini skirt",
+     "box": [
+      134,
+      965,
+      405,
+      1175
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black knee-high boots with silver buckles",
+     "box": [
+      245,
+      1067,
+      446,
+      1366
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Miu Miu black boots with buckles",
+     "box": [
+      128,
+      1382,
+      341,
+      1642
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "black",
+     "description": "black velvet crop top with silver studs",
+     "box": [
+      229,
+      399,
+      410,
+      632
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "black",
+     "description": "CDOU black top with studs",
+     "box": [
+      163,
+      532,
+      377,
+      745
+     ]
+    }
+   }
+  ],
+  "seconds": 33.7
+ },
+ "IMG_1645.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1593
+   ],
+   [
+    725,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 7,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "leather shoulder bag",
+     "box": [
+      112,
+      399,
+      241,
+      693
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "brown leather bag with handles",
+     "box": [
+      148,
+      658,
+      396,
+      832
+     ]
+    }
+   }
+  ],
+  "seconds": 37.1
+ },
+ "IMG_1647.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    724,
+    1596
+   ],
+   [
+    724,
+    0,
+    1187,
+    1596
+   ]
+  ],
+  "garments": 7,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "brown",
+     "description": "brown tote bag with white text",
+     "box": [
+      138,
+      413,
+      278,
+      835
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "gray",
+     "description": "a gray tote bag with text on it",
+     "box": [
+      35,
+      1480,
+      256,
+      1756
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "light blue",
+     "description": "wide-leg light blue pants",
+     "box": [
+      223,
+      850,
+      462,
+      1228
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "a light blue wide-leg pants",
+     "box": [
+      161,
+      1014,
+      376,
+      1386
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "beige",
+     "description": "beige ankle boots",
+     "box": [
+      262,
+      1118,
+      412,
+      1376
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "beige",
+     "description": "a beige ankle boot with a buckle",
+     "box": [
+      322,
+      1528,
+      496,
+      1721
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "long-sleeved white top",
+     "box": [
+      113,
+      413,
+      503,
+      846
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "gray",
+     "description": "a gray ruffled top",
+     "box": [
+      169,
+      774,
+      381,
+      924
+     ]
+    }
+   }
+  ],
+  "seconds": 38.2
+ },
+ "IMG_1648.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1590
+   ],
+   [
+    725,
+    0,
+    1206,
+    1590
+   ]
+  ],
+  "garments": 6,
+  "products": 9,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "large shoulder bag",
+     "box": [
+      294,
+      392,
+      497,
+      700
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "black leather bag with gold hardware",
+     "box": [
+      48,
+      1266,
+      289,
+      1474
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "cropped tank top",
+     "box": [
+      198,
+      333,
+      378,
+      627
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "white sleeveless top with drawstrings",
+     "box": [
+      68,
+      498,
+      235,
+      876
+     ]
+    }
+   }
+  ],
+  "seconds": 43.6
+ },
+ "IMG_1649.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1586
+   ],
+   [
+    725,
+    0,
+    1206,
+    1586
+   ]
+  ],
+  "garments": 5,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "belt",
+    "street": {
+     "category": "belt",
+     "colour": "black",
+     "description": "black belt with silver buckle",
+     "box": [
+      177,
+      624,
+      380,
+      720
+     ]
+    },
+    "product": {
+     "category": "belt",
+     "colour": "black",
+     "description": "black belt with silver cross details",
+     "box": [
+      153,
+      707,
+      315,
+      792
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      114,
+      650,
+      418,
+      1385
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "light blue wide-leg jeans",
+     "box": [
+      125,
+      903,
+      365,
+      1370
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "red",
+     "description": "red sleeveless top with white trim",
+     "box": [
+      199,
+      398,
+      435,
+      672
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "red",
+     "description": "red tank top with white trim",
+     "box": [
+      156,
+      298,
+      338,
+      585
+     ]
+    }
+   }
+  ],
+  "seconds": 34.2
+ },
+ "IMG_1650.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1596
+   ],
+   [
+    725,
+    0,
+    1206,
+    1596
+   ]
+  ],
+  "garments": 6,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "cropped leggings",
+     "box": [
+      212,
+      692,
+      436,
+      1124
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "black leggings with cut-out design",
+     "box": [
+      191,
+      979,
+      360,
+      1365
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "chunky sneakers",
+     "box": [
+      253,
+      1219,
+      415,
+      1385
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black sneakers with Velcro straps",
+     "box": [
+      139,
+      1549,
+      410,
+      1697
+     ]
+    }
+   }
+  ],
+  "seconds": 34.5
+ },
+ "IMG_1651.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1593
+   ],
+   [
+    725,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 7,
+  "products": 8,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "white",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      147,
+      644,
+      430,
+      1329
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "white",
+     "description": "white trousers with elasticated waist and ruffled hem",
+     "box": [
+      188,
+      806,
+      360,
+      1220
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "white/black/red",
+     "description": "low-top sneakers",
+     "box": [
+      187,
+      1225,
+      410,
+      1354
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "navy",
+     "description": "navy sneakers with white and red accents",
+     "box": [
+      149,
+      1317,
+      385,
+      1414
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "embroidered crop top",
+     "box": [
+      173,
+      392,
+      461,
+      637
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "white blouse with lace details and bow front",
+     "box": [
+      125,
+      472,
+      412,
+      705
+     ]
+    }
+   }
+  ],
+  "seconds": 45.7
+ },
+ "IMG_1652.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1599
+   ],
+   [
+    725,
+    0,
+    1206,
+    1599
+   ]
+  ],
+  "garments": 5,
+  "products": 7,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "blue",
+     "description": "tote bag with white logo",
+     "box": [
+      33,
+      618,
+      222,
+      977
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "blue",
+     "description": "tote bag with flower print",
+     "box": [
+      65,
+      1459,
+      211,
+      1721
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "fleece-lined jacket",
+     "box": [
+      179,
+      345,
+      542,
+      867
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "zip-up jacket with drawstrings",
+     "box": [
+      118,
+      389,
+      415,
+      692
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black and white",
+     "description": "snake print sneakers",
+     "box": [
+      13,
+      1253,
+      210,
+      1365
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black and white",
+     "description": "snakeskin sneakers",
+     "box": [
+      264,
+      1585,
+      483,
+      1673
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "black and white",
+     "description": "striped t-shirt",
+     "box": [
+      259,
+      398,
+      345,
+      792
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "black and white",
+     "description": "striped long-sleeve top",
+     "box": [
+      95,
+      787,
+      441,
+      993
+     ]
+    }
+   }
+  ],
+  "seconds": 39.0
+ },
+ "IMG_1653.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1602
+   ],
+   [
+    725,
+    0,
+    1206,
+    1602
+   ]
+  ],
+  "garments": 2,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "gray",
+     "description": "matching sweatpants",
+     "box": [
+      175,
+      695,
+      453,
+      1234
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "gray",
+     "description": "gray sweatpants with text 'uLoveStyles'",
+     "box": [
+      182,
+      803,
+      357,
+      1254
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "gray",
+     "description": "hooded sweatshirt with text and logo",
+     "box": [
+      0,
+      216,
+      533,
+      775
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "gray",
+     "description": "gray hoodie with text 'FALL IN WITH MY LOVE BED'",
+     "box": [
+      119,
+      114,
+      418,
+      520
+     ]
+    }
+   }
+  ],
+  "seconds": 25.5
+ },
+ "IMG_1654.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    705,
+    1587
+   ],
+   [
+    705,
+    0,
+    1206,
+    1587
+   ]
+  ],
+  "garments": 4,
+  "products": 1,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black leather shoes",
+     "box": [
+      148,
+      1275,
+      357,
+      1428
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Maison Margiela - raised split-toe\u4e50\u798f\u978b",
+     "box": [
+      137,
+      1356,
+      440,
+      1560
+     ]
+    }
+   }
+  ],
+  "seconds": 31.3
+ },
+ "IMG_1655.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1021,
+    1587
+   ],
+   [
+    1021,
+    0,
+    1206,
+    1587
+   ]
+  ],
+  "garments": 4,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "blue",
+     "description": "puffy short jacket",
+     "box": [
+      75,
+      155,
+      410,
+      500
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "blue",
+     "description": "blue puffer jacket",
+     "box": [
+      0,
+      328,
+      60,
+      860
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "low-top shoes",
+     "box": [
+      127,
+      1097,
+      290,
+      1176
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black ankle boots",
+     "box": [
+      0,
+      1840,
+      100,
+      1920
+     ]
+    }
+   }
+  ],
+  "seconds": 28.3
+ },
+ "IMG_1656.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    653,
+    1593
+   ],
+   [
+    653,
+    0,
+    1206,
+    1593
+   ]
+  ],
+  "garments": 4,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "olive",
+     "description": "high-waisted wide-leg pants",
+     "box": [
+      165,
+      675,
+      485,
+      1450
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "green",
+     "description": "Green cargo pants",
+     "box": [
+      249,
+      640,
+      469,
+      1110
+     ]
+    }
+   }
+  ],
+  "seconds": 28.9
+ },
+ "IMG_1657.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    701,
+    1600
+   ],
+   [
+    701,
+    0,
+    1206,
+    1600
+   ]
+  ],
+  "garments": 3,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "red",
+     "description": "puffy red jacket",
+     "box": [
+      94,
+      168,
+      480,
+      685
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "red",
+     "description": "Maroon baseball jacket with white trim and 'R' logo",
+     "box": [
+      28,
+      53,
+      510,
+      394
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black sneakers",
+     "box": [
+      228,
+      1289,
+      462,
+      1420
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Black Mizuno Prophecy running shoes with mesh upper",
+     "box": [
+      74,
+      1234,
+      487,
+      1406
+     ]
+    }
+   }
+  ],
+  "seconds": 28.4
+ },
+ "IMG_1658.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1021,
+    1608
+   ],
+   [
+    1021,
+    0,
+    1206,
+    1608
+   ]
+  ],
+  "garments": 6,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "white",
+     "description": "pleated skirt",
+     "box": [
+      78,
+      598,
+      418,
+      980
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "white",
+     "description": "A white pleated skirt.",
+     "box": [
+      0,
+      999,
+      308,
+      1666
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "high-top boots",
+     "box": [
+      159,
+      978,
+      352,
+      1195
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "Brown ankle boots.",
+     "box": [
+      0,
+      1938,
+      239,
+      2599
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "gray",
+     "description": "oversized hoodie with hood",
+     "box": [
+      75,
+      32,
+      413,
+      652
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "A white hoodie with a logo on the front.",
+     "box": [
+      0,
+      54,
+      245,
+      800
+     ]
+    }
+   }
+  ],
+  "seconds": 32.7
+ },
+ "IMG_1659.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    794,
+    1586
+   ],
+   [
+    794,
+    0,
+    1181,
+    1586
+   ]
+  ],
+  "garments": 4,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "knitwear",
+    "street": {
+     "category": "knitwear",
+     "colour": "white/black",
+     "description": "patterned knit sweater",
+     "box": [
+      38,
+      178,
+      437,
+      595
+     ]
+    },
+    "product": {
+     "category": "knitwear",
+     "colour": "white/black",
+     "description": "white knitted sweater with black geometric patterns",
+     "box": [
+      0,
+      35,
+      476,
+      555
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "tan",
+     "description": "tassel-laced tan boots",
+     "box": [
+      194,
+      1185,
+      403,
+      1321
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "tan/black",
+     "description": "tan Timberland boots with black heel",
+     "box": [
+      65,
+      1461,
+      471,
+      1789
+     ]
+    }
+   }
+  ],
+  "seconds": 29.5
+ },
+ "IMG_1660.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1021,
+    1570
+   ],
+   [
+    1021,
+    0,
+    1206,
+    1570
+   ]
+  ],
+  "garments": 7,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      175,
+      555,
+      362,
+      1147
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "Adidas track pants with white stripes",
+     "box": [
+      0,
+      1008,
+      120,
+      1876
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "blue",
+     "description": "denim jacket with fur collar",
+     "box": [
+      10,
+      208,
+      435,
+      910
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "brown",
+     "description": "Knitted sweater with fur trim",
+     "box": [
+      0,
+      78,
+      161,
+      792
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown UGG boots",
+     "box": [
+      205,
+      1108,
+      348,
+      1176
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "tan",
+     "description": "Shearling-lined boots",
+     "box": [
+      0,
+      2222,
+      257,
+      2528
+     ]
+    }
+   }
+  ],
+  "seconds": 364.8
+ },
+ "IMG_1661.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    745,
+    1573
+   ],
+   [
+    745,
+    0,
+    1206,
+    1573
+   ]
+  ],
+  "garments": 3,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "wide-leg jeans",
+     "box": [
+      75,
+      592,
+      523,
+      1290
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "flared jeans",
+     "box": [
+      279,
+      272,
+      456,
+      805
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "beige",
+     "description": "puffy quilted jacket",
+     "box": [
+      225,
+      155,
+      632,
+      653
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "light green",
+     "description": "puffer jacket with hood",
+     "box": [
+      0,
+      86,
+      285,
+      619
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "black platform shoes",
+     "box": [
+      18,
+      1199,
+      278,
+      1372
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "Dr. Martens platform shoes",
+     "box": [
+      117,
+      1440,
+      400,
+      1617
+     ]
+    }
+   }
+  ],
+  "seconds": 81.4
+ },
+ "IMG_1662.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    841,
+    1579
+   ],
+   [
+    841,
+    0,
+    1206,
+    1579
+   ]
+  ],
+  "garments": 10,
+  "products": 6,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "light grey",
+     "description": "puffer jacket",
+     "box": [
+      22,
+      445,
+      348,
+      855
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "light grey",
+     "description": "MLB quilted jacket",
+     "box": [
+      109,
+      645,
+      346,
+      874
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "sunglasses",
+    "street": {
+     "category": "sunglasses",
+     "colour": "black",
+     "description": "sunglasses",
+     "box": [
+      107,
+      315,
+      228,
+      362
+     ]
+    },
+    "product": {
+     "category": "sunglasses",
+     "colour": "black",
+     "description": "Chanel sunglasses",
+     "box": [
+      121,
+      19,
+      316,
+      88
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "v-neck t-shirt",
+     "box": [
+      499,
+      872,
+      661,
+      1094
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "Free People Take 2 Tee",
+     "box": [
+      119,
+      239,
+      329,
+      433
+     ]
+    }
+   }
+  ],
+  "seconds": 107.0
+ },
+ "IMG_1663.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    725,
+    1563
+   ],
+   [
+    725,
+    0,
+    1206,
+    1563
+   ]
+  ],
+  "garments": 5,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "gray",
+     "description": "large tote bag",
+     "box": [
+      322,
+      455,
+      570,
+      827
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "gray",
+     "description": "Gray patterned tote bag",
+     "box": [
+      191,
+      1496,
+      344,
+      1638
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "gray",
+     "description": "high-waisted wide-leg sweatpants",
+     "box": [
+      139,
+      700,
+      450,
+      1344
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "gray",
+     "description": "Gray wide-leg pants",
+     "box": [
+      198,
+      999,
+      365,
+      1366
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "gray",
+     "description": "jacket",
+     "box": [
+      138,
+      689,
+      260,
+      1223
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "gray",
+     "description": "Gray zip-up hoodie",
+     "box": [
+      179,
+      623,
+      360,
+      842
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "top",
+    "street": {
+     "category": "top",
+     "colour": "white",
+     "description": "crop top",
+     "box": [
+      189,
+      408,
+      443,
+      685
+     ]
+    },
+    "product": {
+     "category": "top",
+     "colour": "white",
+     "description": "White t-shirt with decorative elements",
+     "box": [
+      195,
+      244,
+      358,
+      450
+     ]
+    }
+   }
+  ],
+  "seconds": 72.9
+ },
+ "IMG_1664.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1021,
+    1425
+   ],
+   [
+    1021,
+    0,
+    1206,
+    1425
+   ]
+  ],
+  "garments": 4,
+  "products": 2,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "black",
+     "description": "leather tote bag",
+     "box": [
+      0,
+      288,
+      487,
+      1119
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "black",
+     "description": "Leather-like tote bag",
+     "box": [
+      0,
+      1725,
+      200,
+      2439
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "knitwear",
+    "street": {
+     "category": "knitwear",
+     "colour": "gray",
+     "description": "v-neck sweater",
+     "box": [
+      38,
+      250,
+      487,
+      863
+     ]
+    },
+    "product": {
+     "category": "knitwear",
+     "colour": "gray",
+     "description": "Long-sleeved knit sweater with a V-neck",
+     "box": [
+      0,
+      1015,
+      308,
+      1625
+     ]
+    }
+   }
+  ],
+  "seconds": 136.7
+ },
+ "IMG_1665.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    1015,
+    1431
+   ],
+   [
+    1015,
+    0,
+    1199,
+    1431
+   ]
+  ],
+  "garments": 4,
+  "products": 3,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "green",
+     "description": "green and white tote bag",
+     "box": [
+      98,
+      188,
+      378,
+      498
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "olive",
+     "description": "An olive green tote bag with a logo",
+     "box": [
+      0,
+      1118,
+      204,
+      1847
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "black jacket with hood",
+     "box": [
+      58,
+      155,
+      345,
+      458
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "black",
+     "description": "A black jacket",
+     "box": [
+      0,
+      435,
+      42,
+      918
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown leather shoes",
+     "box": [
+      165,
+      970,
+      338,
+      1110
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "Brown leather shoes",
+     "box": [
+      0,
+      2129,
+      170,
+      2387
+     ]
+    }
+   }
+  ],
+  "seconds": 69.1
+ },
+ "IMG_1666.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    605,
+    1436
+   ],
+   [
+    605,
+    0,
+    1206,
+    1436
+   ]
+  ],
+  "garments": 5,
+  "products": 5,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "navy blue",
+     "description": "tote bag with yellow and light blue polka dots",
+     "box": [
+      262,
+      425,
+      485,
+      915
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "navy",
+     "description": "navy blue tote bag with yellow and blue dots",
+     "box": [
+      337,
+      916,
+      548,
+      1310
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "dark blue",
+     "description": "high-waisted wide-leg denim jeans",
+     "box": [
+      195,
+      735,
+      409,
+      1348
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "blue",
+     "description": "dark blue wide-leg pants",
+     "box": [
+      0,
+      521,
+      259,
+      1062
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "outerwear",
+    "street": {
+     "category": "outerwear",
+     "colour": "dark grey",
+     "description": "loose-fitting jacket",
+     "box": [
+      71,
+      425,
+      327,
+      750
+     ]
+    },
+    "product": {
+     "category": "outerwear",
+     "colour": "gray",
+     "description": "gray zip-up jacket with pockets",
+     "box": [
+      45,
+      33,
+      505,
+      413
+     ]
+    }
+   },
+   {
+    "k": 3,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "black and white",
+     "description": "low-top sneakers",
+     "box": [
+      195,
+      1239,
+      409,
+      1390
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "brown",
+     "description": "brown leather lace-up shoes",
+     "box": [
+      0,
+      1184,
+      256,
+      1310
+     ]
+    }
+   }
+  ],
+  "seconds": 230.8
+ },
+ "IMG_1667.jpg": {
+  "layout": [
+   [
+    0,
+    0,
+    637,
+    1422
+   ],
+   [
+    637,
+    0,
+    1206,
+    1422
+   ]
+  ],
+  "garments": 4,
+  "products": 4,
+  "pairs": [
+   {
+    "k": 0,
+    "category": "bag",
+    "street": {
+     "category": "bag",
+     "colour": "beige",
+     "description": "large tote bag with 'STOP' text",
+     "box": [
+      377,
+      268,
+      616,
+      855
+     ]
+    },
+    "product": {
+     "category": "bag",
+     "colour": "olive green",
+     "description": "An olive green tote bag with a minimalist design.",
+     "box": [
+      63,
+      1105,
+      240,
+      1390
+     ]
+    }
+   },
+   {
+    "k": 1,
+    "category": "bottom",
+    "street": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "pleated skirt",
+     "box": [
+      159,
+      598,
+      516,
+      1070
+     ]
+    },
+    "product": {
+     "category": "bottom",
+     "colour": "black",
+     "description": "A black pleated skirt.",
+     "box": [
+      163,
+      604,
+      406,
+      1048
+     ]
+    }
+   },
+   {
+    "k": 2,
+    "category": "shoes",
+    "street": {
+     "category": "shoes",
+     "colour": "dark grey",
+     "description": "knee-high boots with buckles",
+     "box": [
+      20,
+      1039,
+      465,
+      1349
+     ]
+    },
+    "product": {
+     "category": "shoes",
+     "colour": "black",
+     "description": "A pair of black knee-high boots with buckles.",
+     "box": [
+      305,
+      1120,
+      511,
+      1376
+     ]
+    }
+   }
+  ],
+  "seconds": 262.9
+ }
+}
