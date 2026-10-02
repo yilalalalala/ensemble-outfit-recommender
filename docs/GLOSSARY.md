@@ -173,3 +173,22 @@ industry standard and are named as such wherever they appear.
 | **Batch API** | Asynchronous bulk requests at a discount (50% on Anthropic), for work that need not be real time | DS / Eng |
 | **Self-preference bias** | An LLM judge tends to rate outputs from its own model family higher; report judge scores next to objective metrics | DS |
 | **Budget guard** | A hard spending cap enforced in code before each paid call | Eng |
+
+## Retrieval and ranking engineering (added in Phase 2)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Co-visitation** / **co-visitation matrix** | Item-to-item counts of "bought (or viewed) B soon after A" by the same user, usually time-weighted and directional. The standard candidate source in session/e-commerce recommenders (e.g. Kaggle OTTO and H&M solutions) | DS |
+| **Category-conditioned popularity** | Best sellers restricted to the categories (department, section) a user buys from, weighted by the user's affinity. A personalised popularity channel | DS |
+| **Matrix factorisation (ALS)** | Learns user and item vectors whose dot product predicts interaction; ALS (alternating least squares, Hu–Koren–Volinsky 2008) is the implicit-feedback standard | DS |
+| **Candidate budget** / **recall–size Pareto frontier** | The number of candidates per user the ranker can afford, and the best recall reachable at each size. Choosing caps on the frontier rather than per channel by feel | DS |
+| **Unique recall** / **marginal contribution** | Hits only one channel finds, i.e. the recall lost if that channel were removed | DS |
+| **Early stopping** | Stop adding trees when a held-out metric stops improving; here the held-out set is the most recent *training* week (temporal), never the evaluation week | DS |
+| **Negative downsampling** | Keep every positive but only a share of negatives when training a ranker, to cut memory and time | DS |
+| **Surrogate objective** | The loss a model optimises in place of the business metric (LambdaRank optimises an NDCG-based surrogate; MAP@12 is reported) | DS |
+| **Availability proxy** *(project-specific name)* | Without a stock feed, treating an article as unavailable when its last observed sale before the cutoff is too old. A business rule in the re-ranking stage | Both |
+| **Eligibility filter** / **business rules** | Re-ranking stage rules that remove or demote items (out of stock, duplicates) before display | Both |
+| **Intra-list diversity**, **catalog coverage**, **novelty** | Beyond-accuracy metrics: distinct categories within a list, distinct items shown across users, mean −log₂(popularity share) of shown items | Both |
+| **Cluster (customer-level) bootstrap** / **paired bootstrap** | Resample customers with replacement to put a confidence interval on a metric difference between two systems scored on the same customers | DS |
+| **Feature attribution vs. explanation faithfulness** | SHAP says which features moved a score; a user-facing reason is *faithful* only if the underlying data supports the sentence ("you bought this before" needs a recorded purchase) | Both |
+| **Point-in-time correctness** / **cutoff** | Every feature for a prediction date uses only data available before it | DS |

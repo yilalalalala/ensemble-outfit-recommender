@@ -157,6 +157,19 @@ Several independent retrieval channels, merged:
 | Content similarity | Nearest neighbours in metadata + image embedding space. The only strategy that can reach cold articles. |
 | Variant (same style, other colorway) | An H&M-specific pattern: the same `product_code` in a different colour. |
 
+**Channel contract (Phase 2).** Every channel writes `(customer_idx, article_id,
+score)`; the merge ranks each channel per customer with deterministic ties, applies
+a per-channel cap and keeps each candidate's per-channel score and rank as
+provenance (and ranker features). Implemented channels: repeat purchase, global
+and age-band popularity, launch-proxy new arrivals (global and personalised by
+department), item-to-item CF (cosine), directional time-weighted co-visitation,
+colourway variants, department- and section-conditioned popularity, implicit ALS
+and FashionCLIP similarity. Caps are not hand-set: a greedy allocator extends
+whichever channel adds the most new true hits per new candidate on historical
+weeks, tracing a recall vs candidates-per-customer frontier
+(`ensemble.candidates.budget`); the operating point is chosen on downstream
+MAP@12, memory and time (D-027).
+
 **Metric: Recall@K.** The fraction of truly-purchased articles that appear
 anywhere in the candidate set. This is the **ceiling on the final score** — an
 item the ranker never sees cannot be recommended — so it is measured and tuned
@@ -178,6 +191,17 @@ Features span four groups:
   type before, bought this colour before, price relative to their usual spend
 - **Retrieval-source features** — which retrieval channel proposed this candidate,
   and its rank and score within that channel. Frequently one of the strongest features.
+
+The number of trees is chosen by temporal early stopping on the most recent
+training week, then the model is refit on all training weeks. LambdaRank
+optimises an NDCG-based surrogate; MAP@12 is the metric reported.
+
+### Stage 3 — Re-ranking (business rules)
+
+Applied to the ranker's ordered list and evaluated separately: an availability
+eligibility rule (DATA.md, availability proxy) and optional diversity caps
+(colourways per style, items per product type), reported with intra-list
+diversity, catalogue coverage and novelty next to MAP@12.
 
 ---
 
