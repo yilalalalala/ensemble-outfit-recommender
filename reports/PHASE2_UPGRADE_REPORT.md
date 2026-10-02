@@ -259,6 +259,9 @@ PYTHONPATH=src .venv/bin/python -m ensemble.ranking.train test               # t
 make submission serving                                                       # rebuild serving with the new model
 ```
 
+Validation-week re-ranking for the chosen model: `reports/phase2/rerank_val_p2_b160_neg50.json`
+(availability 28 days: 0.03772 → 0.03772).
+
 Evidence files: `reports/phase2/` (frozen baselines, budget frontier, per-config retrieval, ranker and
 backtest JSONs, re-ranking, explanation audit, paired comparisons, logs), `reports/m2_retrieval_*`,
 `reports/m3_ranker_{val,test}.json`, `reports/backtest_track_a.json`.
@@ -280,8 +283,11 @@ backtest JSONs, re-ranking, explanation audit, paired comparisons, logs), `repor
   (~8% of buyers), high variance.
 - **Confidence intervals** resample customers within a week; week-to-week variation is shown
   separately (4 weeks), not folded into one interval.
-- **Serving** depends on rebuilding `track_a_recs.parquet` and the SQLite store with the new model
-  (section 10 notes whether that ran).
+- **Serving was rebuilt with the new model:** `make submission` (1,371,980 customers, 49 min,
+  peak 6.3 GB) then `make serving` (7 s); all API tests pass on the new store. Served chips all
+  carry an evidence type; 15 of 3,960 demo recommendations show no chip rather than an
+  unsupported one. The MVP outputs were kept: `data/interim/submission_mvp_private_0.03189.csv`,
+  `track_a_recs_mvp.parquet`, `ranker_submission_mvp.txt`, `serving_mvp.sqlite`.
 
 ## 10. Git commits
 

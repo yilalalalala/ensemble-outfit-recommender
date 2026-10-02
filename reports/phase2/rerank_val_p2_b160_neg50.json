@@ -1,0 +1,84 @@
+{
+  "val_p2_b160_neg50": {
+    "none": {
+      "map@12": 0.03772064562083015,
+      "map@12_returning": 0.03985733290219856,
+      "map@12_new_customers": 0.011334240906484437,
+      "recall@12": 0.062467640735378,
+      "distinct_product_types_per_list": 5.043918965828462,
+      "distinct_styles_per_list": 8.974978825032283,
+      "catalog_coverage_articles": 13023,
+      "novelty_bits": 10.54073417048617
+    },
+    "availability_28d": {
+      "map@12": 0.03772064562083015,
+      "map@12_returning": 0.03985733290219856,
+      "map@12_new_customers": 0.011334240906484437,
+      "recall@12": 0.062467640735378,
+      "distinct_product_types_per_list": 5.0439050806037296,
+      "distinct_styles_per_list": 8.974978825032283,
+      "catalog_coverage_articles": 13020,
+      "novelty_bits": 10.540704432297657
+    },
+    "availability_14d": {
+      "map@12": 0.03771670522914485,
+      "map@12_returning": 0.03985307343010467,
+      "map@12_new_customers": 0.011334240906484437,
+      "recall@12": 0.062463253038480104,
+      "distinct_product_types_per_list": 5.043877310154265,
+      "distinct_styles_per_list": 8.974992710257016,
+      "catalog_coverage_articles": 12899,
+      "novelty_bits": 10.539647485142657
+    },
+    "styles_max2": {
+      "map@12": 0.0365211109007809,
+      "map@12_returning": 0.0385615516108611,
+      "map@12_new_customers": 0.011323275522025075,
+      "recall@12": 0.059168092668158485,
+      "distinct_product_types_per_list": 5.395673363973396,
+      "distinct_styles_per_list": 9.910912398117164,
+      "catalog_coverage_articles": 13029,
+      "novelty_bits": 10.443797786274262
+    },
+    "styles_max1": {
+      "map@12": 0.03362002826764164,
+      "map@12_returning": 0.03546821482911272,
+      "map@12_new_customers": 0.010796380172840571,
+      "recall@12": 0.05284103374138915,
+      "distinct_product_types_per_list": 6.099904191949347,
+      "distinct_styles_per_list": 12.0,
+      "catalog_coverage_articles": 12763,
+      "novelty_bits": 10.347117508050466
+    },
+    "types_max4": {
+      "map@12": 0.03699943310641745,
+      "map@12_returning": 0.03909088330328203,
+      "map@12_new_customers": 0.011171670749436367,
+      "recall@12": 0.05957614847966303,
+      "distinct_product_types_per_list": 5.82583762618198,
+      "distinct_styles_per_list": 9.576486760438218,
+      "catalog_coverage_articles": 12894,
+      "novelty_bits": 10.44093015252484
+    },
+    "types_max3": {
+      "map@12": 0.03640748540423498,
+      "map@12_returning": 0.03844126750284606,
+      "map@12_new_customers": 0.01129187863169245,
+      "recall@12": 0.057399850818305474,
+      "distinct_product_types_per_list": 6.405198628139797,
+      "distinct_styles_per_list": 9.93646121162471,
+      "catalog_coverage_articles": 12783,
+      "novelty_bits": 10.390971064371975
+    },
+    "styles2_types4": {
+      "map@12": 0.03621160691452396,
+      "map@12_returning": 0.038237435089321564,
+      "map@12_new_customers": 0.011194224835243467,
+      "recall@12": 0.05771576499495415,
+      "distinct_product_types_per_list": 5.958344325802913,
+      "distinct_styles_per_list": 10.119051916855275,
+      "catalog_coverage_articles": 12883,
+      "novelty_bits": 10.387426888844116
+    }
+  }
+}
