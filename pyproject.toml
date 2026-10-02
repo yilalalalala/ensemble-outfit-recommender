@@ -13,5 +13,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Ignore Finder/sync duplicates such as "test_x 2.py": they are not part of the suite.
+addopts = "--ignore-glob='* 2.py'"
 pythonpath = ["src"]
 markers = ["data: requires the raw dataset and built database"]
