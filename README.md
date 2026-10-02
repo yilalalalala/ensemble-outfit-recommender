@@ -19,7 +19,7 @@ Every result is evaluated offline with temporal splits, a popularity baseline an
 
 | capability | result |
 | --- | --- |
-| **Next-purchase ranking** (H&M Kaggle task, MAP@12) | **0.0319 private leaderboard** for the MVP (late submission), above the ~0.030 silver line of 3,006 teams. The Phase 2 upgrade adds **+7.5% [+6.9, +8.2]** MAP@12 over the MVP across a 4-week backtest (+53% over a strong rule baseline) and raises candidate recall from 13% to 18–20% ([report](reports/PHASE2_UPGRADE_REPORT.md)) |
+| **Next-purchase ranking** (H&M Kaggle task, MAP@12) | **0.0333 private leaderboard** (late submission; MVP 0.0319), above the ~0.030 silver line of 3,006 teams. The Phase 2 upgrade adds **+7.5% [+6.9, +8.2]** MAP@12 over the MVP across a 4-week backtest (+53% over a strong rule baseline) and raises candidate recall from 13% to 18–20% ([report](reports/PHASE2_UPGRADE_REPORT.md)) |
 | **Complete the Look** (outfit completion) | **+56% Recall@12** over popularity on the held-out week; FashionCLIP image features add +4 points |
 | **Visual search** (street photo → product) | Street-to-shop adapters trained on DeepFashion2 raise exact-item **Recall@1 from 0.40 to 0.59** on 154 real outfit-post pairs, and from 0.38 to 0.59 on DeepFashion2 |
 | **Shopping assistant** (LLM + tools) | **100% tool accuracy, 0% hallucinated products** over a 24-turn eval, on a free local model (Qwen3-VL) and on Claude Opus 5 |
@@ -91,7 +91,7 @@ model cards for [Track A](reports/MODEL_CARD_track_a.md) and [Track B](reports/M
 | popularity | 0.0066 | 0.0088 | |
 | repeat purchase + age-band popularity | 0.0252 | 0.0269 | |
 | retrieval → LightGBM LambdaRank (MVP) | 0.0355 | 0.0370 | 0.0319 |
-| **Phase 2: frontier retrieval + recency features** | **0.0377** | **0.0392** | not submitted |
+| **Phase 2: frontier retrieval + recency features** | **0.0377** | **0.0392** | **0.0333** |
 
 **Track B: Complete the Look, relative lift in Recall@12 over popularity**
 

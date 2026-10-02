@@ -36,8 +36,9 @@ validation); item cold-start recall is 0 for every system.
 
 **External check.** The MVP's Kaggle late submission scored private MAP@12
 **0.03189** (public 0.03102); local test then ran ~14% above the leaderboard. The
-Phase 2 submission file has been regenerated but **not submitted**; its leaderboard
-score is unknown.
+Phase 2 late submission (2026-10-02) scored private **0.03330**, public 0.03263:
++4.4% / +5.2% over the MVP, in line with the offline gain. Local test (0.03918) again ran
+~15% above the private leaderboard.
 
 ## Top features (gain share, validation)
 

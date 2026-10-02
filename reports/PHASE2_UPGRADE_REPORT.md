@@ -11,6 +11,8 @@ quality without overfitting the validation week:
 
 - **4-week rolling backtest MAP@12: 0.03542 ± 0.00284 vs 0.03298 ± 0.00325**, i.e.
   **+7.5% [+6.9%, +8.2%]** (paired customer bootstrap, pooled). Every week improved, by +5.5% to +10.3%.
+- **Kaggle private leaderboard (late submission): 0.03330 vs 0.03189 for the MVP (+4.4%)**;
+  public 0.03263 vs 0.03102 (+5.2%). The external check confirms the offline gain.
 - **Test week, evaluated once after all choices were frozen: 0.03918 vs 0.03699 (+5.9%)**;
   validation 0.03772 vs 0.03555 (+6.1%).
 - **Lift over the repeat + age-band popularity rule went from +42.4% to +53.2%**
@@ -51,6 +53,8 @@ Frozen baseline = `main` at `2d78709`, re-run from a code snapshot before any ch
 | validation, new customers | 0.00851 | 0.01133 | +33% |
 | validation Recall@12 | 0.0568 | 0.0625 | +10% |
 | **test (single touch)** | 0.03699 | **0.03918** | **+5.9%** |
+| **Kaggle private LB (late submission)** | 0.03189 | **0.03330** | **+4.4%** |
+| Kaggle public LB | 0.03102 | 0.03263 | +5.2% |
 | test, returning / new customers | 0.03951 / 0.00831 | 0.04188 / 0.00839 | +6.0% / +1% |
 | test Recall@12 | 0.0616 | 0.0656 | +6.5% |
 | **4-week backtest mean ± std** | 0.03298 ± 0.00325 | **0.03542 ± 0.00284** | **+7.5% [+6.9, +8.2]** |
@@ -268,8 +272,8 @@ backtest JSONs, re-ranking, explanation audit, paired comparisons, logs), `repor
 
 ## 9. Limitations, risks and next steps
 
-- **Offline only.** The +7.5% is offline MAP@12. The MVP's local test ran ~14% above the Kaggle
-  private LB; the regenerated `reports/submission.csv` has **not been submitted** (needs the owner).
+- **Offline only.** MAP@12, offline and on the Kaggle private LB (0.03330; local test runs ~15%
+  above it), is not an online metric; a real launch needs an A/B test.
 - **Recall beyond 160 does not convert.** 21–26% recall at 200–300 candidates gives no MAP gain;
   next steps are features that separate the many category-popular candidates (e.g. customer-level
   normalised channel scores, similarity of the candidate to the customer's last basket), then
