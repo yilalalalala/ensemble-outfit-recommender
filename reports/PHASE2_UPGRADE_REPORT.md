@@ -294,3 +294,21 @@ backtest JSONs, re-ranking, explanation audit, paired comparisons, logs), `repor
 See the commit list appended below. **Nothing was pushed**: all commits are on the local branch
 `phase2-retrieval-ranking-upgrade`; `main` and `origin` are unchanged. The untracked `* 2` files were not
 touched, staged or committed.
+
+```
+937c158 docs(report): serving rebuilt with the Phase 2 model; validation re-ranking results
+a00568e docs(report): Phase 2 upgrade report, model card, README results; experiment evidence
+4f62ca7 docs(adr): D-027..D-030 retrieval budget, ranker training, re-ranking, evidence-gated reasons
+804ba30 feat(track-a): adopt the 160-candidate frontier operating point, 50% negative downsampling, availability rule
+af99dd3 feat(serving): chunked scoring and the shipped re-ranking policy in submission and serving builds
+044c59b test: ignore sync-duplicate '* 2.py' files in the canonical suite
+58b1ecf test: run LightGBM training tests in a subprocess (torch + LightGBM OpenMP segfault)
+3b43ad2 fix(ranker): INT32 overflow in negative-downsampling hash; runner records real exit code
+9d22e6c docs: channel contract, budget frontier, re-ranking stage, lifetime vs windowed history, proxies
+d25f3c5 chore(experiments): budget-frontier configs and sequential experiment runner
+b218942 feat(ranker): memory-bounded training and scoring, re-ranking layer, evidence-gated reasons
+7b5dd24 feat(ranker): reproducible training, temporal early stopping, stable vocabularies
+3876eec refactor(retrieval): channel registry with a common output contract
+```
+
+`git log main..HEAD` lists 13 commits plus the one that adds this list. `git status -sb` reports no upstream for this branch; `origin/main` is still at `2d78709`.
