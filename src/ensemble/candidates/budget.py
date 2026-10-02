@@ -114,7 +114,7 @@ def run(weeks_back=(3, 2, 1), sample: float = 0.25) -> dict:
     con = connect(cfg, read_only=True)
     splits = load_splits(con, cfg)
     b = cfg.budget
-    r = Config({**dict(cfg.retrieval), **{f"{c}_k": k for c, k in b.pool.items()}})
+    r = Config({**dict(cfg.retrieval), **dict(b.get("params") or {}), **{f"{c}_k": k for c, k in b.pool.items()}})
     pools, n_users, n_truth, offset = [], 0, 0, 0
     for k in weeks_back:
         w = splits.val.shift(-k)
@@ -129,7 +129,7 @@ def run(weeks_back=(3, 2, 1), sample: float = 0.25) -> dict:
     for t, v in targets.items():
         print(f"budget {t:>4}: recall={v['recall']:.4f} cand={v['cand']:.1f} caps={v['caps']}")
     out = {"weeks": [str(splits.val.shift(-k).start) for k in weeks_back], "sample": sample,
-           "pool": dict(b.pool), "targets": targets, "frontier": frontier[::5] + [frontier[-1]]}
+           "pool": dict(b.pool), "params": dict(b.get("params") or {}), "targets": targets, "frontier": frontier[::5] + [frontier[-1]]}
     d = cfg.path("reports") / "phase2"
     d.mkdir(parents=True, exist_ok=True)
     (d / "budget_frontier.json").write_text(json.dumps(out, indent=1, default=float))

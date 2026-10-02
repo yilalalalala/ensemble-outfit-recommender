@@ -37,6 +37,7 @@ retrieval:
   pop_half_life_days: 7  # for pop_metric: decay
   pop_k: 40
   pop_age_k: 30
+  pop_age_age_bins: coarse   # coarse = the 4 M1 baseline bands; fine = 10 bands
   new_arrival_days: 7    # launch proxy: first observed sale within this many days
   new_arrival_k: 10
   cf_weeks: 8            # item-to-item co-purchase window
@@ -60,7 +61,7 @@ retrieval:
   section_pop_weeks: 104
   section_pop_types: 5
   section_pop_items: 30
-  section_pop_by_age: false
+  section_pop_by_age: true
   section_pop_k: 0
   type_pop_key: product_type_no
   type_pop_weeks: 52
@@ -98,7 +99,9 @@ retrieval:
 budget:
   # Maximum cap per channel explored by the allocator (python -m ensemble.candidates.budget)
   pool: {repeat: 100, pop: 200, pop_age: 150, new_arrival: 100, cf: 100, variant: 60, dept_pop: 100,
-         section_pop: 100, covis: 100, als: 100, new_arrival_pers: 60, visual: 50}
+         section_pop: 100, covis: 100, als: 100, new_arrival_pers: 60}
+  # Channel parameters used while exploring (overrides retrieval.* for the allocator only)
+  params: {variant_seed_weeks: 104, pop_age_age_bins: fine}
   targets: [80, 100, 116, 130, 160, 200, 250, 300]
 
 features:
@@ -163,3 +166,17 @@ serving:
   ctl_per_slot: 8
   max_per_product_type: 2   # diversity re-ranking inside a Complete the Look module
   trending_k: 24
+
+rerank:
+  # Re-ranking layer (src/ensemble/ranking/rerank.py), evaluated separately from the ranker.
+  # The shipped policy is `serve`; the others are ablations reported in PHASE2_UPGRADE_REPORT.md.
+  serve: {}
+  policies:
+    none: {}
+    availability_28d: {max_days_since_last_sale: 28}
+    availability_14d: {max_days_since_last_sale: 14}
+    styles_max2: {max_per_product_code: 2}
+    styles_max1: {max_per_product_code: 1}
+    types_max4: {max_per_product_type: 4}
+    types_max3: {max_per_product_type: 3}
+    styles2_types4: {max_per_product_code: 2, max_per_product_type: 4}

@@ -20,7 +20,7 @@ from ensemble.baselines import customer_age_bins, fill, popular, popular_by_age
 from ensemble.config import load_config
 from ensemble.data.splits import load_splits
 from ensemble.db import connect
-from ensemble.ranking.train import train, week_frame
+from ensemble.ranking.train import score_frame, top_k, train, week_frame
 
 CHUNK = 100_000
 
@@ -46,9 +46,7 @@ def main() -> None:
         chunk = all_customers[i:i + CHUNK]
         con.execute("CREATE OR REPLACE TEMP TABLE _chunk AS SELECT unnest(?::INTEGER[]) AS customer_idx", [chunk.tolist()])
         df = week_frame(con, cfg, week, "SELECT customer_idx FROM _chunk", False, False)
-        df = df[["customer_idx", "article_id"]].assign(score=booster.predict(df[features], num_threads=8))
-        df = df.sort_values(["customer_idx", "score"], ascending=[True, False]).groupby("customer_idx", sort=False).head(12)
-        ranked = df.groupby("customer_idx", sort=False)["article_id"].agg(list).to_dict()
+        ranked = top_k(score_frame(booster, features, df))
         ages = customer_age_bins(con, chunk.tolist())
         rows = []
         for c in chunk.tolist():

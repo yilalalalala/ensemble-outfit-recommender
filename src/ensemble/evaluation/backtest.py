@@ -22,13 +22,13 @@ import time
 
 from ensemble import tracking
 from ensemble.baselines import customer_age_bins, fill, popular, popular_by_age, repeat_purchase
-from ensemble.candidates.evaluate import recall_report
+from ensemble.candidates.evaluate import evaluate_week as retrieval_week
 from ensemble.config import load_config
 from ensemble.data.splits import load_splits
 from ensemble.db import connect
 from ensemble.evaluation.track_a import evaluate, load_segments, load_truth, per_customer_ap
-from ensemble.ranking.train import (build_training_frame, buyers_sql, fit, save_ap, score_frame, top_k,
-                                    week_frame)
+from ensemble.ranking.train import (RERANK_COLS, build_training_data, buyers_sql, fit, save_ap, save_scored,
+                                    score_users, top_k)
 
 METRICS = ("map@12", "map@12_returning", "map@12_new_customers", "recall@12", "recall@12_cold_items")
 
@@ -36,16 +36,15 @@ METRICS = ("map@12", "map@12_returning", "map@12_new_customers", "recall@12", "r
 def evaluate_week(con, cfg, target, tag: str) -> dict:
     t0 = time.time()
     weeks = load_splits(con, cfg).train_weeks(int(cfg.ranker.train_weeks), before=target)
-    df_train = build_training_frame(con, cfg, weeks)
-    booster, features, info = fit(cfg, df_train)
-    del df_train
+    booster, features, info = fit(cfg, build_training_data(con, cfg, weeks))
     gc.collect()
-    df = week_frame(con, cfg, target, buyers_sql(target), False, False)
-    retrieval = recall_report(con, target)
-    ranked = top_k(score_frame(booster, features, df))
-    cand_per_cust = len(df) / df.customer_idx.nunique()
-    del df
+    scored = score_users(con, cfg, booster, features, target, buyers_sql(target), extra_cols=RERANK_COLS)
+    save_scored(cfg, f"backtest{tag}_{target.start}", scored)
+    ranked = top_k(scored)
+    cand_per_cust = scored.attrs["candidates_per_customer"]
+    del scored
     gc.collect()
+    retrieval = retrieval_week(con, target, cfg.retrieval)
     truth, seg = load_truth(con, target), load_segments(con, target)
     users = list(truth)
     pop, pop_age, ages = popular(con, target), popular_by_age(con, target), customer_age_bins(con, users)
@@ -95,7 +94,7 @@ def run(n_weeks: int = 4, tag: str | None = None) -> dict:
     cfg = load_config()
     if tag is None:
         name = os.environ.get("ENSEMBLE_CONFIG", "default")
-        tag = "" if name == "default" else f"_{name}"
+        tag = "" if name == "default" else f"_{os.path.basename(name)}"
     con = connect(cfg, read_only=True)
     splits = load_splits(con, cfg)
     weeks = [splits.val.shift(-k) for k in range(n_weeks - 1, -1, -1)]  # ends at validation; test untouched

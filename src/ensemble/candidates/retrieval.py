@@ -128,9 +128,19 @@ def ch_pop(con, week: Week, r, users_table: str) -> None:
     """)
 
 
+FINE_AGE_BINS = ("CASE WHEN age IS NULL THEN -1 WHEN age < 20 THEN 0 WHEN age < 23 THEN 1 WHEN age < 26 THEN 2 "
+                 "WHEN age < 30 THEN 3 WHEN age < 35 THEN 4 WHEN age < 40 THEN 5 WHEN age < 45 THEN 6 "
+                 "WHEN age < 50 THEN 7 WHEN age < 55 THEN 8 WHEN age < 60 THEN 9 ELSE 10 END")
+
+
+def _age_bins(r, name: str) -> str:
+    return FINE_AGE_BINS if r.get(f"{name}_age_bins", "coarse") == "fine" else AGE_BINS
+
+
 @channel("pop_age")
 def ch_pop_age(con, week: Week, r, users_table: str) -> None:
-    """Best sellers within the customer's age band."""
+    """Best sellers within the customer's age band (``pop_age_age_bins``: coarse = the M1 baseline's 4 bands, fine = 10)."""
+    AGE_BINS = _age_bins(r, "pop_age")  # noqa: N806
     con.execute(f"""
         CREATE OR REPLACE TEMP TABLE _ch_pop_age AS
         SELECT u.customer_idx, p.article_id, p.n::DOUBLE AS score FROM (
@@ -243,6 +253,7 @@ def _affinity_pop(con, week: Week, r, users_table: str, name: str) -> None:
     band when ``_by_age``); score = affinity × sales.
     """
     p = lambda k, d=None: r.get(f"{name}_{k}", d)  # noqa: E731
+    AGE_BINS = _age_bins(r, name)  # noqa: N806
     start = _d(week.start)
     lo = _d(week.start - timedelta(weeks=int(p("weeks"))))
     key = _AFFINITY_KEYS[p("key")]
@@ -253,8 +264,7 @@ def _affinity_pop(con, week: Week, r, users_table: str, name: str) -> None:
             FROM transactions t JOIN customers c USING (customer_idx) JOIN articles a USING (article_id)
             WHERE t.t_dat >= {_days_before(week, r.pop_days)} AND t.t_dat < {start} GROUP BY 1, 2, 3
             QUALIFY row_number() OVER (PARTITION BY age_bin, k ORDER BY n DESC, t.article_id) <= {int(p("items"))}"""
-        join = f"""JOIN (SELECT u.customer_idx, {AGE_BINS} AS age_bin FROM {users_table} u JOIN customers c USING (customer_idx)) ua
-                   USING (customer_idx) JOIN best b ON b.k = t.k AND b.age_bin = ua.age_bin"""
+        join = "JOIN best b ON b.k = t.k AND b.age_bin = t.age_bin"
     else:
         best_sql = f"""
             SELECT {key} AS k, s.article_id, s.{m}::DOUBLE AS n FROM _sales s JOIN articles a USING (article_id)
@@ -267,8 +277,10 @@ def _affinity_pop(con, week: Week, r, users_table: str, name: str) -> None:
             SELECT h.customer_idx, {key} AS k, sum({_recency_weight(start, 'h.t_dat')}) AS w
             FROM _hist h JOIN articles a USING (article_id) WHERE h.t_dat >= {lo} GROUP BY 1, 2),
         top_aff AS (
-            SELECT customer_idx, k, w / sum(w) OVER (PARTITION BY customer_idx) AS share FROM aff
-            QUALIFY row_number() OVER (PARTITION BY customer_idx ORDER BY w DESC, k) <= {int(p("types"))}),
+            SELECT aff.customer_idx, aff.k, aff.w / sum(aff.w) OVER (PARTITION BY aff.customer_idx) AS share,
+                   {AGE_BINS} AS age_bin
+            FROM aff JOIN customers c USING (customer_idx)
+            QUALIFY row_number() OVER (PARTITION BY aff.customer_idx ORDER BY aff.w DESC, aff.k) <= {int(p("types"))}),
         best AS ({best_sql})
         SELECT t.customer_idx, b.article_id, max(t.share * b.n) AS score
         FROM top_aff t {join} GROUP BY 1, 2
@@ -363,25 +375,24 @@ def cap_of(r, ch: str) -> int:
 
 
 def merge(con, channels: list[str], caps: dict[str, int], out: str = "cand") -> None:
-    """Union the channel tables, rank each per customer (deterministic ties), cap, pivot.
+    """Rank each channel per customer (deterministic ties), cap, union and pivot.
 
     Scores are rounded to 9 decimals first: multi-threaded float sums differ in the last bits
-    between runs, which would otherwise make near-ties (and so the candidate set) non-deterministic."""
-    union = "\nUNION ALL ".join(
-        f"SELECT customer_idx, article_id, '{c}' AS ch, round(score::DOUBLE, 9) AS score FROM _ch_{c}" for c in channels)
-    cap_case = " ".join(f"WHEN '{c}' THEN {int(caps[c])}" for c in channels)
+    between runs, which would otherwise make near-ties (and so the candidate set) non-deterministic.
+    Capping happens per channel table, before the union, so the pivot only sees kept rows."""
+    union = "\nUNION ALL ".join(f"""
+        SELECT customer_idx, article_id, {i}::TINYINT AS ch, score, rnk FROM (
+            SELECT customer_idx, article_id, round(score::DOUBLE, 9) AS score,
+                   row_number() OVER (PARTITION BY customer_idx ORDER BY round(score::DOUBLE, 9) DESC, article_id) AS rnk
+            FROM _ch_{c} QUALIFY rnk <= {int(caps[c])})""" for i, c in enumerate(channels))
     pivots = ",\n".join(
-        f"max(CASE WHEN ch = '{c}' THEN score END) AS {c}_score, "
-        f"min(CASE WHEN ch = '{c}' THEN rnk END) AS {c}_rank"
-        for c in channels)
+        f"max(CASE WHEN ch = {i} THEN score END) AS {c}_score, "
+        f"min(CASE WHEN ch = {i} THEN rnk END) AS {c}_rank"
+        for i, c in enumerate(channels))
     con.execute(f"""
         CREATE OR REPLACE TEMP TABLE {out} AS
-        WITH ranked AS (
-            SELECT *, row_number() OVER (PARTITION BY customer_idx, ch ORDER BY score DESC, article_id) AS rnk
-            FROM ({union}))
         SELECT customer_idx, article_id, {pivots}
-        FROM ranked WHERE rnk <= CASE ch {cap_case} END
-        GROUP BY 1, 2
+        FROM ({union}) GROUP BY 1, 2
     """)
 
 

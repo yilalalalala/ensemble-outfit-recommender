@@ -17,4 +17,5 @@ def connect(cfg: Config | None = None, read_only: bool = False) -> duckdb.DuckDB
     con.execute(f"SET threads={int(cfg.duckdb.threads)}")
     con.execute(f"SET temp_directory='{tmp}'")
     con.execute("SET preserve_insertion_order=false")
+    con.execute("SET enable_progress_bar=false")
     return con
