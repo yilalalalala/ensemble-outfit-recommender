@@ -60,3 +60,26 @@ def test_rerank_rules():
     assert apply_rules(s, arts, k=3, max_per_product_code=1) == {0: [1, 4, 5]}
     # Caps never shorten the list when not enough items qualify: skipped items fill the tail.
     assert apply_rules(s, arts, k=4, max_per_product_type=1) == {0: [1, 5, 2, 3]}
+
+
+def test_negative_downsampling_keeps_positives_and_handles_large_ids():
+    from datetime import date
+
+    import duckdb
+
+    from ensemble.data.splits import Week
+    from ensemble.ranking.train import downsample_negatives
+    week = Week(date(2020, 9, 16), date(2020, 9, 22))
+
+    def run():
+        con = duckdb.connect()
+        con.execute("CREATE TABLE transactions AS SELECT DATE '2020-09-17' AS t_dat, 1371000 AS customer_idx, 959000000 AS article_id")
+        con.execute("""CREATE TEMP TABLE cand AS SELECT 1371000::INTEGER AS customer_idx, (959000000 + i)::INTEGER AS article_id
+                       FROM range(2000) t(i)""")
+        downsample_negatives(con, week, 0.5)
+        return [r[0] for r in con.execute("SELECT article_id FROM cand ORDER BY 1").fetchall()]
+
+    kept = run()
+    assert 959000000 in kept                    # the positive survives
+    assert 800 < len(kept) < 1200               # about half the negatives
+    assert kept == run()                        # deterministic

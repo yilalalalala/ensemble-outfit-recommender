@@ -12,8 +12,10 @@ for c in "$@"; do
   echo "$(date '+%H:%M:%S') start $mode $c" >> reports/phase2/logs/queue.log
   if [ "$mode" = "val" ]; then
     ENSEMBLE_CONFIG=$cfg PYTHONPATH=src /usr/bin/time -l .venv/bin/python -m ensemble.ranking.train val "$tag" > "$log" 2>&1
+    rc=$?
   else
     ENSEMBLE_CONFIG=$cfg PYTHONPATH=src /usr/bin/time -l .venv/bin/python -m ensemble.evaluation.backtest 4 "$tag" > "$log" 2>&1
+    rc=$?
   fi
-  echo "$(date '+%H:%M:%S') done $mode $c exit=$?" >> reports/phase2/logs/queue.log
+  echo "$(date '+%H:%M:%S') done $mode $c exit=$rc" >> reports/phase2/logs/queue.log
 done

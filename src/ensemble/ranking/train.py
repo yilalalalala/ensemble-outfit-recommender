@@ -61,11 +61,7 @@ def week_frame(con, cfg, week: Week, users_sql: str, with_labels: bool, positive
                            SELECT DISTINCT customer_idx, article_id FROM transactions
                            WHERE t_dat BETWEEN ? AND ?) USING (customer_idx, article_id))""", [week.start, week.end])
     if neg_rate < 1.0:
-        # Deterministic negative downsampling (training only): keep every positive and a hashed share of negatives.
-        con.execute(f"""DELETE FROM cand WHERE (customer_idx, article_id) NOT IN (
-                          SELECT customer_idx, article_id FROM transactions WHERE t_dat BETWEEN ? AND ?)
-                        AND hash(customer_idx * 1000003 + article_id) % 10000 >= {int(neg_rate * 10000)}""",
-                    [week.start, week.end])
+        downsample_negatives(con, week, neg_rate)
     t = time.time()
     df = build_features(con, week, with_labels, groups=feature_groups(cfg), cfg=cfg)
     df.attrs["retrieval_seconds"], df.attrs["feature_seconds"] = retrieval_secs, time.time() - t
@@ -73,6 +69,13 @@ def week_frame(con, cfg, week: Week, users_sql: str, with_labels: bool, positive
         from ensemble.candidates.visual import add_clip_features
         df = add_clip_features(con, week, cfg, df)
     return df
+
+
+def downsample_negatives(con, week: Week, rate: float) -> None:
+    """Training only: keep every positive in ``cand`` and a deterministic, hashed ``rate`` share of negatives."""
+    con.execute(f"""DELETE FROM cand WHERE (customer_idx, article_id) NOT IN (
+                      SELECT customer_idx, article_id FROM transactions WHERE t_dat BETWEEN ? AND ?)
+                    AND hash(customer_idx, article_id) % 10000 >= {int(rate * 10000)}""", [week.start, week.end])
 
 
 def buyers_sql(week: Week) -> str:

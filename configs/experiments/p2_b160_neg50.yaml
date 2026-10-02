@@ -1,0 +1,4 @@
+# Phase 2 ablation: B160 retrieval, negatives downsampled to 50% in training weeks.
+extends: experiments/p2_b160_noals
+ranker:
+  neg_sample_rate: 0.5
