@@ -1,0 +1,15 @@
+# Track B Round 3: fast end-to-end smoke run of the rolling backtest (not an experiment).
+# One fold, one training week, one tower epoch, a small query sample.
+extends: default
+track_b:
+  folds: 1
+  train_weeks: 1
+  train_queries: 3000
+  eval_chunk_queries: 6000
+  bootstrap: {n_boot: 50, seed: 0}
+  candidates: {assoc_co: 20, assoc_npmi: 20, style_co: 15, style_npmi: 15, two_tower: 20,
+               two_tower_content: 10, slot_pop: 15}
+  ranker:
+    early_stopping: {}
+    num_boost_round: 30
+  two_tower: {epochs: 1}
