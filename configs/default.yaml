@@ -25,29 +25,86 @@ sampling:
   min_pair_support: 10
 
 retrieval:
-  # Sizes chosen on the validation week (reports/m2_retrieval_val.json):
-  # ~110 candidates per customer, the point past which recall gains flatten
-  # relative to ranker training cost.
+  # Channel contract and merge: src/ensemble/candidates/retrieval.py. Each enabled
+  # channel contributes its top <name>_k candidates per customer; ties break on
+  # article_id. Caps are chosen on the recall / size frontier
+  # (python -m ensemble.candidates.budget, reports/phase2/budget_frontier.json).
+  channels: [repeat, pop, pop_age, new_arrival, cf, variant]
   repeat_weeks: 52       # repeat purchase: customer's own articles in this window
   repeat_k: 50
   pop_days: 7            # popularity window
+  pop_metric: count      # count | decay | 1d | 3d | 14d | 28d (see _sales in retrieval.py)
+  pop_half_life_days: 7  # for pop_metric: decay
   pop_k: 40
   pop_age_k: 30
-  new_arrival_k: 10      # first sold within the popularity window
+  new_arrival_days: 7    # launch proxy: first observed sale within this many days
+  new_arrival_k: 10
   cf_weeks: 8            # item-to-item co-purchase window
   cf_recent_items: 30    # most recent distinct items per customer used to build pairs
   cf_neighbors: 50       # neighbours kept per article
   cf_min_count: 3
-  cf_seed_weeks: 16      # a customer's items from this window seed CF and variants
+  cf_seed_weeks: 16      # a customer's items from this window seed CF
   cf_k: 50
+  variant_seed_weeks: 16 # a customer's items from this window seed other colourways
+  variant_sales: count   # rank variants by sales in: count (pop_days) | 14d | 28d
   variant_k: 20
-  use_visual: false      # FashionCLIP channel (M7a); enabled after validation, see D-017
-  visual_k: 20
+  # Category-conditioned popularity (_affinity_pop): <name>_key in
+  # product_type_no | department_no | section_no | garment_group_no | type_index | dept_colour
+  dept_pop_key: department_no
+  dept_pop_weeks: 104
+  dept_pop_types: 5
+  dept_pop_items: 30
+  dept_pop_by_age: true
+  dept_pop_k: 0
+  section_pop_key: section_no
+  section_pop_weeks: 104
+  section_pop_types: 5
+  section_pop_items: 30
+  section_pop_by_age: false
+  section_pop_k: 0
+  type_pop_key: product_type_no
+  type_pop_weeks: 52
+  type_pop_types: 5
+  type_pop_items: 30
+  type_pop_k: 0
+  # Directional, time-weighted co-visitation (dst bought within gap days after src)
+  covis_weeks: 8
+  covis_gap_days: 7
+  covis_beta: 0.0
+  covis_min_count: 3
+  covis_neighbors: 50
+  covis_seed_weeks: 52
+  covis_k: 0
+  # Implicit ALS (fitted in a subprocess, cached in data/interim/als)
+  als_weeks: 26
+  als_factors: 64
+  als_iterations: 15
+  als_regularization: 0.05
+  als_alpha: 20
+  als_min_item_count: 5
+  als_recency: true
+  als_seed: 42
+  als_pool_days: 7
+  als_k: 0
+  # Personalised new arrivals: launch-proxy articles in the customer's departments
+  new_arrival_pers_weeks: 104
+  new_arrival_pers_types: 5
+  new_arrival_pers_items: 20
+  new_arrival_pers_k: 0
+  visual_k: 20           # FashionCLIP channel (M7a, D-023)
   visual_pool_days: 14
   visual_profile_items: 20
 
+budget:
+  # Maximum cap per channel explored by the allocator (python -m ensemble.candidates.budget)
+  pool: {repeat: 100, pop: 200, pop_age: 150, new_arrival: 100, cf: 100, variant: 60, dept_pop: 100,
+         section_pop: 100, covis: 100, als: 100, new_arrival_pers: 60, visual: 50}
+  targets: [80, 100, 116, 130, 160, 200, 250, 300]
+
 features:
   use_clip: false        # ca_clip_sim_max / ca_clip_sim_mean ranker features (M7a)
+  # Optional feature groups (src/ensemble/features/track_a.py): recency_affinity, short_velocity
+  groups: [recency_affinity, short_velocity]
 
 visual_adapter:
   hidden: 256
@@ -60,6 +117,11 @@ visual_adapter:
 
 ranker:
   train_weeks: 4           # label weeks preceding the evaluation week
+  seed: 42                 # LightGBM seed (bagging, feature fraction); params also set deterministic
+  neg_sample_rate: 1.0     # share of negative candidates kept in training weeks (deterministic hash)
+  # Number of trees: fit on the older training weeks, early-stop on the most recent
+  # training week (MAP@12), then refit on all training weeks with the best count.
+  early_stopping: {max_rounds: 1500, patience: 60, refit: true}
   params:
     objective: lambdarank
     metric: map
@@ -73,7 +135,7 @@ ranker:
     lambdarank_truncation_level: 20
     verbosity: -1
     num_threads: 8
-  num_boost_round: 200     # MAP@12 on validation plateaus at 200 (reports/m3_ranker_val.json)
+  num_boost_round: 200     # used only when early_stopping is empty
 
 completion:
   window_weeks: 16          # baskets mined from this window before the target week
