@@ -1,0 +1,49 @@
+  train week 2020-07-22: 2,843,114 rows, pos rate 0.0112 (41s)
+  train week 2020-07-29: 2,756,323 rows, pos rate 0.0112 (27s)
+  train week 2020-08-05: 2,607,967 rows, pos rate 0.0111 (20s)
+  train week 2020-08-12: 2,590,809 rows, pos rate 0.0113 (21s)
+2020-08-19: baseline 0.02226  ranker 0.03032  new: ranker 0.00489 vs fallback 0.00790  (272s)
+  train week 2020-07-29: 2,756,323 rows, pos rate 0.0112 (30s)
+  train week 2020-08-05: 2,607,967 rows, pos rate 0.0111 (24s)
+  train week 2020-08-12: 2,590,809 rows, pos rate 0.0113 (26s)
+  train week 2020-08-19: 2,701,693 rows, pos rate 0.0111 (28s)
+2020-08-26: baseline 0.02083  ranker 0.03002  new: ranker 0.00841 vs fallback 0.00878  (285s)
+  train week 2020-08-05: 2,607,967 rows, pos rate 0.0111 (19s)
+  train week 2020-08-12: 2,590,809 rows, pos rate 0.0113 (18s)
+  train week 2020-08-19: 2,701,693 rows, pos rate 0.0111 (23s)
+  train week 2020-08-26: 3,087,432 rows, pos rate 0.0109 (37s)
+2020-09-02: baseline 0.02429  ranker 0.03592  new: ranker 0.01156 vs fallback 0.00891  (333s)
+  train week 2020-08-12: 2,590,809 rows, pos rate 0.0113 (25s)
+  train week 2020-08-19: 2,701,693 rows, pos rate 0.0111 (31s)
+  train week 2020-08-26: 3,087,432 rows, pos rate 0.0109 (44s)
+  train week 2020-09-02: 2,922,356 rows, pos rate 0.0111 (28s)
+2020-09-09: baseline 0.02524  ranker 0.03566  new: ranker 0.00864 vs fallback 0.00830  (309s)
+baseline_repeat+pop_age.map@12 {'mean': 0.02315, 'std': 0.00199}
+baseline_repeat+pop_age.map@12_returning {'mean': 0.02432, 'std': 0.00217}
+baseline_repeat+pop_age.map@12_new_customers {'mean': 0.00847, 'std': 0.00046}
+ranker.map@12 {'mean': 0.03298, 'std': 0.00325}
+ranker.map@12_returning {'mean': 0.03492, 'std': 0.00341}
+ranker.map@12_new_customers {'mean': 0.00837, 'std': 0.00273}
+ranker+new_customer_fallback.map@12 {'mean': 0.03298, 'std': 0.00312}
+ranker+new_customer_fallback.map@12_returning {'mean': 0.03492, 'std': 0.00341}
+ranker+new_customer_fallback.map@12_new_customers {'mean': 0.00847, 'std': 0.00046}
+ranker_relative_lift {'mean': 0.42385, 'std': 0.04936, 'per_week': [0.3619651394109771, 0.4416620483606595, 0.4789977610691423, 0.41278600494351636]}
+fallback_minus_ranker_new_customers {'mean': 0.0001, 'per_week': [0.0030142736482978803, 0.0003726795216493755, -0.002647641287633423, -0.0003408600995833018], 'weeks_fallback_better': 2}
+     1201.74 real      4189.01 user       416.49 sys
+          7964950528  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            97271008  page reclaims
+                2456  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  22  messages sent
+                  60  messages received
+                   0  signals received
+              752813  voluntary context switches
+            16861489  involuntary context switches
+      27308549681224  instructions retired
+      11743953691023  cycles elapsed
+         21798705088  peak memory footprint

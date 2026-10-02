@@ -1,0 +1,9 @@
+training on label weeks ['2020-08-26', '2020-09-02', '2020-09-09', '2020-09-16'] for 2020-09-23..2020-09-29
+  train week 2020-08-26: 2,629,530 rows, pos rate 0.0182 (retrieval 14s, features 7s)
+  train week 2020-09-02: 2,511,704 rows, pos rate 0.0182 (retrieval 14s, features 9s)
+  train week 2020-09-09: 2,321,315 rows, pos rate 0.0182 (retrieval 12s, features 7s)
+  train week 2020-09-16: 2,260,791 rows, pos rate 0.0190 (retrieval 12s, features 7s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  customers 0–100,000 ranked (205s)

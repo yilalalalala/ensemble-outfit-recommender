@@ -1,0 +1,483 @@
+{
+  "metrics": {
+    "map@12": 0.035817825023788656,
+    "map@12_returning": 0.038017912148482574,
+    "map@12_new_customers": 0.008648482188642847,
+    "recall@12": 0.0573120968803475,
+    "recall@12_cold_items": 0.0,
+    "n_customers": 72019,
+    "share_new_customers": 0.07491078743109457,
+    "share_purchases_cold_items": 0.04995392918257207,
+    "map@12_by_rounds": {
+      "100": 0.03531455086960933,
+      "200": 0.03586463241364758,
+      "272": 0.035817825023788656
+    },
+    "n_trees": 272,
+    "train_rows": 11302290,
+    "train_build_seconds": 29.8,
+    "fit_seconds": 404.9,
+    "eval_retrieval_seconds": 3.1,
+    "eval_feature_seconds": 10.7,
+    "eval_score_seconds": 79.5,
+    "eval_candidates_per_customer": 115.90680237159638,
+    "train_seconds": 434.7,
+    "fit.best_iteration": 272,
+    "fit.early_stopping_metric": "map@12",
+    "fit.early_stopping_curve": [
+      0.116381,
+      0.176037,
+      0.180222,
+      0.182679,
+      0.184595,
+      0.186351,
+      0.186823,
+      0.187784,
+      0.187923,
+      0.188641,
+      0.188611,
+      0.188855,
+      0.188897,
+      0.188237
+    ],
+    "fit.best_score": 0.18905094300511383,
+    "fit.num_boost_round": 272
+  },
+  "importance": [
+    [
+      "ca_days_since_article",
+      0.11342961311196334
+    ],
+    [
+      "product_type_no",
+      0.08346737755090912
+    ],
+    [
+      "ca_wshare_prod",
+      0.08016697820692037
+    ],
+    [
+      "c_days_since_last",
+      0.053746973501913535
+    ],
+    [
+      "colour_group_code",
+      0.03989234494062987
+    ],
+    [
+      "a_n_3d",
+      0.03753284914891122
+    ],
+    [
+      "a_n_1d",
+      0.032796011095350235
+    ],
+    [
+      "ca_w_article",
+      0.02765765823045646
+    ],
+    [
+      "cf_rank",
+      0.026769500078844592
+    ],
+    [
+      "a_n_1w",
+      0.026508829033607226
+    ],
+    [
+      "garment_group_no",
+      0.024808924004305146
+    ],
+    [
+      "ca_wshare_dept",
+      0.021452190127583416
+    ],
+    [
+      "a_days_since_first_sale",
+      0.019746204852178748
+    ],
+    [
+      "a_online_share_4w",
+      0.01882445318455272
+    ],
+    [
+      "ca_days_since_dept",
+      0.018776527455402776
+    ],
+    [
+      "repeat_rank",
+      0.01797064233075893
+    ],
+    [
+      "cf_score",
+      0.017200881926477313
+    ],
+    [
+      "c_online_share_life",
+      0.016499461105487098
+    ],
+    [
+      "section_no",
+      0.01556887557811063
+    ],
+    [
+      "a_trend_1w_4w",
+      0.014309957995018252
+    ],
+    [
+      "ca_price_ratio",
+      0.014278958398620192
+    ],
+    [
+      "ca_share_prod_life",
+      0.013533925794349158
+    ],
+    [
+      "ca_age_gap",
+      0.012433352757043648
+    ],
+    [
+      "ca_wshare_colour",
+      0.012071031994278628
+    ],
+    [
+      "ca_w_prod",
+      0.01084756363602384
+    ],
+    [
+      "age",
+      0.010009519385288278
+    ],
+    [
+      "ca_n_article_life",
+      0.009782304774676454
+    ],
+    [
+      "pop_age_score",
+      0.009752322358503148
+    ],
+    [
+      "c_mean_price_life",
+      0.009340664663154323
+    ],
+    [
+      "graphical_appearance_no",
+      0.009038292153859642
+    ],
+    [
+      "ca_share_colour_life",
+      0.008805058061003125
+    ],
+    [
+      "a_trend_3d_1w",
+      0.008105819255484937
+    ],
+    [
+      "a_buyer_age_std_4w",
+      0.007990905563309388
+    ],
+    [
+      "ca_share_igroup_life",
+      0.007516867235726242
+    ],
+    [
+      "c_n_tx_4w",
+      0.00701175450377463
+    ],
+    [
+      "c_n_tx_1w",
+      0.006956860294615619
+    ],
+    [
+      "a_n_life",
+      0.006491370311261906
+    ],
+    [
+      "ca_days_since_type",
+      0.006023025686138811
+    ],
+    [
+      "a_buyer_age_4w",
+      0.005949013501792256
+    ],
+    [
+      "ca_share_type_life",
+      0.005846113875029987
+    ],
+    [
+      "a_n_4w",
+      0.005843136734034526
+    ],
+    [
+      "pop_age_rank",
+      0.005723977575440424
+    ],
+    [
+      "repeat_score",
+      0.005505276213877942
+    ],
+    [
+      "department_no",
+      0.0054109396684347355
+    ],
+    [
+      "a_mean_price_4w",
+      0.004955184813307521
+    ],
+    [
+      "a_n_12w",
+      0.004505526270837096
+    ],
+    [
+      "a_price_change_1w_4w",
+      0.004500114712975465
+    ],
+    [
+      "ca_share_ggroup_life",
+      0.004300743155554772
+    ],
+    [
+      "variant_rank",
+      0.004112373644575903
+    ],
+    [
+      "c_mean_price_12w",
+      0.0038749477773244536
+    ],
+    [
+      "ca_n_prod_life",
+      0.003837866892841268
+    ],
+    [
+      "a_mean_price_1w",
+      0.003776795351429669
+    ],
+    [
+      "a_mean_price_life",
+      0.003633904386630704
+    ],
+    [
+      "ca_w_colour",
+      0.0034962995966981098
+    ],
+    [
+      "n_channels",
+      0.0034143651083476476
+    ],
+    [
+      "c_n_days_life",
+      0.003190504533268715
+    ],
+    [
+      "c_n_tx_12w",
+      0.00303058355402955
+    ],
+    [
+      "ca_w_type",
+      0.0028602769312143623
+    ],
+    [
+      "ca_wshare_type",
+      0.0025831182902863407
+    ],
+    [
+      "ca_wshare_ggroup",
+      0.0025196420086557227
+    ],
+    [
+      "variant_score",
+      0.002438355918131488
+    ],
+    [
+      "ca_n_type_life",
+      0.0024089042122468996
+    ],
+    [
+      "ca_w_ggroup",
+      0.002403450798343688
+    ],
+    [
+      "ca_wshare_igroup",
+      0.0022640395759096405
+    ],
+    [
+      "new_arrival_score",
+      0.0021667203148923427
+    ],
+    [
+      "pop_score",
+      0.0021205025282419027
+    ],
+    [
+      "ca_n_igroup_life",
+      0.0020798819289504504
+    ],
+    [
+      "c_n_tx_life",
+      0.0018610620319462526
+    ],
+    [
+      "ca_n_ggroup_life",
+      0.0018108275636783777
+    ],
+    [
+      "ca_n_colour_life",
+      0.001736509199781309
+    ],
+    [
+      "ca_w_igroup",
+      0.001614363749985425
+    ],
+    [
+      "product_group",
+      0.0015311476292614553
+    ],
+    [
+      "c_tenure_days",
+      0.0013650274573898701
+    ],
+    [
+      "pop_rank",
+      0.0010903440059985947
+    ],
+    [
+      "index_group_no",
+      0.0009644671233184804
+    ],
+    [
+      "a_days_since_last_sale",
+      0.0006678988768160342
+    ],
+    [
+      "perceived_colour_value_id",
+      0.0005758561549832923
+    ],
+    [
+      "new_arrival_rank",
+      0.0004101055971946358
+    ],
+    [
+      "news_freq",
+      0.00019178570471344313
+    ],
+    [
+      "club_status",
+      0.000126029083722006
+    ],
+    [
+      "FN",
+      0.00011064703094840641
+    ],
+    [
+      "Active",
+      7.551863046587084e-05
+    ]
+  ],
+  "manifest": {
+    "git_commit": "7b5dd2407210813419fd99e47fb8d7b648235b4e",
+    "git_dirty": true,
+    "config_name": "default",
+    "config_sha1": "3eb368495eae",
+    "data_fingerprint": {
+      "rows": 31788324,
+      "min_date": "2018-09-20",
+      "max_date": "2020-09-22",
+      "article_id_sum": "22131896419443968"
+    },
+    "vocab_version": "7eb9767dd2",
+    "feature_schema": [
+      "repeat_score",
+      "repeat_rank",
+      "pop_score",
+      "pop_rank",
+      "pop_age_score",
+      "pop_age_rank",
+      "new_arrival_score",
+      "new_arrival_rank",
+      "cf_score",
+      "cf_rank",
+      "variant_score",
+      "variant_rank",
+      "n_channels",
+      "age",
+      "club_status",
+      "news_freq",
+      "FN",
+      "Active",
+      "c_n_tx_life",
+      "c_n_tx_1w",
+      "c_n_tx_4w",
+      "c_n_tx_12w",
+      "c_n_days_life",
+      "c_days_since_last",
+      "c_tenure_days",
+      "c_mean_price_life",
+      "c_mean_price_12w",
+      "c_online_share_life",
+      "product_type_no",
+      "product_group",
+      "graphical_appearance_no",
+      "colour_group_code",
+      "perceived_colour_value_id",
+      "department_no",
+      "index_group_no",
+      "garment_group_no",
+      "section_no",
+      "a_n_1w",
+      "a_n_4w",
+      "a_n_12w",
+      "a_n_life",
+      "a_days_since_first_sale",
+      "a_days_since_last_sale",
+      "a_mean_price_4w",
+      "a_mean_price_life",
+      "a_online_share_4w",
+      "a_n_1d",
+      "a_n_3d",
+      "a_mean_price_1w",
+      "a_trend_1w_4w",
+      "a_trend_3d_1w",
+      "a_price_change_1w_4w",
+      "a_buyer_age_4w",
+      "a_buyer_age_std_4w",
+      "ca_n_article_life",
+      "ca_days_since_article",
+      "ca_n_prod_life",
+      "ca_share_prod_life",
+      "ca_n_type_life",
+      "ca_share_type_life",
+      "ca_n_colour_life",
+      "ca_share_colour_life",
+      "ca_n_igroup_life",
+      "ca_share_igroup_life",
+      "ca_n_ggroup_life",
+      "ca_share_ggroup_life",
+      "ca_w_prod",
+      "ca_wshare_prod",
+      "ca_w_type",
+      "ca_wshare_type",
+      "ca_w_colour",
+      "ca_wshare_colour",
+      "ca_w_igroup",
+      "ca_wshare_igroup",
+      "ca_w_ggroup",
+      "ca_wshare_ggroup",
+      "ca_days_since_type",
+      "ca_days_since_dept",
+      "ca_wshare_dept",
+      "ca_w_article",
+      "ca_price_ratio",
+      "ca_age_gap"
+    ],
+    "feature_schema_sha1": "c1e33559494a",
+    "lightgbm": "4.7.0",
+    "mode": "val",
+    "train_weeks": [
+      "2020-08-12",
+      "2020-08-19",
+      "2020-08-26",
+      "2020-09-02"
+    ],
+    "target_week": "2020-09-09"
+  }
+}

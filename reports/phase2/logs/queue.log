@@ -1,0 +1,33 @@
+20:50:30 start val default
+20:59:26 done val default exit=0
+20:59:26 start val p2_infra_nogroups
+21:07:40 done val p2_infra_nogroups exit=0
+21:07:40 start val p2_b160_noals
+21:22:36 done val p2_b160_noals exit=0
+21:26:09 start val p2_b116
+21:36:47 done val p2_b116 exit=0
+21:36:47 start val p2_b200_noals
+21:57:41 cancelled val p2_b250_noals (memory: ~13GB training matrix on a 16GB machine)
+22:08:53 done val p2_b200_noals
+22:08:53 start val p2_b160_neg50
+22:09:05 done val p2_b160_neg50 exit=0
+22:09:05 start val p2_b160_xendcg
+22:25:44 done val p2_b160_xendcg exit=0
+22:25:44 start val p2_b160_neg50_w6
+22:40:37 done val p2_b160_neg50_w6 exit=0
+22:40:48 start val p2_b160_neg50
+22:41:40 start backtest p2_b116
+22:45:23 aborted backtest p2_b116 (started concurrently by mistake; restarted later)
+22:56:37 done val p2_b160_neg50 exit=0
+22:56:56 done val p2_b160_neg50 (rerun)
+22:56:56 start backtest p2_b116
+00:09:15 done backtest p2_b116
+00:09:15 start backtest p2_b160_neg50
+01:06:48 done backtest p2_b160_neg50 exit=0
+01:06:48 start backtest p2_b160_neg50_nogroups
+01:55:27 done backtest p2_b160_neg50_nogroups exit=0
+01:55:48 start frozen-snapshot backtest (AP dump)
+02:18:08 done frozen-snapshot backtest exit=0
+02:19:46 FINAL TEST WEEK RUN (single touch) start
+02:33:14 FINAL TEST WEEK RUN done
+02:34:03 start submission (predict.py)

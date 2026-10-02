@@ -1,0 +1,12 @@
+2020-09-16: merged recall=0.2009 cand/cust=156.6 (12.3s)
+repeat            recall=0.0277  cand/cust=   7.7  precision=0.0112  unique=0.0113
+pop               recall=0.0119  cand/cust=   5.0  precision=0.0074  unique=0.0001
+pop_age           recall=0.0882  cand/cust=  65.0  precision=0.0042  unique=0.0315
+cf                recall=0.0128  cand/cust=   3.8  precision=0.0105  unique=0.0002
+variant           recall=0.0346  cand/cust=  16.6  precision=0.0064  unique=0.0104
+dept_pop          recall=0.0642  cand/cust=  36.5  precision=0.0055  unique=0.0130
+section_pop       recall=0.0912  cand/cust=  58.5  precision=0.0048  unique=0.0161
+covis             recall=0.0449  cand/cust=  21.2  precision=0.0066  unique=0.0090
+new_arrival_pers  recall=0.0098  cand/cust=   9.0  precision=0.0034  unique=0.0053
+merged            recall=0.2009  cand/cust= 156.6  precision=0.0040  unique=nan
+segments {"returning": {"recall": 0.21061904786014085, "share_of_truth": 0.924132542296751}, "new_customers": {"recall": 0.08294788775824853, "share_of_truth": 0.07586745770324899}, "cold_items": {"recall": 0.0, "share_of_truth": 0.03899348704895943}, "recent_items": {"recall": 0.25244737070085765, "share_of_truth": 0.32404738733343313}}

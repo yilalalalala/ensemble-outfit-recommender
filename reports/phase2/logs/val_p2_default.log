@@ -1,0 +1,32 @@
+  train week 2020-08-12: 2,590,809 rows, pos rate 0.0113 (retrieval 3s, features 4s)
+  train week 2020-08-19: 2,701,694 rows, pos rate 0.0111 (retrieval 2s, features 4s)
+  train week 2020-08-26: 3,087,433 rows, pos rate 0.0109 (retrieval 3s, features 6s)
+  train week 2020-09-02: 2,922,354 rows, pos rate 0.0111 (retrieval 3s, features 5s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+val: MAP@12=0.03582 returning=0.03802 new=0.00865 recall@12=0.0573 trees=272 (434.7s train)
+top features: [('ca_days_since_article', 0.113), ('product_type_no', 0.083), ('ca_wshare_prod', 0.08), ('c_days_since_last', 0.054), ('colour_group_code', 0.04), ('a_n_3d', 0.038), ('a_n_1d', 0.033), ('ca_w_article', 0.028), ('cf_rank', 0.027), ('a_n_1w', 0.027), ('garment_group_no', 0.025), ('ca_wshare_dept', 0.021), ('a_days_since_first_sale', 0.02), ('a_online_share_4w', 0.019), ('ca_days_since_dept', 0.019)]
+      535.46 real      3171.22 user        75.89 sys
+          4450107392  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            10130945  page reclaims
+                3586  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  19  messages sent
+                  43  messages received
+                   0  signals received
+               29072  voluntary context switches
+             6124835  involuntary context switches
+      16840398227053  instructions retired
+       9284236238248  cycles elapsed
+         11849082744  peak memory footprint

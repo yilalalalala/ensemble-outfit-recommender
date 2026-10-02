@@ -1,0 +1,67 @@
+  train week 2020-07-22: 3,108,017 rows, pos rate 0.0114 (retrieval 5s, features 5s)
+  train week 2020-07-29: 3,070,762 rows, pos rate 0.0113 (retrieval 7s, features 5s)
+  train week 2020-08-05: 2,868,058 rows, pos rate 0.0116 (retrieval 5s, features 5s)
+  train week 2020-08-12: 2,766,821 rows, pos rate 0.0119 (retrieval 5s, features 4s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+2020-08-19: baseline 0.02226  ranker 0.03285  retrieval recall 0.1467 @ 118.3  new: ranker 0.00645 vs fallback 0.00790  (2224s)
+  train week 2020-07-29: 3,070,763 rows, pos rate 0.0113 (retrieval 9s, features 7s)
+  train week 2020-08-05: 2,868,061 rows, pos rate 0.0116 (retrieval 13s, features 7s)
+  train week 2020-08-12: 2,766,820 rows, pos rate 0.0119 (retrieval 7s, features 5s)
+  train week 2020-08-19: 2,900,962 rows, pos rate 0.0117 (retrieval 7s, features 6s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+2020-08-26: baseline 0.02083  ranker 0.03298  retrieval recall 0.1580 @ 116.5  new: ranker 0.01069 vs fallback 0.00878  (625s)
+  train week 2020-08-05: 2,868,061 rows, pos rate 0.0116 (retrieval 8s, features 9s)
+  train week 2020-08-12: 2,766,820 rows, pos rate 0.0119 (retrieval 9s, features 6s)
+  train week 2020-08-19: 2,900,962 rows, pos rate 0.0117 (retrieval 8s, features 7s)
+  train week 2020-08-26: 3,386,657 rows, pos rate 0.0119 (retrieval 9s, features 8s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+2020-09-02: baseline 0.02429  ranker 0.03756  retrieval recall 0.1613 @ 116.2  new: ranker 0.01268 vs fallback 0.00891  (840s)
+  train week 2020-08-12: 2,766,820 rows, pos rate 0.0119 (retrieval 7s, features 7s)
+  train week 2020-08-19: 2,900,962 rows, pos rate 0.0117 (retrieval 9s, features 6s)
+  train week 2020-08-26: 3,386,658 rows, pos rate 0.0119 (retrieval 8s, features 8s)
+  train week 2020-09-02: 3,218,457 rows, pos rate 0.0119 (retrieval 7s, features 8s)
+2020-09-09: baseline 0.02524  ranker 0.03750  retrieval recall 0.1564 @ 116.3  new: ranker 0.01012 vs fallback 0.00830  (639s)
+baseline_repeat+pop_age.map@12 {'mean': 0.02315, 'std': 0.00199}
+baseline_repeat+pop_age.map@12_returning {'mean': 0.02432, 'std': 0.00217}
+baseline_repeat+pop_age.map@12_new_customers {'mean': 0.00847, 'std': 0.00046}
+baseline_repeat+pop_age.recall@12 {'mean': 0.03736, 'std': 0.00211}
+baseline_repeat+pop_age.recall@12_cold_items {'mean': 0.0, 'std': 0.0}
+ranker.map@12 {'mean': 0.03522, 'std': 0.00266}
+ranker.map@12_returning {'mean': 0.03722, 'std': 0.00281}
+ranker.map@12_new_customers {'mean': 0.00999, 'std': 0.0026}
+ranker.recall@12 {'mean': 0.06039, 'std': 0.00202}
+ranker.recall@12_cold_items {'mean': 0.0, 'std': 0.0}
+ranker+new_customer_fallback.map@12 {'mean': 0.03511, 'std': 0.00255}
+ranker+new_customer_fallback.map@12_returning {'mean': 0.03722, 'std': 0.00281}
+ranker+new_customer_fallback.map@12_new_customers {'mean': 0.00847, 'std': 0.00046}
+ranker+new_customer_fallback.recall@12 {'mean': 0.06018, 'std': 0.00195}
+ranker+new_customer_fallback.recall@12_cold_items {'mean': 0.0, 'std': 0.0}
+retrieval.recall {'mean': 0.15562, 'std': 0.00627}
+retrieval.candidates_per_customer {'mean': 116.85551, 'std': 1.00333}
+ranker_relative_lift {'mean': 0.52293, 'std': 0.05119, 'per_week': [0.47588644750604486, 0.5836726354603329, 0.5466201278062864, 0.4855382345386155]}
+fallback_minus_ranker_new_customers {'mean': -0.00151, 'per_week': [0.0014533843780060347, -0.0019155333789108407, -0.0037694951246334436, -0.0018249780910879893], 'weeks_fallback_better': 1}
+seconds_per_week {'mean': 1082, 'std': 767.64271}
+     4330.51 real     17508.32 user       412.40 sys
+          7098155008  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            42737687  page reclaims
+                4598  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  19  messages sent
+                  43  messages received
+                   0  signals received
+               27003  voluntary context switches
+            22291041  involuntary context switches
+      69338756759400  instructions retired
+      36312632091504  cycles elapsed
+         14328607224  peak memory footprint

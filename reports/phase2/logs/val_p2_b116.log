@@ -1,0 +1,28 @@
+  train week 2020-08-12: 2,766,820 rows, pos rate 0.0119 (retrieval 6s, features 5s)
+  train week 2020-08-19: 2,900,962 rows, pos rate 0.0117 (retrieval 6s, features 7s)
+  train week 2020-08-26: 3,386,658 rows, pos rate 0.0119 (retrieval 6s, features 8s)
+  train week 2020-09-02: 3,218,453 rows, pos rate 0.0119 (retrieval 10s, features 10s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+val: MAP@12=0.03736 returning=0.03953 new=0.01053 recall@12=0.0621 trees=259 (531.3s train)
+top features: [('product_type_no', 0.096), ('ca_days_since_article', 0.089), ('ca_wshare_prod', 0.083), ('a_days_since_first_sale', 0.06), ('c_days_since_last', 0.054), ('ca_w_prod', 0.052), ('colour_group_code', 0.045), ('a_online_share_4w', 0.028), ('garment_group_no', 0.024), ('covis_rank', 0.022), ('a_n_1d', 0.022), ('ca_w_article', 0.022), ('c_online_share_life', 0.02), ('c_n_tx_1w', 0.019), ('ca_days_since_dept', 0.018)]
+      638.52 real      3708.18 user        98.05 sys
+          4843323392  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            12553879  page reclaims
+                3024  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  19  messages sent
+                  43  messages received
+                   0  signals received
+               56178  voluntary context switches
+             6467287  involuntary context switches
+      17818301104129  instructions retired
+       9607793560612  cycles elapsed
+         13081259120  peak memory footprint

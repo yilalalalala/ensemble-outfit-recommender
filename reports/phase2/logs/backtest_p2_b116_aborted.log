@@ -1,0 +1,6 @@
+  train week 2020-07-22: 3,108,018 rows, pos rate 0.0114 (retrieval 13s, features 8s)
+  train week 2020-07-29: 3,070,762 rows, pos rate 0.0113 (retrieval 13s, features 13s)
+  train week 2020-08-05: 2,868,058 rows, pos rate 0.0116 (retrieval 17s, features 12s)
+  train week 2020-08-12: 2,766,820 rows, pos rate 0.0119 (retrieval 11s, features 11s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
