@@ -117,7 +117,8 @@ def run(names: list[str], policies: dict | None = None) -> dict:
         out[name] = res
     d = cfg.path("reports") / "phase2"
     d.mkdir(exist_ok=True)
-    (d / "rerank.json").write_text(json.dumps(out, indent=2))
+    stem = names[0].rsplit("_20", 1)[0] if len(names) > 1 else names[0]
+    (d / f"rerank_{stem}.json").write_text(json.dumps(out, indent=2))
     return out
 
 

@@ -125,8 +125,7 @@ def run(mode: str = "val", n_weeks: int = 4, tag: str | None = None) -> dict:
         print(f"{ch:17s} recall={m['recall']:.4f}  cand/cust={m['candidates_per_customer']:6.1f}  "
               f"precision={m['precision']:.4f}  unique={m.get('unique_recall', float('nan')):.4f}")
     print("segments", json.dumps(rep["segments"]))
-    tag = tag or ("" if mode != "backtest" else f"_backtest{n_weeks}")
-    name = f"m2_retrieval_{mode if mode != 'backtest' else 'val'}{tag}"
+    name = f"m2_retrieval_{mode}" + (str(n_weeks) if mode == "backtest" else "") + (tag or "")
     with tracking.run("track_a", f"m2/retrieval/{mode}", dict(cfg.retrieval)):
         for ch, m in rep.items():
             if isinstance(m, dict) and "recall" in m:

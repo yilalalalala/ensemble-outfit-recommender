@@ -608,3 +608,135 @@ background and a watermark, unlike H&M images, which can make the full-gallery n
    and the snap flow (text → image rerank, "find something like this").
 3. Background removal hurts in every evaluation (DeepFashion2, judged relevance, exact match).
 4. Jewellery exact match (n = 6): R@10 0.17 raw vs 0.50 with the adapter. Directional only.
+
+---
+
+### D-027 — Track A retrieval: channel contract and a frontier-chosen candidate budget
+**Date:** 2026-10-02 · **Status:** active
+
+**Context.** Merged candidate recall was 13.06% at 115.9 candidates/customer on the
+validation week (13.2% ± 0.3% over 4 weeks), and 92.7% of purchased articles had sold
+in the 7 days before the cutoff. The ceiling was personalisation over ~19k live
+articles, not more global popularity.
+
+**Decision.**
+1. Every channel obeys one contract, `(customer_idx, article_id, score)`, with
+   deterministic ties (score rounded to 9 decimals, then `article_id`) and per-channel caps;
+   per-channel score and rank stay as provenance and ranker features.
+2. New channels: department- and section-conditioned popularity (affinity × sales, age-banded),
+   directional time-weighted co-visitation (seeds from 52 weeks), colourway variants seeded
+   from 104 weeks, personalised new arrivals (launch proxy × department affinity), fine
+   (10-band) age popularity.
+3. Caps come from a greedy recall-per-candidate allocator on the three weeks before
+   validation (25% customer sample; `ensemble.candidates.budget`), then are confirmed on the
+   full validation week, which the allocator never saw.
+4. Operating point: **~160 candidates/customer**:
+   `repeat 10, pop 5, pop_age 65, cf 5, variant 20, dept_pop 40, section_pop 65, covis 25, new_arrival_pers 10`.
+
+**Evidence (validation week unless stated).**
+
+| candidates/customer | merged recall | ranker MAP@12 (same ranker) | training time |
+| ---: | ---: | ---: | ---: |
+| 115.9 (old channel mix) | 13.06% | 0.03582 | 435 s |
+| 116.3 (frontier) | 15.64% | 0.03736 (+4.3% [+3.1, +5.5]) | 531 s |
+| 159.7 (frontier) | 18.58% | 0.03743 | 730 s |
+| 200.7 (frontier) | 21.03% | 0.03724 | 1,594 s (swapping) |
+
+4-week backtest: recall 15.56% ± 0.63% at 116 and **18.41% ± 0.94% at 160**; MAP@12 at
+160 (with 50% negative downsampling, D-028) beat 116 by +0.55% [+0.14, +0.98] pooled, and
+in every week.
+
+**Rejected.**
+- *Implicit ALS channel:* +0.06 pt recall at 160 for +75 s per week (single-threaded fit);
+  the allocator gave it ≤ 5 slots.
+- *FashionCLIP visual channel:* the allocator gave it no budget at any target (D-023 stands).
+- *Global new arrivals, more repeat depth (all history), cosine CF beyond 5:* below the
+  frontier's marginal recall per candidate.
+- *Budgets ≥ 200:* recall keeps rising (21–26%) but MAP@12 does not, and the training
+  matrix exceeds 16 GB RAM.
+
+**Known gap.** Item cold start (first sale inside the label week, ~5% of purchases) stays
+at 0% recall: no channel may read the label week, and the dataset has no launch calendar.
+
+**Revisit if:** the ranker gains features that convert recall above 160 into MAP, memory
+grows, or a launch calendar becomes available.
+
+---
+
+### D-028 — Ranker training: temporal early stopping, seeds, vocabularies, downsampled negatives
+**Date:** 2026-10-02 · **Status:** active
+
+**Decision.**
+- Number of trees from early stopping on the **most recent training week** (MAP@12),
+  then a refit on all training weeks with that count. The validation/test week is never
+  used to pick trees. The old diagnostic reported a "300-round" MAP from a 200-tree model;
+  it now evaluates only trees that exist.
+- LightGBM `seed`, `deterministic`, `force_col_wise`; stable row order; ties in the
+  predicted score break on `article_id`. Two fits on the same data give identical predictions
+  (test).
+- Stable, versioned vocabularies (`data/processed/vocab/vocab.json`, version hash in the run
+  manifest) replace `hash(value) % N`; NULL → 0, unseen → missing.
+- Lifetime features are suffixed `_life`; new groups `recency_affinity` (recency-weighted
+  customer × article / style / type / colour / index group / garment group / department
+  affinities, days since last purchase in the type and department) and `short_velocity`
+  (1- and 3-day sales, 3-day trend, 1-week vs 4-week price change).
+- **50% deterministic negative downsampling** in training weeks.
+- LambdaRank stays: it is an NDCG-based surrogate; MAP@12 is the reported metric.
+
+**Evidence.**
+- Feature groups: +0.56% [−0.29, +1.41] on validation with the old retrieval (n.s.), but
+  **+3.39% [+2.93, +3.89] pooled over the 4-week backtest at 160 candidates**, positive every week.
+- Negative downsampling at 160: validation 0.03772 vs 0.03743 with all negatives, half the
+  training rows (9.5M vs 18.8M).
+- Infrastructure alone (seeds, early stopping, vocabularies; no new features): 0.03562 vs
+  0.03555 frozen; neutral, as intended.
+
+**Rejected.**
+- `rank_xendcg` objective: −2.61% [−3.63, −1.59] vs LambdaRank on validation.
+- 6 training weeks (with 50% negatives): 0.03762 vs 0.03772 for 4 weeks; no gain for +50% data.
+
+**Cost.** Training is slower than before: early stopping plus refit fit ~2.3× the trees,
+and `deterministic` adds overhead (≈ 10–14 min per week at 160 candidates vs ≈ 4.5 min
+before at 116).
+
+---
+
+### D-029 — Re-ranking stage: availability proxy on, diversity caps off by default
+**Date:** 2026-10-02 · **Status:** active
+
+**Decision.** After the ranker, drop articles whose last observed sale is more than
+28 days before the cutoff (*availability proxy*, no stock feed exists; reads only
+pre-cutoff sales). Diversity caps (colourways per style, items per product type) are
+implemented and reported but not applied by default.
+
+**Evidence (4-week backtest, chosen model; validation agrees).** The 28-day rule leaves
+MAP@12 unchanged in every week (e.g. 0.03289 → 0.03289) while removing likely
+unavailable articles; 14 days is also neutral but cuts coverage more. Diversity costs accuracy in every week:
+max 2 colourways per style −2.4% to −2.9%, max 4 items per product type −1.5% to −1.8%,
+max 1 colourway per style −9% to −11%; they raise distinct product types per list from
+5.1–5.5 to 5.5–6.8 (`reports/phase2/rerank_backtest_p2_b160_neg50.json`).
+
+**Revisit if:** a stock feed exists (replace the proxy), or an online test values
+diversity above the offline MAP cost.
+
+---
+
+### D-030 — Reason chips need evidence, not only SHAP attribution
+**Date:** 2026-10-02 · **Status:** active
+
+**Decision.** A reason is shown only if its features push the score up (positive summed
+SHAP) **and** the raw feature values support the sentence (e.g. "You bought this before"
+needs `ca_n_article_life ≥ 1`; "in another colour" needs a purchase of a *different*
+article of the same style). Every reason carries an evidence type: `personal_history`,
+`similarity` or `trending`. New-customer chips are derived from evidence (age-band or
+global best seller), not a fixed label.
+
+**Evidence.** Audit on 36,000 validation recommendations (3,000 customers) of the chosen
+model: **16.2% of SHAP-only chips were unsupported** by the data: "New arrival" 39%,
+"In your usual price range" 31%, "A style you bought, in another colour" 30%, "Trending"
+27%, "In a colour you often choose" 13%. With the gate, every chip is supported and 99.74%
+of recommendations still carry one (`reports/phase2/explain_audit.json`; the
+baseline-retrieval model gave 14.2%).
+
+**Note.** SHAP is model attribution, not causation; the gate makes chips truthful
+statements about the data, not claims about why a customer buys.
