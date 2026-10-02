@@ -29,24 +29,25 @@ retrieval:
   # channel contributes its top <name>_k candidates per customer; ties break on
   # article_id. Caps are chosen on the recall / size frontier
   # (python -m ensemble.candidates.budget, reports/phase2/budget_frontier.json).
-  channels: [repeat, pop, pop_age, new_arrival, cf, variant]
+  # Phase 2 operating point (D-027): ~160 candidates/customer from the budget frontier.
+  channels: [repeat, pop, pop_age, cf, variant, dept_pop, section_pop, covis, new_arrival_pers]
   repeat_weeks: 52       # repeat purchase: customer's own articles in this window
-  repeat_k: 50
+  repeat_k: 10
   pop_days: 7            # popularity window
   pop_metric: count      # count | decay | 1d | 3d | 14d | 28d (see _sales in retrieval.py)
   pop_half_life_days: 7  # for pop_metric: decay
-  pop_k: 40
-  pop_age_k: 30
-  pop_age_age_bins: coarse   # coarse = the 4 M1 baseline bands; fine = 10 bands
+  pop_k: 5
+  pop_age_k: 65
+  pop_age_age_bins: fine     # coarse = the 4 M1 baseline bands; fine = 10 bands
   new_arrival_days: 7    # launch proxy: first observed sale within this many days
-  new_arrival_k: 10
+  new_arrival_k: 10      # (disabled: the allocator gave it no budget at 160)
   cf_weeks: 8            # item-to-item co-purchase window
   cf_recent_items: 30    # most recent distinct items per customer used to build pairs
   cf_neighbors: 50       # neighbours kept per article
   cf_min_count: 3
   cf_seed_weeks: 16      # a customer's items from this window seed CF
-  cf_k: 50
-  variant_seed_weeks: 16 # a customer's items from this window seed other colourways
+  cf_k: 5
+  variant_seed_weeks: 104 # a customer's items from this window seed other colourways
   variant_sales: count   # rank variants by sales in: count (pop_days) | 14d | 28d
   variant_k: 20
   # Category-conditioned popularity (_affinity_pop): <name>_key in
@@ -56,13 +57,13 @@ retrieval:
   dept_pop_types: 5
   dept_pop_items: 30
   dept_pop_by_age: true
-  dept_pop_k: 0
+  dept_pop_k: 40
   section_pop_key: section_no
   section_pop_weeks: 104
   section_pop_types: 5
   section_pop_items: 30
   section_pop_by_age: true
-  section_pop_k: 0
+  section_pop_k: 65
   type_pop_key: product_type_no
   type_pop_weeks: 52
   type_pop_types: 5
@@ -75,7 +76,7 @@ retrieval:
   covis_min_count: 3
   covis_neighbors: 50
   covis_seed_weeks: 52
-  covis_k: 0
+  covis_k: 25
   # Implicit ALS (fitted in a subprocess, cached in data/interim/als)
   als_weeks: 26
   als_factors: 64
@@ -86,13 +87,13 @@ retrieval:
   als_recency: true
   als_seed: 42
   als_pool_days: 7
-  als_k: 0
+  als_k: 0               # rejected (D-027): +0.06 pt recall for +75 s per week
   # Personalised new arrivals: launch-proxy articles in the customer's departments
   new_arrival_pers_weeks: 104
   new_arrival_pers_types: 5
   new_arrival_pers_items: 20
-  new_arrival_pers_k: 0
-  visual_k: 20           # FashionCLIP channel (M7a, D-023)
+  new_arrival_pers_k: 10
+  visual_k: 20           # FashionCLIP channel (M7a, D-023); allocator gave it no budget
   visual_pool_days: 14
   visual_profile_items: 20
 
@@ -121,7 +122,7 @@ visual_adapter:
 ranker:
   train_weeks: 4           # label weeks preceding the evaluation week
   seed: 42                 # LightGBM seed (bagging, feature fraction); params also set deterministic
-  neg_sample_rate: 1.0     # share of negative candidates kept in training weeks (deterministic hash)
+  neg_sample_rate: 0.5     # share of negative candidates kept in training weeks (deterministic hash, D-028)
   # Number of trees: fit on the older training weeks, early-stop on the most recent
   # training week (MAP@12), then refit on all training weeks with the best count.
   early_stopping: {max_rounds: 1500, patience: 60, refit: true}
@@ -170,7 +171,7 @@ serving:
 rerank:
   # Re-ranking layer (src/ensemble/ranking/rerank.py), evaluated separately from the ranker.
   # The shipped policy is `serve`; the others are ablations reported in PHASE2_UPGRADE_REPORT.md.
-  serve: {}
+  serve: {max_days_since_last_sale: 28}   # availability proxy (D-029)
   policies:
     none: {}
     availability_28d: {max_days_since_last_sale: 28}
