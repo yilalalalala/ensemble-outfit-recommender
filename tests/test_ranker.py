@@ -28,20 +28,37 @@ def cfg_with(**ranker):
     return Config({**base, "ranker": r})
 
 
+def _in_subprocess(body: str) -> None:
+    """Run LightGBM training in a fresh interpreter: torch (imported by other test modules) and
+    LightGBM ship different OpenMP runtimes, and training after torch is loaded segfaults on macOS."""
+    import os
+    import subprocess
+    import sys
+    import textwrap
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    code = "import sys; sys.path[:0] = ['src', 'tests']; from test_ranker import *\n" + textwrap.dedent(body)
+    r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=600, cwd=root,
+                       env={**os.environ, "PYTHONPATH": str(root / "src")})
+    assert r.returncode == 0, r.stderr[-2000:]
+
+
 def test_early_stopping_uses_last_training_week_and_refits():
-    cfg = cfg_with(early_stopping={"max_rounds": 300, "patience": 10, "refit": True})
-    booster, features, info = fit(cfg, synthetic())
-    assert 1 <= info["best_iteration"] <= 300
-    assert booster.current_iteration() == info["num_boost_round"] == info["best_iteration"]
-    assert features == ["signal", "noise", "product_type_no"]
+    _in_subprocess("""
+        cfg = cfg_with(early_stopping={"max_rounds": 300, "patience": 10, "refit": True})
+        booster, features, info = fit(cfg, synthetic())
+        assert 1 <= info["best_iteration"] <= 300
+        assert booster.current_iteration() == info["num_boost_round"] == info["best_iteration"]
+        assert features == ["signal", "noise", "product_type_no"]
+    """)
 
 
 def test_fit_is_reproducible():
-    cfg = cfg_with(early_stopping={"max_rounds": 50, "patience": 10, "refit": True})
-    X = synthetic(seed=1).X[0]
-    p1 = fit(cfg, synthetic())[0].predict(X)
-    p2 = fit(cfg, synthetic())[0].predict(X)
-    assert np.array_equal(p1, p2)
+    _in_subprocess("""
+        cfg = cfg_with(early_stopping={"max_rounds": 50, "patience": 10, "refit": True})
+        X = synthetic(seed=1).X[0]
+        assert np.array_equal(fit(cfg, synthetic())[0].predict(X), fit(cfg, synthetic())[0].predict(X))
+    """)
 
 
 def test_top_k_breaks_ties_on_article_id():
