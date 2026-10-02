@@ -1,0 +1,4 @@
+# Phase 2 ablation: baseline retrieval, Phase A ranker infrastructure, no new feature groups.
+extends: default
+features:
+  groups: []
