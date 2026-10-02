@@ -1,0 +1,4 @@
+# Phase 2 ablation: p2_b160_neg50 without the recency_affinity / short_velocity feature groups.
+extends: experiments/p2_b160_neg50
+features:
+  groups: []

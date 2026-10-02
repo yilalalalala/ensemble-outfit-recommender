@@ -3,7 +3,8 @@
   python -m ensemble.ranking.predict
 
 Trains the M3 recipe on the ``train_weeks`` label weeks ending with the final
-week of data, then ranks every customer in ``sample_submission.csv`` in chunks.
+week of data, then ranks every customer in ``sample_submission.csv`` in chunks
+and applies the shipped re-ranking policy (``rerank.serve``, e.g. availability).
 Writes:
   reports/submission.csv                         Kaggle format, one row per customer
   data/processed/track_a_recs.parquet            top-12 per customer with scores
@@ -13,16 +14,16 @@ from __future__ import annotations
 import gc
 import time
 
-import numpy as np
 import pandas as pd
 
 from ensemble.baselines import customer_age_bins, fill, popular, popular_by_age
 from ensemble.config import load_config
 from ensemble.data.splits import load_splits
 from ensemble.db import connect
-from ensemble.ranking.train import score_frame, top_k, train, week_frame
+from ensemble.ranking.rerank import apply_rules
+from ensemble.ranking.train import RERANK_COLS, score_users, train
 
-CHUNK = 100_000
+CHUNK = 100_000          # customers per outer batch; score_users builds features 25k at a time
 
 
 def main() -> None:
@@ -40,20 +41,22 @@ def main() -> None:
     all_customers = con.execute("SELECT customer_idx FROM customers ORDER BY customer_idx").fetchnumpy()["customer_idx"]
     pop = popular(con, week)
     pop_age = popular_by_age(con, week)
+    articles = con.execute("SELECT article_id, product_code, product_type_no FROM articles").df().set_index("article_id")
     parts = []
     for i in range(0, len(all_customers), CHUNK):
         t = time.time()
         chunk = all_customers[i:i + CHUNK]
-        con.execute("CREATE OR REPLACE TEMP TABLE _chunk AS SELECT unnest(?::INTEGER[]) AS customer_idx", [chunk.tolist()])
-        df = week_frame(con, cfg, week, "SELECT customer_idx FROM _chunk", False, False)
-        ranked = top_k(score_frame(booster, features, df))
+        con.execute("CREATE OR REPLACE TEMP TABLE _pred_chunk AS SELECT unnest(?::INTEGER[]) AS customer_idx", [chunk.tolist()])
+        scored = score_users(con, cfg, booster, features, week, "SELECT customer_idx FROM _pred_chunk",
+                             extra_cols=RERANK_COLS, chunk=25_000)
+        ranked = apply_rules(scored, articles, **dict(cfg.rerank.get("serve") or {}))
         ages = customer_age_bins(con, chunk.tolist())
         rows = []
         for c in chunk.tolist():
             rec = fill(ranked.get(c, []), pop_age.get(ages.get(c, -1), pop))
             rows.append((c, rec))
         parts.append(pd.DataFrame(rows, columns=["customer_idx", "articles"]))
-        del df
+        del scored
         gc.collect()
         print(f"  customers {i:,}–{i + len(chunk):,} ranked ({time.time() - t:.0f}s)", flush=True)
     recs = pd.concat(parts, ignore_index=True)

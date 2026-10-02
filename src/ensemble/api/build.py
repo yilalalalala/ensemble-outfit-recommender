@@ -49,12 +49,31 @@ def track_a_with_reasons(con, cfg, week, demo: pd.DataFrame) -> pd.DataFrame:
     con.execute("CREATE OR REPLACE TEMP TABLE _demo AS SELECT customer_idx FROM demo")
     df = week_frame(con, cfg, week, "SELECT customer_idx FROM _demo", False, False)
     df["score"] = booster.predict(df[features], num_threads=8)
-    df = df.sort_values(["customer_idx", "score"], ascending=[True, False]).groupby("customer_idx").head(12).reset_index(drop=True)
+    serve = dict(cfg.get("rerank", {}).get("serve") or {})
+    if serve.get("max_days_since_last_sale") is not None:   # availability proxy (rerank.py)
+        df = df[df["a_days_since_last_sale"] <= serve["max_days_since_last_sale"]]
+    df = (df.sort_values(["customer_idx", "score", "article_id"], ascending=[True, False, True])
+            .groupby("customer_idx").head(12).reset_index(drop=True))
     ex = explain(booster, features, df)
     df["rank"] = df.groupby("customer_idx").cumcount() + 1
     df["reasons"] = [json.dumps(e["reasons"]) for e in ex]
     df["shap"] = [json.dumps(e["shap"]) for e in ex]
     return df[["customer_idx", "rank", "article_id", "score", "reasons", "shap"]]
+
+
+def new_customer_reasons(con, week, recs: pd.DataFrame, k: int = 100) -> list[str]:
+    """Reasons for customers with no history, from evidence only: an age-band best seller gets
+    "Popular with customers your age", a global best seller "Trending this week", anything else none."""
+    from ensemble.baselines import customer_age_bins, popular
+    from ensemble.ranking.explain import REASON_TEXT, REASON_TYPE
+    by_age = {b: set(v) for b, v in popular_by_age(con, week, k=k).items()}
+    top = set(popular(con, week, k=k))
+    ages = customer_age_bins(con, recs.customer_idx.unique().tolist())
+    out = []
+    for c, a in zip(recs.customer_idx, recs.article_id):
+        key = "age_group" if a in by_age.get(ages.get(c, -1), set()) else "trending" if a in top else None
+        out.append(json.dumps([{"key": key, "text": REASON_TEXT[key], "evidence": REASON_TYPE[key]}] if key else []))
+    return out
 
 
 def main() -> None:
@@ -72,9 +91,9 @@ def main() -> None:
     all_recs = pd.read_parquet(cfg.path("processed") / "track_a_recs.parquet")
     new_recs = all_recs[all_recs.customer_idx.isin(demo[demo.segment == "new"].customer_idx)].explode("articles")
     new_recs = new_recs.assign(rank=new_recs.groupby("customer_idx").cumcount() + 1, score=None,
-                               reasons=json.dumps([{"key": "age_group", "text": "Popular with customers your age"}]),
                                shap="[]").rename(columns={"articles": "article_id"})
     new_recs["article_id"] = new_recs["article_id"].astype("int64")  # explode leaves objects → SQLite blobs
+    new_recs["reasons"] = new_customer_reasons(con, week, new_recs)
     pd.concat([ta, new_recs[ta.columns]]).to_sql("for_you", db, index=False)
     print(f"for_you built ({time.time() - t0:.0f}s)", flush=True)
 
