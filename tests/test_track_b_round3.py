@@ -622,3 +622,51 @@ def test_round1_serving_table_still_renders():
     r = ctl_reasons({"source": "co_purchase", "lift": 2.5})
     assert r[0]["key"] == "co_purchase" and "2.5× more often" in r[0]["text"]
     assert ctl_reasons({"source": "style_match"})[0]["key"] == "style"
+
+
+def test_evidence_rows_keeps_only_shown_rows_and_their_own_evidence():
+    from ensemble.completion.serve_round3 import evidence_rows
+    df = pd.DataFrame({
+        "qid": [0, 0, 0, 1, 1],
+        "article_id": [10, 11, 12, 20, 21],
+        "a_co": [5.0, np.nan, np.nan, np.nan, 3.0],
+        "a_lift": [2.0, np.nan, np.nan, np.nan, 1.5],
+        "s_co": [np.nan, 4.0, np.nan, np.nan, np.nan],
+        "src_two_tower": [1, 1, 1, 0, 0],
+        "src_slot_pop": [0, 0, 1, 1, 0],
+        "same_colour_master": [1, 0, 0, 0, 1],
+        "price_tier_diff": [0.0, 1.0, -2.0, 0.0, 0.0],
+    })
+    score = np.array([0.9, 0.5, 0.1, 0.2, 0.8])
+    chosen = {0: np.array([10, 12]), 1: np.array([21])}
+    q = pd.DataFrame({"qid": [0, 1], "anchor": [1, 2], "target_slot": ["lower", "shoes"]})
+    out = evidence_rows(df, score, chosen, q)
+    assert len(out) == 3
+    assert out["rank"].tolist() == [1, 2, 1]
+    assert out.anchor.tolist() == [1, 1, 2]
+    assert out.target_slot.tolist() == ["lower", "lower", "shoes"]
+    # Each row carries its own evidence, taken from its own feature row.
+    first = out[(out.qid == 0) & (out.article_id == 10)].iloc[0]
+    assert first.a_co == 5.0 and first.score == pytest.approx(0.9)
+    popfall = out[(out.qid == 0) & (out.article_id == 12)].iloc[0]
+    assert popfall.a_co != popfall.a_co and popfall.s_co != popfall.s_co   # both null
+    assert popfall.src_slot_pop == 1
+    # The candidate that was scored but not shown is absent.
+    assert 11 not in out.article_id.tolist()
+
+
+def test_label_audit_counts_only_pre_cutoff_history():
+    """The repeat-purchase share must come from before the label week, not inside it."""
+    from ensemble.completion import label_audit as LA
+    cfg = tb_cfg(min_support=1)
+    con = make_db(99, future_customer=9)
+    # Customer 5's label-week basket is (1, 2); give customer 5 a *pre-week* purchase of 2.
+    con.execute("INSERT INTO transactions VALUES (DATE '2020-09-02', 5, 2, 0.1, 2)")
+    A.mine(con, WEEK, cfg)
+    uni = P.eligible_universe(con, WEEK, cfg)
+    con.register("_la_uni_df", uni[["article_id"]])
+    res = LA.audit_week(con, cfg, WEEK)
+    assert res["truth_pairs"] > 0
+    # Customers 6 and 7 have no history at all, 5 has one article in common with its label.
+    assert 0 < res["share_truth_bought_before"] < 1
+    assert res["share_pairs_returning_customer"] == pytest.approx(1 / 3, abs=0.2)
