@@ -344,6 +344,20 @@ only on accessories outside the popularity head, isolating what the model adds.
 | Item cold-start Recall@K | Recall restricted to accessories with no purchase history. The content towers should degrade gracefully here; an ID-based model collapses to zero |
 | Colour-harmony agreement *(project-specific)* | How often the model's picks agree with classical colour theory. **Reported as a finding, not a target** — disagreement would be interesting, since the model is fitted to what people actually bought |
 
+### 5.5a As built, after Round 3 (2026-10-03)
+
+This section is the specification; the deviations below are recorded as ADRs and
+measured in [`reports/TRACK_B_ROUND3_UPGRADE_REPORT.md`](../reports/TRACK_B_ROUND3_UPGRADE_REPORT.md).
+
+| §5 says | what was built | why |
+| --- | --- | --- |
+| "a second, small cross-feature ranker re-orders the top candidates" | Built: LightGBM LambdaRank over a candidate union, one query group per (basket, anchor, target slot). It is the model now, not a re-order on top of the fused list. | The fixed RRF it replaced could not use support, lift, recency, backoff level or the customer. +29.4% Recall@12 without customer features, +47.6% with them, on six rolling folds (D-033). |
+| colour-pair harmony "computed in CIELAB" | Colour agreement at the dataset's own granularity (`colour_group_code`, `perceived_colour_master_id`, `perceived_colour_value_id`) rather than a CIELAB distance | The catalogue ships categorical colour codes, not sRGB values; a CIELAB distance would need a colour-to-RGB table that is not in the data. The colour-agreement group is worth 0.2% of split gain, so the stronger version is unlikely to change much (D-037). |
+| "seasonal co-occurrence in the same week of year" | Not built. Time-decayed co-counts (14 d, 56 d half-lives) are built instead. | Two years of data give at most two observations per (pair, week of year). The decay features cost 0.62% to remove, so recency matters a little and seasonality was not worth a cache rebuild to test (D-037). |
+| "the customer's own history with this accessory type" | Built and extended: 21 point-in-time customer features (article, style, product type, department, section, garment group, colour, slot, price), the largest single feature group (−12.3% to remove) | D-034. Only 3.4% of truth articles are repeat purchases, so this is taste, not buy-it-again. |
+| metrics: "Item cold-start Recall@K" | Replaced by *recently launched* recall (first observed sale within 28 days of the cutoff) | Under a leakage-free catalogue an article with no pre-cutoff sale can never be eligible, so item cold-start recall is identically zero by construction. The dataset has no inventory or launch feed, so true pre-launch availability is unknowable (D-031). |
+| evaluation on "the test week" | Selection on six rolling validation weeks; the test week scored once, after selection | One week cannot support a model choice: the same system moves by a factor of ~1.4 across six consecutive weeks (D-032). |
+
 ### 5.6 Planned ablations
 
 Each isolates one design decision, all on identical temporal splits:
