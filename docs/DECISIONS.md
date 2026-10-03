@@ -740,3 +740,233 @@ baseline-retrieval model gave 14.2%).
 
 **Note.** SHAP is model attribution, not causation; the gate makes chips truthful
 statements about the data, not claims about why a customer buys.
+
+---
+
+### D-031 — Track B catalogue eligibility is decided before the cutoff; the Round-1 universe is kept as an oracle
+**Date:** 2026-10-03 · **Status:** active · **supersedes the protocol in** D-013
+
+**Decision.** The eligible catalogue for label week *w* is "sold at least once in the
+`universe_weeks` before *w*'s cutoff" — a *proxy* for availability, because the dataset has
+no inventory or launch feed, but one that uses no target-week information. Truth articles
+outside it are dropped from the primary protocol and counted (`n_truth_dropped`), not
+scored as guaranteed misses. The Round-1 definition (sales between four weeks before *w*
+and the **end** of *w*, D-013) stays reachable as `eligible_universe(..., oracle=True)`, for
+measurement only.
+
+**Evidence** (`reports/track_b_round3/protocol_leak.json`, two weeks, towers trained once per
+week and both catalogues scored). The oracle catalogue adds ~1,600 articles (27,064 → 28,903
+and 27,070 → 28,611) and ~4,000 queries, and it **lowers** Recall@12 by 5.07–5.11% for every
+fixed-fusion system, because the extra articles contribute 5.87% more truth pairs with no
+pre-cutoff footprint — nothing can retrieve them. Under the leakage-free catalogue those
+5.87% are excluded and counted instead.
+
+**Why it still matters.** Under the Round-1 universe an article could be a legal
+recommendation purely because of sales inside the week being predicted, so eligibility was
+not knowable at prediction time and "item cold-start recall" was a property of the
+definition, not of a model. The honest protocol cannot measure true item cold start at all
+(an article with no pre-cutoff sale is never eligible), so that metric is replaced by
+*recently launched*: recall on articles whose first observed sale is within `new_item_days`
+of the cutoff (`metrics.segments`).
+
+**Consequence.** Round-1 and Round-3 Track B recall levels are **not comparable** — different
+query sets, different truth denominators. Comparisons are only meaningful inside one
+protocol. `reports/track_b_round3/baseline_frozen.json` keeps the Round-1 numbers with their
+caveats so they are not quietly restated.
+
+**Revisit if:** an inventory or launch feed becomes available (replace the proxy and restore a
+true cold-start metric).
+
+---
+
+### D-032 — Track B selects on rolling folds with customer-cluster intervals; the test week is a single confirmation
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.** Every Track B modelling decision is made on six consecutive label weeks ending
+at the validation week. For fold *w*, mining, the catalogue, the towers, every feature and
+the ranker's training labels come from weeks strictly before *w*, and the ranker trains on the
+`train_weeks` label weeks before *w*. The test week is evaluated **once**, after selection,
+with the ablation table switched off (`ENSEMBLE_CONFIG=experiments/tb3_final … backtest
+test`). Intervals come from a paired bootstrap that resamples **customers** with all of their
+queries.
+
+**Evidence.** One basket produces several (anchor, target slot) queries and one customer
+several baskets, so queries are not independent; on correlated synthetic data the clustered
+interval is more than 3× wider than the naive one
+(`test_cluster_bootstrap_is_wider_than_ignoring_clusters`). Across the six folds the same
+system moves by a factor of ~1.4 in Recall@12 (`shipped_rrf_hybrid` 0.0864 → 0.1234), which is
+why one week cannot support a model choice. The six-fold run also reproduced the two shipping
+models exactly from cached matrices (same tree counts, same metrics), so fold-to-fold
+differences are data, not training noise.
+
+**Honest caveats.** The test week was already scored in Round 1 and those numbers have been
+read, so it is a confirmation, not a fresh holdout. The relative intervals divide the paired
+difference interval by the observed baseline mean instead of resampling the denominator, so
+the relative bounds are slightly too narrow. The "±" in per-fold tables is the between-fold
+standard deviation, not a standard error — adjacent folds share most of their mining window.
+
+**Revisit if:** a later week of data arrives (then there is a genuinely untouched week).
+
+---
+
+### D-033 — Learned LambdaRank fusion replaces fixed RRF for Track B; serving ships the compatibility variant
+**Date:** 2026-10-03 · **Status:** active · **supersedes** D-015
+
+**Decision.** Track B ranks a candidate **union** — article association by raw co-count and by
+NPMI, product-code (style) association both ways, two-tower retrieval with and without the
+article-ID embedding, and slot popularity — with a LightGBM LambdaRank model, one query group
+per (basket, anchor, target slot). Trees are chosen by temporal early stopping on the most
+recent training week. The fixed RRF(w = 0.5) of D-015 is kept as a reported baseline. The
+precomputed serving table ships `lgbm_compatibility` (no customer features); `lgbm_personalized`
+is the measured upper bound.
+
+**Evidence** (six rolling folds, `reports/track_b_round3/backtest_val_ablations.json`; pooled
+customer-cluster bootstrap over 145,485 customers and 622,989 queries):
+
+| system | Recall@12 | NDCG@12 | vs shipped RRF (R@12) | folds won |
+| --- | ---: | ---: | ---: | ---: |
+| `shipped_rrf_hybrid` | 0.1066 | 0.0622 | — | — |
+| `rrf_all_sources_union` (same union, fixed fusion) | 0.1088 | 0.0642 | +1.98% [+1.36, +2.56] | 6/6 |
+| `lgbm_compatibility` | 0.1379 | 0.0822 | **+29.37% [+28.57, +30.15]** | 6/6 |
+| `lgbm_personalized` | 0.1573 | 0.0961 | **+47.58% [+46.65, +48.47]** | 6/6 |
+
+**Why it is not a retrieval-budget effect.** `rrf_all_sources_union` fuses the *identical*
+189-candidate union with equal-weight RRF and gains 2%. Candidate-set size and union recall
+(0.4285) are reported with every result.
+
+**Why the compatibility variant ships.** The table is keyed by (anchor, target slot) and must
+answer for anonymous visitors on any product page, so a row per customer is not
+precomputable; request-time personalized scoring needs an online feature store and a model
+server. The gap is reported (+15.11% Recall@12 on returning customers), not claimed.
+
+**Revisit if:** a candidate-budget change moves the union's ceiling materially, a feature
+store exists, or an online test contradicts the offline ordering.
+
+---
+
+### D-034 — Track B personalization is point-in-time, and it is taste rather than repurchase
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.** The ranker gets customer features computed only from purchases before the label
+week: history size and recency, exact-article and style affinity, recency-weighted
+product-type / department / section / garment-group / colour / slot shares, the customer's
+usual price point and distance from it, and explicit interactions between compatibility
+evidence and customer preference. Customers with no history get `c_has_history = 0` and null
+affinities, so the compatibility path answers unchanged — an explicit no-history path, not a
+fallback model.
+
+**Evidence.** Personalization is the largest single feature group: removing all 21 customer
+features costs **−12.33% Recall@12** and **−14.48% NDCG@12** on the six folds, more than any
+other group. It is concentrated where history exists: **+15.11%** over the compatibility
+ranker on 582,992 returning-customer queries, **+0.66%** on 39,997 new-customer queries.
+
+**Not a buy-it-again effect.** Over the six folds only **3.4%** of truth articles had already
+been bought by that customer (7.9% for the style —
+`reports/track_b_round3/label_audit.json`), and removing the two exact-article repeat features
+costs **0.74%**. The gain is category, section, colour and price taste.
+
+**Revisit if:** an online feature store exists (then ship the personalized model and
+re-measure), or `c_has_history` coverage changes materially.
+
+---
+
+### D-035 — Track B serving: evidence stored per row, chips gated on it, diversity caps as a re-ordering
+**Date:** 2026-10-03 · **Status:** active · **extends D-030 to Track B**
+
+**Decision.** Every row of the precomputed Complete-the-Look table carries the evidence it was
+ranked on — co-count, lift, NPMI, style co-count / NPMI / lift, backoff level, source flags,
+two-tower and FashionCLIP similarity, colour agreement, price-tier distance, model score — plus
+one provenance label (`co_purchase`, `style_co_purchase`, `visual_compatibility`,
+`popular_in_slot`, `other`). A reason chip is emitted only when the column it quotes is
+non-null for *that* pair. The diversity rules (one colourway per style, at most
+`serving.max_per_product_type` per product type) are applied as a **re-ordering** and the
+module is then back-filled to `serving.ctl_per_slot`, instead of dropping the items the caps
+reject.
+
+**Evidence** (`reports/track_b_round3/backtest_val_serving_rules.json`, six folds, re-ranked
+from the shipping model's top-48 pool, relative to the unrestricted ranker):
+
+| rule reading | Δ Recall@12 | Δ NDCG@12 | Δ distinct product types / list | mean list length |
+| --- | ---: | ---: | ---: | ---: |
+| caps as a re-ordering, back-filled | **−6.81%** | −6.27% | **+49.10%** | 12.00 |
+| caps as hard filters (Round-1 behaviour) | **−37.45%** | −23.60% | +110.54% | **8.32** |
+
+The hard filter costs 5.5× more accuracy, and the last column says why: modules come out
+part-empty, and some fall below five items, so even Recall@5 drops (0.0861 → 0.0712). Both
+readings still beat the shipped RRF hybrid except the hard filter (−18.9%).
+
+**Consequence.** `tests/test_api.py::test_product_page_and_diversity` moved from "no module
+breaks the cap" to structural assertions plus variety; the cap arithmetic is unit-tested in
+`test_apply_diversity_*`. This is a deliberate change to pre-existing serving behaviour.
+
+**Revisit if:** an online test prefers a strictly diverse but part-empty module, or the
+accuracy cost of the caps grows with a stronger ranker.
+
+---
+
+### D-037 — Association evidence stays plural; style backoff is a feature, not a switch
+**Date:** 2026-10-03 · **Status:** active · **refines** D-005
+
+**Decision.** Mining keeps raw co-count, time-decayed co-counts (14 d and 56 d half-lives),
+marginal supports, lift, PMI and NPMI as **separate** columns at article level and at
+product-code level, with a mining floor of `min_support = 2`. The ranker chooses among them.
+Style-level backoff is not a global on/off choice: both levels are always joined and
+`backoff_level` (0 = article evidence, 1 = style only, 2 = neither) is a feature.
+
+**Evidence.** The funnel shows why no single gate is right: of ~290,000 cross-slot pairs with
+support ≥ 2, ~82,000 reach support ≥ 3 and only ~2,900 reach ≥ 10, while lift > 1 removes
+almost nothing once support ≥ 2 (293,130 of 298,182 on the first fold) — D-005 stands. The
+ablation shows the evidence is highly redundant rather than individually critical: removing
+all 17 article-level association features costs **0.42%** Recall@12, removing the 14
+style-backoff features costs **0.77%**, removing the six time-decayed columns costs **0.62%**.
+Association still carries 12.8% of the model's split gain and `a_co_share` is its fifth most
+important feature, so it is doing work — the style level and the towers simply reconstruct
+most of it.
+
+**Consequence.** Effort is better spent on the towers and the customer than on more
+association statistics.
+
+**Revisit if:** other half-lives or a basket-noise filter are tested on rolling folds. Both
+are part of the artifact cache key, so each variant costs a full rebuild (~2 h).
+
+---
+
+### D-036 — Two-tower negatives: in-batch + logQ, and nothing else earns its place
+**Date:** 2026-10-03 · **Status:** active · **refines** D-016 and D-022
+
+**Decision.** The Track B towers train with in-batch negatives and the logQ correction only
+(`two_tower.negatives: [in_batch, logq]`, `hard_negatives: 0`), six epochs with held-out
+early stopping (patience 2) on baskets from the tail of the mining window.
+
+**Evidence** (`reports/track_b_round3/ablation_towers.json`; two label weeks × two seeds per
+configuration, two-tower list scored alone on the target week over the leakage-free
+catalogue):
+
+| negatives | fold Recall@12 | SD | content-only | vs in-batch + logQ | mean s |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| in-batch only | 0.0706 | 0.0015 | 0.0670 | **−26.48%** | 147 |
+| in-batch + logQ | 0.0961 | 0.0015 | 0.0919 | — | 166 |
+| + 4 retrieval-informed hard negatives | 0.0970 | 0.0010 | 0.0928 | +0.94% | 267 |
+
+**logQ is essential** — removing it costs 26.5%. **The redesigned hard negatives are not.**
+Round 1 tested popularity-sampled and (product type, price tier) hard negatives and found
+nothing; Round 3 replaced them with retrieval-informed mining (re-score a popularity-sampled
+pool with the model being trained, mask the positive, its colourways and basket co-occurring
+articles as likely false negatives) and gets +0.94% against a per-run spread of 1.0–1.5% —
+paired by (week, seed) that is +0.0009 with a paired SD of ~0.0018 and one of four pairs
+negative — for +61% training time. Off by default. The reading is that the constraint is not
+the negative-sampling design but that in-batch + logQ already saturates this architecture on
+3.1 M pairs.
+
+**The epoch budget is adequate.** In all eight weeks the 6-epoch run picks epoch 6 and the
+held-out curve still looks like it is rising, which suggests a binding budget. It is not:
+allowing 12 epochs with patience 2 on the validation week ran 8 and selected epoch 6, with a
+fold Recall@12 (0.0985) inside the seed spread of the 6-epoch runs. One week, one seed.
+
+**Determinism.** CPU is bit-identical across repeated runs with the same seed; MPS is not
+(0.08017826 vs 0.08020096 at one epoch). That spread is two orders of magnitude smaller than
+the seed spread, so every tower conclusion here is a mean over two weeks × two seeds and no
+single-run difference is reported as a result.
+
+**Revisit if:** the architecture changes (then re-test hard negatives), or a decisive tower
+comparison is needed — run it on CPU, which is reproducible.

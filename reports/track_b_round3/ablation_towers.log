@@ -10,3 +10,17 @@
 [2020-09-09] 3,063,418 training pairs, 146,782 holdout pairs, 93,672 queries
   2020-09-09 in_batch               seed 0 mps: holdout 0.0579 fold 0.0706 content 0.0688 (epoch 6/6, 146s)
   2020-09-09 in_batch               seed 1 mps: holdout 0.0527 fold 0.0683 content 0.0654 (epoch 6/6, 144s)
+  2020-09-09 in_batch+logq          seed 0 mps: holdout 0.0892 fold 0.0986 content 0.0930 (epoch 6/6, 170s)
+  2020-09-09 in_batch+logq          seed 1 mps: holdout 0.0898 fold 0.0949 content 0.0907 (epoch 6/6, 172s)
+  2020-09-09 in_batch+logq+hard4    seed 0 mps: holdout 0.0883 fold 0.0971 content 0.0927 (epoch 6/6, 274s)
+  2020-09-09 in_batch+logq+hard4    seed 1 mps: holdout 0.0896 fold 0.0961 content 0.0915 (epoch 5/6, 270s)
+  2020-09-09 in_batch+logq_12epochs seed 0 mps: holdout 0.0896 fold 0.0985 content 0.0941 (epoch 6/8, 221s)
+  2020-09-09 determinism_1epoch     seed 0 cpu: holdout 0.0708 fold 0.0816 content 0.0783 (epoch 1/1, 38s)
+  2020-09-09 determinism_1epoch     seed 0 cpu: holdout 0.0708 fold 0.0816 content 0.0783 (epoch 1/1, 40s)
+  2020-09-09 determinism_1epoch     seed 0 mps: holdout 0.0708 fold 0.0802 content 0.0770 (epoch 1/1, 30s)
+  2020-09-09 determinism_1epoch     seed 0 mps: holdout 0.0716 fold 0.0802 content 0.0771 (epoch 1/1, 30s)
+
+== two-tower negatives ==
+in_batch|mps                   fold R@12 0.0706±0.0015 content 0.0670 vs in_batch+logq -26.48% (147s)
+in_batch+logq|mps              fold R@12 0.0961±0.0015 content 0.0919 vs in_batch+logq +0.00% (166s)
+in_batch+logq+hard4|mps        fold R@12 0.0970±0.0010 content 0.0928 vs in_batch+logq +0.94% (267s)

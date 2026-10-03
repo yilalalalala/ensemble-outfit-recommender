@@ -1,0 +1,12 @@
+Track B rolling backtest (test): weeks 2020-09-02..2020-09-16, 1 folds, cache 7ad0aa24ad
+[2020-09-02] preparing
+  96,881 queries, 27,064 eligible items, towers best epoch 6 (holdout R@12 0.0830), 4s
+[2020-09-09] preparing
+  93,672 queries, 27,070 eligible items, towers best epoch 6 (holdout R@12 0.0886), 4s
+  train matrix 2020-09-09: 1,960,701 rows, 29,958 groups, pos rate 0.0098 (15s)
+[2020-09-16] preparing
+  training towers for 2020-09-16 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4004 holdout R@12 0.0772 (27s)
+    epoch 2: loss 6.2331 holdout R@12 0.0823 (26s)
