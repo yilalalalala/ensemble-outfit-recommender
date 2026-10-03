@@ -148,8 +148,8 @@ def evidence_rows(df: pd.DataFrame, score: np.ndarray, chosen: dict[int, np.ndar
     want = pd.DataFrame([(qid, int(a), r + 1) for qid, arr in chosen.items()
                          for r, a in enumerate(arr)], columns=["qid", "article_id", "rank"])
     cols = ["qid", "article_id", "a_co", "a_lift", "a_npmi", "s_co", "s_lift", "s_npmi",
-            "backoff_level", "src_two_tower", "src_slot_pop", "tt_pair_sim", "clip_sim",
-            "same_colour_master", "price_tier_diff"]
+            "backoff_level", "src_two_tower", "src_two_tower_content", "src_slot_pop",
+            "tt_pair_sim", "ttc_pair_sim", "clip_sim", "same_colour_master", "price_tier_diff"]
     ev = df[[c for c in cols if c in df.columns]].copy()
     ev["score"] = score
     out = want.merge(ev, on=["qid", "article_id"], how="left")
@@ -162,7 +162,7 @@ def source_of(row) -> str:
         return "co_purchase"
     if row.s_co == row.s_co and row.s_co >= 1:
         return "style_co_purchase"
-    if row.src_two_tower == 1:
+    if row.src_two_tower == 1 or row.src_two_tower_content == 1:
         return "visual_compatibility"
     if row.src_slot_pop == 1:
         return "popular_in_slot"
@@ -242,8 +242,9 @@ def build(log=print) -> dict:
     ctl["source"] = [source_of(r) for r in ctl.itertuples(index=False)]
     ctl = ctl.rename(columns={"target_slot": "slot", "a_lift": "lift"})
     ctl = ctl[["anchor", "slot", "rank", "article_id", "source", "lift", "score", "a_co", "a_npmi",
-               "s_co", "s_npmi", "s_lift", "backoff_level", "src_two_tower", "src_slot_pop",
-               "tt_pair_sim", "clip_sim", "same_colour_master", "price_tier_diff"]]
+               "s_co", "s_npmi", "s_lift", "backoff_level", "src_two_tower",
+               "src_two_tower_content", "src_slot_pop", "tt_pair_sim", "ttc_pair_sim", "clip_sim",
+               "same_colour_master", "price_tier_diff"]]
     out = cfg.path("processed") / "models" / "complete_the_look.parquet"
     out.parent.mkdir(parents=True, exist_ok=True)
     keep = out.with_name("complete_the_look_round1.parquet")

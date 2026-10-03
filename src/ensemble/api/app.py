@@ -76,6 +76,9 @@ def home(customer_idx: int):
 # Provenance labels written by ensemble.completion.serve_round3; the Round-1 table only
 # ever carried "co_purchase" and "style_match", which both still resolve here.
 ASSOCIATION_SOURCES = ("co_purchase", "style_co_purchase", "style_match")
+# Below this co-purchase count a lift ratio is a small-sample artefact, so the chip
+# states the count only (D-035).
+LIFT_MIN_SUPPORT = 5
 
 
 def _ctl_columns() -> list[str]:
@@ -99,10 +102,14 @@ def ctl_reasons(r: dict) -> list[dict]:
 
     out: list[dict] = []
     co, lift, s_co = num("a_co"), num("lift"), num("s_co")
-    if r.get("source") in ("co_purchase", "style_match") and co and lift:
-        out.append({"key": "co_purchase",
-                    "text": f"Bought together {int(co)}× in past baskets, "
-                            f"{lift:.1f}× more often than chance"})
+    if r.get("source") in ("co_purchase", "style_match") and co:
+        # The multiplier is only quoted when the pair has enough support for the ratio to
+        # mean something: at co = 4 a lift of 193x is a small-sample artefact, and a chip
+        # that says so is the same kind of unsupported claim D-030 rules out.
+        text = f"Bought together {int(co)}× in past baskets"
+        if lift and co >= LIFT_MIN_SUPPORT:
+            text += f", {lift:.1f}× more often than chance"
+        out.append({"key": "co_purchase", "text": text})
     elif r.get("source") == "co_purchase" and lift:          # Round-1 table: lift only
         out.append({"key": "co_purchase", "text": f"Bought together {lift:.1f}× more often than chance"})
     elif r.get("source") == "style_co_purchase" and s_co:
@@ -128,7 +135,8 @@ def product(article_id: int):
     a = card(a[0])
     have = _ctl_columns()
     extra = "".join(f", c.{c}" for c in ("a_co", "a_npmi", "s_co", "s_npmi", "backoff_level",
-                                         "src_two_tower", "src_slot_pop", "tt_pair_sim", "clip_sim",
+                                         "src_two_tower", "src_two_tower_content", "src_slot_pop",
+                                         "tt_pair_sim", "ttc_pair_sim", "clip_sim",
                                          "same_colour_master", "price_tier_diff", "score")
                     if c in have)
     ctl = q(f"""SELECT c.slot AS target_slot, c.rank, c.source, c.lift{extra}, {ART_COLS}

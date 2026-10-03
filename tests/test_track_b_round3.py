@@ -576,10 +576,12 @@ def test_serving_provenance_label_prefers_the_strongest_evidence():
     from ensemble.completion.serve_round3 import source_of
     nan = float("nan")
     Row = lambda **kw: pd.Series({"a_co": nan, "s_co": nan, "src_two_tower": 0,  # noqa: E731
-                                  "src_slot_pop": 0, **kw})
+                                  "src_two_tower_content": 0, "src_slot_pop": 0, **kw})
     assert source_of(Row(a_co=4.0, s_co=9.0, src_two_tower=1)) == "co_purchase"
     assert source_of(Row(s_co=9.0, src_two_tower=1)) == "style_co_purchase"
     assert source_of(Row(src_two_tower=1, src_slot_pop=1)) == "visual_compatibility"
+    # A candidate retrieved only by the content-only tower is still a visual pick.
+    assert source_of(Row(src_two_tower_content=1, src_slot_pop=1)) == "visual_compatibility"
     assert source_of(Row(src_slot_pop=1)) == "popular_in_slot"
     assert source_of(Row()) == "other"
 
@@ -595,6 +597,11 @@ def test_reason_chips_only_cite_evidence_present_in_the_row():
     co = ctl_reasons({**base, "source": "co_purchase", "a_co": 7, "lift": 3.25})
     assert co[0]["key"] == "co_purchase" and "7×" in co[0]["text"] and "3.2× more often" in co[0]["text"]
 
+    # A lift ratio off four co-purchases is a small-sample artefact: state the count only.
+    thin = ctl_reasons({**base, "source": "co_purchase", "a_co": 4, "lift": 193.4})
+    assert thin[0]["key"] == "co_purchase"
+    assert "4× in past baskets" in thin[0]["text"] and "more often than chance" not in thin[0]["text"]
+
     # Visual and popularity picks must not borrow a co-purchase or style claim.
     vis = ctl_reasons({**base, "source": "visual_compatibility"})
     assert [r["key"] for r in vis] == ["visual"]
@@ -602,17 +609,17 @@ def test_reason_chips_only_cite_evidence_present_in_the_row():
     assert [r["key"] for r in pop] == ["popular"]
     assert "Popular" in pop[0]["text"]
 
-    # A co_purchase row with no numbers falls back rather than formatting a null.
+    # A co_purchase row with no numbers at all falls back rather than formatting a null.
     assert [r["key"] for r in ctl_reasons({**base, "source": "co_purchase"})] == ["style"]
 
     sty = ctl_reasons({**base, "source": "style_co_purchase", "s_co": 5})
     assert sty[0]["key"] == "style" and "5×" in sty[0]["text"]
 
     # Optional chips are added only when their own column says so, and never more than three.
-    rich = ctl_reasons({**base, "source": "co_purchase", "a_co": 2, "lift": 1.5,
+    rich = ctl_reasons({**base, "source": "co_purchase", "a_co": 9, "lift": 1.5,
                         "same_colour_master": 1, "price_tier_diff": 0})
     assert [r["key"] for r in rich] == ["co_purchase", "colour", "price"]
-    assert len(ctl_reasons({**base, "source": "co_purchase", "a_co": 2, "lift": 1.5,
+    assert len(ctl_reasons({**base, "source": "co_purchase", "a_co": 9, "lift": 1.5,
                             "same_colour_master": 1, "price_tier_diff": 0, "extra": 1})) == 3
 
 
@@ -633,6 +640,7 @@ def test_evidence_rows_keeps_only_shown_rows_and_their_own_evidence():
         "a_lift": [2.0, np.nan, np.nan, np.nan, 1.5],
         "s_co": [np.nan, 4.0, np.nan, np.nan, np.nan],
         "src_two_tower": [1, 1, 1, 0, 0],
+        "src_two_tower_content": [1, 0, 0, 0, 1],
         "src_slot_pop": [0, 0, 1, 1, 0],
         "same_colour_master": [1, 0, 0, 0, 1],
         "price_tier_diff": [0.0, 1.0, -2.0, 0.0, 0.0],
