@@ -1049,3 +1049,67 @@ vs the current `lgbm_compatibility+shipped` = **+7.06% Recall@12**, interval of 
 with the diversity rules applied a smaller pool serves *better* (P = 24: +9.89%), because the caps
 then draw replacements from a shorter, stronger list. Revisit with an online test or a rule that
 selects P on the served (+shipped) metric.
+
+---
+
+### D-039 — Reproduced baselines: BPR-MF, LightGCN and SASRec (gSASRec loss), tuned on tuning folds only
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.** Track A is benchmarked against three faithful, minimal PyTorch reproductions
+(`src/ensemble/research/models.py`), each trained per label week on data before its cutoff and
+scored exactly over the eligible catalogue (D-038): BPR-MF (Rendle et al. 2009; uniform negatives
+rejecting the customer's own training positives, SparseAdam, CPU), LightGCN (He et al. 2020;
+symmetric-normalised bipartite graph, mean of layers 0..L, BPR with L2 on the ego embeddings,
+N(0, 0.1) init, MPS) and SASRec (Kang & McAuley 2018; causal self-attention over the last 50
+purchases, tied embeddings). SASRec is trained with **gSASRec's gBCE** (Petrov & Macdonald,
+RecSys 2023; 256 uniform negatives per sequence, t = 0.75): full-softmax cross-entropy
+(Klenitskiy & Vasilev 2023) costs ~9 min per epoch on a 41k-item vocabulary here, and gBCE is
+the published SASRec objective designed to recover most of that quality with sampled negatives.
+The original one-negative BCE was kept in the grid.
+
+**Selection** (`reports/track_a_research/tuning.json`; bounded grid declared before running:
+Stage A, two refinements, Stage B on the second tuning fold, Stage C convergence guard):
+BPR-MF 26-week window, dim 128, lr 0.005, reg 1e-5, 24 epochs; LightGCN 26 weeks, 3 layers,
+dim 64, lr 0.02, batch 131,072, 27 epochs; SASRec gBCE, lr 0.002, dropout 0.2, 24 epochs (Stage
+C doubled the budget because epoch 12 was the curve's last point; at 24 it was still rising
+slowly, +3.4% from epoch 12 to 24, and no further extension is in the declared budget).
+Not masking the customer's own purchases won for every model (repurchase is a large share of
+H&M purchases). gBCE beat BCE by +63% raw MAP@12 on the tuning fold.
+
+**Repeat handling and time.** Sequences keep repeats; same-day purchases are ordered by
+`article_id` (no time of day in the data); time gaps are not modelled (standard SASRec).
+**Fallback:** customers a model cannot represent (no interaction in its window or vocabulary)
+get the shared age-band fallback (D-038), and that share is reported per model.
+
+**Reproducibility.** Toy tests check the expected ranking behaviour and that identical CPU
+seed/config runs reproduce exactly (`tests/test_research_track_a.py`); MPS runs are not
+bit-reproducible (D-036), so stochastic spread is reported over three seeds.
+
+**Revisit if:** more compute allows full-softmax SASRec or longer LightGCN schedules.
+
+---
+
+### D-042 — Track B serving runtime: versioned bundles, NumPy GBDT, evidence-ordered fallbacks, exact vector search
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.**
+- **Offline/online split.** `ensemble.serving.bundle` builds a versioned, immutable bundle (pools
+  with compatibility features, profile snapshot, models, catalogue/availability snapshot, visual
+  index, sha256 manifest) and publishes it atomically (`CURRENT` pointer). No request retrains or
+  reads training tables.
+- **Ranker runtime.** The personalized LightGBM model is exported to a NumPy tree evaluator
+  (`ensemble.serving.gbdt`), equal to `Booster.predict` within 1e-9 including NaN and categorical
+  edge cases, so the API never loads LightGBM next to PyTorch (the OpenMP clash). A build-time
+  gate compares offline SQL + LightGBM with the online path on sampled real requests and refuses
+  to publish on any ordering difference.
+- **Fallback ladder** in evidence order: the anchor's own pool → a live colourway of the same
+  style → the nearest live article of the same slot in FashionCLIP space → slot popularity;
+  ordering is personalized whenever the customer has a profile. Every row carries
+  `provenance`, `evidence_types` and chips gated on its own evidence (D-030, D-035).
+- **Availability** (snapshot + runtime overrides) is applied before the top-k cut, and is part of
+  every cache key together with the bundle version.
+- **Vector search is exact**, no ANN: see the benchmark in the final report (exact top-k over the
+  live visual index takes about a millisecond on this laptop, so an ANN dependency would add
+  build and recall risk for no measurable gain).
+
+**Revisit if:** the live catalogue grows by an order of magnitude, or latency targets tighten.

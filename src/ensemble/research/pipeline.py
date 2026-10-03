@@ -52,9 +52,9 @@ def models(seeds_extra=(1, 2)) -> None:
     jobs = [(m, w, 0, None, False) for w in weeks for m in ("bpr", "lightgcn", "sasrec")]
     jobs += [(m, w, s, None, False) for s in seeds_extra for w in folds for m in ("bpr", "lightgcn", "sasrec")]
     t = time.time()
-    # Three lanes: BPR-MF on the CPU; LightGCN and SASRec each on its own MPS lane (measured: the
-    # two GPU jobs overlap usefully because both spend part of each step on host-side work).
-    run_lanes(jobs, {"bpr": "cpu", "lightgcn": "gpu", "sasrec": "gpu2"})
+    # Two lanes: BPR-MF on the CPU, LightGCN and SASRec one after the other on MPS. Measured: two
+    # concurrent MPS jobs ran 158 s + 155 s per epoch vs 50 s + 65 s alone, i.e. slower in total.
+    run_lanes(jobs, {"bpr": "cpu", "lightgcn": "gpu", "sasrec": "gpu"})
     print(f"models done ({time.time() - t:.0f}s)")
 
 
