@@ -41,15 +41,16 @@ research:
 
   # Faithful, minimal reproductions (src/ensemble/research/models.py). Values here are
   # the tuning-fold winners; the grids that produced them are in `tuning`.
+  # Selected on tuning folds only by ensemble.research.tune (reports/track_a_research/tuning.json).
   models:
     bpr:
-      window_weeks: 26        # positives: unique (customer, article) purchases in this window
+      window_weeks: 26
       min_item_count: 3
-      dim: 64
-      reg: 0.0001
+      dim: 128
+      reg: 1.0e-05
       lr: 0.005
       batch_size: 16384
-      epochs: 20
+      epochs: 24
       mask_seen: false
       device: cpu
     lightgcn:
@@ -58,27 +59,27 @@ research:
       dim: 64
       layers: 3
       reg: 0.0001
-      lr: 0.005
+      lr: 0.02
       batch_size: 131072
-      epochs: 20
+      epochs: 27
       mask_seen: false
       device: mps
     sasrec:
-      vocab_weeks: 26         # items with >= min_item_count sales in this window form the vocabulary
+      vocab_weeks: 26
       min_item_count: 3
-      train_weeks: 26         # customers with a purchase in this window contribute training sequences
-      history_weeks: 104      # inference/training inputs read at most this far back
+      train_weeks: 26
+      history_weeks: 104
       max_len: 50
       dim: 64
       blocks: 2
       heads: 1
       dropout: 0.2
-      lr: 0.001
+      lr: 0.002
       batch_size: 256
-      epochs: 8
-      loss: gbce             # gSASRec generalised BCE (Petrov & Macdonald 2023); bce = original; ce = full softmax
-      negatives: 256         # gbce: uniform negatives per sequence
-      gbce_t: 0.75           # gbce calibration parameter t (paper default)
+      epochs: 24
+      loss: gbce
+      negatives: 256
+      gbce_t: 0.75
       mask_seen: false
       device: mps
   top_k: 100                 # list length cached per (model, week, seed): retrieval channel pool

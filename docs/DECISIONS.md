@@ -1039,3 +1039,13 @@ profile snapshot; the diversity rules (D-035) then re-order and back-fill. P is 
    Recall@12 difference entirely above zero.
 
 If no P meets (1), the largest P is used and the shortfall is reported as a product trade-off.
+
+**Outcome (2026-10-03, `reports/track_b_production/serving_regression.json`; six folds, 622,989
+queries, customer-cluster bootstrap).** Retention of unrestricted personalized Recall@12: P = 24
+93.1%, P = 48 96.3%, **P = 100 98.9%** — no P meets the 99% bar, so by the rule **P = 100** ships
+and the 1.1% shortfall is reported. Tolerance (2) holds: served `lgbm_personalized@pool100+shipped`
+vs the current `lgbm_compatibility+shipped` = **+7.06% Recall@12**, interval of the difference
+[+0.0083, +0.0097] (6/6 folds). Observed but not acted on (it was not the predeclared criterion):
+with the diversity rules applied a smaller pool serves *better* (P = 24: +9.89%), because the caps
+then draw replacements from a shorter, stronger list. Revisit with an online test or a rule that
+selects P on the served (+shipped) metric.

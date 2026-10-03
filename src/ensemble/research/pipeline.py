@@ -52,7 +52,9 @@ def models(seeds_extra=(1, 2)) -> None:
     jobs = [(m, w, 0, None, False) for w in weeks for m in ("bpr", "lightgcn", "sasrec")]
     jobs += [(m, w, s, None, False) for s in seeds_extra for w in folds for m in ("bpr", "lightgcn", "sasrec")]
     t = time.time()
-    run_lanes(jobs)
+    # Three lanes: BPR-MF on the CPU; LightGCN and SASRec each on its own MPS lane (measured: the
+    # two GPU jobs overlap usefully because both spend part of each step on host-side work).
+    run_lanes(jobs, {"bpr": "cpu", "lightgcn": "gpu", "sasrec": "gpu2"})
     print(f"models done ({time.time() - t:.0f}s)")
 
 

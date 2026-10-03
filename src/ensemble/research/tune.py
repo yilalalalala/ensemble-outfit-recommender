@@ -60,12 +60,13 @@ def log_path(cfg) -> Path:
     return d / "tuning_runs.log"
 
 
-def run_lanes(jobs: list[tuple]) -> None:
+def run_lanes(jobs: list[tuple], lane_of: dict | None = None) -> None:
     """jobs: (model, week, seed, overrides, curve). Each lane runs its jobs sequentially."""
     cfg = load_config()
+    lane_of = lane_of or LANE
     lanes: dict[str, list] = {}
     for j in jobs:
-        lanes.setdefault(LANE[j[0]], []).append(j)
+        lanes.setdefault(lane_of[j[0]], []).append(j)
     errors = []
 
     def worker(lane_jobs):
