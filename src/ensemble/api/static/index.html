@@ -123,9 +123,21 @@ async function product(id) {
   const d = await api(`/api/product/${id}`);
   const a = d.article;
   log("click", "product_page", a.article_id);
-  const look = d.complete_the_look.length
+  // v2: request-time Complete the Look (personalized for the demo customer when a profile exists),
+  // with fallback level, provenance and versions shown. Falls back to the v1 table if no bundle is loaded.
+  let look = null, prov = "";
+  try {
+    const r = await fetch(`/api/v2/complete-the-look?anchor=${id}&k=8` + (customer != null ? `&customer=${customer}` : ""));
+    if (r.ok) {
+      const v = await r.json();
+      prov = `<p class="sub">${v.personalized ? "Personalized for this customer" : "Not personalized (no purchase history)"} · model ${esc(v.model_version)} · catalogue ${esc(v.catalog_version)} · request ${esc(v.request_id)}</p>`;
+      look = v.modules.filter(m => m.items.length).map(m => `<h3>${m.title} <span class="chip">${m.personalized ? "personalized" : "compatibility order"}</span> <span class="chip">source: ${m.fallback_level.replace(/_/g, " ")}</span></h3><div class="row">${m.items.map(it => { log("impression", "complete_the_look", it.article_id, a.article_id); return cardHTML({...it.card, reasons: [...it.reasons, {text: `evidence: ${it.provenance.replace(/_/g, " ")}`}]}, "complete_the_look"); }).join("")}</div>`).join("");
+    }
+  } catch (e) { look = null; }
+  if (look === null) look = d.complete_the_look.length
     ? d.complete_the_look.map(m => `<h3>${m.title}</h3><div class="row">${m.items.map(it => { log("impression", "complete_the_look", it.article_id, a.article_id); return cardHTML(it, "complete_the_look"); }).join("")}</div>`).join("")
     : `<p class="sub">No outfit suggestions: this item is outside the wearable slots or not in the live catalogue.</p>`;
+  look = prov + look;
   $("#app").innerHTML = `<div class="product"><img src="${a.image}" alt="${esc(a.prod_name)}">
     <div><h1>${esc(a.prod_name)}</h1><p class="sub">${esc(a.product_type_name)} · ${esc(a.colour_group_name)} · ${esc(a.department_name)} · ${esc(a.index_group_name)}</p>
     <p>${esc(a.detail_desc)}</p><button onclick="history.back()">← Back</button>

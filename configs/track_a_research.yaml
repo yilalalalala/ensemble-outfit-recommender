@@ -84,3 +84,21 @@ research:
   top_k: 100                 # list length cached per (model, week, seed): retrieval channel pool
 
   tuning: {}
+
+  # Track A ensemble configurations compared on the reporting folds (ensemble.research.ensemble).
+  # phase2: the authoritative Phase-2 operating point (D-027), reproduced. phase2_nscores: same
+  # candidates + the three neural dot-product features (isolates ranking signal at a fixed
+  # candidate set). neural_channels: the allocator's caps at ~160 with the neural channels in its
+  # pool (allocator weeks only; reports/track_a_research/budget_frontier.json) + the features.
+  ensemble:
+    neural_seed: 0
+    eval_chunk_customers: 20000
+    keep_top: 50
+    final: phase2            # set by the adoption rule (D-038) after the comparison; see D-040
+    configs:
+      phase2:
+        caps: {repeat: 10, pop: 5, pop_age: 65, cf: 5, variant: 20, dept_pop: 40, section_pop: 65, covis: 25, new_arrival_pers: 10}
+        neural_features: []
+      phase2_nscores:
+        caps: {repeat: 10, pop: 5, pop_age: 65, cf: 5, variant: 20, dept_pop: 40, section_pop: 65, covis: 25, new_arrival_pers: 10}
+        neural_features: [bpr, lightgcn, sasrec]

@@ -173,6 +173,33 @@ def cluster_bootstrap(a: pd.DataFrame, b: pd.DataFrame, col: str = "ap", n_boot:
             "p_diff_gt_0": float((d > 0).mean()), "n_customers": int(N), "n_rows": int(n.sum()), "n_boot": int(n_boot)}
 
 
+def cluster_bootstrap_ratio(a: pd.DataFrame, b: pd.DataFrame, num: str, den: str, n_boot: int = 1000,
+                            seed: int = 0, chunk: int = 50) -> dict:
+    """As ``cluster_bootstrap`` for a micro-averaged ratio metric sum(num) / sum(den), e.g. Recall@12
+    = hits / truth. Customers (across folds) are the resampling unit; the ratio is recomputed in
+    every resample, for both systems on the same resampled customers."""
+    keys = ["customer_idx", "fold"]
+    m = a[keys + [num, den]].merge(b[keys + [num]], on=keys, suffixes=("_a", "_b"), validate="one_to_one")
+    if len(m) != len(a) or len(m) != len(b):
+        raise ValueError("systems were scored on different (customer, fold) populations")
+    g = m.groupby("customer_idx").agg(na=(f"{num}_a", "sum"), nb=(f"{num}_b", "sum"), d=(den, "sum"))
+    na, nb, dd = (g[c].to_numpy(dtype=np.float64) for c in ("na", "nb", "d"))
+    rng = np.random.default_rng(seed)
+    diff, rel = [], []
+    for start in range(0, n_boot, chunk):
+        idx = rng.integers(0, len(g), size=(min(chunk, n_boot - start), len(g)))
+        D = dd[idx].sum(1)
+        ra, rb = na[idx].sum(1) / D, nb[idx].sum(1) / D
+        diff.append(rb - ra)
+        rel.append(rb / ra - 1)
+    diff, rel = np.concatenate(diff), np.concatenate(rel)
+    ra, rb = na.sum() / dd.sum(), nb.sum() / dd.sum()
+    return {"metric": f"{num}/{den}", "mean_a": float(ra), "mean_b": float(rb), "diff": float(rb - ra),
+            "diff_ci95": [float(x) for x in np.percentile(diff, [2.5, 97.5])], "relative": float(rb / ra - 1),
+            "relative_ci95": [float(x) for x in np.percentile(rel, [2.5, 97.5])],
+            "p_diff_gt_0": float((diff > 0).mean()), "n_customers": int(len(g)), "n_boot": int(n_boot)}
+
+
 def fold_stats(per_fold: dict[str, dict], metric: str = "map@12") -> dict:
     vals = [v[metric] for v in per_fold.values()]
     return {"per_fold": {k: v[metric] for k, v in per_fold.items()}, "mean": float(np.mean(vals)),
