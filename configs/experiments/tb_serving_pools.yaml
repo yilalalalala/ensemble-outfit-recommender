@@ -1,0 +1,13 @@
+# Track B serving regression (D-041): how much of the personalized ranker survives when it may
+# only re-order the compatibility ranker's top-P pool per (anchor, target slot), which is what
+# request-time serving stores. Same cache key as `default` (nothing below is part of it), so the
+# cached towers and training matrices of the Round-3 six-fold run are reused; the ablation table
+# is off. Six rolling validation folds only; the test week is not touched.
+extends: default
+track_b:
+  feature_ablations: []
+  serving_pools:
+    model: lgbm_personalized
+    pool_model: lgbm_compatibility
+    pools: [24, 48, 100]
+    rules: {one_per_product_code: true, max_per_product_type: 2}

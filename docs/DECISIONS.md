@@ -970,3 +970,72 @@ single-run difference is reported as a result.
 
 **Revisit if:** the architecture changes (then re-test hard negatives), or a decisive tower
 comparison is needed — run it on CPU, which is reproducible.
+
+---
+
+### D-038 — Track A research protocol: six rolling folds, a sales-proxy eligible catalogue, one fallback, customer-cluster intervals
+**Date:** 2026-10-03 · **Status:** active · **frozen before any comparison was run**
+
+**Decision.** Track A's research comparison (`configs/track_a_research.yaml`, `research.protocol`,
+`src/ensemble/research/protocol.py`) uses:
+
+- **Six reporting folds**, the consecutive label weeks 2020-08-05 … 2020-09-09 (ending at
+  validation). Every per-week model, retrieval statistic, vocabulary, graph, sequence and
+  feature reads only `t_dat < week.start`; the ranker trains on the four label weeks before
+  each fold. Six are feasible: the earliest ranker training week (2020-07-08) still has 22
+  months of history behind it.
+- **Tuning folds** 2020-07-22 and 2020-07-29, and **allocator weeks** 2020-07-15/22/29, all
+  ending before the first reporting fold. Neural hyperparameters and any new candidate budget
+  are chosen there, never on a reporting fold.
+- **The test week 2020-09-16 is confirmation evidence only.** It and the Kaggle scores have
+  been observed (Phase 2); they are not used for selection, debugging, thresholds or stopping,
+  and no Kaggle submission is made.
+- **Evaluation customers:** every label-week buyer (D-014), no sampling.
+- **Eligible catalogue** `E(w)`: articles sold at least once in the 28 days before `w.start`
+  (the D-029 availability proxy; 94.3% of validation-week purchase pairs fall inside it).
+  Every system's list is restricted to `E(w)` and back-filled with the age-band best sellers
+  of the 7 days before the cutoff, which are always in `E(w)`. This is also every system's
+  new-user fallback. Ties break on `article_id`.
+- **Metrics:** MAP@12 (selection), Recall@12, NDCG@12, candidate recall and conversion,
+  catalogue coverage over `E(w)`, novelty (mean −log₂ of 28-day sales share).
+- **Segments, declared before scoring:** returning vs new customers; activity bands from
+  52-week transaction counts (low ≤ 12, medium 13–32, high ≥ 33 — the tertiles among buyers
+  of tuning week 2020-07-22); head = top 10% of `E(w)` by 7-day sales; recently launched =
+  first sale within 28 days before the cutoff; repeat vs non-repeat truth (bought before the
+  cutoff or not); cold and ineligible truth reported as ceilings.
+- **Uncertainty:** paired bootstrap, 1,000 resamples, seed 0, resampling **customers across
+  folds** (a customer who buys in three folds is one cluster carrying three rows); the relative
+  difference is computed inside every resample, fixing the fixed-denominator approximation
+  noted in D-032.
+- **Seeds:** neural baselines 0, 1, 2; ranker 42, 43, 44.
+- **Adoption rule for any change to the ensemble:** pooled ΔMAP@12 95% interval entirely above
+  zero, a gain in at least 4 of 6 folds, and at most +50% ranker training time and +25% peak
+  memory. The target (+5% over the strongest reproduced baseline with a CI above zero) is
+  reported as met or not met; the protocol is not changed to meet it.
+
+**Why.** One week cannot carry a model choice (D-032). A catalogue restriction that is
+knowable at the cutoff keeps every system from winning or losing on stale stock, and a single
+shared fallback means a model is never credited with a popularity list it did not produce.
+
+**Revisit if:** a later week of data arrives (a genuinely untouched holdout), or an inventory
+feed replaces the sales proxy.
+
+---
+
+### D-041 — Track B request-time personalization re-ranks a bounded compatibility pool; tolerance fixed before measuring
+**Date:** 2026-10-03 · **Status:** active (thresholds fixed before the regression run)
+
+**Decision.** The serving bundle stores, per (anchor, target slot), the compatibility ranker's
+top-P candidates with their compatibility features. At request time the personalized ranker
+(D-033, D-034) re-orders that pool with point-in-time customer features read from a versioned
+profile snapshot; the diversity rules (D-035) then re-order and back-fill. P is the smallest of
+{24, 48, 100} meeting both predeclared tolerances on the six rolling validation folds
+(`configs/experiments/tb_serving_pools.yaml`):
+
+1. `lgbm_personalized@poolP` keeps at least **99%** of unrestricted `lgbm_personalized`
+   pooled Recall@12, and
+2. `lgbm_personalized@poolP+shipped` (what serving shows) is **not worse** than the currently
+   served `lgbm_compatibility+shipped`: pooled customer-cluster bootstrap 95% interval of the
+   Recall@12 difference entirely above zero.
+
+If no P meets (1), the largest P is used and the shortfall is reported as a product trade-off.

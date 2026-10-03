@@ -366,6 +366,16 @@ def ch_new_arrival_pers(con, week: Week, r, users_table: str) -> None:
     """)
 
 
+def _neural(con, week: Week, r, users_table: str, model: str) -> None:
+    """Reproduced BPR-MF / LightGCN / SASRec top-k for this week's cutoff (``ensemble.research``)."""
+    from ensemble.research.channels import build_neural_channel
+    build_neural_channel(con, week, r, users_table, model)
+
+
+for _model in ("bpr", "lightgcn", "sasrec"):
+    channel(_model)(lambda con, week, r, users_table, _m=_model: _neural(con, week, r, users_table, _m))
+
+
 # ---------------------------------------------------------------------------
 # Merge
 # ---------------------------------------------------------------------------

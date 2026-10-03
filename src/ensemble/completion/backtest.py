@@ -108,6 +108,19 @@ def rrf_from_ranks(df: pd.DataFrame) -> np.ndarray:
     return s
 
 
+def pooled_rerank(chunk: pd.DataFrame, pool_score: np.ndarray, rank_score: np.ndarray, pool: int) -> dict:
+    """Per qid: keep the ``pool`` best candidates by ``pool_score`` (ties -> smaller article id),
+    then order them by ``rank_score``. Returns the whole re-ordered pool per qid."""
+    qid, art = chunk.qid.to_numpy(), chunk.article_id.to_numpy()
+    order = np.lexsort((art, -pool_score, qid))
+    q_s = qid[order]
+    starts = np.r_[0, np.flatnonzero(q_s[1:] != q_s[:-1]) + 1]
+    pos = np.arange(len(order)) - np.repeat(starts, np.diff(np.r_[starts, len(order)]))
+    keep = order[pos < pool]
+    sub = chunk.iloc[keep][["qid", "article_id"]]
+    return R.top_k(sub, rank_score[keep], pool)
+
+
 # ------------------------------------------------------------------ matrices
 
 
@@ -189,6 +202,13 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
     pool_k = max(k, int(rules.get("pool", 4 * k))) if serve_model else k
     pools: list = [None] * len(q) if serve_model else []
 
+    # Request-time serving (D-041): the personalized ranker re-orders only the compatibility
+    # ranker's top-P pool per (anchor, target slot), because serving stores a bounded pool per key.
+    sp = cfg.track_b.get("serving_pools") or {}
+    sp_on = bool(sp) and sp.get("model") in boosters and sp.get("pool_model") in boosters
+    sp_pools = [int(x) for x in sp.get("pools", [])] if sp_on else []
+    sp_lists: dict = {P: [None] * len(q) for P in sp_pools}
+
     t_eval = time.time()
     n_rows, n_hits = 0, 0
     rrf_union: list = [None] * len(q)
@@ -196,14 +216,19 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
     for chunk in eval_chunks(con, cfg, art):
         n_rows += len(chunk)
         n_hits += int(chunk.label.sum())
+        scores = {}
         for name, (booster, feats) in boosters.items():
             score = booster.predict(chunk[feats], num_threads=8)
+            scores[name] = score
             take = pool_k if name == serve_model else k
             for qid, arr in R.top_k(chunk, score, take).items():
                 i = pos_of[qid]
                 recs[name][i] = arr[:k]
                 if name == serve_model:
                     pools[i] = arr
+        for P_ in sp_pools:
+            for qid, arr in pooled_rerank(chunk, scores[sp["pool_model"]], scores[sp["model"]], P_).items():
+                sp_lists[P_][pos_of[qid]] = arr
         for qid, arr in R.top_k(chunk, rrf_from_ranks(chunk), k).items():
             rrf_union[pos_of[qid]] = arr
         del chunk
@@ -211,6 +236,19 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
     recs["rrf_all_sources_union"] = [a if a is not None else np.empty(0, dtype=np.int64) for a in rrf_union]
     for name in boosters:
         recs[name] = [a if a is not None else np.empty(0, dtype=np.int64) for a in recs[name]]
+    if sp_on:
+        ptype_ = dict(zip(attrs.article_id.to_numpy(), attrs.product_type_no.to_numpy()))
+        pcode_ = dict(zip(attrs.article_id.to_numpy(), attrs.product_code.to_numpy()))
+        empty = np.empty(0, dtype=np.int64)
+        rules_ = dict(sp.get("rules") or {})
+        for P_ in sp_pools:
+            lists = [a if a is not None else empty for a in sp_lists[P_]]
+            recs[f"{sp['model']}@pool{P_}"] = [a[:k] for a in lists]
+            if rules_:
+                recs[f"{sp['model']}@pool{P_}+shipped"] = [FU.apply_diversity(a, k, ptype_, pcode_, **rules_)
+                                                          for a in lists]
+        del sp_lists
+        gc.collect()
     if serve_model:
         ptype = dict(zip(attrs.article_id.to_numpy(), attrs.product_type_no.to_numpy()))
         pcode = dict(zip(attrs.article_id.to_numpy(), attrs.product_code.to_numpy()))

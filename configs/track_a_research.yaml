@@ -1,0 +1,86 @@
+# Track A research benchmark (reports/TRACK_A_RESEARCH_TRACK_B_PRODUCTION_REPORT.md, D-038..).
+# One frozen, versioned protocol under which the Phase-2 ensemble and the reproduced
+# BPR-MF, LightGCN and SASRec baselines are compared. Bump `protocol_version` whenever
+# anything below `research.protocol` changes; it is part of every cache key.
+extends: default
+
+research:
+  protocol:
+    protocol_version: 1
+    # Six consecutive label weeks ending at validation (2020-09-09). The test week
+    # 2020-09-16 has already been observed (Phase 2, Kaggle) and is confirmation
+    # evidence only: never used for selection, debugging, thresholds or stopping.
+    reporting_folds: ["2020-08-05", "2020-08-12", "2020-08-19", "2020-08-26", "2020-09-02", "2020-09-09"]
+    # Hyperparameter tuning and the candidate-budget allocator use only these weeks,
+    # all of which end before the first reporting fold starts.
+    tuning_folds: ["2020-07-22", "2020-07-29"]
+    allocator_weeks: ["2020-07-15", "2020-07-22", "2020-07-29"]
+    allocator_sample: 0.25
+    confirmation_week: "2020-09-16"
+    k: 12
+    # Eligible catalogue for label week w: articles with >= 1 sale in the
+    # `eligible_days` before w.start (the D-029 availability proxy). Knowable at the
+    # cutoff. Every system's list is restricted to it, then back-filled.
+    eligible_days: 28
+    # Deterministic back-fill / new-user fallback for every system: the M1 age-band
+    # best sellers of the 7 days before the cutoff (baselines.popular_by_age).
+    fallback: popular_by_age
+    # Segments (declared before any reporting fold was scored; thresholds are the
+    # tertiles of 52-week transaction counts among buyers of tuning week 2020-07-22).
+    activity_weeks: 52
+    activity_bands: {low: [0, 12], medium: [13, 32], high: [33, 1000000]}
+    head_share: 0.10          # head = top 10% of the eligible catalogue by 7-day pre-cutoff sales
+    head_days: 7
+    recent_item_days: 28      # launch proxy: first observed sale within 28 days before the cutoff
+    bootstrap: {n_boot: 1000, seed: 0}
+    seeds: {neural: [0, 1, 2], ranker: [42, 43, 44]}
+    # Adoption rule for any addition to the ensemble (fixed before the comparison ran):
+    # pooled customer-cluster bootstrap 95% CI of ΔMAP@12 entirely above 0, a gain in at
+    # least 4 of 6 folds, and no more than +50% ranker training time or +25% peak memory.
+    adoption: {min_folds_won: 4, max_train_time_increase: 0.5, max_peak_rss_increase: 0.25}
+
+  # Faithful, minimal reproductions (src/ensemble/research/models.py). Values here are
+  # the tuning-fold winners; the grids that produced them are in `tuning`.
+  models:
+    bpr:
+      window_weeks: 26        # positives: unique (customer, article) purchases in this window
+      min_item_count: 3
+      dim: 64
+      reg: 0.0001
+      lr: 0.005
+      batch_size: 16384
+      epochs: 20
+      mask_seen: false
+      device: cpu
+    lightgcn:
+      window_weeks: 26
+      min_item_count: 3
+      dim: 64
+      layers: 3
+      reg: 0.0001
+      lr: 0.005
+      batch_size: 131072
+      epochs: 20
+      mask_seen: false
+      device: mps
+    sasrec:
+      vocab_weeks: 26         # items with >= min_item_count sales in this window form the vocabulary
+      min_item_count: 3
+      train_weeks: 26         # customers with a purchase in this window contribute training sequences
+      history_weeks: 104      # inference/training inputs read at most this far back
+      max_len: 50
+      dim: 64
+      blocks: 2
+      heads: 1
+      dropout: 0.2
+      lr: 0.001
+      batch_size: 256
+      epochs: 8
+      loss: gbce             # gSASRec generalised BCE (Petrov & Macdonald 2023); bce = original; ce = full softmax
+      negatives: 256         # gbce: uniform negatives per sequence
+      gbce_t: 0.75           # gbce calibration parameter t (paper default)
+      mask_seen: false
+      device: mps
+  top_k: 100                 # list length cached per (model, week, seed): retrieval channel pool
+
+  tuning: {}
