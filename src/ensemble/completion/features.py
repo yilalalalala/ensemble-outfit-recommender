@@ -81,11 +81,7 @@ def build_context(con, week: Week, cfg, uni: pd.DataFrame, q: pd.DataFrame,
                     SELECT p.article_id, p.mean_price,
                            ntile(5) OVER (PARTITION BY a.slot ORDER BY p.mean_price) AS price_tier
                     FROM p JOIN _tb_attrs a USING (article_id) WHERE a.slot IS NOT NULL""")
-    con.register("_tb_keysim_df", key_sims if key_sims is not None else pd.DataFrame(
-        {"anchor": pd.Series(dtype="int64"), "target_slot": pd.Series(dtype="object"),
-         "article_id": pd.Series(dtype="int64"), "tt_pair_sim": pd.Series(dtype="float32"),
-         "ttc_pair_sim": pd.Series(dtype="float32"), "clip_sim": pd.Series(dtype="float32")}))
-    con.execute("CREATE OR REPLACE TEMP TABLE _tb_keysim AS SELECT * FROM _tb_keysim_df")
+    register_key_sims(con, key_sims)
     truth = pd.DataFrame({"qid": np.repeat(q.qid.values, [len(t) for t in q.truth.values]),
                           "article_id": np.concatenate([np.asarray(t, dtype=np.int64)
                                                         for t in q.truth.values]) if len(q) else
@@ -93,6 +89,19 @@ def build_context(con, week: Week, cfg, uni: pd.DataFrame, q: pd.DataFrame,
     con.register("_tb_truth_df", truth)
     con.execute("CREATE OR REPLACE TEMP TABLE _tb_truth AS SELECT * FROM _tb_truth_df")
     _customer_tables(con, week, cfg)
+
+
+def register_key_sims(con, key_sims: pd.DataFrame | None) -> None:
+    """``_tb_keysim``: two-tower / FashionCLIP similarity per (anchor, target_slot, article_id).
+
+    Separate from :func:`build_context` because serving covers every live anchor and
+    swaps this table one batch of anchors at a time.
+    """
+    con.register("_tb_keysim_df", key_sims if key_sims is not None else pd.DataFrame(
+        {"anchor": pd.Series(dtype="int64"), "target_slot": pd.Series(dtype="object"),
+         "article_id": pd.Series(dtype="int64"), "tt_pair_sim": pd.Series(dtype="float32"),
+         "ttc_pair_sim": pd.Series(dtype="float32"), "clip_sim": pd.Series(dtype="float32")}))
+    con.execute("CREATE OR REPLACE TEMP TABLE _tb_keysim AS SELECT * FROM _tb_keysim_df")
 
 
 def _customer_tables(con, week: Week, cfg) -> None:

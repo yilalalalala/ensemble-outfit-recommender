@@ -1,0 +1,11 @@
+# Track B Round 3: the measurement runs that must not fit the ablation table.
+#
+# Same cache key as `default` (feature_ablations and serving_rules are not part of
+# it), so every cached tower artifact and training matrix is reused. Only the two
+# candidate shipping models are fitted, plus the serving diversity variants:
+#   * the serving re-ranking trade-off on the rolling folds, and
+#   * the single final test-week evaluation.
+# The ablation table is switched off here so the test week never sees ten models.
+extends: default
+track_b:
+  feature_ablations: []

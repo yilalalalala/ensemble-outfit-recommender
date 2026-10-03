@@ -182,6 +182,13 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
         for name in boosters:
             recs[name] = [None] * len(q)
 
+    # Phase 7: the serving model's deeper pool, kept so the diversity rules can be
+    # re-ranked out of it without a second scoring pass.
+    rules = cfg.track_b.get("serving_rules") or {}
+    serve_model = rules.get("model") if rules.get("model") in boosters else None
+    pool_k = max(k, int(rules.get("pool", 4 * k))) if serve_model else k
+    pools: list = [None] * len(q) if serve_model else []
+
     t_eval = time.time()
     n_rows, n_hits = 0, 0
     rrf_union: list = [None] * len(q)
@@ -191,8 +198,12 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
         n_hits += int(chunk.label.sum())
         for name, (booster, feats) in boosters.items():
             score = booster.predict(chunk[feats], num_threads=8)
-            for qid, arr in R.top_k(chunk, score, k).items():
-                recs[name][pos_of[qid]] = arr
+            take = pool_k if name == serve_model else k
+            for qid, arr in R.top_k(chunk, score, take).items():
+                i = pos_of[qid]
+                recs[name][i] = arr[:k]
+                if name == serve_model:
+                    pools[i] = arr
         for qid, arr in R.top_k(chunk, rrf_from_ranks(chunk), k).items():
             rrf_union[pos_of[qid]] = arr
         del chunk
@@ -200,6 +211,16 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
     recs["rrf_all_sources_union"] = [a if a is not None else np.empty(0, dtype=np.int64) for a in rrf_union]
     for name in boosters:
         recs[name] = [a if a is not None else np.empty(0, dtype=np.int64) for a in recs[name]]
+    if serve_model:
+        ptype = dict(zip(attrs.article_id.to_numpy(), attrs.product_type_no.to_numpy()))
+        pcode = dict(zip(attrs.article_id.to_numpy(), attrs.product_code.to_numpy()))
+        empty = np.empty(0, dtype=np.int64)
+        for variant, opts in (rules.get("variants") or {}).items():
+            recs[f"{serve_model}+{variant}"] = [
+                FU.apply_diversity(pl, k, ptype, pcode, **dict(opts)) if pl is not None else empty
+                for pl in pools]
+        del pools
+        gc.collect()
 
     n_truth = int(sum(len(t) for t in q.truth.values))
     out: dict = {"metrics": {}, "fit": fit_info, "n_eval_rows": int(n_rows),

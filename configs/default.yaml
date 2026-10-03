@@ -217,6 +217,15 @@ track_b:
   # ranker with that group removed, on every fold, in the same evaluation pass. Not part
   # of the cache key: the feature matrices are unchanged, only the fitted model differs.
   feature_ablations: [repeat, towers, clip, association, style_backoff, decay, popularity, price+colour]
+  # Phase 7: what serving's Complete-the-Look diversity rules cost in accuracy. Each variant
+  # re-ranks the shipping model's top `pool` candidates and is scored as its own system.
+  serving_rules:
+    model: lgbm_compatibility
+    pool: 48
+    variants:
+      one_colourway: {one_per_product_code: true}
+      max2_per_type: {max_per_product_type: 2}
+      shipped: {one_per_product_code: true, max_per_product_type: 2}
   eval_chunk_queries: 8000
   bootstrap: {n_boot: 1000, seed: 0}
   ranker:

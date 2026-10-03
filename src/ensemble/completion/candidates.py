@@ -38,14 +38,32 @@ def register(con, q: pd.DataFrame, uni: pd.DataFrame) -> None:
                    FROM _tb_keys k JOIN articles a ON a.article_id = k.anchor""")
 
 
-def build_sources(con, cfg, tt: pd.DataFrame | None = None, ttc: pd.DataFrame | None = None) -> dict:
+def register_keys(con, qid_lo: int, qid_hi: int) -> int:
+    """Narrow ``_tb_keys`` / ``_tb_code_keys`` to the queries in ``[qid_lo, qid_hi)``.
+
+    Serving covers every live anchor, which is far more keys than one backtest
+    fold, so it is built in slices; this is what makes a slice's evidence,
+    retrieval and pair similarities the only ones held in memory.
+    """
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE _tb_keys AS
+                    SELECT DISTINCT anchor, target_slot FROM _tbq
+                    WHERE qid >= {int(qid_lo)} AND qid < {int(qid_hi)}""")
+    con.execute("""CREATE OR REPLACE TEMP TABLE _tb_code_keys AS
+                   SELECT DISTINCT a.product_code AS src_code, k.target_slot
+                   FROM _tb_keys k JOIN articles a ON a.article_id = k.anchor""")
+    return con.execute("SELECT count(*) FROM _tb_keys").fetchone()[0]
+
+
+def build_sources(con, cfg, tt: pd.DataFrame | None = None, ttc: pd.DataFrame | None = None,
+                  cand: dict | None = None) -> dict:
     """Create ``_tb_assoc``, ``_tb_style``, ``_tb_tt`` and ``_tb_pop``; return row counts.
 
     ``tt`` / ``ttc`` are optional two-tower retrieval results with columns
-    (anchor, target_slot, article_id, sim) ordered best-first per key.
+    (anchor, target_slot, article_id, sim) ordered best-first per key. ``cand``
+    overrides the per-source budget (serving uses its own, see D-033).
     """
     b = cfg.track_b
-    cand = b.candidates
+    cand = dict(b.candidates if cand is None else cand)
     dcols = decay_names(cfg)
     dsel = "".join(f", p.{c}" for c in dcols)
     n_co, n_npmi = int(cand["assoc_co"]), int(cand["assoc_npmi"])

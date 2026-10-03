@@ -73,25 +73,77 @@ def home(customer_idx: int):
     ]}
 
 
+# Provenance labels written by ensemble.completion.serve_round3; the Round-1 table only
+# ever carried "co_purchase" and "style_match", which both still resolve here.
+ASSOCIATION_SOURCES = ("co_purchase", "style_co_purchase", "style_match")
+
+
+def _ctl_columns() -> list[str]:
+    """Columns the serving store actually has, so an older table still renders."""
+    try:
+        return [r["name"] for r in q("PRAGMA table_info(complete_the_look)")]
+    except Exception:  # noqa: BLE001 - no serving store yet; the endpoint 404s anyway
+        return []
+
+
+def ctl_reasons(r: dict) -> list[dict]:
+    """Reason chips for one Complete-the-Look pick, gated on evidence present in the row.
+
+    A chip is emitted only when the column it quotes is non-null for *this* pair
+    (D-034): a visually retrieved pick never claims co-purchase support, and a
+    popularity fallback says so instead of borrowing a style explanation.
+    """
+    def num(key):
+        v = r.get(key)
+        return v if isinstance(v, (int, float)) and v == v else None
+
+    out: list[dict] = []
+    co, lift, s_co = num("a_co"), num("lift"), num("s_co")
+    if r.get("source") in ("co_purchase", "style_match") and co and lift:
+        out.append({"key": "co_purchase",
+                    "text": f"Bought together {int(co)}× in past baskets, "
+                            f"{lift:.1f}× more often than chance"})
+    elif r.get("source") == "co_purchase" and lift:          # Round-1 table: lift only
+        out.append({"key": "co_purchase", "text": f"Bought together {lift:.1f}× more often than chance"})
+    elif r.get("source") == "style_co_purchase" and s_co:
+        out.append({"key": "style", "text": f"Bought with this style {int(s_co)}× in past baskets"})
+    elif r.get("source") == "visual_compatibility":
+        out.append({"key": "visual", "text": "Visually matches this piece"})
+    elif r.get("source") == "popular_in_slot":
+        out.append({"key": "popular", "text": "Popular pick for this category"})
+    else:
+        out.append({"key": "style", "text": "Style match for this piece"})
+    if num("same_colour_master") == 1:
+        out.append({"key": "colour", "text": "Same colour family"})
+    if num("price_tier_diff") == 0:
+        out.append({"key": "price", "text": "Same price range"})
+    return out[:3]
+
+
 @app.get("/api/product/{article_id}")
 def product(article_id: int):
     a = q("SELECT * FROM articles WHERE article_id = ?", (article_id,))
     if not a:
         raise HTTPException(404, "unknown article")
     a = card(a[0])
-    ctl = q(f"""SELECT c.slot AS target_slot, c.rank, c.source, c.lift, {ART_COLS}
+    have = _ctl_columns()
+    extra = "".join(f", c.{c}" for c in ("a_co", "a_npmi", "s_co", "s_npmi", "backoff_level",
+                                         "src_two_tower", "src_slot_pop", "tt_pair_sim", "clip_sim",
+                                         "same_colour_master", "price_tier_diff", "score")
+                    if c in have)
+    ctl = q(f"""SELECT c.slot AS target_slot, c.rank, c.source, c.lift{extra}, {ART_COLS}
                 FROM complete_the_look c JOIN articles a USING (article_id)
                 WHERE c.anchor = ? ORDER BY c.slot, c.rank""", (article_id,))
     by_slot: dict[str, list] = {}
     for r in ctl:
         r = card(r)
-        r["reasons"] = [{"key": "co_purchase", "text": f"Bought together {r['lift']:.1f}× more often than chance"}
-                        if r["source"] == "co_purchase" else {"key": "style", "text": "Style match for this piece"}]
+        r["reasons"] = ctl_reasons(r)
         by_slot.setdefault(r["target_slot"], []).append(r)
     # Show a slot only when customers actually complete this item with it (at least one
-    # co-purchase-backed pick); shoes and accessories are always offered. Order by evidence.
+    # association-backed pick); shoes and accessories are always offered. Order by evidence.
     order = ["lower", "upper", "full", "shoes", "accessories", "socks", "swimwear"]
-    evidence = {s: sum(i["source"] == "co_purchase" for i in items) for s, items in by_slot.items()}
+    evidence = {s: sum(i["source"] in ASSOCIATION_SOURCES for i in items)
+                for s, items in by_slot.items()}
     look = [{"slot": s, "title": SLOT_TITLES[s], "items": items} for s, items in by_slot.items()
             if evidence[s] > 0 or s in ("shoes", "accessories")]
     look.sort(key=lambda m: (-evidence[m["slot"]], order.index(m["slot"])))

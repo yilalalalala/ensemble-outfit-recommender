@@ -502,3 +502,123 @@ def test_baseline_recs_are_capped_at_k_and_unique():
             assert len(r) == len(set(r.tolist())) <= 4
         assert np.array_equal(out[name][0], out[name][1])     # same key -> same list
     assert out["slot_popularity"][0].tolist() == [7, 8, 9, 10]
+
+
+# ---------------------------------------------------------------- serving re-ranking rules
+
+
+def test_apply_diversity_enforces_the_serving_rules_and_keeps_the_list_full():
+    from ensemble.completion import fusion as FU
+    # Articles 1..4 are two colourways of two styles of one product type; 5..8 are distinct.
+    pcode = {1: "a", 2: "a", 3: "b", 4: "b", 5: "c", 6: "d", 7: "e", 8: "f"}
+    ptype = {1: 10, 2: 10, 3: 10, 4: 10, 5: 20, 6: 30, 7: 40, 8: 50}
+    pool = [1, 2, 3, 4, 5, 6, 7, 8]
+    assert FU.apply_diversity(pool, 4, ptype, pcode, one_per_product_code=True).tolist() == [1, 3, 5, 6]
+    assert FU.apply_diversity(pool, 4, ptype, pcode, max_per_product_type=2).tolist() == [1, 2, 5, 6]
+    assert FU.apply_diversity(pool, 4, ptype, pcode, one_per_product_code=True,
+                              max_per_product_type=2).tolist() == [1, 3, 5, 6]
+    # With no rule the pool order is preserved exactly.
+    assert FU.apply_diversity(pool, 4, ptype, pcode).tolist() == [1, 2, 3, 4]
+
+
+def test_apply_diversity_fills_back_rejected_items_rather_than_shortening():
+    from ensemble.completion import fusion as FU
+    pcode = {i: "same" for i in range(1, 6)}
+    ptype = {i: 10 for i in range(1, 6)}
+    strict = FU.apply_diversity([1, 2, 3, 4, 5], 3, ptype, pcode, one_per_product_code=True,
+                                fill_back=False)
+    filled = FU.apply_diversity([1, 2, 3, 4, 5], 3, ptype, pcode, one_per_product_code=True)
+    assert strict.tolist() == [1]                  # every other item is the same style
+    assert filled.tolist() == [1, 2, 3]            # order unchanged, length restored
+
+
+def test_apply_diversity_handles_unknown_attributes():
+    from ensemble.completion import fusion as FU
+    out = FU.apply_diversity([1, 2, 3], 3, {}, {}, one_per_product_code=True)
+    assert out.tolist() == [1, 2, 3]               # all codes None -> one kept, two filled back
+
+
+# ---------------------------------------------------------------- serving key space (Phase 7)
+
+
+def test_serving_queries_cover_every_live_anchor_and_other_slot():
+    from ensemble.completion import pipeline as PL
+    uni = pd.DataFrame({"article_id": [1, 2, 3], "slot": ["upper", "lower", "shoes"]})
+    q = PL.serving_queries(uni)
+    assert len(q) == 3 * (len(PL.SERVE_SLOTS) - 1)
+    assert (q.anchor_slot != q.target_slot).all()
+    assert (q.customer_idx == -1).all()                     # anchor-level table, no customer
+    assert all(len(t) == 0 for t in q.truth)                # a future week has no label
+    assert q.qid.tolist() == list(range(len(q)))
+    assert q.anchor.is_monotonic_increasing
+    # Same shape as the evaluation query table, so the same feature SQL runs unchanged.
+    assert {"qid", "customer_idx", "anchor", "anchor_slot", "target_slot", "truth"} <= set(q.columns)
+
+
+def test_serving_batches_partition_the_key_space_on_anchor_boundaries():
+    from ensemble.completion import pipeline as PL
+    uni = pd.DataFrame({"article_id": list(range(1, 11)), "slot": ["upper"] * 10})
+    q = PL.serving_queries(uni)
+    for n in (1, 3, 4, 100):
+        b = PL.serving_batches(q, n)
+        assert b[0][0] == 0 and b[-1][1] == len(q)
+        assert all(b[i][1] == b[i + 1][0] for i in range(len(b) - 1))   # contiguous, no gaps
+        covered = sum(hi - lo for lo, hi in b)
+        assert covered == len(q)
+        # No anchor is split across two batches.
+        for lo, hi in b:
+            inside = set(q.anchor[(q.qid >= lo) & (q.qid < hi)])
+            outside = set(q.anchor[(q.qid < lo) | (q.qid >= hi)])
+            assert not (inside & outside)
+
+
+def test_serving_provenance_label_prefers_the_strongest_evidence():
+    from ensemble.completion.serve_round3 import source_of
+    nan = float("nan")
+    Row = lambda **kw: pd.Series({"a_co": nan, "s_co": nan, "src_two_tower": 0,  # noqa: E731
+                                  "src_slot_pop": 0, **kw})
+    assert source_of(Row(a_co=4.0, s_co=9.0, src_two_tower=1)) == "co_purchase"
+    assert source_of(Row(s_co=9.0, src_two_tower=1)) == "style_co_purchase"
+    assert source_of(Row(src_two_tower=1, src_slot_pop=1)) == "visual_compatibility"
+    assert source_of(Row(src_slot_pop=1)) == "popular_in_slot"
+    assert source_of(Row()) == "other"
+
+
+# ---------------------------------------------------------------- evidence-gated reason chips
+
+
+def test_reason_chips_only_cite_evidence_present_in_the_row():
+    from ensemble.api.app import ctl_reasons
+    nan = float("nan")
+    base = {"a_co": nan, "lift": nan, "s_co": nan, "same_colour_master": nan, "price_tier_diff": nan}
+
+    co = ctl_reasons({**base, "source": "co_purchase", "a_co": 7, "lift": 3.25})
+    assert co[0]["key"] == "co_purchase" and "7×" in co[0]["text"] and "3.2× more often" in co[0]["text"]
+
+    # Visual and popularity picks must not borrow a co-purchase or style claim.
+    vis = ctl_reasons({**base, "source": "visual_compatibility"})
+    assert [r["key"] for r in vis] == ["visual"]
+    pop = ctl_reasons({**base, "source": "popular_in_slot"})
+    assert [r["key"] for r in pop] == ["popular"]
+    assert "Popular" in pop[0]["text"]
+
+    # A co_purchase row with no numbers falls back rather than formatting a null.
+    assert [r["key"] for r in ctl_reasons({**base, "source": "co_purchase"})] == ["style"]
+
+    sty = ctl_reasons({**base, "source": "style_co_purchase", "s_co": 5})
+    assert sty[0]["key"] == "style" and "5×" in sty[0]["text"]
+
+    # Optional chips are added only when their own column says so, and never more than three.
+    rich = ctl_reasons({**base, "source": "co_purchase", "a_co": 2, "lift": 1.5,
+                        "same_colour_master": 1, "price_tier_diff": 0})
+    assert [r["key"] for r in rich] == ["co_purchase", "colour", "price"]
+    assert len(ctl_reasons({**base, "source": "co_purchase", "a_co": 2, "lift": 1.5,
+                            "same_colour_master": 1, "price_tier_diff": 0, "extra": 1})) == 3
+
+
+def test_round1_serving_table_still_renders():
+    """The Round-1 table has only source and lift; the chips must still be legal."""
+    from ensemble.api.app import ctl_reasons
+    r = ctl_reasons({"source": "co_purchase", "lift": 2.5})
+    assert r[0]["key"] == "co_purchase" and "2.5× more often" in r[0]["text"]
+    assert ctl_reasons({"source": "style_match"})[0]["key"] == "style"

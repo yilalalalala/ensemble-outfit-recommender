@@ -97,3 +97,34 @@ def baseline_recs(q: pd.DataFrame, base: dict, cfg) -> dict[str, list[np.ndarray
         for name in BASELINES:
             out[name].append(got[name])
     return out
+
+
+def apply_diversity(pool, k: int, ptype: dict, pcode: dict, max_per_product_type: int = 0,
+                    one_per_product_code: bool = False, fill_back: bool = True) -> np.ndarray:
+    """Serving's Complete-the-Look re-ranking rules, applied to a ranked ``pool``.
+
+    ``max_per_product_type`` caps how many items of one product type a module may
+    show; ``one_per_product_code`` keeps a single colourway per style. Items the
+    rules reject are appended afterwards when ``fill_back`` is set, so the list is
+    still ``k`` long and the measured cost is a cost of *order*, not of length.
+    """
+    kept: list[int] = []
+    rejected: list[int] = []
+    seen_code: set = set()
+    per_type: dict = {}
+    for a in pool:
+        a = int(a)
+        code = pcode.get(a)
+        t = ptype.get(a)
+        if (one_per_product_code and code in seen_code) or \
+           (max_per_product_type and per_type.get(t, 0) >= max_per_product_type):
+            rejected.append(a)
+            continue
+        kept.append(a)
+        seen_code.add(code)
+        per_type[t] = per_type.get(t, 0) + 1
+        if len(kept) == k:
+            break
+    if fill_back and len(kept) < k:
+        kept += rejected[: k - len(kept)]
+    return np.asarray(kept[:k], dtype=np.int64)

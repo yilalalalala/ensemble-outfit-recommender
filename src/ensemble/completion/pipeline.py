@@ -49,6 +49,71 @@ def tower_paths(cfg, week: Week) -> dict[str, Path]:
             "key_sims": d / f"keysims_{week.start}.parquet", "info": d / f"tower_{week.start}.json"}
 
 
+# ------------------------------------------------------------------ serving (Phase 7)
+
+SERVE_SLOTS = ["upper", "lower", "full", "shoes", "accessories", "socks", "swimwear"]
+
+
+def serving_week(splits) -> Week:
+    """The week serving answers for: the one after the data ends, so nothing is held back.
+
+    Its cutoff is the last date in the dataset, which makes every mined pair,
+    every catalogue statistic and every customer feature legal.
+    """
+    return splits.submission
+
+
+def serving_queries(uni: pd.DataFrame) -> pd.DataFrame:
+    """One synthetic query per (live anchor, other slot) — serving's whole key space.
+
+    Shaped exactly like :func:`ensemble.completion.protocol.queries` so the same
+    feature SQL runs unchanged, with ``customer_idx = -1`` (no customer: the
+    precomputed Complete-the-Look table is anchor-level, see D-033) and an empty
+    truth list (there is no label for a future week).
+    """
+    rows = uni[["article_id", "slot"]].itertuples(index=False)
+    q = pd.DataFrame([(a, s, t) for a, s in rows for t in SERVE_SLOTS if t != s],
+                     columns=["anchor", "anchor_slot", "target_slot"])
+    q = q.sort_values(["anchor", "target_slot"]).reset_index(drop=True)
+    q.insert(0, "customer_idx", np.int64(-1))
+    q["t_dat"] = pd.NaT
+    q["truth"] = [np.empty(0, dtype=np.int64)] * len(q)
+    return q.rename_axis("qid").reset_index()
+
+
+def serving_batches(q: pd.DataFrame, n_anchors: int) -> list[tuple[int, int]]:
+    """Split the serving key space into (qid_lo, qid_hi) slices of ``n_anchors`` anchors.
+
+    Memory, not speed, sets the batch size: the pair-similarity table for every
+    live anchor at the full candidate budget is an order of magnitude larger than
+    one backtest fold's.
+    """
+    anchors = q.anchor.to_numpy()
+    cuts = np.unique(anchors)[::n_anchors]
+    out = []
+    for i, lo_anchor in enumerate(cuts):
+        lo = int(np.searchsorted(anchors, lo_anchor, "left"))
+        hi = int(np.searchsorted(anchors, cuts[i + 1], "left")) if i + 1 < len(cuts) else len(q)
+        out.append((int(q.qid.iloc[lo]), int(q.qid.iloc[hi - 1]) + 1))
+    return out
+
+
+def serve_dir(cfg) -> Path:
+    d = cache_dir(cfg) / "serve"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def serve_paths(cfg) -> dict[str, Path]:
+    """Serving artifacts: one retrieval list per tower, one key-sim part per anchor batch."""
+    d = serve_dir(cfg)
+    return {"tt": d / "tt.parquet", "ttc": d / "ttc.parquet", "meta": d / "meta.json"}
+
+
+def serve_keysim_path(cfg, batch: int) -> Path:
+    return serve_dir(cfg) / f"keysims_{batch:03d}.parquet"
+
+
 def price_tiers(con, week: Week, n_tiers: int = 5) -> dict[int, int]:
     """Per-slot price quintile of each article's mean pre-cutoff price (1..5)."""
     rows = con.execute(f"""
