@@ -173,6 +173,7 @@ def train_pairwise(model, u: np.ndarray, i: np.ndarray, n_items: int, p: dict, s
         if on_epoch is not None:
             rec.update(on_epoch(ep, model) or {})
         log.append(rec)
+        print(f"    epoch {rec}", flush=True)
     return log
 
 
@@ -284,6 +285,7 @@ def train_sasrec(model: SASRec, seq: np.ndarray, n_items: int, p: dict, seed: in
         if on_epoch is not None:
             rec.update(on_epoch(ep, model) or {})
         log.append(rec)
+        print(f"    epoch {rec}", flush=True)
     return log
 
 
