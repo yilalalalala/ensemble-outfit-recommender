@@ -39,6 +39,7 @@ import pandas as pd
 from ensemble import tracking
 from ensemble.completion import candidates as C
 from ensemble.completion import features as FE
+from ensemble.completion import fusion as FU
 from ensemble.completion import metrics as MET
 from ensemble.completion import pipeline as PL
 from ensemble.completion import protocol as P
@@ -47,10 +48,9 @@ from ensemble.completion.pipeline import cache_dir, cache_key
 from ensemble.config import ROOT, load_config
 from ensemble.data.splits import Week, load_splits
 from ensemble.db import connect
+from ensemble.completion.fusion import BASELINES, RRF_C
 from ensemble.evaluation.metrics import relative_lift
 
-BASELINES = ("slot_popularity", "assoc_npmi", "shipped_rrf_hybrid", "rrf_all_sources")
-RRF_C = 60.0
 # Equal-weight RRF control over the union: (column holding the source rank, weight).
 RRF_SOURCES = (("a_rank_co", 1.0), ("a_rank_npmi", 1.0), ("s_rank_co", 1.0), ("s_rank_npmi", 1.0),
                ("tt_rank", 1.0), ("ttc_rank", 1.0), ("cand_slot_pop_rank", 1.0))
@@ -84,7 +84,7 @@ def build_week(con, cfg, week: Week, log=print) -> dict:
     tow = tower_artifacts(con, cfg, week, log=log)
     counts = C.build_sources(con, cfg, tow["tt"], tow["ttc"])
     FE.build_context(con, week, cfg, prep["uni"], prep["q"], tow["key_sims"])
-    base = baseline_lists(con, cfg, prep["uni"], tow["tt"], tow["ttc"])
+    base = FU.baseline_lists(con, cfg, prep["uni"], tow["tt"], tow["ttc"])
     out = {"week": week, "uni": prep["uni"], "q": prep["q"], "funnel": prep["funnel"],
            "basket_audit": prep["basket_audit"], "n_truth_dropped": prep["n_truth_dropped"],
            "source_rows": counts, "tower_info": tow["info"], "baselines": base,
@@ -95,81 +95,6 @@ def build_week(con, cfg, week: Week, log=print) -> dict:
 
 
 # ------------------------------------------------------------------ baselines
-
-
-def _grouped(rows, k: int) -> dict:
-    out: dict[tuple, list[int]] = {}
-    for key1, key2, art in rows:
-        lst = out.setdefault((key1, key2), [])
-        if len(lst) < k:
-            lst.append(art)
-    return out
-
-
-def baseline_lists(con, cfg, uni: pd.DataFrame, tt: pd.DataFrame | None, ttc: pd.DataFrame | None) -> dict:
-    """Round-1 style recommendations at (anchor, target_slot) level — none is personalized."""
-    k = int(cfg.track_b.k)
-    pop = {s: g.article_id.to_numpy()[: 4 * k] for s, g in uni.groupby("slot", sort=False)}
-    assoc = _grouped(con.execute(f"""
-        SELECT src, dst_slot, dst FROM _tb_assoc WHERE co >= 3 AND lift > 1
-        ORDER BY src, dst_slot, npmi DESC, dst""").fetchall(), 4 * k)
-    tt_lists = {} if tt is None else _grouped(
-        tt.sort_values(["anchor", "target_slot", "sim"], ascending=[True, True, False])
-        [["anchor", "target_slot", "article_id"]].itertuples(index=False, name=None), 4 * k)
-    ttc_lists = {} if ttc is None else _grouped(
-        ttc.sort_values(["anchor", "target_slot", "sim"], ascending=[True, True, False])
-        [["anchor", "target_slot", "article_id"]].itertuples(index=False, name=None), 4 * k)
-    style = _grouped(con.execute("""
-        SELECT ar.article_id, y.dst_slot, y.dst FROM _tb_keys kk
-        JOIN _tb_attrs ar ON ar.article_id = kk.anchor
-        JOIN _tb_style y ON y.src_code = ar.product_code AND y.dst_slot = kk.target_slot
-        WHERE y.s_co >= 3 AND y.s_lift > 1
-        ORDER BY ar.article_id, y.dst_slot, y.s_npmi DESC, y.dst""").fetchall(), 4 * k)
-    return {"pop": pop, "assoc": assoc, "tt": tt_lists, "ttc": ttc_lists, "style": style}
-
-
-def fill(head: list[int], tail, k: int) -> np.ndarray:
-    seen = set(head)
-    out = list(head[:k])
-    for a in tail:
-        if len(out) >= k:
-            break
-        if a not in seen:
-            out.append(a)
-            seen.add(a)
-    return np.asarray(out[:k], dtype=np.int64)
-
-
-def rrf(lists: list[list[int]], weights: list[float], k: int) -> list[int]:
-    score: dict[int, float] = {}
-    for w, lst in zip(weights, lists):
-        for r, a in enumerate(lst):
-            score[a] = score.get(a, 0.0) + w / (RRF_C + r + 1)
-    return sorted(score, key=lambda a: (-score[a], a))[:k]
-
-
-def baseline_recs(q: pd.DataFrame, base: dict, cfg) -> dict[str, list[np.ndarray]]:
-    """Materialise each baseline's top-k for every query row of ``q``."""
-    k = int(cfg.track_b.k)
-    pop, assoc, tt, ttc, style = base["pop"], base["assoc"], base["tt"], base["ttc"], base["style"]
-    cache: dict[tuple, dict[str, np.ndarray]] = {}
-    out = {name: [] for name in BASELINES}
-    for a, s in zip(q.anchor.to_numpy(), q.target_slot.to_numpy()):
-        key = (a, s)
-        got = cache.get(key)
-        if got is None:
-            pl = pop.get(s, np.empty(0, dtype=np.int64))
-            al, tl, cl, sl = assoc.get(key, []), tt.get(key, []), ttc.get(key, []), style.get(key, [])
-            got = {
-                "slot_popularity": np.asarray(pl[:k], dtype=np.int64),
-                "assoc_npmi": fill(al, pl, k),
-                "shipped_rrf_hybrid": fill(rrf([al, tl], [0.5, 0.5], k), pl, k),
-                "rrf_all_sources": fill(rrf([al, sl, tl, cl, list(pl)], [1.0] * 5, k), pl, k),
-            }
-            cache[key] = got
-        for name in BASELINES:
-            out[name].append(got[name])
-    return out
 
 
 def rrf_from_ranks(df: pd.DataFrame) -> np.ndarray:
@@ -230,19 +155,26 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
     k = int(cfg.track_b.k)
     attrs = con.execute("SELECT article_id, product_type_no, product_code FROM articles").df()
     seg = MET.segments(uni, cfg)
+    # Phase 3 segment split: customers with any pre-cutoff purchase vs the no-history path.
+    with_history = con.execute("SELECT customer_idx FROM _tb_cust").fetchnumpy()["customer_idx"]
+    returning = np.isin(q.customer_idx.to_numpy(), with_history)
 
-    recs = baseline_recs(q, art["baselines"], cfg)
+    recs = FU.baseline_recs(q, art["baselines"], cfg)
     fit_info: dict = {}
     boosters: dict = {}
     if train_frames:
         all_features = FE.feature_names(train_frames[0])
-        subsets = {"lgbm_personalized": all_features,
-                   "lgbm_compatibility": FE.drop_personalization(all_features)}
+        group_sizes = FE.check_groups(all_features)   # fail loudly on a renamed feature
+        fit_info["_feature_groups"] = {"n_features": len(all_features), "removed_by_group": group_sizes}
+        subsets = FE.ablation_subsets(cfg, all_features)
         for name, feats in subsets.items():
             t = time.time()
             booster, info = R.fit(cfg, train_frames, feats, log=log)
             info["fit_seconds"] = round(time.time() - t, 1)
             info["n_features"] = len(feats)
+            imp = R.importance(booster, feats)
+            info["top_features"] = [{"feature": f, "gain_share": round(g, 5)} for f, g in imp[:25]]
+            info["group_gain_share"] = R.group_gain(imp)
             boosters[name] = (booster, feats)
             fit_info[name] = info
             log(f"  {name}: {info['train_rows']:,} rows, {len(feats)} features, "
@@ -277,7 +209,12 @@ def run_fold(con, cfg, art: dict, train_frames: list[pd.DataFrame], log=print) -
     per_query: dict = {}
     for name, r in recs.items():
         m = MET.evaluate(r, q, uni, cfg, attrs=attrs, seg=seg)
-        per_query[name] = m.pop("_per_query")
+        pq = m.pop("_per_query")
+        for label, mask in (("returning", returning), ("new_customer", ~returning)):
+            m[f"recall@{k}_{label}"] = float(pq[f"recall@{k}"][mask].mean()) if mask.any() else float("nan")
+            m[f"ndcg@{k}_{label}"] = float(pq[f"ndcg@{k}"][mask].mean()) if mask.any() else float("nan")
+            m[f"n_queries_{label}"] = int(mask.sum())
+        per_query[name] = pq
         out["metrics"][name] = m
     p0 = out["metrics"]["slot_popularity"][f"recall@{k}"]
     h0 = out["metrics"]["shipped_rrf_hybrid"][f"recall@{k}"]
@@ -308,10 +245,14 @@ def _ms(vals) -> dict:
 def summarise(folds: dict, cfg) -> dict:
     k = int(cfg.track_b.k)
     names = list(next(iter(folds.values()))["metrics"])
+    first = next(iter(folds.values()))["metrics"][names[0]]
+    slot_keys = sorted(kk for kk in first if kk.startswith(f"recall@{k}_slot_"))
     keys = [f"recall@{k}", "recall@5", f"ndcg@{k}", f"recall@{k}_tail", f"recall@{k}_new_item",
-            f"recall@{k}_jewellery", f"catalog_coverage@{k}", "novelty", f"diversity_product_type@{k}",
+            f"recall@{k}_jewellery", f"recall@{k}_returning", f"recall@{k}_new_customer",
+            f"catalog_coverage@{k}", "novelty", f"diversity_product_type@{k}",
             f"diversity_product_code@{k}", f"relative_lift_recall@{k}_vs_popularity",
-            f"relative_lift_recall@{k}_vs_shipped", f"relative_lift_ndcg@{k}_vs_shipped"]
+            f"relative_lift_recall@{k}_vs_shipped", f"relative_lift_ndcg@{k}_vs_shipped",
+            *slot_keys]
     out: dict = {"systems": {}}
     for name in names:
         out["systems"][name] = {kk: _ms([f["metrics"][name].get(kk) for f in folds.values()]) for kk in keys}

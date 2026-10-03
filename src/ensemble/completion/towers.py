@@ -140,6 +140,7 @@ class Towers:
                     "sim": sim.cpu().numpy().ravel().astype(np.float32)}))
                 del qe, sim, top
             del emb, rows
+            _release(self.device)
         self.model.train()
         return pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(
             columns=["anchor", "target_slot", "article_id", "sim"])
@@ -162,6 +163,12 @@ class Towers:
                 out[j] = (qe * ce).sum(1).cpu().numpy()
         self.model.train()
         return out
+
+
+def _release(device: str) -> None:
+    """Return cached MPS blocks; without this, later epochs slow down badly on long runs."""
+    if device == "mps" and torch.backends.mps.is_available():
+        torch.mps.empty_cache()
 
 
 def _pair_keys(src: np.ndarray, dst: np.ndarray) -> np.ndarray:
@@ -243,6 +250,7 @@ def train(con, pos: pd.DataFrame, enc: Encoder, uni: pd.DataFrame, cfg, holdout:
             total += float(loss.item())
             steps += 1
         rec = _holdout_recall(towers, hv, uni, int(cfg.track_b.k)) if hv is not None else float("nan")
+        _release(dev)
         hist.append({"epoch": epoch + 1, "loss": total / max(steps, 1), "holdout_recall@12": rec,
                      "seconds": round(time.time() - t0, 1)})
         log(f"    epoch {epoch + 1}: loss {hist[-1]['loss']:.4f} holdout R@12 "

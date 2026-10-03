@@ -279,3 +279,77 @@ def feature_names(df: pd.DataFrame) -> list[str]:
 
 def drop_personalization(features: list[str]) -> list[str]:
     return [f for f in features if not f.startswith(PERSONAL_PREFIXES)]
+
+
+# Feature groups the ablation table switches off. Each value is the set of prefixes
+# (or exact names) removed from the full schema; the ranker is refitted without them.
+# A group has to take every feature that carries its signal, interactions included —
+# leaving ``x_tt_type`` behind would let tower similarity back into "minus towers".
+GROUPS: dict[str, tuple[str, ...]] = {
+    "personalization": PERSONAL_PREFIXES,
+    "repeat": ("cu_article_",),
+    "clip": ("clip_sim",),
+    "towers": ("tt_", "ttc_", "src_two_tower", "x_tt"),
+    "style_backoff": ("s_", "has_style_evidence", "backoff_level"),
+    "decay": ("a_co_d", "s_co_d"),
+    "association": ("a_co", "a_lift", "a_pmi", "a_npmi", "a_n_", "a_rank", "a_last_co_days",
+                    "has_article_evidence", "x_npmi", "x_co"),
+    "popularity": ("cand_pop_", "cand_log_pop_", "cand_slot_pop", "src_slot_pop",
+                   "cand_days_sold", "cand_days_since_last_sale", "cand_age_days"),
+    "price": ("price_", "cand_price_tier", "anchor_price_tier", "cu_price_dist"),
+    "colour": ("same_colour",),
+}
+
+# How many features each group must remove from the *full* production schema. A typo
+# in a prefix, or a renamed feature, would otherwise silently produce an ablation
+# identical to the full model, which would then be reported as "no effect".
+# :func:`check_groups` enforces this; the backtest calls it on the real schema.
+GROUP_MIN_FEATURES: dict[str, int] = {
+    "personalization": 21, "repeat": 2, "clip": 1, "towers": 7, "style_backoff": 14,
+    "decay": 6, "association": 17, "popularity": 10, "price": 7, "colour": 3,
+}
+
+
+def subset(features: list[str], drop: tuple[str, ...]) -> list[str]:
+    """``features`` without the named groups (``drop`` holds :data:`GROUPS` keys).
+
+    A group that removes nothing would make the ablation a copy of the full model,
+    so that is an error rather than a silent "no effect" row in the table.
+    """
+    out = list(features)
+    for g in drop:
+        kept = [f for f in out if not f.startswith(GROUPS[g])]
+        if len(kept) == len(out):
+            raise ValueError(f"feature group {g!r} removed nothing from {len(out)} features")
+        out = kept
+    return out
+
+
+def check_groups(features: list[str]) -> dict[str, int]:
+    """Assert every group still bites the full schema; return how much each removes.
+
+    Called on the real feature schema before any ablation is fitted, so a renamed
+    feature fails the run instead of quietly weakening one row of the table.
+    """
+    counts = {g: len(features) - len([f for f in features if not f.startswith(GROUPS[g])])
+              for g in GROUPS}
+    short = {g: (n, GROUP_MIN_FEATURES[g]) for g, n in counts.items() if n < GROUP_MIN_FEATURES[g]}
+    if short:
+        raise ValueError(f"feature groups no longer match the schema (got, expected): {short}")
+    return counts
+
+
+def ablation_subsets(cfg, features: list[str]) -> dict[str, list[str]]:
+    """Named feature subsets to fit on each fold, from ``track_b.feature_ablations``.
+
+    ``lgbm_personalized`` (everything) and ``lgbm_compatibility`` (no customer
+    feature) are always present: they are the two candidate shipping models.
+    """
+    out = {"lgbm_personalized": features, "lgbm_compatibility": subset(features, ("personalization",))}
+    for name in cfg.track_b.get("feature_ablations", []) or []:
+        groups = tuple(x.strip() for x in str(name).split("+") if x.strip())
+        unknown = [g for g in groups if g not in GROUPS]
+        if unknown:
+            raise KeyError(f"unknown feature ablation group(s): {unknown}")
+        out[f"lgbm_minus_{'_'.join(groups)}"] = subset(features, groups)
+    return out

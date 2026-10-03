@@ -105,3 +105,20 @@ def importance(booster, features) -> list[tuple[str, float]]:
     gain = booster.feature_importance("gain")
     total = gain.sum() or 1.0
     return sorted(((f, float(g / total)) for f, g in zip(features, gain)), key=lambda x: -x[1])
+
+
+def group_gain(imp: list[tuple[str, float]]) -> dict[str, float]:
+    """Split total split gain over the feature groups in :data:`features.GROUPS`.
+
+    A feature can belong to more than one group (``a_co_d14`` is association *and*
+    decay), so the shares do not sum to 1; the point is to see at a glance whether
+    the model is mostly association, mostly popularity or mostly the customer.
+    """
+    from ensemble.completion.features import GROUPS
+
+    out = {}
+    for name, prefixes in GROUPS.items():
+        out[name] = round(sum(g for f, g in imp if f.startswith(prefixes)), 5)
+    out["other"] = round(sum(g for f, g in imp
+                             if not any(f.startswith(p) for p in GROUPS.values())), 5)
+    return out

@@ -197,6 +197,7 @@ track_b:
   new_item_days: 28         # "recently launched" segment: first observed sale within this many days
   min_basket_size: 2
   max_basket_size: 6
+  customer_weeks: 104       # history window for the point-in-time customer features (Phase 3)
   min_support: 2            # mining floor; support stays a ranker feature, not a hard choice
   half_lives_days: [14, 56] # time-decayed co-counts (Phase 4.2)
   basket_filter: ""         # extra SQL predicate on tb_bk (Phase 4.5 ablation)
@@ -212,6 +213,10 @@ track_b:
   neg_sample_rate: 0.35     # share of negative candidates kept in training weeks
   personalization: true
   use_clip: true            # FashionCLIP vectors in the towers and as a ranker feature
+  # Feature-group ablations (ensemble.completion.features.GROUPS). Each entry refits the
+  # ranker with that group removed, on every fold, in the same evaluation pass. Not part
+  # of the cache key: the feature matrices are unchanged, only the fitted model differs.
+  feature_ablations: [repeat, towers, clip, association, style_backoff, decay, popularity, price+colour]
   eval_chunk_queries: 8000
   bootstrap: {n_boot: 1000, seed: 0}
   ranker:
@@ -237,12 +242,12 @@ track_b:
     hidden: 256
     temperature: 0.05
     batch_size: 4096
-    epochs: 4
+    epochs: 6
     lr: 0.002
     id_dropout: 0.5
     negatives: [in_batch, logq]
     hard_negatives: 0        # redesigned retrieval-informed hard negatives (Phase 5); 0 = off
     hard_pool: 200           # candidate pool per slot for retrieval-informed mining
-    early_stopping_patience: 1
+    early_stopping_patience: 2
     holdout_days: 7          # last days of the mining window held out for model selection
     seed: 0

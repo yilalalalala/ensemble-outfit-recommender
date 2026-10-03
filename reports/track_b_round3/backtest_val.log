@@ -1,0 +1,196 @@
+Track B rolling backtest (val): weeks 2020-07-22..2020-09-09, 6 folds, cache 7ad0aa24ad
+[2020-07-22] preparing
+  training towers for 2020-07-22 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4616 holdout R@12 0.0605 (27s)
+    epoch 2: loss 6.3230 holdout R@12 0.0635 (26s)
+    epoch 3: loss 6.2772 holdout R@12 0.0668 (26s)
+    epoch 4: loss 6.2463 holdout R@12 0.0686 (28s)
+    epoch 5: loss 6.2241 holdout R@12 0.0696 (28s)
+    epoch 6: loss 6.2064 holdout R@12 0.0705 (29s)
+  towers 2020-07-22: best epoch 6 holdout R@12 0.0705, 6,656,199 candidate keys (190s)
+  126,776 queries, 28,252 eligible items, towers best epoch 6 (holdout R@12 0.0705), 198s
+  train matrix 2020-07-22: 1,997,045 rows, 30,100 groups, pos rate 0.0085 (16s)
+[2020-07-29] preparing
+  training towers for 2020-07-29 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4461 holdout R@12 0.0614 (29s)
+    epoch 2: loss 6.3160 holdout R@12 0.0649 (28s)
+    epoch 3: loss 6.2691 holdout R@12 0.0673 (28s)
+    epoch 4: loss 6.2386 holdout R@12 0.0689 (27s)
+    epoch 5: loss 6.2180 holdout R@12 0.0680 (32s)
+    epoch 6: loss 6.2012 holdout R@12 0.0699 (32s)
+  towers 2020-07-29: best epoch 6 holdout R@12 0.0699, 6,666,679 candidate keys (206s)
+  135,154 queries, 27,773 eligible items, towers best epoch 6 (holdout R@12 0.0699), 215s
+  train matrix 2020-07-29: 2,003,013 rows, 30,196 groups, pos rate 0.0084 (20s)
+[2020-08-05] preparing
+  training towers for 2020-08-05 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4619 holdout R@12 0.0597 (29s)
+    epoch 2: loss 6.3198 holdout R@12 0.0644 (26s)
+    epoch 3: loss 6.2699 holdout R@12 0.0657 (27s)
+    epoch 4: loss 6.2382 holdout R@12 0.0669 (27s)
+    epoch 5: loss 6.2167 holdout R@12 0.0675 (26s)
+    epoch 6: loss 6.1997 holdout R@12 0.0683 (25s)
+  towers 2020-08-05: best epoch 6 holdout R@12 0.0683, 6,195,765 candidate keys (183s)
+  118,124 queries, 27,524 eligible items, towers best epoch 6 (holdout R@12 0.0683), 190s
+  train matrix 2020-08-05: 2,046,304 rows, 30,535 groups, pos rate 0.0088 (15s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 4,000,058 rows, 95 features, 131 trees (64s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 4,000,058 rows, 74 features, 138 trees (57s)
+    candidate union: recall 0.4189 at 191 candidates/query (22,503,635 rows)
+    slot_popularity            R@12=0.0527 R@5=0.0249 NDCG=0.0267 vs_pop=+0.0% vs_shipped=-34.7% tail=0.0086 cov=0.003
+    assoc_npmi                 R@12=0.0705 R@5=0.0419 NDCG=0.0414 vs_pop=+33.7% vs_shipped=-12.7% tail=0.0240 cov=0.225
+    shipped_rrf_hybrid         R@12=0.0807 R@5=0.0490 NDCG=0.0461 vs_pop=+53.2% vs_shipped=+0.0% tail=0.0290 cov=0.277
+    rrf_all_sources            R@12=0.0884 R@5=0.0519 NDCG=0.0493 vs_pop=+67.8% vs_shipped=+9.6% tail=0.0256 cov=0.231
+    lgbm_personalized          R@12=0.1296 R@5=0.0806 NDCG=0.0763 vs_pop=+145.8% vs_shipped=+60.5% tail=0.0584 cov=0.292
+    lgbm_compatibility         R@12=0.1126 R@5=0.0668 NDCG=0.0643 vs_pop=+113.7% vs_shipped=+39.5% tail=0.0510 cov=0.225
+    rrf_all_sources_union      R@12=0.0885 R@5=0.0529 NDCG=0.0507 vs_pop=+68.0% vs_shipped=+9.7% tail=0.0311 cov=0.389
+[2020-08-12] preparing
+  training towers for 2020-08-12 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4469 holdout R@12 0.0567 (26s)
+    epoch 2: loss 6.3064 holdout R@12 0.0644 (27s)
+    epoch 3: loss 6.2568 holdout R@12 0.0657 (26s)
+    epoch 4: loss 6.2256 holdout R@12 0.0691 (28s)
+    epoch 5: loss 6.2041 holdout R@12 0.0691 (27s)
+    epoch 6: loss 6.1873 holdout R@12 0.0711 (27s)
+  towers 2020-08-12: best epoch 6 holdout R@12 0.0711, 5,960,023 candidate keys (185s)
+  108,057 queries, 27,282 eligible items, towers best epoch 6 (holdout R@12 0.0711), 192s
+  train matrix 2020-08-12: 1,976,198 rows, 29,614 groups, pos rate 0.0085 (16s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 4,049,317 rows, 95 features, 133 trees (74s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 4,049,317 rows, 74 features, 69 trees (37s)
+    candidate union: recall 0.4064 at 190 candidates/query (20,529,026 rows)
+    slot_popularity            R@12=0.0629 R@5=0.0328 NDCG=0.0320 vs_pop=+0.0% vs_shipped=-24.5% tail=0.0060 cov=0.003
+    assoc_npmi                 R@12=0.0803 R@5=0.0489 NDCG=0.0478 vs_pop=+27.7% vs_shipped=-3.6% tail=0.0269 cov=0.228
+    shipped_rrf_hybrid         R@12=0.0833 R@5=0.0530 NDCG=0.0496 vs_pop=+32.4% vs_shipped=+0.0% tail=0.0330 cov=0.293
+    rrf_all_sources            R@12=0.0914 R@5=0.0581 NDCG=0.0539 vs_pop=+45.4% vs_shipped=+9.8% tail=0.0303 cov=0.251
+    lgbm_personalized          R@12=0.1367 R@5=0.0876 NDCG=0.0830 vs_pop=+117.3% vs_shipped=+64.1% tail=0.0725 cov=0.289
+    lgbm_compatibility         R@12=0.1183 R@5=0.0714 NDCG=0.0684 vs_pop=+88.0% vs_shipped=+42.0% tail=0.0639 cov=0.229
+    rrf_all_sources_union      R@12=0.0936 R@5=0.0589 NDCG=0.0557 vs_pop=+48.7% vs_shipped=+12.3% tail=0.0368 cov=0.400
+[2020-08-19] preparing
+  training towers for 2020-08-19 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4492 holdout R@12 0.0561 (26s)
+    epoch 2: loss 6.3052 holdout R@12 0.0598 (26s)
+    epoch 3: loss 6.2531 holdout R@12 0.0617 (26s)
+    epoch 4: loss 6.2217 holdout R@12 0.0646 (27s)
+    epoch 5: loss 6.1993 holdout R@12 0.0686 (26s)
+    epoch 6: loss 6.1820 holdout R@12 0.0699 (26s)
+  towers 2020-08-19: best epoch 6 holdout R@12 0.0699, 5,664,805 candidate keys (180s)
+  98,537 queries, 27,151 eligible items, towers best epoch 6 (holdout R@12 0.0699), 187s
+  train matrix 2020-08-19: 2,028,875 rows, 30,276 groups, pos rate 0.0086 (15s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 4,022,502 rows, 95 features, 149 trees (74s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 4,022,502 rows, 74 features, 110 trees (46s)
+    candidate union: recall 0.4132 at 191 candidates/query (18,781,579 rows)
+    slot_popularity            R@12=0.0780 R@5=0.0434 NDCG=0.0412 vs_pop=+0.0% vs_shipped=-16.5% tail=0.0294 cov=0.003
+    assoc_npmi                 R@12=0.0997 R@5=0.0657 NDCG=0.0618 vs_pop=+27.7% vs_shipped=+6.7% tail=0.0490 cov=0.228
+    shipped_rrf_hybrid         R@12=0.0934 R@5=0.0612 NDCG=0.0570 vs_pop=+19.7% vs_shipped=+0.0% tail=0.0392 cov=0.295
+    rrf_all_sources            R@12=0.1003 R@5=0.0643 NDCG=0.0597 vs_pop=+28.5% vs_shipped=+7.3% tail=0.0378 cov=0.256
+    lgbm_personalized          R@12=0.1542 R@5=0.1010 NDCG=0.0948 vs_pop=+97.6% vs_shipped=+65.1% tail=0.0999 cov=0.284
+    lgbm_compatibility         R@12=0.1318 R@5=0.0837 NDCG=0.0799 vs_pop=+68.9% vs_shipped=+41.1% tail=0.0834 cov=0.220
+    rrf_all_sources_union      R@12=0.1044 R@5=0.0677 NDCG=0.0628 vs_pop=+33.8% vs_shipped=+11.8% tail=0.0463 cov=0.405
+[2020-08-26] preparing
+  training towers for 2020-08-26 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4379 holdout R@12 0.0573 (27s)
+    epoch 2: loss 6.2957 holdout R@12 0.0613 (28s)
+    epoch 3: loss 6.2401 holdout R@12 0.0689 (27s)
+    epoch 4: loss 6.2051 holdout R@12 0.0712 (27s)
+    epoch 5: loss 6.1808 holdout R@12 0.0740 (27s)
+    epoch 6: loss 6.1619 holdout R@12 0.0747 (27s)
+  towers 2020-08-26: best epoch 6 holdout R@12 0.0747, 5,422,414 candidate keys (183s)
+  107,718 queries, 27,126 eligible items, towers best epoch 6 (holdout R@12 0.0747), 190s
+  train matrix 2020-08-26: 1,985,112 rows, 29,932 groups, pos rate 0.0091 (16s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 4,005,073 rows, 95 features, 129 trees (72s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 4,005,073 rows, 74 features, 92 trees (41s)
+    candidate union: recall 0.4264 at 189 candidates/query (20,318,028 rows)
+    slot_popularity            R@12=0.0897 R@5=0.0492 NDCG=0.0454 vs_pop=+0.0% vs_shipped=-12.6% tail=0.0298 cov=0.003
+    assoc_npmi                 R@12=0.1150 R@5=0.0723 NDCG=0.0685 vs_pop=+28.1% vs_shipped=+12.0% tail=0.0520 cov=0.225
+    shipped_rrf_hybrid         R@12=0.1026 R@5=0.0680 NDCG=0.0632 vs_pop=+14.4% vs_shipped=+0.0% tail=0.0422 cov=0.300
+    rrf_all_sources            R@12=0.1122 R@5=0.0721 NDCG=0.0664 vs_pop=+25.0% vs_shipped=+9.3% tail=0.0390 cov=0.264
+    lgbm_personalized          R@12=0.1658 R@5=0.1063 NDCG=0.1009 vs_pop=+84.8% vs_shipped=+61.6% tail=0.0933 cov=0.290
+    lgbm_compatibility         R@12=0.1483 R@5=0.0929 NDCG=0.0884 vs_pop=+65.3% vs_shipped=+44.5% tail=0.0842 cov=0.223
+    rrf_all_sources_union      R@12=0.1143 R@5=0.0741 NDCG=0.0684 vs_pop=+27.4% vs_shipped=+11.4% tail=0.0468 cov=0.405
+[2020-09-02] preparing
+  training towers for 2020-09-02 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4380 holdout R@12 0.0647 (28s)
+    epoch 2: loss 6.2874 holdout R@12 0.0736 (29s)
+    epoch 3: loss 6.2269 holdout R@12 0.0782 (30s)
+    epoch 4: loss 6.1913 holdout R@12 0.0803 (28s)
+    epoch 5: loss 6.1660 holdout R@12 0.0822 (27s)
+    epoch 6: loss 6.1470 holdout R@12 0.0830 (27s)
+  towers 2020-09-02: best epoch 6 holdout R@12 0.0830, 5,131,772 candidate keys (189s)
+  96,881 queries, 27,064 eligible items, towers best epoch 6 (holdout R@12 0.0830), 196s
+  train matrix 2020-09-02: 1,973,391 rows, 29,852 groups, pos rate 0.0099 (14s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 4,013,987 rows, 95 features, 149 trees (78s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 4,013,987 rows, 74 features, 146 trees (59s)
+    candidate union: recall 0.4567 at 187 candidates/query (18,162,101 rows)
+    slot_popularity            R@12=0.0892 R@5=0.0471 NDCG=0.0436 vs_pop=+0.0% vs_shipped=-22.0% tail=0.0228 cov=0.003
+    assoc_npmi                 R@12=0.1226 R@5=0.0753 NDCG=0.0730 vs_pop=+37.4% vs_shipped=+7.2% tail=0.0559 cov=0.224
+    shipped_rrf_hybrid         R@12=0.1143 R@5=0.0754 NDCG=0.0703 vs_pop=+28.2% vs_shipped=+0.0% tail=0.0550 cov=0.303
+    rrf_all_sources            R@12=0.1219 R@5=0.0780 NDCG=0.0703 vs_pop=+36.6% vs_shipped=+6.6% tail=0.0477 cov=0.269
+    lgbm_personalized          R@12=0.1806 R@5=0.1184 NDCG=0.1112 vs_pop=+102.4% vs_shipped=+57.9% tail=0.1088 cov=0.295
+    lgbm_compatibility         R@12=0.1610 R@5=0.1025 NDCG=0.0968 vs_pop=+80.5% vs_shipped=+40.8% tail=0.0968 cov=0.228
+    rrf_all_sources_union      R@12=0.1262 R@5=0.0812 NDCG=0.0736 vs_pop=+41.5% vs_shipped=+10.4% tail=0.0596 cov=0.413
+[2020-09-09] preparing
+  training towers for 2020-09-09 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4353 holdout R@12 0.0693 (27s)
+    epoch 2: loss 6.2654 holdout R@12 0.0808 (27s)
+    epoch 3: loss 6.2014 holdout R@12 0.0848 (27s)
+    epoch 4: loss 6.1639 holdout R@12 0.0861 (27s)
+    epoch 5: loss 6.1387 holdout R@12 0.0858 (27s)
+    epoch 6: loss 6.1192 holdout R@12 0.0886 (27s)
+  towers 2020-09-09: best epoch 6 holdout R@12 0.0886, 4,834,729 candidate keys (182s)
+  93,672 queries, 27,070 eligible items, towers best epoch 6 (holdout R@12 0.0886), 188s
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 3,958,503 rows, 95 features, 161 trees (77s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 3,958,503 rows, 74 features, 86 trees (40s)
+    candidate union: recall 0.4496 at 186 candidates/query (17,411,381 rows)
+    slot_popularity            R@12=0.0788 R@5=0.0426 NDCG=0.0402 vs_pop=+0.0% vs_shipped=-32.1% tail=0.0213 cov=0.003
+    assoc_npmi                 R@12=0.1161 R@5=0.0752 NDCG=0.0728 vs_pop=+47.3% vs_shipped=-0.0% tail=0.0559 cov=0.223
+    shipped_rrf_hybrid         R@12=0.1161 R@5=0.0775 NDCG=0.0718 vs_pop=+47.3% vs_shipped=+0.0% tail=0.0571 cov=0.297
+    rrf_all_sources            R@12=0.1216 R@5=0.0769 NDCG=0.0700 vs_pop=+54.2% vs_shipped=+4.7% tail=0.0508 cov=0.261
+    lgbm_personalized          R@12=0.1771 R@5=0.1162 NDCG=0.1103 vs_pop=+124.6% vs_shipped=+52.5% tail=0.1141 cov=0.280
+    lgbm_compatibility         R@12=0.1555 R@5=0.0994 NDCG=0.0951 vs_pop=+97.3% vs_shipped=+33.9% tail=0.1003 cov=0.217
+    rrf_all_sources_union      R@12=0.1257 R@5=0.0807 NDCG=0.0742 vs_pop=+59.4% vs_shipped=+8.2% tail=0.0612 cov=0.407
+
+== summary (3198s, peak 5928 MB) ==
+slot_popularity            R@12 0.0752±0.0147 NDCG 0.0382 vs_shipped -23.72% wins 0/6
+assoc_npmi                 R@12 0.1007±0.0212 NDCG 0.0609 vs_shipped +1.62% wins 3/6
+shipped_rrf_hybrid         R@12 0.0984±0.0152 NDCG 0.0597 vs_shipped +0.00% wins -/6
+rrf_all_sources            R@12 0.1060±0.0147 NDCG 0.0616 vs_shipped +7.88% wins 6/6
+lgbm_personalized          R@12 0.1573±0.0210 NDCG 0.0961 vs_shipped +60.29% wins 6/6
+lgbm_compatibility         R@12 0.1379±0.0201 NDCG 0.0822 vs_shipped +40.32% wins 6/6
+rrf_all_sources_union      R@12 0.1088±0.0160 NDCG 0.0642 vs_shipped +10.64% wins 6/6
