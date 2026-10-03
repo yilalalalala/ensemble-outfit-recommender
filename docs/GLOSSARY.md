@@ -192,3 +192,22 @@ industry standard and are named as such wherever they appear.
 | **Cluster (customer-level) bootstrap** / **paired bootstrap** | Resample customers with replacement to put a confidence interval on a metric difference between two systems scored on the same customers | DS |
 | **Feature attribution vs. explanation faithfulness** | SHAP says which features moved a score; a user-facing reason is *faithful* only if the underlying data supports the sentence ("you bought this before" needs a recorded purchase) | Both |
 | **Point-in-time correctness** / **cutoff** | Every feature for a prediction date uses only data available before it | DS |
+
+## Candidate fusion and point-in-time protocol (added in Track B Round 3)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Reciprocal rank fusion (RRF)** | Merge several ranked lists by summing `w / (c + rank)`, typically `c = 60` (Cormack et al., 2009). No training and no score calibration needed, which is why it is the usual first fusion a team ships | DS |
+| **Learned fusion** / **learning-to-rank fusion** | Replacing a fixed fusion rule with a trained ranker over the union of the sources, using each source's presence, rank and score as features. The standard next step after RRF | DS |
+| **Candidate union** | The deduplicated set of candidates from every retrieval source for one query, with each source's rank kept as a feature | DS |
+| **Query group** (learning to rank) | The set of candidates that compete for one ranking decision; LambdaRank optimises within a group. Here one group is one (basket, anchor, target slot) | DS |
+| **Hierarchical backoff** | When exact-key evidence is too sparse, fall back to a coarser key (here: all colourways of a `product_code` pooled), and expose *which* level was used as a feature instead of choosing globally | DS |
+| **Time-decayed / recency-weighted co-occurrence** | Co-occurrence counts where an older basket contributes less, `0.5 ^ (age / half_life)`. The **half-life** is the age at which a basket counts half as much | DS |
+| **Sampled softmax** / **in-batch negatives** | Train a retrieval model by scoring each positive against the other items in the batch instead of the whole catalogue | DS |
+| **logQ correction** | Subtract `log` of a candidate's sampling frequency from its logit, because in-batch sampling over-samples popular items (Yi et al., 2019, "Sampling-bias-corrected neural modeling"). Without it, in-batch training collapses toward popularity | DS |
+| **Hard negatives** | Wrong candidates the current model scores highly, mined deliberately so the model learns the fine distinctions. **Retrieval-informed** hard negatives are mined by re-scoring a pool with the model being trained | DS |
+| **False negative** (retrieval training) | A "negative" that is actually a valid answer (another colourway of the positive, an item with basket co-occurrence evidence). Masked out rather than learned against | DS |
+| **Oracle protocol** *(project-specific name)* | An evaluation variant that deliberately uses information unavailable at prediction time, kept only to measure what an earlier leak was worth. Never a reported result | DS |
+| **Evidence provenance** | Recording, per recommendation, which signal produced it (co-purchase, style co-purchase, visual compatibility, popularity fallback) and the raw values behind it, so an explanation can be checked against the data | Both |
+| **Feature store** | The serving-side system that computes and serves point-in-time-correct features at request time (Feast, Tecton). Personalised recommendations that cannot be precomputed per key need one | DS / Eng |
+| **Recently launched recall** *(project-specific name)* | Recall restricted to articles whose first observed sale is within `new_item_days` of the cutoff. Used where true item cold start is unmeasurable because the dataset has no launch or inventory feed | DS |
