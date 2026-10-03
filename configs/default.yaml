@@ -188,14 +188,14 @@ rerank:
     styles2_types4: {max_per_product_code: 2, max_per_product_type: 4}
 
 # ---------------------------------------------------------------- Track B Round 3
-# Leakage-free rolling protocol + learned fusion (docs/DECISIONS.md D-030..D-035).
+# Leakage-free rolling protocol + learned fusion (docs/DECISIONS.md D-031..D-037).
 # The Round-1 `completion:` block above still drives `make track-b`; this block
 # drives `python -m ensemble.completion.backtest`.
 track_b:
   folds: 6                  # consecutive label weeks ending at validation (test week untouched)
   train_weeks: 2            # ranker label weeks before each fold (point-in-time per week)
   window_weeks: 16          # baskets mined from this window before the target week
-  universe_weeks: 4         # eligible catalogue: sold in this window BEFORE the cutoff (D-030)
+  universe_weeks: 4         # eligible catalogue: sold in this window BEFORE the cutoff (D-031)
   pop_days: 7
   k: 12
   head_share: 0.10          # top 10% of each slot by window sales = popularity head
@@ -206,7 +206,7 @@ track_b:
   min_support: 2            # mining floor; support stays a ranker feature, not a hard choice
   half_lives_days: [14, 56] # time-decayed co-counts (Phase 4.2)
   basket_filter: ""         # extra SQL predicate on tb_bk (Phase 4.5 ablation)
-  candidates:               # per-source budget per query (operating point: D-032)
+  candidates:               # per-source budget per query (D-033; the ceiling it sets is 0.4285)
     assoc_co: 100
     assoc_npmi: 100
     style_co: 60

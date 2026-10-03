@@ -6,7 +6,7 @@
 What changes versus ``ensemble.completion.serve_ctl`` (Round 1): the fixed
 RRF(w = 0.5) of association and the two towers is replaced by the learned
 compatibility ranker, and every row carries the evidence it was actually ranked
-on, so a reason chip can never claim support that is not there (D-034).
+on, so a reason chip can never claim support that is not there (D-035).
 
 Why the *compatibility* ranker and not the personalized one. Complete the Look is
 an anchor-level surface: it has to answer for an anonymous visitor on any product
@@ -143,7 +143,7 @@ def evidence_rows(df: pd.DataFrame, score: np.ndarray, chosen: dict[int, np.ndar
     """The provenance a reason chip is allowed to cite, for the rows actually shown.
 
     Only columns that came out of the feature matrix are used, so an explanation
-    can never assert co-purchase support for a pair that has none (D-034).
+    can never assert co-purchase support for a pair that has none (D-035).
     """
     want = pd.DataFrame([(qid, int(a), r + 1) for qid, arr in chosen.items()
                          for r, a in enumerate(arr)], columns=["qid", "article_id", "rank"])

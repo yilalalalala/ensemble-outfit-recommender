@@ -61,12 +61,32 @@ is also why it is robust.
    customers the personalized ranker adds +15.1% over the compatibility ranker, on
    new customers +0.7%.
 
-**Not everything improved.** The shipped hybrid's own tail-item recall fell once
-the baseline was corrected (popularity back-fill concentrates it on the head), the
-two-tower channel is under-trained in every fold (the held-out curve is still
-rising at the last epoch), and serving still ships the compatibility ranker rather
-than the better personalized one, because the Complete-the-Look table is
-anchor-level and a per-customer row is not precomputable.
+**The test week agrees.** Scored once, after every selection decision, with the
+ablation table off: the personalized ranker reaches **Recall@12 0.1820 (+44.33%
+[+42.20%, +46.43%])** and **NDCG@12 0.1124 (+49.45%)**; the compatibility ranker
+**0.1596 (+26.57%)**. Every lift is 2–5 points smaller than the validation mean, in
+the same direction for every system, with the ordering of all seven systems
+unchanged. It is a confirmation, not a fresh holdout — the week was scored in
+Round 1 and those numbers have been read (§3.1).
+
+**What serving actually shows, now that provenance is recorded.** The rebuilt
+Complete-the-Look table was scored by the compatibility ranker for all 26,165 live
+anchors. Only **2.9%** of served picks have article-level co-purchase evidence,
+5.1% style-level, 60.7% come from a tower and **31.4% are a popularity fallback
+with no compatibility evidence at all**. The Round-1 table labelled every row
+`co_purchase` or `style_match`, so the UI implied evidence that was not there for
+most picks; reason chips are now gated on the row's own columns and an audit found
+no unsupported chip (§9.3).
+
+**Not everything improved, and one claim had to be withdrawn.** The shipped
+hybrid's own tail-item recall fell once the baseline was corrected (popularity
+back-fill concentrates it on the head). Serving still ships the compatibility
+ranker rather than the better personalized one, because the Complete-the-Look table
+is anchor-level and a per-customer row is not precomputable. The redesigned
+two-tower hard negatives did not beat in-batch + logQ. And the held-out tower curve
+*looks* like it is still rising at the last epoch in all eight weeks, which reads
+like a binding epoch budget — a 12-epoch probe ran 8 epochs and selected epoch 6,
+so that claim is withdrawn (§8).
 
 ---
 
@@ -1007,15 +1027,17 @@ test resolved to the *method*. Test-only, caught immediately, fixed with
 `out["rank"]` — recorded because the serving table has a `rank` column and the
 same trap is one attribute access away in any code that touches it.
 
+---
+
 ## 15. Rejected approaches, and why
 
 | approach | why it was not kept |
 | --- | --- |
 | Shipping `lgbm_personalized` in the precomputed Complete-the-Look table | The table is keyed by (anchor, target slot) and has to answer for anonymous visitors on any product page. A row per customer is not precomputable (26 k anchors × 6 slots × 1.4 M customers), and request-time scoring needs an online feature store and a model server that this local SQLite demo does not have. The gain it would buy is measured and reported instead of being claimed (§6, §9.2). |
-| Round-1 popularity-sampled negatives and (product type, price tier) hard negatives | D-016 already found no measurable gain; they were removed rather than carried forward, and replaced by retrieval-informed hard negatives, which are judged on §9's evidence. |
+| Round-1 popularity-sampled negatives and (product type, price tier) hard negatives | D-016 already found no measurable gain; they were removed rather than carried forward, and replaced by retrieval-informed hard negatives, which are judged on §8's evidence. |
 | Keeping the Round-1 target-week catalogue as the primary universe | Eligibility was not knowable at prediction time, which makes "item cold-start recall" an artefact. It is retained only as an explicit `oracle=True` comparison (§3). |
 | A constructed "pre-launch availability" proxy for true item cold start | The dataset has no inventory or launch feed. Any proxy would be invented, not measured, so the metric is replaced by *recently launched* (first observed sale within 28 days of the cutoff) and the limitation is stated instead. |
-| A single global association score (NPMI only, or raw co-count only) | Round 1 had to choose one. Raw co-count, decayed co-counts, support, lift, PMI and NPMI are now separate features and the ranker picks; §8 shows what dropping each group costs. |
+| A single global association score (NPMI only, or raw co-count only) | Round 1 had to choose one. Raw co-count, decayed co-counts, support, lift, PMI and NPMI are now separate features and the ranker picks; §5 shows what dropping each group costs. |
 | Treating (anchor, slot) queries as independent for confidence intervals | One basket produces several queries and one customer several baskets. All intervals resample **customers** with all of their queries; a test asserts the clustered interval is more than 3× wider than the naive one on correlated data. |
 
 ---
@@ -1044,8 +1066,8 @@ an untouched holdout, and it is not.
 "could a merchandiser have offered this article in this week" is approximated by
 "it sold at least once in the four weeks before the cutoff". That is why true
 item cold start is not measurable here and is replaced by a recently-launched
-segment; it also means 5.6% of truth articles are excluded from the primary
-protocol (§3).
+segment; it also means 5.9% of truth articles are excluded from the primary
+protocol (§3.2).
 
 **The relative confidence intervals are an approximation.** The customer-cluster
 bootstrap resamples the paired *difference*; the relative interval divides that

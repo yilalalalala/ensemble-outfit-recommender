@@ -4,11 +4,13 @@ Three things make the Round-1 protocol indefensible, and this module fixes them.
 
 **Catalogue leakage.** ``ensemble.completion.data.universe`` builds the eligible
 catalogue from sales in ``[start - universe_weeks, week.end]`` — it reads the
-target week. Every truth item is then eligible by construction, which inflates
-every system and makes "item cold start" an artefact of the leak. Here the
-eligible catalogue is built strictly before the cutoff
-(:func:`eligible_universe`); the old definition is still available as
-``oracle=True`` for a side-by-side oracle comparison only (D-030).
+target week, so eligibility is not knowable at prediction time and "item cold
+start" becomes an artefact of the definition. Measured, that leak does *not*
+flatter the numbers: it adds ~5.9% more truth articles with no pre-cutoff
+footprint, which nothing can retrieve, and so *lowers* Recall@12 by ~5.1% for
+every fixed-fusion system (``protocol_check``, D-031). Here the eligible
+catalogue is built strictly before the cutoff (:func:`eligible_universe`); the
+old definition stays reachable as ``oracle=True`` for that comparison only.
 
 **One week of evidence.** Model selection used the single validation week.
 :func:`folds` returns consecutive label weeks ending at validation, so every
@@ -112,10 +114,10 @@ def queries(con, week: Week, cfg) -> pd.DataFrame:
 def restrict_truth(q: pd.DataFrame, uni: pd.DataFrame) -> pd.DataFrame:
     """Drop truth items outside the eligible catalogue and queries left with none.
 
-    Under the leakage-free catalogue ~5.6% of truth articles are not eligible
-    (never sold before the cutoff). Keeping them would make every system's
-    recall uncomputable-but-nonzero-ceiling; they are excluded from the primary
-    protocol and counted in ``n_truth_dropped`` instead.
+    Under the leakage-free catalogue ~5.9% of truth articles are not eligible
+    (never sold before the cutoff). Scoring them as guaranteed misses would bury
+    an unreachable ceiling inside every number, so they are excluded from the
+    primary protocol and counted in ``n_truth_dropped`` instead (D-031).
     """
     live = np.sort(uni.article_id.to_numpy(dtype=np.int64))
     lens = np.fromiter((len(t) for t in q.truth.values), dtype=np.int64, count=len(q))

@@ -93,7 +93,7 @@ def ctl_reasons(r: dict) -> list[dict]:
     """Reason chips for one Complete-the-Look pick, gated on evidence present in the row.
 
     A chip is emitted only when the column it quotes is non-null for *this* pair
-    (D-034): a visually retrieved pick never claims co-purchase support, and a
+    (D-035): a visually retrieved pick never claims co-purchase support, and a
     popularity fallback says so instead of borrowing a style explanation.
     """
     def num(key):
