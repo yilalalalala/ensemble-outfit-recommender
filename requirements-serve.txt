@@ -1,0 +1,14 @@
+# Pinned runtime for the Track B serving API (src/ensemble/api, src/ensemble/serving).
+# The API process needs neither LightGBM (the ranker runs on the NumPy runtime,
+# ensemble.serving.gbdt) nor DuckDB. Versions are the ones the test suite and the local
+# benchmarks ran with. Visual search additionally needs requirements-serve-visual.txt.
+fastapi==0.141.1
+uvicorn==0.54.0
+pydantic==2.13.5
+numpy==2.4.6
+pandas==3.0.6
+pyarrow==25.0.1
+pyyaml==6.0.3
+python-multipart==0.0.32
+pillow==12.3.0
+httpx==0.28.1

@@ -1,0 +1,8 @@
+data/
+mlruns/
+reports/
+.venv/
+**/__pycache__/
+*.pyc
+.git/
+* 2.*

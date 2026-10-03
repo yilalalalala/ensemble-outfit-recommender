@@ -12,6 +12,10 @@ successive halving, not open-ended search):
 - **Stage B** (tuning fold 2020-07-29): the two best configurations per model are rerun with
   their chosen epoch count; the winner has the higher mean of the curve-selected raw MAP@12
   over both tuning folds (ties -> fewer epochs, then cheaper).
+- **Stage C** (convergence guard, declared before Stage A2 results were read): a winner whose
+  curve-selected epoch is the last epoch of its budget is retrained on tuning fold 2020-07-22
+  with twice the budget; the longer count is adopted if its curve-selected raw MAP@12 is
+  higher. A baseline is never reported at a budget its own learning curve says is binding.
 
 Two lanes run side by side: BPR-MF on the CPU, LightGCN and SASRec on the GPU (MPS). Their
 measured peaks are ~2.8 GB and ~6 GB, so the pair stays well inside 16 GB; nothing else
@@ -165,5 +169,41 @@ def run(stage: str = "all") -> dict:
     return state
 
 
+def stage_c() -> dict:
+    cfg = load_config()
+    tf = list(cfg.research.protocol.tuning_folds)
+    out_path = cfg.path("reports") / "track_a_research" / "tuning.json"
+    state = json.loads(out_path.read_text())
+    jobs, plan = [], {}
+    for m, sel in state["selected"].items():
+        win = next(r for r in state["stage_b"][m] if r["epochs"] == sel["epochs"]
+                   and all(sel.get(k) == v for k, v in r["overrides"].items()))
+        budget = MAX_EPOCHS[m]
+        if win["epochs"] < budget:
+            plan[m] = {"binding": False}
+            continue
+        ov = {**win["overrides"], "epochs": 2 * budget, "curve_every": CURVE_EVERY[m]}
+        plan[m] = {"binding": True, "overrides": ov}
+        jobs.append((m, tf[0], 0, ov, True))
+    run_lanes(jobs)
+    for m, pl in plan.items():
+        if not pl["binding"]:
+            continue
+        best = curve_best(result(m, tf[0], 0, pl["overrides"]))
+        prev = next(r for r in state["stage_b"][m] if r["epochs"] == state["selected"][m]["epochs"])
+        pl["best"] = best
+        pl["adopted"] = best["raw_map@12"] > prev["fold_a_raw_map@12"]
+        if pl["adopted"]:
+            state["selected"][m]["epochs"] = best["epoch"]
+            state["selected"][m]["mask_seen"] = best["mask_seen"]
+    state["stage_c"] = plan
+    out_path.write_text(json.dumps(state, indent=1, default=float))
+    print(json.dumps({m: state["selected"][m] for m in state["selected"]}, indent=1))
+    return state
+
+
 if __name__ == "__main__":
-    run(sys.argv[1] if len(sys.argv) > 1 else "all")
+    if len(sys.argv) > 1 and sys.argv[1] == "stage_c":
+        stage_c()
+    else:
+        run(sys.argv[1] if len(sys.argv) > 1 else "all")
