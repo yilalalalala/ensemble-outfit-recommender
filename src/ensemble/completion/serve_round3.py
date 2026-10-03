@@ -30,6 +30,7 @@ from __future__ import annotations
 import gc
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -244,6 +245,12 @@ def build(log=print) -> dict:
                "tt_pair_sim", "clip_sim", "same_colour_master", "price_tier_diff"]]
     out = cfg.path("processed") / "models" / "complete_the_look.parquet"
     out.parent.mkdir(parents=True, exist_ok=True)
+    keep = out.with_name("complete_the_look_round1.parquet")
+    if out.exists() and not keep.exists():
+        # The Round-1 table is a generated artifact, but `make track-b serve` takes an hour
+        # to rebuild it; keep one copy so the two serving tables can be compared.
+        shutil.copy2(out, keep)
+        log(f"  kept the previous serving table as {keep.name}")
     ctl.to_parquet(out, index=False)
     summary = {"model": SHIPPED_MODEL, "n_features": len(feats), "trees": booster.current_iteration(),
                "train_weeks": train_weeks, "serving_week": str(week.start), "cutoff": str(week.cutoff),
