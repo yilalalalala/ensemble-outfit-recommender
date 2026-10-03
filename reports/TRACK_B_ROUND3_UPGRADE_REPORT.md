@@ -1027,6 +1027,17 @@ test resolved to the *method*. Test-only, caught immediately, fixed with
 `out["rank"]` — recorded because the serving table has a `rank` column and the
 same trap is one attribute access away in any code that touches it.
 
+**12. I staged files I had been told not to touch.** The working tree carries 27
+Finder/iCloud sync duplicates (`* 2.py`, `* 2.json`, `docs/HANDOFF 2.md`), and the
+instructions were not to delete, rename, stage or modify them. Three `git add -A`
+calls staged them anyway (commits `fd3de84`: 15 files, `5978fbe`: 1, `0cc6d62`:
+11); none had been tracked at `24b57da`. Fixed with `git rm --cached`, which
+removes them from the index and leaves every file on disk untouched, restoring the
+pre-round state: 0 tracked, 27 present and untracked. No duplicate was ever
+deleted, renamed or edited — `git add` does not modify working-tree content — but
+`git add -A` was the wrong tool in a tree with files that are deliberately
+untracked, and explicit paths should have been used throughout.
+
 ---
 
 ## 15. Rejected approaches, and why
@@ -1247,6 +1258,9 @@ ENSEMBLE_CONFIG=experiments/tb3_smoke PYTHONPATH=src .venv/bin/python \
 ### Commits made in this round (local only)
 
 ```
+af49025 fix: untrack the '* 2.*' sync duplicates I should never have staged
+0cc6d62 docs: correct the leak claim, cross-references and stale ADR ids
+aaf02d6 test(report): assert every headline figure against the stored artifacts
 bcb1f04 feat(serving): rebuild Complete the Look with the learned ranker; honest provenance
 dbd226e docs: Track B model card and README for Round 3
 86e0069 docs(report): Round-3 upgrade report; single final test-week evaluation
@@ -1274,8 +1288,20 @@ local run against the local DuckDB database.
 
 ### Pre-existing files that were left alone
 
-The working tree contains Finder/iCloud sync duplicates (`* 2.py`, `* 2.json`,
-`docs/HANDOFF 2.md`). None of them was deleted, renamed, staged or modified; the
-pytest configuration already ignores `* 2.py` so they stay out of the suite.
-`docs/CLAUDECODE_TRACK_B_ROUND3_PLAN.md` and `docs/HANDOFF.md` are unchanged
-apart from the plan file being committed as-is.
+The working tree contains 27 Finder/iCloud sync duplicates (`* 2.py`, `* 2.json`,
+`docs/HANDOFF 2.md`). All 27 are still on disk, byte-for-byte, and untracked —
+`git ls-files | grep ' 2\.'` returns nothing and
+`git status --untracked-files=all` lists all 27. None was deleted, renamed or
+edited. All 27 *were* staged mid-round by three `git add -A` calls, and that was
+undone with `git rm --cached` (problem 12 in §14). The pytest configuration ignores
+`* 2.py`, so they stay out of the suite either way.
+`docs/HANDOFF.md` is unchanged; `docs/CLAUDECODE_TRACK_B_ROUND3_PLAN.md` was
+committed as-is.
+
+Apart from those duplicates the working tree is clean: `git status --porcelain`
+lists nothing else. The 44 paths this round changed are 28 additions and 16
+modifications (`git diff --name-status 24b57da..HEAD`), all under
+`src/ensemble/completion`, `src/ensemble/api/app.py`,
+`tests/`, `configs/`, `docs/`, `reports/` and `scripts/`; no file outside that set
+was touched, and no Round-1 Track B module (`completion/data.py`, `models.py`,
+`run.py`, `serve_ctl.py`) was modified.
