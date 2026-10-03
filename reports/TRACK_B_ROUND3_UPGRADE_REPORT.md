@@ -502,6 +502,75 @@ establish that the complexity is earning its place.
 
 ---
 
+## 8. Two-tower negatives, epoch budget and determinism (Phase 5)
+
+`reports/track_b_round3/ablation_towers.json`: two label weeks × two seeds per
+configuration, trained point-in-time, evaluated three ways — held-out Recall@12 on
+baskets from the tail of the mining window (the rule that picks the epoch),
+`fold_recall@12` of the two-tower list alone on the target week over the
+leakage-free catalogue, and the same with the article-ID embedding switched off
+(what a brand-new article could be retrieved by).
+
+| negatives | fold Recall@12 | seed/week SD | content-only Recall@12 | held-out Recall@12 | vs in-batch + logQ | mean seconds | runs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| in-batch only | 0.0706 | 0.0015 | 0.0670 | 0.0529 | **−26.48%** | 147 | 4 |
+| **in-batch + logQ** | **0.0961** | 0.0015 | 0.0919 | 0.0854 | — | 166 | 4 |
+| in-batch + logQ + 4 retrieval-informed hard | 0.0970 | 0.0010 | 0.0928 | 0.0858 | +0.94% | 267 | 4 |
+
+### logQ is not optional
+
+Dropping the logQ correction costs **26.5%** of the tower channel's recall. This
+reproduces D-016 on the Round-3 protocol with a faster trainer, and it is the one
+negative-sampling component with an unambiguous effect: in-batch sampling
+over-samples popular items, and without the correction the tower collapses toward
+popularity.
+
+### The redesigned hard negatives still do not earn their place
+
+Round 1 tested popularity-sampled negatives and (product type, price tier) hard
+negatives and found nothing (D-016). Those were removed. What is tested here is a
+different design — **retrieval-informed** hard negatives: each step re-scores a
+popularity-sampled pool with the model being trained and takes the
+highest-scoring wrong items, with the positive, its colourways and articles that
+co-occur with the anchor in a basket masked out as likely false negatives.
+
+The result is +0.94%, against a per-run spread of 0.0010–0.0015 (1.0–1.5%). Paired
+by (week, seed) the difference is +0.0009 with a paired SD of ~0.0018 and one of
+four pairs negative. At n = 4 that is not a detectable effect, and it costs **+61%
+training time** (267 s vs 166 s per week). They stay **off** (`hard_negatives: 0`).
+
+The stronger reading: Round 1 concluded "these particular hard negatives do not
+help"; Round 3 redesigned them and reached the same place, which suggests the
+binding constraint is not the negative-sampling design but that in-batch + logQ
+already saturates what this architecture can extract from 3.1 M training pairs
+(D-036).
+
+### The epoch budget is adequate — contrary to what the fold logs suggest
+
+In all eight weeks the 6-epoch run picked epoch 6, and the held-out curve still
+looked like it was rising (for example 2020-09-09: 0.0693, 0.0808, 0.0848, 0.0861,
+0.0858, 0.0886). That reads like a binding budget. The probe says otherwise:
+allowing up to 12 epochs with patience 2 on 2020-09-09 ran **8** epochs and
+selected **epoch 6**, and its fold Recall@12 (0.0985) is inside the seed spread of
+the 6-epoch runs (0.0961 ± 0.0015). The curve flattens immediately after epoch 6.
+Caveat: one week, one seed — enough to withdraw the "under-trained" claim, not
+enough to rule out a gain on other weeks.
+
+### Determinism
+
+| backend | one epoch, identical seed, repeated | identical? |
+| --- | --- | --- |
+| CPU | 0.08163852, 0.08163852 | yes |
+| MPS | 0.08017826, 0.08020096 | no (0.028% apart) |
+
+MPS kernels are not bit-reproducible, so no tower conclusion in this report rests
+on a single run: every configuration above is a mean over two weeks × two seeds,
+and the seed/week SD is reported next to it. The MPS run-to-run spread (0.028%) is
+two orders of magnitude smaller than the seed spread (1.0–1.5%), so seed choice,
+not backend nondeterminism, is what the comparisons have to survive.
+
+---
+
 ## 9. Serving (Phase 7)
 
 ### 9.1 What the diversity rules cost
@@ -577,69 +646,503 @@ time, so a Round-1 serving store still renders; the Round-1 table is also kept a
 
 ---
 
-## 8. Two-tower negatives, epoch budget and determinism (Phase 5)
+## 10. The single final test-week evaluation
 
-`reports/track_b_round3/ablation_towers.json`: two label weeks × two seeds per
-configuration, trained point-in-time, evaluated three ways — held-out Recall@12 on
-baskets from the tail of the mining window (the rule that picks the epoch),
-`fold_recall@12` of the two-tower list alone on the target week over the
-leakage-free catalogue, and the same with the article-ID embedding switched off
-(what a brand-new article could be retrieved by).
+Run **once**, after every selection decision above was made, with the ablation
+table switched off so the test week never saw ten models:
 
-| negatives | fold Recall@12 | seed/week SD | content-only Recall@12 | held-out Recall@12 | vs in-batch + logQ | mean seconds | runs |
+```
+ENSEMBLE_CONFIG=experiments/tb3_final .venv/bin/python -m ensemble.completion.backtest test
+```
+
+Test week **2020-09-16** (the last seven days of the dataset). The ranker trained
+on 2020-09-02 and 2020-09-09 with their own point-in-time features; the towers for
+the test week were trained from data ending 2020-09-15. 86,350 queries, 21,283
+customers, 184 candidates per query, union recall 0.4719.
+`reports/track_b_round3/backtest_test.json`, git commit `5978fbe`, 452 s, peak 5.4 GB.
+
+| system | Recall@12 | Recall@5 | NDCG@12 | vs shipped (R@12) | 95% CI | vs shipped (NDCG@12) | 95% CI |
+| --- | ---: | ---: | ---: | ---: | --- | ---: | --- |
+| `slot_popularity` | 0.0884 | 0.0480 | 0.0461 | −29.92% | [−32.29, −27.68] | −38.71% | [−41.34, −36.11] |
+| `assoc_npmi` | 0.1202 | 0.0763 | 0.0747 | −4.67% | [−6.26, −3.00] | −0.71% | [−2.24, +1.03] |
+| `shipped_rrf_hybrid` | 0.1261 | 0.0776 | 0.0752 | — | | — | |
+| `rrf_all_sources` | 0.1304 | 0.0796 | 0.0747 | +3.38% | [+2.26, +4.50] | −0.73% | [−1.74, +0.30] |
+| `rrf_all_sources_union` | 0.1322 | 0.0837 | 0.0781 | +4.86% | [+3.43, +6.33] | +3.88% | [+2.54, +5.31] |
+| **`lgbm_compatibility`** | **0.1596** | **0.0996** | **0.0956** | **+26.57%** | **[+24.74, +28.34]** | **+27.11%** | **[+25.29, +28.81]** |
+| **`lgbm_personalized`** | **0.1820** | **0.1187** | **0.1124** | **+44.33%** | **[+42.20, +46.43]** | **+49.45%** | **[+47.16, +51.78]** |
+| `lgbm_compatibility` + shipped diversity rules | 0.1494 | 0.0878 | 0.0897 | +18.48% | | +19.28% | |
+
+### Did validation predict the test week?
+
+| quantity | six validation folds | test week | shortfall |
+| --- | ---: | ---: | ---: |
+| `lgbm_personalized` vs shipped, Recall@12 | +47.74% | +44.33% | −3.4 pts |
+| `lgbm_compatibility` vs shipped, Recall@12 | +29.33% | +26.57% | −2.8 pts |
+| `lgbm_personalized` vs shipped, NDCG@12 | +54.70% | +49.45% | −5.3 pts |
+| shipped diversity rules vs shipped hybrid | +20.58% | +18.48% | −2.1 pts |
+
+Every lift is 2–5 percentage points smaller on the test week than the validation
+mean, in the same direction for every system. That is the expected sign — the
+operating point was chosen on those folds — and the shrinkage is small relative to
+the effect, which is what matters. The ordering of all seven systems is identical
+on validation and test.
+
+### Test-week segments
+
+| system | tail | recently launched | jewellery | returning | new customer | coverage | novelty | div. type | div. style |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `slot_popularity` | 0.0136 | 0.0911 | 0.0000 | 0.0883 | 0.0895 | 0.0031 | 11.87 | 0.2429 | 0.8496 |
+| `assoc_npmi` | 0.0455 | 0.1143 | 0.0004 | 0.1193 | 0.1312 | 0.2173 | 12.21 | 0.2595 | 0.8522 |
+| `shipped_rrf_hybrid` | 0.0438 | 0.0715 | 0.0062 | 0.1248 | 0.1422 | 0.2241 | 11.89 | 0.2748 | 0.8180 |
+| `rrf_all_sources_union` | 0.0577 | 0.0782 | 0.0089 | 0.1306 | 0.1514 | 0.3970 | 12.17 | 0.2767 | 0.8060 |
+| `lgbm_compatibility` | 0.0927 | 0.1586 | 0.0155 | 0.1583 | 0.1751 | 0.2223 | 12.82 | 0.2404 | 0.8244 |
+| `lgbm_personalized` | **0.1080** | **0.1765** | **0.0287** | **0.1826** | 0.1750 | 0.2789 | 12.84 | 0.2432 | 0.8031 |
+| `lgbm_compatibility` + diversity rules | 0.0864 | 0.1445 | **0.0380** | 0.1485 | 0.1610 | 0.2270 | 12.83 | **0.3842** | **0.9074** |
+
+Tail +147%, recently launched +147%, jewellery +363% relative to the shipped
+hybrid; coverage +24%, novelty +0.95 bits. Intra-list diversity is 11% lower than
+the shipped hybrid before the serving rules and 40% higher after them.
+Interestingly the diversity rules are the best configuration for **jewellery**
+(0.0380 vs 0.0155 unrestricted) — forcing variety inside a module surfaces
+accessories that the raw score ordering buries.
+
+### Test-week per slot (Recall@12)
+
+| system | upper | lower | full | shoes | accessories | socks | swimwear |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| in-batch only | 0.0706 | 0.0015 | 0.0670 | 0.0529 | **−26.48%** | 147 | 4 |
-| **in-batch + logQ** | **0.0961** | 0.0015 | 0.0919 | 0.0854 | — | 166 | 4 |
-| in-batch + logQ + 4 retrieval-informed hard | 0.0970 | 0.0010 | 0.0928 | 0.0858 | +0.94% | 267 | 4 |
+| `shipped_rrf_hybrid` | 0.0833 | 0.1454 | 0.1167 | 0.1870 | 0.1098 | 0.3081 | 0.0989 |
+| `lgbm_compatibility` | 0.1118 | 0.1864 | 0.1549 | 0.2201 | 0.1178 | 0.3606 | 0.1544 |
+| `lgbm_personalized` | **0.1254** | **0.2124** | **0.2025** | **0.2382** | **0.1301** | **0.3784** | **0.1867** |
 
-### logQ is not optional
+Wins in every slot, as on validation.
 
-Dropping the logQ correction costs **26.5%** of the tower channel's recall. This
-reproduces D-016 on the Round-3 protocol with a faster trainer, and it is the one
-negative-sampling component with an unambiguous effect: in-batch sampling
-over-samples popular items, and without the correction the tower collapses toward
-popularity.
+### The honest caveat
 
-### The redesigned hard negatives still do not earn their place
+This week was scored once in Round 1 and those numbers have been read, so it is a
+**confirmation, not a fresh holdout**. What it does establish is that the
+operating point chosen on six earlier weeks transfers to a seventh with a 2–5
+point shrinkage and no change in ordering. It does not establish anything about
+online behaviour.
 
-Round 1 tested popularity-sampled negatives and (product type, price tier) hard
-negatives and found nothing (D-016). Those were removed. What is tested here is a
-different design — **retrieval-informed** hard negatives: each step re-scores a
-popularity-sampled pool with the model being trained and takes the
-highest-scoring wrong items, with the positive, its colourways and articles that
-co-occur with the anchor in a basket masked out as likely false negatives.
+---
 
-The result is +0.94%, against a per-run spread of 0.0010–0.0015 (1.0–1.5%). Paired
-by (week, seed) the difference is +0.0009 with a paired SD of ~0.0018 and one of
-four pairs negative. At n = 4 that is not a detectable effect, and it costs **+61%
-training time** (267 s vs 166 s per week). They stay **off** (`hard_negatives: 0`).
+## 11. Architecture and code changes
 
-The stronger reading: Round 1 concluded "these particular hard negatives do not
-help"; Round 3 redesigned them and reached the same place, which suggests the
-binding constraint is not the negative-sampling design but that in-batch + logQ
-already saturates what this architecture can extract from 3.1 M training pairs
-(D-036).
+### What the pipeline looks like now
 
-### The epoch budget is adequate — contrary to what the fold logs suggest
+```
+                     week w  (label week; every arrow reads only t_dat < w.start)
+                        │
+  association.py  ──────┤  tb_pairs / tb_style_pairs: cross-slot co-counts, time-decayed
+                        │  co-counts (14 d, 56 d half-lives), support, lift, PMI, NPMI, all
+                        │  as separate columns at article level and at product_code level
+                        │
+  protocol.py     ──────┤  eligible_universe(): sold in the 4 weeks BEFORE the cutoff
+                        │  queries():  one row per (basket, anchor, target slot) in week w
+                        │  restrict_truth(): truth articles outside the catalogue are dropped
+                        │                    and counted, not silently scored as misses
+                        │
+  towers.py       ──────┤  two-tower retrieval, in-batch + logQ, held-out early stopping
+                        │  (own process: PyTorch and LightGBM ship clashing OpenMP runtimes)
+                        │
+  candidates.py   ──────┤  _tb_assoc / _tb_style / _tb_tt / _tb_ttc / _tb_pop, each with
+                        │  its own rank, built per (anchor, target slot) KEY, not per query
+                        │
+  features.py     ──────┤  one row per (query, candidate): compatibility + candidate +
+                        │  point-in-time personalization features (95 columns)
+                        │
+  ranker.py       ──────┤  LightGBM LambdaRank, one group per (basket, anchor, target slot),
+                        │  trees chosen by temporal early stopping on the last training week
+                        │
+  metrics.py      ──────┤  Recall@5/@12, NDCG@12, per slot, tail, recently launched,
+                        │  jewellery, returning vs new customer, coverage, novelty,
+                        │  list diversity, customer-cluster bootstrap
+                        │
+  backtest.py     ──────┘  the rolling backtest that drives all of it, with per-week
+                           artifacts cached under a configuration hash
+```
 
-In all eight weeks the 6-epoch run picked epoch 6, and the held-out curve still
-looked like it was rising (for example 2020-09-09: 0.0693, 0.0808, 0.0848, 0.0861,
-0.0858, 0.0886). That reads like a binding budget. The probe says otherwise:
-allowing up to 12 epochs with patience 2 on 2020-09-09 ran **8** epochs and
-selected **epoch 6**, and its fold Recall@12 (0.0985) is inside the seed spread of
-the 6-epoch runs (0.0961 ± 0.0015). The curve flattens immediately after epoch 6.
-Caveat: one week, one seed — enough to withdraw the "under-trained" claim, not
-enough to rule out a gain on other weeks.
+### Files added
+
+| file | what it does |
+| --- | --- |
+| `src/ensemble/completion/protocol.py` | leakage-free eligible catalogue (and the Round-1 oracle, for measurement only), rolling folds, truth restriction, customer-level resampling units, run manifest |
+| `src/ensemble/completion/association.py` | point-in-time cross-slot mining with raw co-count, time-decayed co-counts, support, lift, PMI and NPMI kept separate; style-level pooling; basket-noise audit |
+| `src/ensemble/completion/candidates.py` | the candidate union and its per-source ranks, built at key level; `register_keys` makes the key space sliceable for serving |
+| `src/ensemble/completion/features.py` | the 95-column feature matrix, the feature groups the ablation table switches off, and `check_groups` as the schema contract |
+| `src/ensemble/completion/towers.py` | two-tower retrieval rebuilt for speed, logQ, retrieval-informed hard negatives, held-out early stopping, pair-similarity export |
+| `src/ensemble/completion/ranker.py` | LightGBM LambdaRank fit, temporal early stopping, deterministic top-k, gain importance by feature group |
+| `src/ensemble/completion/metrics.py` | the Round-3 metric set and the customer-cluster bootstrap |
+| `src/ensemble/completion/fusion.py` | the fixed-fusion baselines (importable without LightGBM or PyTorch) and the serving diversity rules |
+| `src/ensemble/completion/pipeline.py` | artifacts shared by the two processes; cache key; the serving key space and its batching |
+| `src/ensemble/completion/backtest.py` | the rolling backtest, the ablation pass, the per-fold reports |
+| `src/ensemble/completion/protocol_check.py` | scores the fixed-fusion baselines over the leakage-free catalogue and the Round-1 oracle catalogue |
+| `src/ensemble/completion/ablate_towers.py` | two-tower negative-sampling ablation, epoch-budget probe, backend-determinism probe |
+| `src/ensemble/completion/label_audit.py` | what the Complete-the-Look label actually contains |
+| `src/ensemble/completion/serve_round3.py` | the serving table, scored by the learned ranker, with per-row evidence |
+| `tests/test_track_b_round3.py` | 41 tests: leakage, fold boundaries, metrics, ablation groups, serving key space, reason chips |
+| `scripts/tb3_tables.py` | renders every table in this report from the stored JSON |
+| `configs/experiments/tb3_final.yaml` | same cache key as `default`, ablation table off: the serving-rule folds and the single test-week run |
+| `configs/experiments/tb3_smoke.yaml`, `tb3_light.yaml`, `tb3_smoke_light.yaml` | fast end-to-end smoke runs; smaller DuckDB budget for audits that run next to a backtest |
+
+### Files changed
+
+| file | change |
+| --- | --- |
+| `configs/default.yaml` | the whole `track_b:` block: folds, training weeks, candidate budget per source, ranker and two-tower hyperparameters, `customer_weeks`, `feature_ablations`, `serving_rules` |
+| `src/ensemble/api/app.py` | Complete-the-Look reason chips are built from the evidence stored on each served row and cite only what is non-null for that pair; slot ordering counts any association-backed pick; serving columns are detected at query time so a Round-1 store still renders |
+| `docs/DECISIONS.md` | D-031 … D-037 |
+| `reports/MODEL_CARD_track_b.md` | Round-3 section |
+
+Nothing in the Round-1 Track B path (`completion/data.py`, `models.py`, `run.py`,
+`serve_ctl.py`) was modified, so `make track-b` still reproduces the Round-1
+numbers exactly.
+
+---
+
+## 12. Leakage and reproducibility checks
+
+### Protocol-level
+
+| check | how | result |
+| --- | --- | --- |
+| Mining ignores the label week | swap every label-week article for a different one; mine again | identical `tb_pairs` (co, lift, NPMI) — `test_mining_ignores_label_week` |
+| The eligible catalogue ignores the label week | same swap | identical catalogue; the swapped article is never eligible — `test_eligible_universe_ignores_label_week` |
+| Every feature column ignores the label week | same swap, compare all 95 columns of every candidate row | `assert_frame_equal` passes — `test_features_ignore_label_week` |
+| The *volume* of label-week activity cannot move a feature | keep the queried baskets, multiply the other label-week baskets ×10 | identical features for the shared customers, identical mining, identical catalogue — `test_label_week_volume_does_not_move_any_feature` |
+| Customer history stops at the cutoff | customers whose only purchases are inside the label week | `c_has_history == 0` for all of them — `test_customer_history_excludes_label_week` |
+| Truth stays inside the basket | every truth article must be in that customer's same-day purchases | passes — `test_query_truth_stays_inside_the_basket` |
+| Folds never touch the test week | fold list + the test-mode week list | all fold weeks end before the test week starts; the test-mode training weeks are the two before it — `test_folds_end_at_validation_and_never_touch_test`, `test_test_mode_training_weeks_precede_the_test_week` |
+| Training weeks precede each fold | fold-by-fold assertion | passes — `test_training_weeks_precede_each_fold` |
+| The oracle catalogue is only reachable on purpose | `oracle=True` must differ from the default | passes — `test_oracle_universe_does_see_label_week` |
+
+Every feature-building entry point takes `week` as a **required** argument with no
+default, so a call site cannot forget the cutoff (`association.mine`,
+`protocol.eligible_universe`, `protocol.queries`, `features.build_context`,
+`pipeline.prepare_sql`, `pipeline.price_tiers`).
+
+### Ablation-level
+
+`features.check_groups` asserts that every feature group still removes at least
+its expected number of columns from the live schema, and the backtest calls it
+before fitting anything. A renamed feature therefore fails the run instead of
+producing an ablation row that silently reads "no effect". `subset` additionally
+refuses a group that removes nothing.
 
 ### Determinism
 
-| backend | one epoch, identical seed, repeated | identical? |
-| --- | --- | --- |
-| CPU | 0.08163852, 0.08163852 | yes |
-| MPS | 0.08017826, 0.08020096 | no (0.028% apart) |
+| component | result |
+| --- | --- |
+| LightGBM ranker | `deterministic: true`, fixed seed, `force_col_wise`. The ablation run refitted the two shipping models on the same folds as the first run and reproduced the tree counts and the metrics exactly (for example fold 2020-08-05: 131 trees and Recall@12 0.12958 both times). |
+| Top-k tie-breaking | `np.lexsort` on (−score, article_id): a tie always resolves to the smaller article id — `test_groups_and_top_k_are_deterministic` |
+| Customer subsampling for training weeks | hashed on `customer_idx`, so a basket is never split and the sample is stable across runs — `test_sample_queries_is_deterministic_and_customer_level` |
+| Bootstrap | fixed seed (0), 1,000 resamples, customers as the resampling unit |
+| Two-tower on CPU | bit-identical across repeated runs with the same seed |
+| Two-tower on MPS | **not** bit-identical; the spread is quantified in §9 and tower comparisons are made across seeds, not from single runs |
 
-MPS kernels are not bit-reproducible, so no tower conclusion in this report rests
-on a single run: every configuration above is a mean over two weeks × two seeds,
-and the seed/week SD is reported next to it. The MPS run-to-run spread (0.028%) is
-two orders of magnitude smaller than the seed spread (1.0–1.5%), so seed choice,
-not backend nondeterminism, is what the comparisons have to survive.
+### Traceability
+
+Every report JSON carries a manifest: git commit, whether the tree was dirty,
+config name, a SHA-1 of the `track_b` configuration, and a data fingerprint (row
+count, date range, and a checksum over `article_id`). Per-week artifacts are
+cached under `data/interim/track_b/<cache-key>/`, where the key is a SHA-1 of
+every setting that can change the mined evidence, the catalogue, the candidate
+union or the towers — so a configuration change can never pick up a stale
+artifact. `feature_ablations` and `serving_rules` are deliberately *not* part of
+the key: they change which models are fitted, not the matrices, which is what
+makes the ablation pass cheap.
+
+
+---
+
+## 13. Problems encountered, and what was done about them
+
+**1. The Round-3 reproduction of the shipped baseline was weaker than the real
+Round-1 model.** `shipped_rrf_hybrid` fused the raw association list with the
+two-tower list. Round 1 (`completion/models.py::association` called with
+`k = 4·12`, then `models.rrf`) first back-fills the association channel from the
+slot's 8·12 most popular articles and *then* fuses, so popularity earns
+reciprocal-rank credit inside the association list rather than only filling the
+tail. Fixed in `fusion.baseline_lists` / `baseline_recs`. The effect is large
+enough to matter: on fold 2020-08-05 the baseline moves from 0.0807 to 0.0864
+Recall@12, and the headline lift of the learned ranker drops accordingly. The
+first six-fold run (`backtest_val.json`) was produced by the pre-fix code and is
+retained but superseded; §2 and §4 use the corrected run.
+
+**2. PyTorch and LightGBM crash in one process on macOS** (two OpenMP runtimes).
+The two-tower stage runs as its own process and hands results to the ranker
+process through the artifact cache; the serving build does the same; the
+LightGBM tests run in a fresh interpreter.
+
+**3. Two-tower training was too slow for a rolling backtest.** The Round-1
+trainer re-encoded each batch through a Python dict twice per step and drew hard
+negatives with one `rng.choice` per positive: ~370 s per epoch over 3.2 M pairs.
+Article ids are now mapped to rows once with `np.searchsorted` and every
+per-batch tensor is a gather on a precomputed matrix: ~27 s per epoch. Eight
+weeks of towers became affordable (~190 s per week including retrieval and pair
+similarities).
+
+**4. Later epochs slowed down on MPS.** The Metal allocator keeps cached blocks;
+`torch.mps.empty_cache()` after each epoch and after each retrieval batch keeps
+epoch time flat.
+
+**5. Memory.** A fold's feature matrix is ~20 M rows × 95 columns. Everything is
+built in query-id chunks, downcast to float32/int32, written to a per-week
+Parquet cache, and training matrices are evicted as soon as no later fold needs
+them. Peak RSS for the full six-fold ablation run stayed around 6 GB on a 16 GB
+machine. Serving covers ~10× more keys than a fold, so it is built in batches of
+2,000 anchors and each batch is scored in 8,000-query sub-chunks.
+
+**6. Truth articles outside the leakage-free catalogue.** 5.6% of truth articles
+have no sale before the cutoff, so they cannot be in a legal catalogue. Scoring
+them as guaranteed misses would have buried an unreachable ceiling inside every
+number, so `restrict_truth` drops them and reports the count per week. This is
+also why Round-1 and Round-3 recall levels are not comparable (§3).
+
+**7. Feature-group ablations can silently become no-ops.** A renamed feature
+would make "minus towers" identical to the full model, and the table would read
+"no effect". `features.check_groups` now asserts the expected number of removed
+columns per group against the live schema, and the backtest calls it before
+fitting; `x_tt_type` (a tower × customer interaction) was in fact being left
+behind by the `towers` group and is now removed with it.
+
+**8. The serving diversity rules change list length, not just order.** Measuring
+them with a fill-back would have hidden that. Both are reported: `shipped` (order
+cost only, list stays 12 long) and `shipped_strict` (the hard caps serving
+actually applies, which can shorten a module).
+
+## 14. Rejected approaches, and why
+
+| approach | why it was not kept |
+| --- | --- |
+| Shipping `lgbm_personalized` in the precomputed Complete-the-Look table | The table is keyed by (anchor, target slot) and has to answer for anonymous visitors on any product page. A row per customer is not precomputable (26 k anchors × 6 slots × 1.4 M customers), and request-time scoring needs an online feature store and a model server that this local SQLite demo does not have. The gain it would buy is measured and reported instead of being claimed (§5, §10). |
+| Round-1 popularity-sampled negatives and (product type, price tier) hard negatives | D-016 already found no measurable gain; they were removed rather than carried forward, and replaced by retrieval-informed hard negatives, which are judged on §9's evidence. |
+| Keeping the Round-1 target-week catalogue as the primary universe | Eligibility was not knowable at prediction time, which makes "item cold-start recall" an artefact. It is retained only as an explicit `oracle=True` comparison (§3). |
+| A constructed "pre-launch availability" proxy for true item cold start | The dataset has no inventory or launch feed. Any proxy would be invented, not measured, so the metric is replaced by *recently launched* (first observed sale within 28 days of the cutoff) and the limitation is stated instead. |
+| A single global association score (NPMI only, or raw co-count only) | Round 1 had to choose one. Raw co-count, decayed co-counts, support, lift, PMI and NPMI are now separate features and the ranker picks; §8 shows what dropping each group costs. |
+| Treating (anchor, slot) queries as independent for confidence intervals | One basket produces several queries and one customer several baskets. All intervals resample **customers** with all of their queries; a test asserts the clustered interval is more than 3× wider than the naive one on correlated data. |
+
+---
+
+## 15. Limitations
+
+**Everything here is offline.** Recall@12 and NDCG@12 on held-out baskets are
+proxies for a surface nobody has interacted with. A real decision to ship needs
+an online A/B test with engagement and add-to-basket metrics; nothing in this
+report establishes that.
+
+**The label is co-purchase, not co-wear.** A Complete-the-Look truth item is
+another article the same customer bought on the same day. The basket audit says
+what that proxy costs: 15.6–17.2% of mined baskets contain a repeated quantity,
+14.3–15.4% contain more than one colourway of one style, and 2.7–2.9% span four
+or more slots — all signs of a shopping trip rather than an outfit. The optional
+Polyvore experiment (M8) is the only way in this project to separate the two.
+
+**The test week is a confirmation, not a fresh holdout.** It was scored once in
+Round 1 and those numbers have been read. Model selection in this round used the
+six rolling validation folds only, and the test week was touched once, after
+selection, with the ablation table switched off. It still cannot be presented as
+an untouched holdout, and it is not.
+
+**Catalogue eligibility is a sales proxy.** With no inventory or launch feed,
+"could a merchandiser have offered this article in this week" is approximated by
+"it sold at least once in the four weeks before the cutoff". That is why true
+item cold start is not measurable here and is replaced by a recently-launched
+segment; it also means 5.6% of truth articles are excluded from the primary
+protocol (§3).
+
+**The relative confidence intervals are an approximation.** The customer-cluster
+bootstrap resamples the paired *difference*; the relative interval divides that
+interval by the observed baseline mean rather than resampling the denominator
+too. For gains this far from zero the difference is cosmetic, but the relative
+bounds are slightly too narrow. Resampling the ratio is a one-line change and is
+listed as a next step.
+
+**The between-fold spread is not a standard error.** Consecutive folds share most
+of their 16-week mining window and many of their customers, so the per-fold
+numbers are positively correlated. The "±" in the per-fold tables is the
+between-fold standard deviation — a description of how the six weeks differ, not
+an uncertainty on the mean. The pooled customer-cluster bootstrap is the
+uncertainty statement.
+
+**`rrf_all_sources_union` is a reach control, not a tuned baseline.** It sums
+reciprocal ranks over the union's rank columns, and the slot-popularity rank is
+defined for *every* candidate, so the control carries more popularity signal than
+a hand-tuned fixed fusion would. Its purpose is to show that the learned
+ranker's gain does not come from a larger candidate pool, and it does that; it is
+not evidence about the best achievable fixed fusion.
+
+**The shipped serving model is not the best model measured.** Serving ships
+`lgbm_compatibility`. The personalized variant is better on every fold but needs
+an online feature store (§14).
+
+**The candidate union is the ceiling, and it is low.** Union recall is 0.4285: more
+than half of all truth pairs are not in the 189 candidates any system may choose
+from, so no amount of ranking can reach them. The learned ranker converts 36.7% of
+that ceiling into a top-12 hit. Raising the ceiling is a separate problem from
+ranking it, and it was not attempted this round.
+
+**The two-tower conclusions rest on two weeks and two seeds.** The negative-sampling
+table is four runs per configuration, the epoch-budget probe is one week and one
+seed, and MPS is not bit-reproducible. The logQ result (−26.5%) is far outside that
+noise; the hard-negative result (+0.94%) is inside it, which is exactly why hard
+negatives are reported as "not detectable at this sample size" rather than as "no
+effect".
+
+**MPS is not bit-reproducible.** Tower comparisons are therefore made across
+seeds and the seed spread is reported; single-run tower differences smaller than
+that spread carry no information.
+
+**Jewellery is still weak** in absolute terms, even though it improves a lot in
+relative terms. Metadata and a global image vector do not separate
+near-identical accessories; region-level visual features are the obvious next
+attempt and were out of scope here.
+
+**Not tested on rolling folds:** the basket-noise filter (`basket_filter`) and
+alternative time-decay half-lives. Both are part of the cache key, so each
+variant means rebuilding eight weeks of tower artifacts and training matrices
+(~2 h per variant). The audit that motivates the filter is reported, the decay
+features are kept as features and their value is measured by the `decay`
+ablation, but the filter itself and other half-lives remain untested. They are
+the first two experiments in §17.
+
+---
+
+## 16. Reproduction
+
+All commands run from the repository root with the project venv (Python 3.11).
+The dataset must already be ingested (`make ingest`).
+
+```bash
+# 0. environment (once)
+make setup
+
+# 1. the frozen Round-1 baseline is already stored:
+#    reports/track_b_round3/baseline_frozen.json
+
+# 2. how much the Round-1 catalogue definition was worth  (~25 min)
+PYTHONPATH=src .venv/bin/python -m ensemble.completion.protocol_check 2
+
+# 3. what the label contains  (~4 min)
+PYTHONPATH=src .venv/bin/python -m ensemble.completion.label_audit 6
+
+# 4. the six-fold rolling backtest with the full feature-group ablation table
+#    (~2 h; the first run also trains eight weeks of towers, ~25 min of that)
+PYTHONPATH=src .venv/bin/python -m ensemble.completion.backtest val 6 ablations
+
+# 5. the serving diversity rules on the same folds  (~35 min, reuses the cache)
+ENSEMBLE_CONFIG=experiments/tb3_final PYTHONPATH=src .venv/bin/python \
+    -m ensemble.completion.backtest val 6 serving_rules
+
+# 6. two-tower negatives, epoch budget and backend determinism  (~75 min)
+PYTHONPATH=src .venv/bin/python -m ensemble.completion.ablate_towers 2 2
+
+# 7. THE SINGLE FINAL TEST-WEEK EVALUATION — run once, after selection  (~12 min)
+ENSEMBLE_CONFIG=experiments/tb3_final PYTHONPATH=src .venv/bin/python \
+    -m ensemble.completion.backtest test
+
+# 8. serving artifacts and store  (~45 min)
+PYTHONPATH=src .venv/bin/python -m ensemble.completion.serve_round3 build
+PYTHONPATH=src .venv/bin/python -m ensemble.api.build
+
+# 9. tests
+make test
+
+# 10. regenerate every table in this report from the stored JSON
+.venv/bin/python scripts/tb3_tables.py backtest_val_ablations \
+    backtest_val_serving_rules backtest_test
+```
+
+A fast end-to-end smoke run of the whole backtest (one fold, one tower epoch,
+small budgets, ~3 min) is:
+
+```bash
+ENSEMBLE_CONFIG=experiments/tb3_smoke PYTHONPATH=src .venv/bin/python \
+    -m ensemble.completion.backtest val 1 smoke
+```
+
+### Artifacts
+
+| file | what |
+| --- | --- |
+| `reports/track_b_round3/baseline_frozen.json` | the Round-1 Track B results as observed before this round, with their protocol caveats |
+| `reports/track_b_round3/protocol_leak.json` | leakage-free catalogue vs the Round-1 oracle catalogue, per week and per system |
+| `reports/track_b_round3/label_audit.json` | label composition and basket-noise proxies per week |
+| `reports/track_b_round3/backtest_val.json` + `.log` | the first six-fold run (superseded; see §2) |
+| `reports/track_b_round3/backtest_val_ablations.json` + `.log` | **the authoritative validation result**: all systems, the feature-group ablation table, per-fold and pooled bootstrap, feature importance |
+| `reports/track_b_round3/backtest_val_serving_rules.json` + `.log` | the serving diversity rules on the same folds |
+| `reports/track_b_round3/ablation_towers.json` + `.log` | two-tower negatives, epoch budget, backend determinism |
+| `reports/track_b_round3/backtest_test.json` + `.log` | the single final test-week evaluation |
+| `reports/track_b_round3/serving.json` | what the serving build produced, with provenance mix and feature importance |
+| `data/interim/track_b/<cache-key>/` | per-week tower artifacts, pair similarities and training matrices (gitignored) |
+| `data/interim/track_b/per_query/` | per-query Recall@5/@12 and NDCG@12 for every system and fold, for re-bootstrapping without rerunning (gitignored) |
+| `mlruns/` | MLflow run per backtest, one metric set per system (gitignored) |
+
+---
+
+## 17. What to do next, in order of expected value per hour
+
+1. **A candidate-budget frontier for the union.** Union recall is 0.4285 and the
+   ranker converts 36.7% of it; more than half of all truth pairs are simply not
+   reachable. Ranking is now the strong part of the funnel and retrieval is the
+   weak one. Track A already has the method (recall-vs-candidates Pareto frontier,
+   D-027) and it transfers directly: sweep the per-source budgets, plot union
+   recall against candidates per query, and pick an operating point. Cost: the
+   budget is part of the cache key, so each point is a full rebuild (~2 h), but the
+   first three points would say whether the ceiling is cheap or expensive to lift.
+2. **An online feature store for personalized Complete the Look.** The prize is
+   measured: +15.11% Recall@12 on returning customers, who are 93.4% of queries.
+   The work is request-time point-in-time feature serving plus a model server, not
+   modelling.
+3. **Resample the ratio in the bootstrap** so the relative intervals are exact
+   rather than divided by a fixed denominator. Minutes of work; the per-query
+   scores are already cached under `data/interim/track_b/per_query/`, so no model
+   has to be refitted.
+4. **Test the basket-noise filter on rolling folds.** The audit says 15.6–17.2% of
+   mined baskets contain a repeated quantity and 14.3–15.4% more than one
+   colourway of one style. The implemented hook (`track_b.basket_filter`) is a
+   row-level predicate on `tb_bk`, while those proxies are basket-level
+   properties, so the filter has to be expressed basket-level first. It is part of
+   the cache key, so each variant costs a full artifact rebuild (~2 h).
+5. **Test other time-decay half-lives.** Currently 14 and 56 days, both exposed as
+   features. The `decay` ablation says what the pair is worth; it does not say the
+   pair is optimal. Same cost structure as (4), and the ablation suggests the
+   expected return is small.
+6. **Region-level visual features for jewellery and accessories.** A single global
+   FashionCLIP vector per article cannot separate near-identical accessories, and
+   jewellery is still the weakest segment in absolute terms (0.0275). A crop-level
+   or multi-region embedding is the next honest attempt, and the M7a DeepFashion2
+   adapters already produce crops. Note the ablation's warning: removing the single
+   CLIP feature costs 0.66%, so visual signal has to get much better to matter.
+7. **Co-wear labels (M8, Polyvore).** The only way to separate "bought together"
+   from "worn together" in this project.
+
+## 18. Repository status
+
+### Commits made in this round (local only)
+
+```
+010668c test: evidence rows, label-audit point-in-time history; report table renderer
+ce3ab80 feat(track-b): label-composition audit; strict serving caps; batch sub-chunking
+fd3de84 feat(track-b): Round-3 serving path, evidence-gated reasons, diversity trade-off
+4868d5b feat(track-b): ablation harness, tower/protocol probes, stronger leakage tests
+24b57da feat(track-b): leakage-free rolling protocol, candidate union, learned fusion
+```
+
+Branch: `phase2-retrieval-ranking-upgrade`. `24b57da` was already present at the
+start of this session; the four commits above it are this round's.
+
+### Nothing left the machine
+
+Nothing was pushed, merged, rebased onto `main`, or opened as a pull request. No
+Kaggle submission was made, no artifact was published, no external service was
+contacted, and no paid API was called. Every number in this report came from a
+local run against the local DuckDB database.
+
+### Pre-existing files that were left alone
+
+The working tree contains Finder/iCloud sync duplicates (`* 2.py`, `* 2.json`,
+`docs/HANDOFF 2.md`). None of them was deleted, renamed, staged or modified; the
+pytest configuration already ignores `* 2.py` so they stay out of the suite.
+`docs/CLAUDECODE_TRACK_B_ROUND3_PLAN.md` and `docs/HANDOFF.md` are unchanged
+apart from the plan file being committed as-is.

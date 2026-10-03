@@ -1,0 +1,7 @@
+  building serving tower artifacts in a subprocess (PyTorch / LightGBM OpenMP clash)
+serving week 2020-09-23..2020-09-29 (cutoff 2020-09-22): 26,165 live articles, 156,990 (anchor, target slot) keys
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.3927 holdout R@12 0.0818 (26s)
+    epoch 2: loss 6.2145 holdout R@12 0.0863 (25s)
+    epoch 3: loss 6.1492 holdout R@12 0.0864 (25s)
