@@ -1,0 +1,174 @@
+{
+  "weeks": [
+    "2020-08-05",
+    "2020-08-12",
+    "2020-08-19",
+    "2020-08-26",
+    "2020-09-02",
+    "2020-09-09"
+  ],
+  "per_week": {
+    "2020-08-05": {
+      "truth_pairs": 167134,
+      "customers": 25677,
+      "share_truth_bought_before": 0.030275108595498222,
+      "share_truth_style_bought_before": 0.07284574054351597,
+      "share_pairs_returning_customer": 0.9377325977957807,
+      "share_truth_bought_before_returning": 0.03228543901178482,
+      "basket_noise": {
+        "baskets": 472001.0,
+        "mean_articles": 3.4065033760521692,
+        "mean_slots": 2.266660451990568,
+        "share_repeated_quantity": 0.16350177224200796,
+        "share_multi_colourway": 0.14951239510085784,
+        "share_heterogeneous_4plus": 0.028644007110154426,
+        "mean_units_per_article": 1.1389442324628347
+      }
+    },
+    "2020-08-12": {
+      "truth_pairs": 152467,
+      "customers": 24163,
+      "share_truth_bought_before": 0.03581758675647845,
+      "share_truth_style_bought_before": 0.08039772540943287,
+      "share_pairs_returning_customer": 0.9445978474030446,
+      "share_truth_bought_before_returning": 0.03791834467435078,
+      "basket_noise": {
+        "baskets": 482575.0,
+        "mean_articles": 3.3974283790084443,
+        "mean_slots": 2.265902709423406,
+        "share_repeated_quantity": 0.1609490752732736,
+        "share_multi_colourway": 0.14778635445267574,
+        "share_heterogeneous_4plus": 0.028501269232761747,
+        "mean_units_per_article": 1.1371568840768025
+      }
+    },
+    "2020-08-19": {
+      "truth_pairs": 138727,
+      "customers": 23194,
+      "share_truth_bought_before": 0.035804133297771885,
+      "share_truth_style_bought_before": 0.08430226271742343,
+      "share_pairs_returning_customer": 0.9362993505229695,
+      "share_truth_bought_before_returning": 0.038240049272461316,
+      "basket_noise": {
+        "baskets": 485797.0,
+        "mean_articles": 3.3867438456803973,
+        "mean_slots": 2.2638447746692547,
+        "share_repeated_quantity": 0.15885030166921574,
+        "share_multi_colourway": 0.1462750902125785,
+        "share_heterogeneous_4plus": 0.02812285790155147,
+        "mean_units_per_article": 1.135672787879225
+      }
+    },
+    "2020-08-26": {
+      "truth_pairs": 154633,
+      "customers": 25750,
+      "share_truth_bought_before": 0.03271617313251376,
+      "share_truth_style_bought_before": 0.0776613012746309,
+      "share_pairs_returning_customer": 0.9318709460464455,
+      "share_truth_bought_before_returning": 0.035108051464975226,
+      "basket_noise": {
+        "baskets": 493839.0,
+        "mean_articles": 3.3782325818738497,
+        "mean_slots": 2.2612572113583576,
+        "share_repeated_quantity": 0.15733062799819375,
+        "share_multi_colourway": 0.14552313608281242,
+        "share_heterogeneous_4plus": 0.027719560423538847,
+        "mean_units_per_article": 1.1347053054403717
+      }
+    },
+    "2020-09-02": {
+      "truth_pairs": 137818,
+      "customers": 23804,
+      "share_truth_bought_before": 0.035097012001335096,
+      "share_truth_style_bought_before": 0.07888664760771452,
+      "share_pairs_returning_customer": 0.9248646766024757,
+      "share_truth_bought_before_returning": 0.03794826734032621,
+      "basket_noise": {
+        "baskets": 499413.0,
+        "mean_articles": 3.370553029256347,
+        "mean_slots": 2.257710552188269,
+        "share_repeated_quantity": 0.1566759375506845,
+        "share_multi_colourway": 0.14418327116034224,
+        "share_heterogeneous_4plus": 0.027205939773293848,
+        "mean_units_per_article": 1.1345320406157535
+      }
+    },
+    "2020-09-09": {
+      "truth_pairs": 132168,
+      "customers": 22897,
+      "share_truth_bought_before": 0.03624931904848375,
+      "share_truth_style_bought_before": 0.08263724956116458,
+      "share_pairs_returning_customer": 0.9300738454088735,
+      "share_truth_bought_before_returning": 0.03897466768625026,
+      "basket_noise": {
+        "baskets": 498958.0,
+        "mean_articles": 3.362321077124728,
+        "mean_slots": 2.2536425911599776,
+        "share_repeated_quantity": 0.15603517730951302,
+        "share_multi_colourway": 0.1430100329085815,
+        "share_heterogeneous_4plus": 0.02656335803815151,
+        "mean_units_per_article": 1.1345827370908348
+      }
+    }
+  },
+  "summary": {
+    "share_truth_bought_before": {
+      "mean": 0.03432655547201353,
+      "per_week": [
+        0.03028,
+        0.03582,
+        0.0358,
+        0.03272,
+        0.0351,
+        0.03625
+      ]
+    },
+    "share_truth_style_bought_before": {
+      "mean": 0.07945515451898037,
+      "per_week": [
+        0.07285,
+        0.0804,
+        0.0843,
+        0.07766,
+        0.07889,
+        0.08264
+      ]
+    },
+    "share_pairs_returning_customer": {
+      "mean": 0.9342398772965983,
+      "per_week": [
+        0.93773,
+        0.9446,
+        0.9363,
+        0.93187,
+        0.92486,
+        0.93007
+      ]
+    },
+    "share_truth_bought_before_returning": {
+      "mean": 0.03674580324169144,
+      "per_week": [
+        0.03229,
+        0.03792,
+        0.03824,
+        0.03511,
+        0.03795,
+        0.03897
+      ]
+    },
+    "truth_pairs_total": 882947
+  },
+  "manifest": {
+    "git_commit": "fd3de848ff592068fb1d24ceeef054da0da7cc17",
+    "git_dirty": false,
+    "config_name": "experiments/tb3_light",
+    "track_b_config_sha1": "8467b0612269",
+    "data_fingerprint": {
+      "rows": 31788324,
+      "min_date": "2018-09-20",
+      "max_date": "2020-09-22",
+      "article_id_sum": "22131896419443968"
+    },
+    "n_weeks": 6
+  }
+}

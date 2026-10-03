@@ -226,6 +226,8 @@ track_b:
       one_colourway: {one_per_product_code: true}
       max2_per_type: {max_per_product_type: 2}
       shipped: {one_per_product_code: true, max_per_product_type: 2}
+      # What serving actually does: the caps are hard, so a module may be short.
+      shipped_strict: {one_per_product_code: true, max_per_product_type: 2, fill_back: false}
   eval_chunk_queries: 8000
   bootstrap: {n_boot: 1000, seed: 0}
   ranker:

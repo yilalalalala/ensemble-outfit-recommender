@@ -209,23 +209,31 @@ def build(log=print) -> dict:
     pcode = dict(zip(attrs.article_id.to_numpy(), attrs.product_code.to_numpy()))
     parts: list[pd.DataFrame] = []
     n_rows = 0
+    step = int(cfg.track_b.eval_chunk_queries)
     for i, (lo, hi) in enumerate(batches(cfg, q)):
         C.register_keys(con, lo, hi)
         FE.register_key_sims(con, pd.read_parquet(PL.serve_keysim_path(cfg, i)))
-        df = FE.chunk_features(con, cfg, lo, hi, with_labels=False, personalize=False)
-        if not len(df):
-            continue
-        score = booster.predict(df[feats], num_threads=8)
-        top = R.top_k(df, score, pool)
-        chosen = {qid: FU.apply_diversity(arr, per_slot, ptype, pcode,
-                                          max_per_product_type=int(cfg.serving.max_per_product_type),
-                                          one_per_product_code=True)
-                  for qid, arr in top.items()}
-        parts.append(evidence_rows(df, score, chosen, q))
-        n_rows += len(df)
-        log(f"  batch {i:3d}: {len(df):,} candidate rows -> {sum(len(v) for v in chosen.values()):,} shown")
-        del df, score, top, chosen
-        gc.collect()
+        n_batch, n_shown = 0, 0
+        for sub in range(lo, hi, step):
+            df = FE.chunk_features(con, cfg, sub, min(sub + step, hi), with_labels=False,
+                                   personalize=False)
+            if not len(df):
+                continue
+            score = booster.predict(df[feats], num_threads=8)
+            top = R.top_k(df, score, pool)
+            # Serving honours the caps strictly: a module may be shorter than `per_slot`
+            # rather than show a third item of one product type (D-035).
+            chosen = {qid: FU.apply_diversity(arr, per_slot, ptype, pcode,
+                                              max_per_product_type=int(cfg.serving.max_per_product_type),
+                                              one_per_product_code=True, fill_back=False)
+                      for qid, arr in top.items()}
+            parts.append(evidence_rows(df, score, chosen, q))
+            n_batch += len(df)
+            n_shown += sum(len(v) for v in chosen.values())
+            del df, score, top, chosen
+            gc.collect()
+        n_rows += n_batch
+        log(f"  batch {i:3d}: qids [{lo}, {hi}) {n_batch:,} candidate rows -> {n_shown:,} shown")
     ctl = pd.concat(parts, ignore_index=True)
     del parts
     gc.collect()

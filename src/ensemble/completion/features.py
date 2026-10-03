@@ -82,10 +82,10 @@ def build_context(con, week: Week, cfg, uni: pd.DataFrame, q: pd.DataFrame,
                            ntile(5) OVER (PARTITION BY a.slot ORDER BY p.mean_price) AS price_tier
                     FROM p JOIN _tb_attrs a USING (article_id) WHERE a.slot IS NOT NULL""")
     register_key_sims(con, key_sims)
-    truth = pd.DataFrame({"qid": np.repeat(q.qid.values, [len(t) for t in q.truth.values]),
-                          "article_id": np.concatenate([np.asarray(t, dtype=np.int64)
-                                                        for t in q.truth.values]) if len(q) else
-                          np.empty(0, np.int64)})
+    lens = [len(t) for t in q.truth.values]
+    flat = (np.concatenate([np.asarray(t, dtype=np.int64) for t in q.truth.values])
+            if sum(lens) else np.empty(0, np.int64))      # serving has no labels at all
+    truth = pd.DataFrame({"qid": np.repeat(q.qid.values, lens), "article_id": flat})
     con.register("_tb_truth_df", truth)
     con.execute("CREATE OR REPLACE TEMP TABLE _tb_truth AS SELECT * FROM _tb_truth_df")
     _customer_tables(con, week, cfg)

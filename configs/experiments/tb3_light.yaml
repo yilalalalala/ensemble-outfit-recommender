@@ -1,0 +1,6 @@
+# Round-3 descriptive audits run alongside a backtest: same Track B settings, a
+# smaller DuckDB budget so two processes fit in 16 GB.
+extends: default
+duckdb:
+  memory_limit: 3GB
+  threads: 3

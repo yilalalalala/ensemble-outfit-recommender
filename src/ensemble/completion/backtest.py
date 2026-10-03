@@ -273,7 +273,7 @@ def summarise(folds: dict, cfg) -> dict:
             f"catalog_coverage@{k}", "novelty", f"diversity_product_type@{k}",
             f"diversity_product_code@{k}", f"relative_lift_recall@{k}_vs_popularity",
             f"relative_lift_recall@{k}_vs_shipped", f"relative_lift_ndcg@{k}_vs_shipped",
-            *slot_keys]
+            "mean_list_length", *slot_keys]
     out: dict = {"systems": {}}
     for name in names:
         out["systems"][name] = {kk: _ms([f["metrics"][name].get(kk) for f in folds.values()]) for kk in keys}
