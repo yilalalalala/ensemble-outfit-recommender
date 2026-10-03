@@ -1,0 +1,12 @@
+[2020-09-02] 3,073,336 training pairs, 160,248 holdout pairs, 96,881 queries
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+  2020-09-02 in_batch               seed 0 mps: holdout 0.0542 fold 0.0720 content 0.0672 (epoch 5/6, 152s)
+  2020-09-02 in_batch               seed 1 mps: holdout 0.0467 fold 0.0717 content 0.0669 (epoch 5/6, 145s)
+  2020-09-02 in_batch+logq          seed 0 mps: holdout 0.0841 fold 0.0950 content 0.0907 (epoch 6/6, 162s)
+  2020-09-02 in_batch+logq          seed 1 mps: holdout 0.0785 fold 0.0958 content 0.0932 (epoch 5/6, 161s)
+  2020-09-02 in_batch+logq+hard4    seed 0 mps: holdout 0.0849 fold 0.0961 content 0.0919 (epoch 6/6, 263s)
+  2020-09-02 in_batch+logq+hard4    seed 1 mps: holdout 0.0804 fold 0.0986 content 0.0949 (epoch 6/6, 263s)
+[2020-09-09] 3,063,418 training pairs, 146,782 holdout pairs, 93,672 queries
+  2020-09-09 in_batch               seed 0 mps: holdout 0.0579 fold 0.0706 content 0.0688 (epoch 6/6, 146s)
+  2020-09-09 in_batch               seed 1 mps: holdout 0.0527 fold 0.0683 content 0.0654 (epoch 6/6, 144s)

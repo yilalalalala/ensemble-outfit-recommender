@@ -1,0 +1,35 @@
+[2020-09-02] training towers once, scoring both catalogues
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4343 holdout R@12 0.0626 (29s)
+    epoch 2: loss 6.2846 holdout R@12 0.0731 (27s)
+    epoch 3: loss 6.2254 holdout R@12 0.0776 (28s)
+    epoch 4: loss 6.1893 holdout R@12 0.0804 (26s)
+    epoch 5: loss 6.1645 holdout R@12 0.0826 (26s)
+    epoch 6: loss 6.1452 holdout R@12 0.0827 (27s)
+  honest : 27,064 items, 96,881 queries, slot_popularity=0.0892  assoc_npmi=0.1226  shipped_rrf_hybrid=0.1233  rrf_all_sources=0.1218
+  oracle : 28,903 items, 101,282 queries, slot_popularity=0.0845  assoc_npmi=0.1162  shipped_rrf_hybrid=0.1169  rrf_all_sources=0.1155
+    slot_popularity      honest 0.0892 -> oracle 0.0845 (-5.3%)
+    assoc_npmi           honest 0.1226 -> oracle 0.1162 (-5.2%)
+    shipped_rrf_hybrid   honest 0.1233 -> oracle 0.1169 (-5.2%)
+    rrf_all_sources      honest 0.1218 -> oracle 0.1155 (-5.2%)
+[2020-09-09] training towers once, scoring both catalogues
+    epoch 1: loss 6.4317 holdout R@12 0.0733 (28s)
+    epoch 2: loss 6.2630 holdout R@12 0.0791 (28s)
+    epoch 3: loss 6.2002 holdout R@12 0.0857 (26s)
+    epoch 4: loss 6.1625 holdout R@12 0.0849 (28s)
+    epoch 5: loss 6.1375 holdout R@12 0.0874 (26s)
+    epoch 6: loss 6.1179 holdout R@12 0.0892 (28s)
+  honest : 27,070 items, 93,672 queries, slot_popularity=0.0788  assoc_npmi=0.1161  shipped_rrf_hybrid=0.1186  rrf_all_sources=0.1219
+  oracle : 28,611 items, 97,651 queries, slot_popularity=0.0750  assoc_npmi=0.1103  shipped_rrf_hybrid=0.1128  rrf_all_sources=0.1159
+    slot_popularity      honest 0.0788 -> oracle 0.0750 (-4.9%)
+    assoc_npmi           honest 0.1161 -> oracle 0.1103 (-5.0%)
+    shipped_rrf_hybrid   honest 0.1186 -> oracle 0.1128 (-5.0%)
+    rrf_all_sources      honest 0.1219 -> oracle 0.1159 (-4.9%)
+
+== oracle (Round-1) catalogue inflation, mean over weeks ==
+slot_popularity        -5.11%
+assoc_npmi             -5.11%
+shipped_rrf_hybrid     -5.07%
+rrf_all_sources        -5.05%
+truth dropped as ineligible: {'honest_mean_truth_dropped_share': 0.05874240414212256, 'oracle_mean_truth_dropped_share': 0.0}

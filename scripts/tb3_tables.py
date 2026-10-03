@@ -81,8 +81,8 @@ def bootstrap_table(d, metric="recall@12", order=None) -> str:
 
 def ablation_table(d, full="lgbm_personalized") -> str:
     s = d["summary"]["systems"]
-    base = s[full]["recall@12"]["mean"]
-    base_n = s[full]["ndcg@12"]["mean"]
+    base = s[full]["recall@12"]
+    base_n = s[full]["ndcg@12"]
     groups = (d["per_fold"][d["folds"][0]]["fit"].get("_feature_groups") or {}).get("removed_by_group", {})
     rows = []
     for n, m in s.items():
@@ -91,7 +91,7 @@ def ablation_table(d, full="lgbm_personalized") -> str:
         g = "personalization" if n == "lgbm_compatibility" else n[len("lgbm_minus_"):]
         r, nd = m["recall@12"]["mean"], m["ndcg@12"]["mean"]
         wins = sum(1 for a, b in zip(m["recall@12"]["per_fold"], base["per_fold"]) if a > b)
-        rows.append((abs(r - base) / base, g, m, r, nd, wins))
+        rows.append((abs(r - base['mean']) / base['mean'], g, m, r, nd, wins))
     rows.sort(reverse=True)
     head = ("| feature group removed | features | Recall@12 | Δ vs full | NDCG@12 | Δ vs full | "
             "folds where removal wins |")

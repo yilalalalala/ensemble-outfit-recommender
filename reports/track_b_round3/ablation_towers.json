@@ -1,0 +1,176 @@
+{
+  "runs": [
+    {
+      "week": "2020-09-09",
+      "negatives": "in_batch",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.038619141173168677,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.05959838992797046,
+      "fold_recall@12_content_only": 0.05673839355971188,
+      "seconds": 33.2
+    },
+    {
+      "week": "2020-09-09",
+      "negatives": "in_batch+logq",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.06797642436149312,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.07864233399915259,
+      "fold_recall@12_content_only": 0.07596392470189456,
+      "seconds": 34.8
+    },
+    {
+      "week": "2020-09-09",
+      "negatives": "in_batch+logq+hard4",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.07044625315745158,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.08076084982749228,
+      "fold_recall@12_content_only": 0.07805974214635918,
+      "seconds": 64.8
+    },
+    {
+      "week": "2020-09-09",
+      "probe": "in_batch+logq_12epochs",
+      "negatives": "in_batch+logq_12epochs",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.09065394330620263,
+      "best_epoch": 8,
+      "epochs_run": 10,
+      "fold_recall@12": 0.09911627625446401,
+      "fold_recall@12_content_only": 0.09472035591065917,
+      "seconds": 323.1
+    },
+    {
+      "week": "2020-09-09",
+      "probe": "determinism",
+      "negatives": "determinism_1epoch",
+      "seed": 0,
+      "device": "cpu",
+      "holdout_recall@12": 0.07027785573954533,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.08071545305974215,
+      "fold_recall@12_content_only": 0.07554022153622662,
+      "seconds": 78.6
+    },
+    {
+      "week": "2020-09-09",
+      "probe": "determinism",
+      "negatives": "determinism_1epoch",
+      "seed": 0,
+      "device": "cpu",
+      "holdout_recall@12": 0.07027785573954533,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.08071545305974215,
+      "fold_recall@12_content_only": 0.07554022153622662,
+      "seconds": 81.2
+    },
+    {
+      "week": "2020-09-09",
+      "probe": "determinism",
+      "negatives": "determinism_1epoch",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.07010945832163906,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.08035984504569942,
+      "fold_recall@12_content_only": 0.0781581018098178,
+      "seconds": 37.8
+    },
+    {
+      "week": "2020-09-09",
+      "probe": "determinism",
+      "negatives": "determinism_1epoch",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.06909907381420151,
+      "best_epoch": 1,
+      "epochs_run": 1,
+      "fold_recall@12": 0.0798453483445312,
+      "fold_recall@12_content_only": 0.07801434537860905,
+      "seconds": 36.7
+    }
+  ],
+  "summary": {
+    "in_batch|mps": {
+      "fold_recall@12_mean": 0.05959838992797046,
+      "fold_recall@12_std": 0.0,
+      "fold_recall@12_content_only_mean": 0.05673839355971188,
+      "holdout_recall@12_mean": 0.038619141173168677,
+      "mean_seconds": 33.2,
+      "n_runs": 1,
+      "relative_vs_in_batch+logq": -0.2421589378487589
+    },
+    "in_batch+logq|mps": {
+      "fold_recall@12_mean": 0.07864233399915259,
+      "fold_recall@12_std": 0.0,
+      "fold_recall@12_content_only_mean": 0.07596392470189456,
+      "holdout_recall@12_mean": 0.06797642436149312,
+      "mean_seconds": 34.8,
+      "n_runs": 1,
+      "relative_vs_in_batch+logq": 0.0
+    },
+    "in_batch+logq+hard4|mps": {
+      "fold_recall@12_mean": 0.08076084982749228,
+      "fold_recall@12_std": 0.0,
+      "fold_recall@12_content_only_mean": 0.07805974214635918,
+      "holdout_recall@12_mean": 0.07044625315745158,
+      "mean_seconds": 64.8,
+      "n_runs": 1,
+      "relative_vs_in_batch+logq": 0.026938618433711772
+    }
+  },
+  "epoch_budget_probe": [
+    {
+      "week": "2020-09-09",
+      "negatives": "in_batch+logq_12epochs",
+      "seed": 0,
+      "device": "mps",
+      "holdout_recall@12": 0.09065394330620263,
+      "best_epoch": 8,
+      "epochs_run": 10,
+      "fold_recall@12": 0.09911627625446401,
+      "fold_recall@12_content_only": 0.09472035591065917,
+      "seconds": 323.1,
+      "probe": "in_batch+logq_12epochs"
+    }
+  ],
+  "determinism": {
+    "cpu_repeat_same_seed_fold_recall": [
+      0.08071545,
+      0.08071545
+    ],
+    "cpu_identical": true,
+    "mps_repeat_same_seed_fold_recall": [
+      0.08035985,
+      0.07984535
+    ],
+    "mps_identical": false,
+    "note": "One epoch, identical seed, repeated twice per backend. MPS kernels are not bit-reproducible, so decisive comparisons use the seed spread above."
+  },
+  "manifest": {
+    "git_commit": "ce3ab806deedc8de0cb27f9e51a97292621307f0",
+    "git_dirty": false,
+    "config_name": "experiments/tb3_smoke_light",
+    "track_b_config_sha1": "12420cf156c4",
+    "data_fingerprint": {
+      "rows": 31788324,
+      "min_date": "2018-09-20",
+      "max_date": "2020-09-22",
+      "article_id_sum": "22131896419443968"
+    },
+    "n_weeks": 1,
+    "n_seeds": 1
+  }
+}

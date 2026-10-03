@@ -204,6 +204,7 @@ def build(log=print) -> dict:
     FE.build_context(con, week, cfg, uni, q, None)
 
     per_slot = int(cfg.serving.ctl_per_slot)
+    fill_back = bool(cfg.serving.get("diversity_fill_back", True))
     pool = max(per_slot, int((cfg.track_b.get("serving_rules") or {}).get("pool", 48)))
     attrs = con.execute("SELECT article_id, product_type_no, product_code FROM articles").df()
     ptype = dict(zip(attrs.article_id.to_numpy(), attrs.product_type_no.to_numpy()))
@@ -222,11 +223,11 @@ def build(log=print) -> dict:
                 continue
             score = booster.predict(df[feats], num_threads=8)
             top = R.top_k(df, score, pool)
-            # Serving honours the caps strictly: a module may be shorter than `per_slot`
-            # rather than show a third item of one product type (D-035).
+            # The caps re-order and then back-fill to `per_slot` (D-035): applied as a hard
+            # filter they leave modules part-empty and cost five times as much accuracy.
             chosen = {qid: FU.apply_diversity(arr, per_slot, ptype, pcode,
                                               max_per_product_type=int(cfg.serving.max_per_product_type),
-                                              one_per_product_code=True, fill_back=False)
+                                              one_per_product_code=True, fill_back=fill_back)
                       for qid, arr in top.items()}
             parts.append(evidence_rows(df, score, chosen, q))
             n_batch += len(df)
@@ -258,7 +259,7 @@ def build(log=print) -> dict:
                "n_rows": int(len(ctl)), "n_anchors": int(ctl.anchor.nunique()),
                "per_slot": per_slot, "pool": pool,
                "max_per_product_type": int(cfg.serving.max_per_product_type),
-               "one_per_product_code": True,
+               "one_per_product_code": True, "diversity_fill_back": fill_back,
                "source_mix": {k: int(v) for k, v in ctl.source.value_counts().items()},
                "mean_distinct_product_types_per_module": float(
                    ctl.assign(t=ctl.article_id.map(ptype)).groupby(["anchor", "slot"])["t"].nunique().mean()),

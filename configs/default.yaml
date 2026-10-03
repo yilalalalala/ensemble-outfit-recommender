@@ -166,6 +166,11 @@ serving:
   demo_new: 30              # customers with no purchases (user cold start)
   ctl_per_slot: 8
   max_per_product_type: 2   # diversity re-ranking inside a Complete the Look module
+  # Apply the caps as a re-ordering and back-fill the module to ctl_per_slot, instead of
+  # dropping the items the caps reject. Measured on the six rolling folds (D-035):
+  # as a re-ordering the caps cost -6.8% Recall@12 and buy +44% distinct product types;
+  # as a hard filter they cost -37% Recall@12 because modules come out part-empty.
+  diversity_fill_back: true
   trending_k: 24
 
 rerank:
