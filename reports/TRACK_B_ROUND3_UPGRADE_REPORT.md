@@ -1,7 +1,7 @@
 # Track B Round 3 — Complete the Look upgrade
 
 **Offline evaluation readout.** 2026-10-03 · branch `phase2-retrieval-ranking-upgrade` ·
-nothing pushed, merged, published or submitted (§18).
+nothing pushed, merged, published or submitted (§19).
 
 ---
 
@@ -182,7 +182,7 @@ contain a repeated quantity, 14.3–15.4% contain more than one colourway of one
 style, 2.7–2.9% span four or more slots, mean 3.36–3.44 articles and 2.25–2.27
 slots per basket. These are reported, not acted on: the implemented filter hook is
 a row-level predicate while the proxies are basket-level properties, and testing a
-filter costs a full artifact rebuild (§15, §17).
+filter costs a full artifact rebuild (§16, §18).
 
 ---
 
@@ -268,7 +268,7 @@ Baseline is `shipped_rrf_hybrid`.
 The intervals are narrow because the sample is large and the effect is far from
 zero; they are **not** a claim about online behaviour. The relative interval
 divides the paired difference interval by the observed baseline mean rather than
-resampling the denominator, so the relative bounds are slightly too narrow (§15).
+resampling the denominator, so the relative bounds are slightly too narrow (§16).
 
 ### 4.5 Segments
 
@@ -637,12 +637,53 @@ customers**. That is reported as a known shortfall, not hidden (D-033).
 
 **Provenance.** Each row gets exactly one label, strongest evidence first:
 `co_purchase` (article-level co-count ≥ 1), `style_co_purchase` (style-level
-co-count ≥ 1), `visual_compatibility` (retrieved by a tower), `popular_in_slot`
-(popularity fallback), `other`. The API builds chips from the row's own columns, so
-a visually retrieved pick can no longer borrow a co-purchase claim and a popularity
-fallback says so (D-035, extending D-030 to Track B). Columns are detected at query
-time, so a Round-1 serving store still renders; the Round-1 table is also kept as
-`complete_the_look_round1.parquet` when the Round-3 build replaces it.
+co-count ≥ 1), `visual_compatibility` (retrieved by either tower),
+`popular_in_slot` (popularity fallback), `other`. The API builds chips from the
+row's own columns, so a visually retrieved pick can no longer borrow a co-purchase
+claim and a popularity fallback says so (D-035, extending D-030 to Track B).
+Columns are detected at query time, so a Round-1 serving store still renders; the
+Round-1 table is kept as `complete_the_look_round1.parquet` when the Round-3 build
+replaces it.
+
+### 9.3 What the rebuilt table looks like
+
+`reports/track_b_round3/serving.json`. Serving week **2020-09-23** (the week after
+the data ends, cutoff 2020-09-22, so nothing is held back), ranker trained on
+2020-09-09 and 2020-09-16 with their own point-in-time features: 74 features, 132
+trees. 26,165 live articles × their 6 other slots = **156,990 keys**, 26.3 M
+candidate rows scored in 13 anchor batches, **1,255,920 served rows** (8 per
+module), 132 s plus 234 s for the serving-week towers, inside the 16 GB budget.
+
+| provenance of a served pick | rows | share |
+| --- | ---: | ---: |
+| `visual_compatibility` (retrieved by a tower) | 762,188 | **60.7%** |
+| `popular_in_slot` (popularity fallback) | 394,137 | **31.4%** |
+| `style_co_purchase` | 63,801 | 5.1% |
+| `co_purchase` (article-level) | 35,794 | **2.9%** |
+
+**This is the most uncomfortable number in the report, and it is the point of
+storing provenance.** Only 2.9% of what Complete the Look shows has article-level
+co-purchase evidence behind it, and 31.4% is a popularity fallback with no
+compatibility evidence at all. The funnel in §3.3 predicts it — ~82,000 pairs reach
+support ≥ 3 against 26,165 live anchors × 6 slots — but the Round-1 table labelled
+every row either `co_purchase` or `style_match`, so the UI implied evidence that
+was not there for most picks. Now a popularity pick says "Popular pick for this
+category" and a tower pick says "Visually matches this piece".
+
+A related gate: a lift ratio computed from four co-purchases is a small-sample
+artefact (a real served row had co = 4 and lift = 193×), so a chip quotes the
+multiplier only at co ≥ 5 and otherwise states the count alone.
+
+Mean distinct product types per module: **3.86** of 8 items. An end-to-end check
+through the API on a demo customer's product page returns full modules for Tops,
+Shoes and Accessories with chips such as "Bought together 4× in past baskets",
+"Bought with this style 3× in past baskets", "Visually matches this piece", "Same
+colour family", "Same price range" — and an audit of every chip against its own
+row found **no unsupported chip**.
+
+The SQLite serving store was rebuilt from it (`python -m ensemble.api.build`,
+6 s, 1,255,920 Complete-the-Look rows, 26,364 articles referenced) and the full
+test suite passes against it (117 tests).
 
 ---
 
@@ -782,6 +823,7 @@ online behaviour.
 | `src/ensemble/completion/serve_round3.py` | the serving table, scored by the learned ranker, with per-row evidence |
 | `tests/test_track_b_round3.py` | 41 tests: leakage, fold boundaries, metrics, ablation groups, serving key space, reason chips |
 | `scripts/tb3_tables.py` | renders every table in this report from the stored JSON |
+| `scripts/tb3_verify_report.py` | asserts every hand-typed figure in this report against those artifacts |
 | `configs/experiments/tb3_final.yaml` | same cache key as `default`, ablation table off: the serving-rule folds and the single test-week run |
 | `configs/experiments/tb3_smoke.yaml`, `tb3_light.yaml`, `tb3_smoke_light.yaml` | fast end-to-end smoke runs; smaller DuckDB budget for audits that run next to a backtest |
 
@@ -855,7 +897,41 @@ makes the ablation pass cheap.
 
 ---
 
-## 13. Problems encountered, and what was done about them
+## 13. Runtime and memory
+
+Everything ran on one Apple Silicon laptop with 16 GB of RAM. Peak RSS is the
+`ru_maxrss` of the driving process.
+
+| run | what it does | wall time | peak RSS |
+| --- | --- | ---: | ---: |
+| `backtest val 6` (cold cache) | 8 weeks of towers + 7 training matrices + 6 folds × 2 models | 53 min | 5.9 GB |
+| **`backtest val 6 ablations`** | 6 folds × **10** models, artifact cache warm | **111 min** | **6.7 GB** |
+| `backtest val 6 serving_rules` | 6 folds × 2 models + 4 diversity variants, cache warm | 26 min | 5.5 GB |
+| `backtest test` | 1 new week of towers + 1 fold × 2 models + 4 variants | 7.5 min | 5.4 GB |
+| `protocol_check 2` | 2 weeks of towers, both catalogues scored | 6 min | — |
+| `label_audit 6` | 6 weeks of DuckDB aggregation | 4 min | — |
+| `ablate_towers 2 2` | 12 tower trainings + a 12-epoch probe + 4 determinism runs (17 runs, 2,679 s of training) | 55 min | — |
+| `serve_round3 towers` | serving-week towers + 157 k keys of pair similarities in 13 batches | 4 min | — |
+| `serve_round3 build` | ranker fit + 26.3 M candidate rows scored in 13 batches | 2 min | — |
+| `api.build` | SQLite serving store | 6 s | — |
+| `make test` | 117 tests | 6 s | — |
+
+Per fold of the ablation run: ~5 s to mine and register a week (towers cached),
+~63 s per model fit (10 models), ~442 s to score 19.6 M candidate rows with all
+ten models plus the RRF control. The caches on disk are 1.9 GB of per-week tower
+artifacts, pair similarities and training matrices, plus 224 MB of serving
+retrieval lists.
+
+**What keeps it inside 16 GB:** feature matrices are built in 8,000-query chunks
+and downcast to float32/int32; training matrices are written to Parquet and
+evicted as soon as no later fold needs them; the towers run in a separate process
+that exits; serving works in batches of 2,000 anchors and sub-chunks each batch.
+The two-tower rewrite (27 s per epoch instead of 370 s) is what made a rolling
+backtest affordable at all.
+
+---
+
+## 14. Problems encountered, and what was done about them
 
 **1. The Round-3 reproduction of the shipped baseline was weaker than the real
 Round-1 model.** `shipped_rrf_hybrid` fused the raw association list with the
@@ -911,11 +987,31 @@ them with a fill-back would have hidden that. Both are reported: `shipped` (orde
 cost only, list stays 12 long) and `shipped_strict` (the hard caps serving
 actually applies, which can shorten a module).
 
-## 14. Rejected approaches, and why
+**9. A provenance label that fell through to an unsupported chip.** The first
+serving build labelled 9,131 rows `other` — candidates retrieved *only* by the
+content-only tower, because the label checked `src_two_tower` and not
+`src_two_tower_content`. The API then fell through to a generic "Style match"
+chip, which is precisely the unsupported claim the evidence gate exists to
+prevent. Both flags are now stored and both count as visual compatibility;
+`other` is 0 rows.
+
+**10. A reason chip quoting a 193× lift off four co-purchases.** A real served row
+had `a_co = 4` and `lift = 193.4`, and the chip said "193.4× more often than
+chance". The ratio is arithmetically correct and statistically meaningless. The
+chip now quotes the multiplier only at `co ≥ 5` and states the count alone below
+that. This was found by reading the rendered chips, not by a test — which is why
+the end-to-end chip audit is now part of the verification.
+
+**11. `DataFrame.rank` shadows a column named `rank`.** `out.rank.tolist()` in a
+test resolved to the *method*. Test-only, caught immediately, fixed with
+`out["rank"]` — recorded because the serving table has a `rank` column and the
+same trap is one attribute access away in any code that touches it.
+
+## 15. Rejected approaches, and why
 
 | approach | why it was not kept |
 | --- | --- |
-| Shipping `lgbm_personalized` in the precomputed Complete-the-Look table | The table is keyed by (anchor, target slot) and has to answer for anonymous visitors on any product page. A row per customer is not precomputable (26 k anchors × 6 slots × 1.4 M customers), and request-time scoring needs an online feature store and a model server that this local SQLite demo does not have. The gain it would buy is measured and reported instead of being claimed (§5, §10). |
+| Shipping `lgbm_personalized` in the precomputed Complete-the-Look table | The table is keyed by (anchor, target slot) and has to answer for anonymous visitors on any product page. A row per customer is not precomputable (26 k anchors × 6 slots × 1.4 M customers), and request-time scoring needs an online feature store and a model server that this local SQLite demo does not have. The gain it would buy is measured and reported instead of being claimed (§6, §9.2). |
 | Round-1 popularity-sampled negatives and (product type, price tier) hard negatives | D-016 already found no measurable gain; they were removed rather than carried forward, and replaced by retrieval-informed hard negatives, which are judged on §9's evidence. |
 | Keeping the Round-1 target-week catalogue as the primary universe | Eligibility was not knowable at prediction time, which makes "item cold-start recall" an artefact. It is retained only as an explicit `oracle=True` comparison (§3). |
 | A constructed "pre-launch availability" proxy for true item cold start | The dataset has no inventory or launch feed. Any proxy would be invented, not measured, so the metric is replaced by *recently launched* (first observed sale within 28 days of the cutoff) and the limitation is stated instead. |
@@ -924,7 +1020,7 @@ actually applies, which can shorten a module).
 
 ---
 
-## 15. Limitations
+## 16. Limitations
 
 **Everything here is offline.** Recall@12 and NDCG@12 on held-out baskets are
 proxies for a surface nobody has interacted with. A real decision to ship needs
@@ -974,7 +1070,7 @@ not evidence about the best achievable fixed fusion.
 
 **The shipped serving model is not the best model measured.** Serving ships
 `lgbm_compatibility`. The personalized variant is better on every fold but needs
-an online feature store (§14).
+an online feature store (§15).
 
 **The candidate union is the ceiling, and it is low.** Union recall is 0.4285: more
 than half of all truth pairs are not in the 189 candidates any system may choose
@@ -1004,11 +1100,11 @@ variant means rebuilding eight weeks of tower artifacts and training matrices
 (~2 h per variant). The audit that motivates the filter is reported, the decay
 features are kept as features and their value is measured by the `decay`
 ablation, but the filter itself and other half-lives remain untested. They are
-the first two experiments in §17.
+items 4 and 5 of §18.
 
 ---
 
-## 16. Reproduction
+## 17. Reproduction
 
 All commands run from the repository root with the project venv (Python 3.11).
 The dataset must already be ingested (`make ingest`).
@@ -1051,7 +1147,14 @@ make test
 # 10. regenerate every table in this report from the stored JSON
 .venv/bin/python scripts/tb3_tables.py backtest_val_ablations \
     backtest_val_serving_rules backtest_test
+
+# 11. check every hand-typed number in this report against those artifacts
+.venv/bin/python scripts/tb3_verify_report.py
 ```
+
+`scripts/tb3_verify_report.py` re-reads the JSON and asserts each of the 56
+headline figures quoted in this report, exiting non-zero on the first mismatch.
+It passes at the commit this report was written at.
 
 A fast end-to-end smoke run of the whole backtest (one fold, one tower epoch,
 small budgets, ~3 min) is:
@@ -1080,7 +1183,7 @@ ENSEMBLE_CONFIG=experiments/tb3_smoke PYTHONPATH=src .venv/bin/python \
 
 ---
 
-## 17. What to do next, in order of expected value per hour
+## 18. What to do next, in order of expected value per hour
 
 1. **A candidate-budget frontier for the union.** Union recall is 0.4285 and the
    ranker converts 36.7% of it; more than half of all truth pairs are simply not
@@ -1117,11 +1220,18 @@ ENSEMBLE_CONFIG=experiments/tb3_smoke PYTHONPATH=src .venv/bin/python \
 7. **Co-wear labels (M8, Polyvore).** The only way to separate "bought together"
    from "worn together" in this project.
 
-## 18. Repository status
+## 19. Repository status
 
 ### Commits made in this round (local only)
 
 ```
+bcb1f04 feat(serving): rebuild Complete the Look with the learned ranker; honest provenance
+dbd226e docs: Track B model card and README for Round 3
+86e0069 docs(report): Round-3 upgrade report; single final test-week evaluation
+5978fbe docs(adr): D-031..D-037 for the Round-3 Track B protocol, fusion and serving
+46b70d4 feat(track-b): six-fold ablation results; diversity caps become a re-ordering
+bd7c6ee docs(glossary): candidate fusion and point-in-time protocol terms (D-008)
+26b4a7e fix(serving): keep the Round-1 Complete-the-Look table when the Round-3 build replaces it
 010668c test: evidence rows, label-audit point-in-time history; report table renderer
 ce3ab80 feat(track-b): label-composition audit; strict serving caps; batch sub-chunking
 fd3de84 feat(track-b): Round-3 serving path, evidence-gated reasons, diversity trade-off
@@ -1130,7 +1240,8 @@ fd3de84 feat(track-b): Round-3 serving path, evidence-gated reasons, diversity t
 ```
 
 Branch: `phase2-retrieval-ranking-upgrade`. `24b57da` was already present at the
-start of this session; the four commits above it are this round's.
+start of this session (it is the Phase 1–4 scaffolding, listed last above); every
+commit above it is this round's work.
 
 ### Nothing left the machine
 
