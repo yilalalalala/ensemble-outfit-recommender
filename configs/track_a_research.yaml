@@ -95,7 +95,7 @@ research:
     neural_seed: 0
     eval_chunk_customers: 20000
     keep_top: 50
-    final: phase2            # set by the adoption rule (D-038) after the comparison; see D-040
+    final: phase2_nscores    # frozen by the D-038 adoption rule on the seed-42 comparison (D-040)
     configs:
       phase2:
         caps: {repeat: 10, pop: 5, pop_age: 65, cf: 5, variant: 20, dept_pop: 40, section_pop: 65, covis: 25, new_arrival_pers: 10}

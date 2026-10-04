@@ -1113,3 +1113,36 @@ bit-reproducible (D-036), so stochastic spread is reported over three seeds.
   build and recall risk for no measurable gain).
 
 **Revisit if:** the live catalogue grows by an order of magnitude, or latency targets tighten.
+
+---
+
+### D-040 — Track A adds the reproduced baselines' scores as ranker features, not as retrieval channels
+**Date:** 2026-10-04 · **Status:** active · **frozen before seeds 43/44, ablations and any confirmation run**
+
+**Decision.** The final Track A system is `phase2_nscores`: the Phase-2 candidate set and features
+(D-027, D-028) plus three features, the BPR-MF, LightGCN and SASRec dot products of the customer
+and the candidate (`nn_<model>_dot`), from models trained per week on data before the cutoff.
+`research.ensemble.final` is set to it.
+
+**Evidence** (six reporting folds, seed 42, pooled customer-cluster bootstrap over customers
+across folds, `reports/track_a_research/comparison.json`). Under the D-038 rule, fixed before the
+comparison ran:
+
+| vs `phase2` (0.03403) | MAP@12 | relative (95% CI) | folds won | train time | peak RSS | rule |
+| --- | ---: | --- | ---: | ---: | ---: | --- |
+| `phase2_nscores` | 0.03524 | +3.55% [+3.10, +3.97] | 6/6 | −0.5% | −1.4% | **adopt** |
+| `neural_channels` (allocator caps + neural channels + features) | 0.03549 | +4.30% [+3.86, +4.78] | 6/6 | +197% | +1.9% | reject (time) |
+| `realloc` (allocator caps, no neural signal) | 0.03428 | +0.74% [+0.38, +1.09] | 5/6 | +50.01% | −3.3% | reject (time) |
+
+**Caveat on cost.** Every fit ran next to a GPU training job; two fold-09-09 fits (`realloc`
+3,129 s, `neural_channels` 8,946 s against 600–1,000 s elsewhere) were slowed by that contention.
+The verdict does not depend on them: by the median over folds `neural_channels` is still +63%
+(above +50%) and `phase2_nscores` still ≈ 0%. `realloc` misses the limit by 0.01 percentage
+points on the mean only; it is reported as a near-miss, not adopted.
+
+**Reading.** The neural signal helps the ranker (+3.6%, every fold) at no measurable cost; giving
+it candidate slots adds a further ~0.7% MAP@12 that the allocator's re-shaping of the other
+channels partly explains (`realloc` +0.7% by itself), at a cost the rule rejects.
+
+**Revisit if:** training time is measured on an otherwise idle machine (the `neural_channels`
+cost leg may then pass), or a retrieval change raises recall above 160 candidates per customer.
