@@ -103,3 +103,13 @@ research:
       phase2_nscores:
         caps: {repeat: 10, pop: 5, pop_age: 65, cf: 5, variant: 20, dept_pop: 40, section_pop: 65, covis: 25, new_arrival_pers: 10}
         neural_features: [bpr, lightgcn, sasrec]
+      # Allocator at ~160 candidates on allocator weeks 2020-07-15/22/29 (budget_frontier.json):
+      # with the neural channels in the pool (164.0 cand., recall 0.1555) ...
+      neural_channels:
+        caps: {repeat: 15, pop_age: 35, cf: 5, variant: 25, dept_pop: 45, section_pop: 25, covis: 65, new_arrival_pers: 10, lightgcn: 5, sasrec: 15}
+        neural_features: [bpr, lightgcn, sasrec]
+      # ... and without them on the same weeks (161.2 cand., recall 0.1529): the control
+      # that separates "new channels" from "re-allocated Phase-2 channels".
+      realloc:
+        caps: {repeat: 15, pop_age: 35, cf: 5, variant: 25, dept_pop: 50, section_pop: 25, covis: 70, new_arrival_pers: 10}
+        neural_features: []
