@@ -152,6 +152,48 @@ def failure_analysis(cfg, ev: dict, system: str, n_examples: int = 24) -> dict:
     return out
 
 
+def retrieval_coverage(cfg) -> dict:
+    """Per neural model (seed 0) and fold: Recall@k of its raw top-100 list over the eligible catalogue
+    (k = 12, 50, 100), share of label-week buyers it can represent, distinct articles in its top-12."""
+    from ensemble.db import connect
+    from ensemble.research.neural import cache_dir, params_for
+    con = connect(cfg, read_only=True)
+    out: dict = {}
+    for fold in P.reporting_folds(cfg):
+        tr = P.truth(con, fold)
+        n_truth = sum(len(t) for t in tr.values())
+        for m in NEURAL:
+            d = cache_dir(cfg, m, str(fold.start), 0, params_for(cfg, m))
+            if not (d / "topk.parquet").exists():
+                continue
+            tk = pd.read_parquet(d / "topk.parquet")
+            info = json.loads((d / "result.json").read_text())
+            rec = {}
+            for k in (12, 50, 100):
+                sub = tk[tk["rank"] <= k]
+                hits = sum(len(tr.get(int(c), set()) & set(g.article_id.astype(int)))
+                           for c, g in sub.groupby("customer_idx"))
+                rec[f"recall@{k}"] = hits / n_truth
+            rec["buyers_represented"] = info["n_targets_represented"] / info["n_targets"]
+            rec["distinct_top12"] = int(tk[tk["rank"] <= 12].article_id.nunique())
+            out.setdefault(m, {})[str(fold.start)] = rec
+    return out
+
+
+def phase2_reproduction(cfg, ev: dict) -> dict:
+    """ens_phase2 (seed 42, this protocol) vs the authoritative Phase-2 4-week backtest (same config,
+    no eligibility restriction) on the weeks both cover."""
+    src = cfg.path("reports") / "phase2" / "backtest_track_a_p2_b160_neg50.json"
+    if not src.exists() or "ens_phase2" not in ev:
+        return {}
+    old = {w: v["ranker"]["map@12"] for w, v in json.loads(src.read_text())["per_week"].items()}
+    new = {fd: x["summary"]["map@12"] for fd, x in ev["ens_phase2"][42]["meta"].items()}
+    rows = {w: {"phase2_backtest": old[w], "this_protocol": new[w], "relative": new[w] / old[w] - 1}
+            for w in sorted(set(old) & set(new))}
+    return {"source": src.name, "weeks": rows,
+            "max_abs_relative": max(abs(r["relative"]) for r in rows.values()) if rows else None}
+
+
 def adoption(cmp: dict, res_a: dict, res_b: dict, rule: dict) -> dict:
     m = cmp["map@12"]
     t_inc = (res_b["fit_seconds"] + res_b["load_seconds"]) / (res_a["fit_seconds"] + res_a["load_seconds"]) - 1
@@ -188,7 +230,8 @@ def run() -> dict:
         if strongest:
             pairs.append((strongest, e))
         pairs.append((strongest_any, e))
-    comparisons = [compare(ev, a, b, bs) for a, b in dict.fromkeys(pairs) if a in ev and b in ev]
+    pairs.append((final, "ens_neural_channels"))
+    comparisons = [compare(ev, a, b, bs) for a, b in dict.fromkeys(pairs) if a in ev and b in ev and a != b]
     decisions = {}
     for c in comparisons:
         if c["a"] == "ens_phase2" and c["b"].startswith("ens_") and "__minus_" not in c["b"]:
@@ -215,6 +258,8 @@ def run() -> dict:
            "strongest_baseline_any": strongest_any, "final_system": final, "comparisons": comparisons,
            "adoption_decisions": decisions, "ablations": ablations, "target": target,
            "failure_analysis": failure_analysis(cfg, ev, final) if final in ev else None,
+           "neural_retrieval_coverage": retrieval_coverage(cfg),
+           "phase2_reproduction": phase2_reproduction(cfg, ev),
            "manifest": P.manifest(cfg, con)}
     path = cfg.path("reports") / "track_a_research" / "comparison.json"
     path.write_text(json.dumps(out, indent=1, default=float))
