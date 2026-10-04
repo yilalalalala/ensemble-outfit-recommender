@@ -79,7 +79,7 @@ def build_context(con, week: Week, cfg, uni: pd.DataFrame, q: pd.DataFrame,
                                WHERE t_dat BETWEEN {_d(week.start - timedelta(weeks=52))}
                                              AND {_d(week.cutoff)} GROUP BY 1)
                     SELECT p.article_id, p.mean_price,
-                           ntile(5) OVER (PARTITION BY a.slot ORDER BY p.mean_price) AS price_tier
+                           ntile(5) OVER (PARTITION BY a.slot ORDER BY p.mean_price, p.article_id) AS price_tier
                     FROM p JOIN _tb_attrs a USING (article_id) WHERE a.slot IS NOT NULL""")
     register_key_sims(con, key_sims)
     lens = [len(t) for t in q.truth.values]

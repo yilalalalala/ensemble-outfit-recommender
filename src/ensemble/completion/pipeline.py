@@ -120,7 +120,7 @@ def price_tiers(con, week: Week, n_tiers: int = 5) -> dict[int, int]:
         WITH p AS (SELECT article_id, avg(price) AS price FROM transactions
                    WHERE t_dat BETWEEN DATE '{week.start - timedelta(weeks=52)}'
                                  AND DATE '{week.cutoff}' GROUP BY 1)
-        SELECT p.article_id, ntile({n_tiers}) OVER (PARTITION BY a.slot ORDER BY p.price)
+        SELECT p.article_id, ntile({n_tiers}) OVER (PARTITION BY a.slot ORDER BY p.price, p.article_id)
         FROM p JOIN articles a USING (article_id) WHERE a.slot IS NOT NULL""").fetchall()
     return dict(rows)
 

@@ -1,0 +1,162 @@
+{
+ "format": 1,
+ "bundle_version": "2020-09-23_4edf27eb8e_df69b1f77f",
+ "model_version": "4edf27eb8e",
+ "catalog_version": "df69b1f77f",
+ "profile_version": "2020-09-23-1356683",
+ "feature_schema_sha1": "9088df3326ed",
+ "serving_week": "2020-09-23",
+ "cutoff": "2020-09-22",
+ "train_weeks": [
+  "2020-09-09",
+  "2020-09-16"
+ ],
+ "pool": 100,
+ "n_keys": 156990,
+ "n_pool_rows": 15699000,
+ "n_live_articles": 26165,
+ "profiles": {
+  "n_customers": 1356683,
+  "blob_bytes": 1034235681,
+  "seconds": null,
+  "reused": true
+ },
+ "visual": {
+  "present": true,
+  "n": 26127,
+  "adapted": true
+ },
+ "rankers": {
+  "compatibility": {
+   "trees": 132,
+   "features": 74,
+   "fit": {
+    "trees": 132,
+    "reconstructed_from_model_file": true
+   }
+  },
+  "personalized": {
+   "trees": 138,
+   "features": 95,
+   "fit": {
+    "trees": 138,
+    "reconstructed_from_model_file": true
+   }
+  }
+ },
+ "equivalence": {
+  "requests": 400,
+  "identical_order": 400,
+  "identical_order_share": 1.0,
+  "max_score_abs_diff": 0.0,
+  "max_feature_abs_diff": 1.0,
+  "with_profile": 320,
+  "tolerance": {
+   "identical_order_share": 1.0,
+   "max_score_abs_diff": 1e-06
+  }
+ },
+ "files": {
+  "_train_meta.json": {
+   "bytes": 3172,
+   "sha256": "0d891d70e1505f5efc51eae7f39c57f7350c6ba58fd0e1febca3746773b38b2e"
+  },
+  "catalog.parquet": {
+   "bytes": 3179095,
+   "sha256": "2ed3669e977f07208ce7ddbe8406fe9d705c0afaf1611f2480cd02f1e2462226"
+  },
+  "equivalence.json": {
+   "bytes": 53980,
+   "sha256": "9eeb082c01904ec8387853717cde1d4e49edf09e66afe81fd738ba147714bf8f"
+  },
+  "feature_schema.json": {
+   "bytes": 4128,
+   "sha256": "9fce915228dcc22dcd795b5b800705c04ad245c8541fe9d9cbd84758202df40e"
+  },
+  "keys.npz": {
+   "bytes": 3297788,
+   "sha256": "bcff82e5e2511e63b0030a1cd6f679088260a2854f33518de8205bd569f055d0"
+  },
+  "model_compatibility.txt": {
+   "bytes": 1108275,
+   "sha256": "281975c224b65c9475e713c3a08c7447fbbde296df54b1ae91d26e3c28d7eb82"
+  },
+  "model_personalized.json": {
+   "bytes": 732053,
+   "sha256": "4edf27eb8ec6266c1d344feb49abacba716701d2d27788001177993e90e5f326"
+  },
+  "model_personalized.txt": {
+   "bytes": 1140440,
+   "sha256": "f0fdb992ae1998dfd17a419b28725209b332f7e06faa00869fc735f3159f94f9"
+  },
+  "pool_article.npy": {
+   "bytes": 125592128,
+   "sha256": "cf8056102292b0564bea57b3f5c96ad9948c8c7f47248e19ef5aa62b962b593b"
+  },
+  "pool_aux.npy": {
+   "bytes": 376776128,
+   "sha256": "ef3644d0fb7af79db8ed8301bf00491b2ec04b81da5c76b19aaf47027b7e5d13"
+  },
+  "pool_compat.npy": {
+   "bytes": 125592128,
+   "sha256": "557af3c699afd2d83776127a832caf75bf517712e209729acedc5cd6effaf395"
+  },
+  "pool_feat.npy": {
+   "bytes": 4646904128,
+   "sha256": "d72aeac07c932bf28d9df45028ba56c51912aaf5ac91cf674f7b2019ea7ee6d5"
+  },
+  "profiles.sqlite": {
+   "bytes": 1250082816,
+   "sha256": "7850e02087ca237757521fd260bd818588bb58a30e66920a4690c6babab1ae03"
+  },
+  "slot_popularity.json": {
+   "bytes": 15485,
+   "sha256": "6e30d2682d14b5ec610b9906b5df959aa7b01d41606d62ea3ce066d859de6488"
+  },
+  "visual/all_clip.npy": {
+   "bytes": 107622528,
+   "sha256": "942b0c88e77f4eb85cbb1e3d59b1e757d76851b99be9d2efd70e80dfe6e70960"
+  },
+  "visual/all_ids.npy": {
+   "bytes": 840928,
+   "sha256": "75684f11eab549ebcbbdbaeb21308913b6b1f8682519562c4c747a6814e4f8ce"
+  },
+  "visual/clip.npy": {
+   "bytes": 26754176,
+   "sha256": "9ef1c4e39832554fe3da8eed5f16521fdb11175f82afac239fe6502ab3ce84c1"
+  },
+  "visual/clip_shop_adapted.npy": {
+   "bytes": 26754176,
+   "sha256": "81434514359a0c731cc3beef576f3ce95fe1f5b96cc128af89f5e367d35053a6"
+  },
+  "visual/live_ids.npy": {
+   "bytes": 209144,
+   "sha256": "47b9a6ca020f1eb6b2d0bd881bf2948a9bba63e93d9bebb292a26f976cd7475a"
+  }
+ },
+ "lightgbm": "4.7.0",
+ "data_fingerprint": {
+  "transactions": 31788324,
+  "min_date": "2018-09-20",
+  "max_date": "2020-09-22",
+  "article_id_sum": "22131896419443968",
+  "customer_idx_sum": "21781598115217",
+  "row_hash_sum": "15896463904003242",
+  "articles": 105542,
+  "customers": 1371980
+ },
+ "manifest": {
+  "git_commit": "b9e342d5e53cf820a918e5029e2805a133519b10",
+  "git_dirty": true,
+  "config_name": "default",
+  "track_b_config_sha1": "7a47dc6137c9",
+  "data_fingerprint": {
+   "rows": 31788324,
+   "min_date": "2018-09-20",
+   "max_date": "2020-09-22",
+   "article_id_sum": "22131896419443968"
+  },
+  "stage": "serving_bundle"
+ },
+ "build_seconds": 63.9
+}

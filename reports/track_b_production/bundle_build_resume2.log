@@ -1,0 +1,25 @@
+  resuming .tmp-1791092230: rankers and pools already built
+  rankers: compatibility 132 trees / 74 features, personalized 138 trees / 95 features (276s)
+  pools: 156,990 keys, 15,699,000 rows
+  profiles: reusing 1,356,683 customers from the resumed build
+  equivalence gate: 400/400 identical orderings, max |score diff| 0.00e+00, max |feature diff| 1.00e+00 -> PASS
+  visual index: 26,127 live articles with images (adapter yes)
+published bundle 2020-09-23_4edf27eb8e_df69b1f77f (64s)
+       67.57 real        70.32 user        15.93 sys
+          1902772224  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1482797  page reclaims
+               11805  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                7117  voluntary context switches
+              291690  involuntary context switches
+        472737417367  instructions retired
+        154430323295  cycles elapsed
+          4223520920  peak memory footprint
