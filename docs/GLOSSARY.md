@@ -211,3 +211,25 @@ industry standard and are named as such wherever they appear.
 | **Evidence provenance** | Recording, per recommendation, which signal produced it (co-purchase, style co-purchase, visual compatibility, popularity fallback) and the raw values behind it, so an explanation can be checked against the data | Both |
 | **Feature store** | The serving-side system that computes and serves point-in-time-correct features at request time (Feast, Tecton). Personalised recommendations that cannot be precomputed per key need one | DS / Eng |
 | **Recently launched recall** *(project-specific name)* | Recall restricted to articles whose first observed sale is within `new_item_days` of the cutoff. Used where true item cold start is unmeasurable because the dataset has no launch or inventory feed | DS |
+
+## Research benchmark and production serving (added in the Track A research / Track B production round)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **BPR (Bayesian Personalized Ranking)** | Pairwise loss that pushes a bought item above a sampled unbought one for the same user (Rendle et al., 2009). **BPR-MF** = BPR on a matrix-factorisation model | DS |
+| **LightGCN** | Graph collaborative filtering that only averages ID embeddings over the user–item graph, no feature transforms (He et al., 2020); a standard strong CF baseline | DS |
+| **SASRec** | Self-attentive sequential recommender: a causal Transformer over the user's last purchases predicts the next item (Kang & McAuley, 2018) | DS |
+| **gBCE / gSASRec** | Generalised binary cross-entropy: BCE with k sampled negatives and the positive term raised to a calibration power, so a sampled loss stops over-predicting (Petrov & Macdonald, 2023) | DS |
+| **Reproduced baseline** | A published model re-implemented and tuned under *your* protocol, so the comparison is apples to apples; a claim may only name baselines actually reproduced | DS |
+| **Tuning fold** vs **reporting fold** | Weeks used to choose hyperparameters vs weeks used to report results; keeping them disjoint keeps the reported numbers honest | DS |
+| **Adoption rule** / **ship criterion** | A predeclared test a change must pass before it is adopted (here: CI above zero, folds won, cost limits) | Both |
+| **Ablation (refit)** | Remove one feature group and *retrain*; zeroing inputs of a trained model is not an ablation | DS |
+| **Serving bundle** *(project-specific name)* | Versioned, immutable directory of everything the online path reads (models, candidate pools, profiles, catalogue snapshot, manifest with hashes) | DS / Eng |
+| **Train–serve skew** | Online features or scores differing from what the model saw offline; checked here by an **equivalence gate** before a bundle is published | DS / Eng |
+| **Request-time (online) personalization** | Scoring with the user's features when the request arrives, instead of a precomputed per-key table | Both |
+| **Liveness / readiness probe** | `/healthz` (process up) vs `/readyz` (able to serve: artifacts loaded and validated) | Eng |
+| **p50 / p95 / p99 latency** | Median and tail response times; tails (p95, p99) are what users feel under load | Both |
+| **Cold vs warm cache** | Latency with every request computed vs with repeated requests answered from cache | Eng |
+| **Cache invalidation** | Making sure no stale answer survives a model or data change; here the bundle and availability versions are part of every cache key | Eng |
+| **Atomic swap / rollback** | Publishing a new version by switching one pointer after it is complete and validated; rolling back = switching it back | Eng |
+| **Exact vs approximate nearest-neighbour search** | Brute-force similarity over all vectors vs an index (HNSW, FAISS) that trades a little recall for speed; only worth it when exact is too slow | DS / Eng |

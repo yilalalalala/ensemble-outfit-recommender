@@ -137,3 +137,18 @@ is 11% lower before the serving rules and 40% higher after them.
 - **Jewellery is still the weakest segment** in absolute terms (0.0287 on test).
 - Relative confidence intervals divide the paired difference interval by the
   observed baseline mean rather than resampling the denominator.
+
+---
+
+## Update 2026-10-05 — request-time personalized serving (D-041 … D-043)
+
+Readout: [`TRACK_A_RESEARCH_TRACK_B_PRODUCTION_REPORT.md`](TRACK_A_RESEARCH_TRACK_B_PRODUCTION_REPORT.md),
+runbook [`docs/RUNBOOK_SERVING.md`](../docs/RUNBOOK_SERVING.md).
+
+| | |
+| --- | --- |
+| **Served model** | `lgbm_personalized` now ships, at request time: it re-orders the compatibility ranker's top-100 pool per (anchor, target slot) with the customer's point-in-time profile; anonymous and unknown customers get the compatibility order. |
+| **Offline regression (six folds)** | P = 100 keeps 98.9% of unrestricted personalized Recall@12 (99% bar missed by 1.1 pt, reported); served pipeline +7.06% Recall@12 over the previously served compatibility + diversity table, CI above zero, 6/6 folds. |
+| **Serving bundle** | 156,990 keys × 100 candidates, 1,356,683 customer profiles, 26,127-article visual index; published only after a 400-request offline/online equivalence gate (identical orderings). |
+| **Performance (local, one worker)** | uncached p95 26 ms, 68 rps at concurrency 4; warm p95 2.9 ms; startup < 1 s; RSS ≤ 1 GB. |
+| **Status** | A production-oriented prototype: no inventory feed (availability is a sales proxy plus manual overrides), no live traffic, no online A/B test. |
