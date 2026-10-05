@@ -58,3 +58,34 @@ customer last bought the article (6.4%), days since the customer's last purchase
 - **Training cost:** ≈10–14 minutes per week at 160 candidates on a 16 GB laptop
   (early stopping + refit, deterministic mode).
 - Offline only. Online impact needs an A/B test (CTR, conversion).
+
+---
+
+## Update 2026-10-05 — research benchmark and neural score features (D-038 … D-040)
+
+Full readout: [`TRACK_A_RESEARCH_TRACK_B_PRODUCTION_REPORT.md`](TRACK_A_RESEARCH_TRACK_B_PRODUCTION_REPORT.md).
+The numbers above are kept as history; they come from a different protocol (one validation week,
+no eligibility restriction) and are not directly comparable with the table below.
+
+| | |
+| --- | --- |
+| **Change** | Three features added to the Phase-2 ranker: the dot product of customer and candidate vectors from reproduced **BPR-MF**, **LightGCN** and **SASRec** (gSASRec loss), each trained per label week on data before its cutoff (`nn_<model>_dot`). Candidates, other features and the ranker recipe are unchanged (91 features). |
+| **Not adopted** | The same models as retrieval channels (+0.72% MAP@12 over the final system, but +197% training time against a +50% limit) and the allocator's re-allocated caps (+0.74% over Phase 2, cost limit missed by 0.01 pt). |
+| **Protocol** | Six rolling folds 2020-08-05 … 2020-09-09, eligible catalogue = sold in the 28 days before the cutoff, shared age-band fallback, customer-cluster bootstrap across folds (D-038). The test week 2020-09-16 is confirmation evidence and was not used. |
+
+Six-fold pooled MAP@12 (`reports/track_a_research/comparison.json`):
+
+| system | MAP@12 |
+| --- | ---: |
+| repeat purchase + age-band popularity | 0.02212 |
+| BPR-MF / LightGCN / SASRec (3 seeds each) | 0.00924 / 0.00937 / 0.01432 |
+| Phase-2 ensemble, reproduced (3 seeds) | 0.03409 ± 0.00006 |
+| **Final: + neural score features (3 seeds)** | **0.03525 ± 0.00004** |
+
+Paired bootstrap (seed 42): vs Phase 2 **+3.55% [+3.10, +3.97]**, 6/6 folds; vs SASRec, the strongest
+reproduced baseline, +147% [+143, +151]. Every ablation hurts: recency/velocity −3.1%, SASRec score
+−1.9%, repeat features −1.6%, retrieval provenance −0.9%, BPR-MF + LightGCN scores −0.4%.
+
+**Serving status.** The served Track A recommendations (`make submission serving`) are still the
+Phase-2 model: shipping the new features needs the three neural models retrained on all data and
+scored for every customer, which this round did not do.

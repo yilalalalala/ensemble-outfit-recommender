@@ -45,6 +45,7 @@ def test_numpy_forest_matches_lightgbm_exactly():
                 got = Forest.load(d + "/m.json").predict(T)
             assert f.feature_names == ["a", "b", "c", "d", "e"]
             assert np.max(np.abs(got - ref)) < 1e-9, np.max(np.abs(got - ref))
+            assert np.max(np.abs(f.predict_reference(T) - got)) < 1e-9
             assert (np.argsort(-got, kind="stable") == np.argsort(-ref, kind="stable")).all()
             n_cat = sum(any(t["is_cat"]) for t in f.spec["trees"])
             print("ok", zero_as_missing, n_cat, float(np.max(np.abs(got - ref))))

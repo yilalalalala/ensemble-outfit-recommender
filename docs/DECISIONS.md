@@ -1146,3 +1146,44 @@ channels partly explains (`realloc` +0.7% by itself), at a cost the rule rejects
 
 **Revisit if:** training time is measured on an otherwise idle machine (the `neural_channels`
 cost leg may then pass), or a retrieval change raises recall above 160 candidates per customer.
+
+---
+
+### D-043 — Serving performance thresholds, set after the baseline measurement and before optimization
+**Date:** 2026-10-05 · **Status:** active
+
+**Baseline** (`reports/track_b_production/bench_serving_baseline.json`; Apple M5 laptop, 16 GB, one
+uvicorn worker, real bundle, 2,000-request seeded Zipf workload, half the requests with a known
+customer): with the cache warm (82% hits) Complete the Look answers in p50 2.1 ms / p95 2.8 ms at
+concurrency 1 and ~440–500 rps; **uncached, every request computing ~6 modules, p50 196 ms, ~8 rps,
+and 37 timeouts at concurrency 16** — not acceptable for a service whose cache is cold after every
+bundle swap. Startup to ready 0.65 s; peak RSS 1.08 GB; visual search warm p95 28 ms; exact
+top-8 over the 26,127-article visual index 1.35 ms.
+
+**Thresholds** (the final benchmark must meet all of them; none may be met by changing what is
+recommended — any change to ordering has to pass the offline equivalence gate):
+
+| measure | threshold |
+| --- | --- |
+| uncached Complete the Look (all slots), concurrency 1 | p95 ≤ 60 ms |
+| uncached, concurrency 4 | ≥ 40 rps |
+| uncached, concurrency 16 | 0 errors and 0 timeouts (10 s client timeout) |
+| warm cache, concurrency 1 | p95 ≤ 10 ms |
+| startup to ready | ≤ 5 s |
+| steady-state RSS under the workload | ≤ 2 GB |
+| visual search, warm, concurrency 1 | p95 ≤ 100 ms |
+
+**Why these.** They are 3–4× tighter than the measured uncached baseline where it is weak and
+keep the measured headroom where it is already good; all are local single-worker numbers, not
+production SLOs.
+
+**Outcome (2026-10-05, `bench_serving_final.json`; same machine, workload and bundle).** One
+engineering change, no change to what is recommended: the NumPy forest now evaluates every
+(row, tree) pair per depth step over flat global arrays (categorical splits as a lookup table),
+and the catalogue lookups on the request path use NumPy arrays instead of pandas indexing.
+Uncached p95 219 → **26 ms** (c1), throughput 8 → **68 rps** (c4), **0** errors at c16 (was 37);
+warm p95 2.9 ms; startup ≤ 0.66 s; steady RSS 0.85 GB; visual warm p95 51 ms — every threshold
+met. Ranking equivalence re-proven after the change: the build gate re-run on the published bundle
+gives 400/400 identical orderings, max |score difference| 2.7e-15 against LightGBM
+(`equivalence_after_optimization.json`), and the evaluator equals the previous per-tree one
+within 1e-9 in `tests/test_serving_gbdt.py`.

@@ -82,8 +82,81 @@ class Forest:
         return Forest(json.loads(Path(path).read_text()))
 
     # -------------------------------------------------------------- scoring
+    def _compile(self) -> None:
+        """Flatten every tree into global arrays so all (row, tree) pairs advance one depth level per
+        vectorised step (D-043: the per-tree loop was 92% of uncached request time). Categorical
+        splits become a boolean lookup table indexed by (categorical node, category value)."""
+        feat, thr, iscat, dleft, miss, left, right, catrow, leaves, roots = [], [], [], [], [], [], [], [], [], []
+        cat_sets = []
+        for t in self.trees:
+            n_off, l_off = len(feat), len(leaves)
+
+            def g(ch):                       # local child pointer -> global pointer
+                ch = int(ch)
+                return ch + n_off if ch >= 0 else -(l_off + (~ch)) - 1
+
+            for j in range(len(t["feature"])):
+                feat.append(int(t["feature"][j]))
+                thr.append(float(t["threshold"][j]))
+                iscat.append(bool(t["is_cat"][j]))
+                dleft.append(bool(t["default_left"][j]))
+                miss.append(int(t["missing"][j]))
+                left.append(g(t["left"][j]))
+                right.append(g(t["right"][j]))
+                if t["is_cat"][j]:
+                    catrow.append(len(cat_sets))
+                    cat_sets.append(t["cat_sets"][j])
+                else:
+                    catrow.append(-1)
+            roots.append(g(t["root"]))
+            leaves.extend(float(v) for v in t["leaf_value"])
+        max_cat = max((max(c) for c in cat_sets if c), default=0)
+        table = np.zeros((max(1, len(cat_sets)), max_cat + 2), dtype=bool)
+        for r, c in enumerate(cat_sets):
+            table[r, list(c)] = True
+        self._c = {"feat": np.asarray(feat, np.int64), "thr": np.asarray(thr, np.float64),
+                   "iscat": np.asarray(iscat, bool), "dleft": np.asarray(dleft, bool),
+                   "miss": np.asarray(miss, np.int8), "left": np.asarray(left, np.int64),
+                   "right": np.asarray(right, np.int64), "catrow": np.asarray(catrow, np.int64),
+                   "leaves": np.asarray(leaves, np.float64), "roots": np.asarray(roots, np.int64),
+                   "table": table, "max_cat": max_cat}
+
     def predict(self, X: np.ndarray) -> np.ndarray:
         """Raw scores (sum of leaf values) for rows of ``X`` in ``feature_names`` order."""
+        if not hasattr(self, "_c"):
+            self._compile()
+        c = self._c
+        X = np.asarray(X, dtype=np.float32).astype(np.float64)
+        n, T = len(X), len(c["roots"])
+        node = np.tile(c["roots"], n)                 # flat (row, tree) pairs, row-major
+        row = np.repeat(np.arange(n), T)
+        idx = np.flatnonzero(node >= 0)                # only pairs still inside a tree
+        feat, thr, iscat, dleft, miss = c["feat"], c["thr"], c["iscat"], c["dleft"], c["miss"]
+        any_cat = bool(iscat.any())
+        while idx.size:
+            nd = node[idx]
+            v = X[row[idx], feat[nd]]
+            mn = miss[nd]
+            nan = np.isnan(v)
+            vn = np.where(nan & (mn != 2), 0.0, v)
+            use_def = ((mn == 1) & (np.abs(vn) <= K_ZERO)) | ((mn == 2) & nan)
+            with np.errstate(invalid="ignore"):
+                gl = np.where(use_def, dleft[nd], vn <= thr[nd])
+            if any_cat:
+                cat = iscat[nd]
+                if cat.any():
+                    vc = v[cat]
+                    ok = ~np.isnan(vc) & (vc >= 0)    # LightGBM 4: NaN and negative values go right
+                    iv = np.where(ok, vc, 0).astype(np.int64)
+                    ok &= iv <= c["max_cat"]          # a category never seen in training goes right
+                    gl[cat] = ok & c["table"][c["catrow"][nd[cat]], np.minimum(iv, c["max_cat"] + 1)]
+            nxt = np.where(gl, c["left"][nd], c["right"][nd])
+            node[idx] = nxt
+            idx = idx[nxt >= 0]
+        return c["leaves"][-node - 1].reshape(n, T).sum(axis=1)
+
+    def predict_reference(self, X: np.ndarray) -> np.ndarray:
+        """The original per-tree evaluator, kept as the test oracle for the vectorised one."""
         X = np.asarray(X, dtype=np.float32).astype(np.float64)
         n = len(X)
         out = np.zeros(n, dtype=np.float64)

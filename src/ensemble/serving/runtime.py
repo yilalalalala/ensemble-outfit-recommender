@@ -206,8 +206,13 @@ class Bundle:
         self.pool_aux = np.load(self.path / "pool_aux.npy", mmap_mode="r")
         if self.pool_feat.shape != (len(self.pool_article), len(self.schema["pool_features"])):
             raise BundleError("pool feature matrix shape does not match the schema")
-        cat = pd.read_parquet(self.path / "catalog.parquet")
+        cat = pd.read_parquet(self.path / "catalog.parquet").sort_values("article_id").reset_index(drop=True)
         self.catalog = cat.set_index("article_id", drop=False)
+        # Hot-path attribute arrays (no pandas indexing per request): position = searchsorted(ids).
+        self.cat_ids = cat.article_id.to_numpy(np.int64)
+        self.cat_cols = {c: cat[c].to_numpy() for c in ("product_code", "product_type_no", "department_no",
+                                                         "section_no", "garment_group_no", "colour_group_code",
+                                                         "perceived_colour_master_id", "cp_mean_price")}
         self.live = set(cat.article_id[cat.live].astype(int))
         self.slot_pop = {s: [int(a) for a in v] for s, v in
                          json.loads((self.path / "slot_popularity.json").read_text()).items()}
@@ -460,7 +465,8 @@ class Recommender:
         rows: list[dict] = []
         if sl is not None:
             arts = np.asarray(b.pool_article[sl], dtype=np.int64)
-            keep = np.array([self.available(int(a)) for a in arts], dtype=bool)
+            keep = np.fromiter((a in b.live and a not in self.unavailable for a in arts.tolist()), dtype=bool,
+                               count=len(arts))
             idx = np.flatnonzero(keep)
             arts = arts[idx]
             feat = np.asarray(b.pool_feat[sl][idx], dtype=np.float32)
@@ -468,10 +474,8 @@ class Recommender:
             compat = np.asarray(b.pool_compat[sl][idx], dtype=np.float64)
             pers_rows = None
             if personalized and len(arts):
-                cat = b.catalog.loc[arts]
-                cand = {c: cat[c].to_numpy() for c in ("product_code", "product_type_no", "department_no",
-                                                        "section_no", "garment_group_no", "colour_group_code",
-                                                        "perceived_colour_master_id", "cp_mean_price")}
+                pos = np.searchsorted(b.cat_ids, arts)
+                cand = {c: v[pos] for c, v in b.cat_cols.items()}
                 cand["article_id"] = arts
                 P = personal_matrix(profile, cand, slot, aux)
                 X = np.empty((len(arts), len(b.forest.feature_names)), dtype=np.float32)
