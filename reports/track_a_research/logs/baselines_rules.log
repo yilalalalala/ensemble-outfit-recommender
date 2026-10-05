@@ -1,0 +1,36 @@
+fold 2020-08-05
+  popularity_global  2020-08-05 s0: MAP@12 0.00248
+  popularity_age     2020-08-05 s0: MAP@12 0.00383
+  repeat_pop_age     2020-08-05 s0: MAP@12 0.01859
+  item_cf            2020-08-05 s0: MAP@12 0.01320
+  covis              2020-08-05 s0: MAP@12 0.01456
+fold 2020-08-12
+  popularity_global  2020-08-12 s0: MAP@12 0.00317
+  popularity_age     2020-08-12 s0: MAP@12 0.00507
+  repeat_pop_age     2020-08-12 s0: MAP@12 0.02168
+  item_cf            2020-08-12 s0: MAP@12 0.01444
+  covis              2020-08-12 s0: MAP@12 0.01606
+fold 2020-08-19
+  popularity_global  2020-08-19 s0: MAP@12 0.00787
+  popularity_age     2020-08-19 s0: MAP@12 0.00887
+  repeat_pop_age     2020-08-19 s0: MAP@12 0.02226
+  item_cf            2020-08-19 s0: MAP@12 0.01344
+  covis              2020-08-19 s0: MAP@12 0.01470
+fold 2020-08-26
+  popularity_global  2020-08-26 s0: MAP@12 0.00683
+  popularity_age     2020-08-26 s0: MAP@12 0.00862
+  repeat_pop_age     2020-08-26 s0: MAP@12 0.02083
+  item_cf            2020-08-26 s0: MAP@12 0.01188
+  covis              2020-08-26 s0: MAP@12 0.01383
+fold 2020-09-02
+  popularity_global  2020-09-02 s0: MAP@12 0.00673
+  popularity_age     2020-09-02 s0: MAP@12 0.00880
+  repeat_pop_age     2020-09-02 s0: MAP@12 0.02429
+  item_cf            2020-09-02 s0: MAP@12 0.01303
+  covis              2020-09-02 s0: MAP@12 0.01574
+fold 2020-09-09
+  popularity_global  2020-09-09 s0: MAP@12 0.00660
+  popularity_age     2020-09-09 s0: MAP@12 0.00756
+  repeat_pop_age     2020-09-09 s0: MAP@12 0.02524
+  item_cf            2020-09-09 s0: MAP@12 0.01346
+  covis              2020-09-09 s0: MAP@12 0.01538

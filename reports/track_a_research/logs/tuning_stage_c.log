@@ -1,0 +1,45 @@
+  done sasrec 2020-07-22 s0 {'loss': 'gbce', 'lr': 0.002, 'epochs': 24, 'curve_every': 1} (3492s)
+{
+ "bpr": {
+  "window_weeks": 26,
+  "min_item_count": 3,
+  "dim": 128,
+  "reg": 1e-05,
+  "lr": 0.005,
+  "batch_size": 16384,
+  "epochs": 24,
+  "mask_seen": false,
+  "device": "cpu"
+ },
+ "lightgcn": {
+  "window_weeks": 26,
+  "min_item_count": 3,
+  "dim": 64,
+  "layers": 3,
+  "reg": 0.0001,
+  "lr": 0.02,
+  "batch_size": 131072,
+  "epochs": 27,
+  "mask_seen": false,
+  "device": "mps"
+ },
+ "sasrec": {
+  "vocab_weeks": 26,
+  "min_item_count": 3,
+  "train_weeks": 26,
+  "history_weeks": 104,
+  "max_len": 50,
+  "dim": 64,
+  "blocks": 2,
+  "heads": 1,
+  "dropout": 0.2,
+  "lr": 0.002,
+  "batch_size": 256,
+  "epochs": 24,
+  "loss": "gbce",
+  "negatives": 256,
+  "gbce_t": 0.75,
+  "mask_seen": false,
+  "device": "mps"
+ }
+}

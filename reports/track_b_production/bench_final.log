@@ -1,0 +1,128 @@
+{
+ "cold": {
+  "startup_to_ready_s": 0.45007991790771484,
+  "rss_after_ready_mb": 359.609375,
+  "first_request_ms": 9.929625084623694,
+  "first_request_status": 200,
+  "c1": {
+   "n": 2000,
+   "p50_ms": 18.967083073221147,
+   "p95_ms": 26.061372493859377,
+   "p99_ms": 48.43862910754979,
+   "mean_ms": 13.851955208112486,
+   "throughput_rps": 72.18599099576804,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c4": {
+   "n": 2000,
+   "p50_ms": 90.9948330372572,
+   "p95_ms": 121.25299103790893,
+   "p99_ms": 138.96038813516498,
+   "mean_ms": 58.65887097362429,
+   "throughput_rps": 68.16040932565268,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c16": {
+   "n": 2000,
+   "p50_ms": 559.6568540204316,
+   "p95_ms": 650.8045127498917,
+   "p99_ms": 692.4084726767614,
+   "mean_ms": 325.7246022328036,
+   "throughput_rps": 49.00975013735011,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "cache": {
+   "hits": 0,
+   "misses": 36006,
+   "size": 0,
+   "capacity": 0
+  },
+  "rss_steady_mb": 438.984375,
+  "rss_peak_mb": 438.984375,
+  "wall_s": 98.5
+ }
+}
+{
+ "warm": {
+  "startup_to_ready_s": 0.6594810485839844,
+  "rss_after_ready_mb": 358.28125,
+  "first_request_ms": 9.258500067517161,
+  "first_request_status": 200,
+  "c1": {
+   "n": 2000,
+   "p50_ms": 2.126478939317167,
+   "p95_ms": 2.944694401230663,
+   "p99_ms": 4.610212708357721,
+   "mean_ms": 2.3037884946679696,
+   "throughput_rps": 433.9408106962202,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c4": {
+   "n": 2000,
+   "p50_ms": 7.855103584006429,
+   "p95_ms": 11.053755949251354,
+   "p99_ms": 13.316056451294571,
+   "mean_ms": 8.127210797509179,
+   "throughput_rps": 491.90404342733757,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c16": {
+   "n": 2000,
+   "p50_ms": 35.38418747484684,
+   "p95_ms": 78.65117898909375,
+   "p99_ms": 99.43994063418359,
+   "mean_ms": 36.80096882744692,
+   "throughput_rps": 433.66989188450077,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "cache": {
+   "hits": 39144,
+   "misses": 8862,
+   "size": 8862,
+   "capacity": 200000
+  },
+  "visual": {
+   "first_call_ms": 4873.768875142559,
+   "first_call_status": 200,
+   "mode": "crop_adapter",
+   "warm_c1": {
+    "n": 40,
+    "p50_ms": 26.725062052719295,
+    "p95_ms": 51.0800041956827,
+    "p99_ms": 54.60970039945096,
+    "mean_ms": 30.891735421027988,
+    "throughput_rps": 32.28511196314212,
+    "errors": 0,
+    "timeouts": 0,
+    "error_rate": 0.0
+   },
+   "warm_c4": {
+    "n": 40,
+    "p50_ms": 154.32679210789502,
+    "p95_ms": 263.13988297479216,
+    "p99_ms": 315.2551535028033,
+    "mean_ms": 155.57018750114366,
+    "throughput_rps": 17.78675218125984,
+    "errors": 0,
+    "timeouts": 0,
+    "error_rate": 0.0
+   }
+  },
+  "rss_steady_mb": 850.640625,
+  "rss_peak_mb": 963.359375,
+  "wall_s": 62.3
+ }
+}
+wrote /Users/yilacao/Documents/Codex/ensemble/reports/track_b_production/bench_serving_final.json

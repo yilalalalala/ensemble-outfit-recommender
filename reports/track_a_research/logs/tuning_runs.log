@@ -1,0 +1,2247 @@
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-22_s0_53844b695ac3
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.5295581278892664, 'seconds': 76.91}
+    epoch {'epoch': 2, 'loss': 0.30737002480488557, 'seconds': 65.55}
+    epoch {'epoch': 3, 'loss': 0.2826472864701198, 'seconds': 80.29, 'raw_map@12': 0.0038045407925414304, 'raw_map@12_mask_seen': 0.0032318987007059832}
+    epoch {'epoch': 4, 'loss': 0.25899553986696094, 'seconds': 82.2}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_fec5613a62b1
+    epoch {'epoch': 1, 'loss': 0.5965525768335583, 'seconds': 40.94}
+    epoch {'epoch': 5, 'loss': 0.2390669398009777, 'seconds': 76.13}
+    epoch {'epoch': 2, 'loss': 0.2505291619708816, 'seconds': 33.88}
+    epoch {'epoch': 3, 'loss': 0.17406207055432124, 'seconds': 31.11, 'raw_map@12': 0.003444891685577942, 'raw_map@12_mask_seen': 0.0016447714463629667}
+    epoch {'epoch': 6, 'loss': 0.22255412861704826, 'seconds': 68.89, 'raw_map@12': 0.004226135650152152, 'raw_map@12_mask_seen': 0.0035548251400027956}
+    epoch {'epoch': 4, 'loss': 0.15134149565569405, 'seconds': 25.26}
+    epoch {'epoch': 5, 'loss': 0.13980359649195254, 'seconds': 26.93}
+    epoch {'epoch': 7, 'loss': 0.20625165477395058, 'seconds': 63.27}
+    epoch {'epoch': 6, 'loss': 0.13265703361734604, 'seconds': 27.82, 'raw_map@12': 0.003782193688343178, 'raw_map@12_mask_seen': 0.0015442204349612183}
+    epoch {'epoch': 8, 'loss': 0.19082119974952477, 'seconds': 64.06}
+    epoch {'epoch': 7, 'loss': 0.12652118610742602, 'seconds': 28.16}
+    epoch {'epoch': 8, 'loss': 0.12101815364242179, 'seconds': 27.73}
+    epoch {'epoch': 9, 'loss': 0.17574648874310347, 'seconds': 64.95, 'raw_map@12': 0.004799965324624913, 'raw_map@12_mask_seen': 0.004008306183237357}
+    epoch {'epoch': 9, 'loss': 0.11678763088381407, 'seconds': 22.92, 'raw_map@12': 0.003916863674732672, 'raw_map@12_mask_seen': 0.0016969704589146547}
+    epoch {'epoch': 10, 'loss': 0.11288366443251521, 'seconds': 26.78}
+    epoch {'epoch': 10, 'loss': 0.16256937814446595, 'seconds': 63.18}
+    epoch {'epoch': 11, 'loss': 0.10898227868511261, 'seconds': 27.84}
+    epoch {'epoch': 11, 'loss': 0.1512549748787513, 'seconds': 64.07}
+    epoch {'epoch': 12, 'loss': 0.10615879968170402, 'seconds': 28.31, 'raw_map@12': 0.004215338790318186, 'raw_map@12_mask_seen': 0.001833037220912928}
+    epoch {'epoch': 13, 'loss': 0.10359065169558941, 'seconds': 28.81}
+    epoch {'epoch': 14, 'loss': 0.1013826594226858, 'seconds': 27.09}
+    epoch {'epoch': 12, 'loss': 0.1417983162861604, 'seconds': 65.35, 'raw_map@12': 0.00537365633784666, 'raw_map@12_mask_seen': 0.004399837670088527}
+    epoch {'epoch': 15, 'loss': 0.10004165455771302, 'seconds': 18.89, 'raw_map@12': 0.004173724276799423, 'raw_map@12_mask_seen': 0.0017775492744570615}
+    epoch {'epoch': 16, 'loss': 0.0980080219473943, 'seconds': 31.56}
+    epoch {'epoch': 13, 'loss': 0.13373709441377565, 'seconds': 66.74}
+    epoch {'epoch': 17, 'loss': 0.09676466323435307, 'seconds': 30.75}
+    epoch {'epoch': 14, 'loss': 0.1269555536027138, 'seconds': 67.74}
+    epoch {'epoch': 18, 'loss': 0.0953216824355056, 'seconds': 31.08, 'raw_map@12': 0.004248369889374256, 'raw_map@12_mask_seen': 0.0019181793475805968}
+    epoch {'epoch': 19, 'loss': 0.0943496703956891, 'seconds': 29.75}
+    epoch {'epoch': 20, 'loss': 0.09321893422493657, 'seconds': 23.11}
+    epoch {'epoch': 15, 'loss': 0.12107705410856467, 'seconds': 64.16, 'raw_map@12': 0.005687869663950204, 'raw_map@12_mask_seen': 0.004610631826084165}
+    epoch {'epoch': 21, 'loss': 0.09268600745036186, 'seconds': 25.76, 'raw_map@12': 0.004342716628754525, 'raw_map@12_mask_seen': 0.002067316603029331}
+    epoch {'epoch': 16, 'loss': 0.11591507379825298, 'seconds': 66.9}
+    epoch {'epoch': 22, 'loss': 0.0915139955152007, 'seconds': 31.55}
+    epoch {'epoch': 23, 'loss': 0.09068712266614136, 'seconds': 31.24}
+    epoch {'epoch': 17, 'loss': 0.11093528482776421, 'seconds': 68.68}
+    epoch {'epoch': 24, 'loss': 0.09011192525764114, 'seconds': 29.71, 'raw_map@12': 0.004500603036849484, 'raw_map@12_mask_seen': 0.0019419614372215208}
+    epoch {'epoch': 25, 'loss': 0.08980218205347802, 'seconds': 20.96}
+    epoch {'epoch': 18, 'loss': 0.10630080433419117, 'seconds': 68.04, 'raw_map@12': 0.005938601512054824, 'raw_map@12_mask_seen': 0.004723097341105695}
+    epoch {'epoch': 26, 'loss': 0.08897606243641631, 'seconds': 28.89}
+    epoch {'epoch': 19, 'loss': 0.10234949393914296, 'seconds': 70.5}
+    epoch {'epoch': 27, 'loss': 0.088703702321475, 'seconds': 30.71, 'raw_map@12': 0.004290274476372955, 'raw_map@12_mask_seen': 0.001868929042492715}
+    epoch {'epoch': 20, 'loss': 0.09877135948492931, 'seconds': 71.15}
+    epoch {'epoch': 28, 'loss': 0.08850553239361175, 'seconds': 34.49}
+    epoch {'epoch': 29, 'loss': 0.0880987768070501, 'seconds': 32.3}
+    epoch {'epoch': 21, 'loss': 0.09544249179844673, 'seconds': 73.91, 'raw_map@12': 0.006080526215864741, 'raw_map@12_mask_seen': 0.004792284786161059}
+    epoch {'epoch': 30, 'loss': 0.08746433138702679, 'seconds': 33.92, 'raw_map@12': 0.004154673757654055, 'raw_map@12_mask_seen': 0.0018029707808446206}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_d9ca4a0e3a7a
+    epoch {'epoch': 22, 'loss': 0.09195729746268345, 'seconds': 71.81}
+    epoch {'epoch': 1, 'loss': 0.693565279968734, 'seconds': 45.65}
+    epoch {'epoch': 2, 'loss': 0.48670276261649087, 'seconds': 35.62}
+    epoch {'epoch': 23, 'loss': 0.08921695701204814, 'seconds': 78.69}
+    epoch {'epoch': 3, 'loss': 0.24452850331091186, 'seconds': 38.91, 'raw_map@12': 0.0038809936581798397, 'raw_map@12_mask_seen': 0.0022567385267130225}
+    epoch {'epoch': 4, 'loss': 0.16856831529186767, 'seconds': 20.12}
+    epoch {'epoch': 24, 'loss': 0.0863909490693074, 'seconds': 72.6, 'raw_map@12': 0.006283098744605717, 'raw_map@12_mask_seen': 0.004787519988795512}
+    epoch {'epoch': 5, 'loss': 0.12594568248368004, 'seconds': 29.53}
+    epoch {'epoch': 25, 'loss': 0.08347126182455283, 'seconds': 69.12}
+    epoch {'epoch': 6, 'loss': 0.09998633567858668, 'seconds': 31.95, 'raw_map@12': 0.005758960310724575, 'raw_map@12_mask_seen': 0.0025470356391952523}
+    epoch {'epoch': 26, 'loss': 0.08110359038871068, 'seconds': 69.26}
+    epoch {'epoch': 7, 'loss': 0.08292977862711091, 'seconds': 32.86}
+    epoch {'epoch': 8, 'loss': 0.07151424342278138, 'seconds': 31.89}
+    epoch {'epoch': 27, 'loss': 0.07880049413786484, 'seconds': 70.4, 'raw_map@12': 0.0065442268099415, 'raw_map@12_mask_seen': 0.004913886762047664}
+    epoch {'epoch': 9, 'loss': 0.06355567835271358, 'seconds': 35.98, 'raw_map@12': 0.0063769092060019785, 'raw_map@12_mask_seen': 0.002535082434784593}
+    epoch {'epoch': 10, 'loss': 0.05749335155361197, 'seconds': 37.79}
+    epoch {'epoch': 28, 'loss': 0.07649089095111077, 'seconds': 74.18}
+    epoch {'epoch': 11, 'loss': 0.05294928342574141, 'seconds': 33.31}
+    epoch {'epoch': 29, 'loss': 0.0743195372991837, 'seconds': 67.04}
+    epoch {'epoch': 12, 'loss': 0.04930066509009565, 'seconds': 30.74, 'raw_map@12': 0.006518537605620654, 'raw_map@12_mask_seen': 0.002533259421118497}
+    epoch {'epoch': 13, 'loss': 0.046373446182646216, 'seconds': 29.55}
+    epoch {'epoch': 14, 'loss': 0.04392224514983522, 'seconds': 25.72}
+    epoch {'epoch': 30, 'loss': 0.07203897489951207, 'seconds': 66.0, 'raw_map@12': 0.006741671980443499, 'raw_map@12_mask_seen': 0.004973469894735729}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-22_s0_a0a1565d5d23
+    epoch {'epoch': 15, 'loss': 0.0421437988491747, 'seconds': 19.64, 'raw_map@12': 0.006638797219218367, 'raw_map@12_mask_seen': 0.00264684361039777}
+    epoch {'epoch': 16, 'loss': 0.040272422487512956, 'seconds': 42.64}
+    epoch {'epoch': 17, 'loss': 0.03872538984581394, 'seconds': 22.8}
+    epoch {'epoch': 1, 'loss': 4.4106332353026385, 'seconds': 59.4, 'raw_map@12': 0.003780499513461851, 'raw_map@12_mask_seen': 0.002744552312899864}
+    epoch {'epoch': 18, 'loss': 0.03743320770417024, 'seconds': 21.65, 'raw_map@12': 0.006577569785776592, 'raw_map@12_mask_seen': 0.0025695837892048584}
+    epoch {'epoch': 2, 'loss': 1.4336472748392852, 'seconds': 56.31, 'raw_map@12': 0.007980397560551225, 'raw_map@12_mask_seen': 0.0049313111165062784}
+    epoch {'epoch': 19, 'loss': 0.036243234566657, 'seconds': 24.34}
+    epoch {'epoch': 20, 'loss': 0.035197136571034064, 'seconds': 38.57}
+    epoch {'epoch': 3, 'loss': 1.3711996728324538, 'seconds': 55.93, 'raw_map@12': 0.009102172122514511, 'raw_map@12_mask_seen': 0.0053224018418678715}
+    epoch {'epoch': 21, 'loss': 0.03425654875638994, 'seconds': 25.99, 'raw_map@12': 0.006724673226232513, 'raw_map@12_mask_seen': 0.00274122962091098}
+    epoch {'epoch': 22, 'loss': 0.03335411832170579, 'seconds': 27.46}
+    epoch {'epoch': 4, 'loss': 1.34569141201771, 'seconds': 54.92, 'raw_map@12': 0.010273224444949923, 'raw_map@12_mask_seen': 0.005947590104840706}
+    epoch {'epoch': 23, 'loss': 0.03257771884769346, 'seconds': 20.82}
+    epoch {'epoch': 24, 'loss': 0.03185945689605856, 'seconds': 37.36, 'raw_map@12': 0.006593448682801736, 'raw_map@12_mask_seen': 0.0025248971083579154}
+    epoch {'epoch': 5, 'loss': 1.3315025407745473, 'seconds': 55.88, 'raw_map@12': 0.0108668131525399, 'raw_map@12_mask_seen': 0.006030066635294882}
+    epoch {'epoch': 25, 'loss': 0.03129558491710465, 'seconds': 35.26}
+    epoch {'epoch': 26, 'loss': 0.03060281547509785, 'seconds': 34.57}
+    epoch {'epoch': 6, 'loss': 1.322972067328887, 'seconds': 57.22, 'raw_map@12': 0.011316405580674566, 'raw_map@12_mask_seen': 0.006410347556452474}
+    epoch {'epoch': 27, 'loss': 0.030192035223239835, 'seconds': 19.45, 'raw_map@12': 0.006645904679756875, 'raw_map@12_mask_seen': 0.002541908219318186}
+    epoch {'epoch': 28, 'loss': 0.029652374285698228, 'seconds': 20.22}
+    epoch {'epoch': 7, 'loss': 1.3166367210735932, 'seconds': 53.37, 'raw_map@12': 0.011572974340295064, 'raw_map@12_mask_seen': 0.006389374020694676}
+    epoch {'epoch': 29, 'loss': 0.028983403603067098, 'seconds': 27.09}
+    epoch {'epoch': 30, 'loss': 0.028592584283968197, 'seconds': 37.68, 'raw_map@12': 0.0065783165099052975, 'raw_map@12_mask_seen': 0.0025339482145353325}
+    epoch {'epoch': 8, 'loss': 1.3120002556900952, 'seconds': 55.7, 'raw_map@12': 0.011728657470073723, 'raw_map@12_mask_seen': 0.006419372525593446}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_f959db23ec1a
+    epoch {'epoch': 1, 'loss': 0.5960053425390743, 'seconds': 30.55}
+    epoch {'epoch': 2, 'loss': 0.24853858431276765, 'seconds': 21.33}
+    epoch {'epoch': 9, 'loss': 1.3086999565637354, 'seconds': 59.29, 'raw_map@12': 0.012102167095882356, 'raw_map@12_mask_seen': 0.0064978709101301884}
+    epoch {'epoch': 3, 'loss': 0.171757067834, 'seconds': 42.56, 'raw_map@12': 0.0035038077708702095, 'raw_map@12_mask_seen': 0.0016825738614202072}
+    epoch {'epoch': 10, 'loss': 1.3061114607594948, 'seconds': 61.62, 'raw_map@12': 0.012116563605626901, 'raw_map@12_mask_seen': 0.006681060385902983}
+    epoch {'epoch': 4, 'loss': 0.14897097477201118, 'seconds': 32.01}
+    epoch {'epoch': 5, 'loss': 0.13736039834115113, 'seconds': 36.67}
+    epoch {'epoch': 11, 'loss': 1.3037449614558212, 'seconds': 56.28, 'raw_map@12': 0.011993567281545062, 'raw_map@12_mask_seen': 0.006480537670444272}
+    epoch {'epoch': 6, 'loss': 0.13013885736248446, 'seconds': 20.64, 'raw_map@12': 0.003851637600442526, 'raw_map@12_mask_seen': 0.0015956829822100019}
+    epoch {'epoch': 7, 'loss': 0.12388894126470228, 'seconds': 21.88}
+    epoch {'epoch': 12, 'loss': 1.302095112747909, 'seconds': 54.73, 'raw_map@12': 0.012402464423144435, 'raw_map@12_mask_seen': 0.0067856563725233274}
+    epoch {'epoch': 8, 'loss': 0.11832661944830301, 'seconds': 19.65}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-22_s0_3cc9232de2f1
+    epoch {'epoch': 9, 'loss': 0.11402457478700333, 'seconds': 26.27, 'raw_map@12': 0.003942426641551118, 'raw_map@12_mask_seen': 0.0016972087952690678}
+    epoch {'epoch': 1, 'loss': 0.7547143618265788, 'seconds': 50.87, 'raw_map@12': 0.0029429590920536587, 'raw_map@12_mask_seen': 0.002165892826943165}
+    epoch {'epoch': 10, 'loss': 0.11005929660377572, 'seconds': 23.64}
+    epoch {'epoch': 11, 'loss': 0.10602838848039363, 'seconds': 40.05}
+    epoch {'epoch': 2, 'loss': 0.6030819306057461, 'seconds': 47.66, 'raw_map@12': 0.004929693304918998, 'raw_map@12_mask_seen': 0.003408763350916815}
+    epoch {'epoch': 12, 'loss': 0.10313691990902123, 'seconds': 21.89, 'raw_map@12': 0.004249435043184316, 'raw_map@12_mask_seen': 0.0018280151124959708}
+    epoch {'epoch': 13, 'loss': 0.10055384793978872, 'seconds': 24.44}
+    epoch {'epoch': 3, 'loss': 0.567896824625096, 'seconds': 48.58, 'raw_map@12': 0.005571829593988125, 'raw_map@12_mask_seen': 0.00391774631084694}
+    epoch {'epoch': 14, 'loss': 0.09827488604752184, 'seconds': 19.99}
+    epoch {'epoch': 15, 'loss': 0.09695623178505203, 'seconds': 39.39, 'raw_map@12': 0.0042656035194220095, 'raw_map@12_mask_seen': 0.0018515695279284056}
+    epoch {'epoch': 4, 'loss': 0.5512776635628379, 'seconds': 46.75, 'raw_map@12': 0.006031791331316582, 'raw_map@12_mask_seen': 0.00408017562600275}
+    epoch {'epoch': 16, 'loss': 0.09482236137812577, 'seconds': 30.99}
+    epoch {'epoch': 17, 'loss': 0.09362615738968247, 'seconds': 31.89}
+    epoch {'epoch': 5, 'loss': 0.5413310583783777, 'seconds': 46.43, 'raw_map@12': 0.006452612260213711, 'raw_map@12_mask_seen': 0.004271849675582468}
+    epoch {'epoch': 18, 'loss': 0.09206270965412983, 'seconds': 19.65, 'raw_map@12': 0.004313063058480435, 'raw_map@12_mask_seen': 0.001956920393863278}
+    epoch {'epoch': 19, 'loss': 0.0911248781112502, 'seconds': 19.4}
+    epoch {'epoch': 6, 'loss': 0.5341326128931555, 'seconds': 45.54, 'raw_map@12': 0.006622526820404318, 'raw_map@12_mask_seen': 0.004463227595727923}
+    epoch {'epoch': 20, 'loss': 0.08991713689875255, 'seconds': 25.39}
+    epoch {'epoch': 21, 'loss': 0.08947047828108941, 'seconds': 36.55, 'raw_map@12': 0.004382779857981528, 'raw_map@12_mask_seen': 0.0020070942243717907}
+    epoch {'epoch': 7, 'loss': 0.5288391399229868, 'seconds': 46.13, 'raw_map@12': 0.0068318239405377205, 'raw_map@12_mask_seen': 0.004369794891553461}
+    epoch {'epoch': 22, 'loss': 0.08817743873494921, 'seconds': 37.13}
+    epoch {'epoch': 23, 'loss': 0.08725176075274504, 'seconds': 24.42}
+    epoch {'epoch': 8, 'loss': 0.5240189330792998, 'seconds': 45.17, 'raw_map@12': 0.007544165393691797, 'raw_map@12_mask_seen': 0.004729632768772708}
+    epoch {'epoch': 24, 'loss': 0.0866577053279842, 'seconds': 19.52, 'raw_map@12': 0.004568674529912589, 'raw_map@12_mask_seen': 0.0019839347058129638}
+    epoch {'epoch': 25, 'loss': 0.08636440267985307, 'seconds': 19.97}
+    epoch {'epoch': 9, 'loss': 0.5211550291401247, 'seconds': 45.23, 'raw_map@12': 0.007212892867663434, 'raw_map@12_mask_seen': 0.004606803530046929}
+    epoch {'epoch': 26, 'loss': 0.08548601315293497, 'seconds': 33.52}
+    epoch {'epoch': 10, 'loss': 0.5181901701247494, 'seconds': 47.87, 'raw_map@12': 0.0072636421368506236, 'raw_map@12_mask_seen': 0.004626076022289365}
+    epoch {'epoch': 27, 'loss': 0.08511322537816844, 'seconds': 30.36, 'raw_map@12': 0.00436076699766338, 'raw_map@12_mask_seen': 0.0018512221704763022}
+    epoch {'epoch': 28, 'loss': 0.08497781527129192, 'seconds': 38.05}
+    epoch {'epoch': 29, 'loss': 0.08453107381112945, 'seconds': 21.18}
+    epoch {'epoch': 11, 'loss': 0.5161480463231686, 'seconds': 47.12, 'raw_map@12': 0.007030914772659726, 'raw_map@12_mask_seen': 0.004562407502517191}
+    epoch {'epoch': 30, 'loss': 0.0838115132838777, 'seconds': 27.02, 'raw_map@12': 0.00442183824865013, 'raw_map@12_mask_seen': 0.0018788503648144916}
+    epoch {'epoch': 12, 'loss': 0.5140205818754973, 'seconds': 50.37, 'raw_map@12': 0.007613479949711502, 'raw_map@12_mask_seen': 0.004930899438392541}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_5081995d1cd6
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-22_s0_49e5f87ec108
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.6948231827129018, 'seconds': 19.43}
+    epoch {'epoch': 2, 'loss': 0.6314866120165045, 'seconds': 14.44}
+    epoch {'epoch': 1, 'loss': 0.38203810384640324, 'seconds': 91.39}
+    epoch {'epoch': 3, 'loss': 0.3980326820503582, 'seconds': 17.78, 'raw_map@12': 0.003395782861041736, 'raw_map@12_mask_seen': 0.0014074021867145849}
+    epoch {'epoch': 4, 'loss': 0.21614679443565282, 'seconds': 19.8}
+    epoch {'epoch': 5, 'loss': 0.14243840697136792, 'seconds': 15.38}
+    epoch {'epoch': 2, 'loss': 0.22591049539355132, 'seconds': 78.05}
+    epoch {'epoch': 6, 'loss': 0.10335248796777292, 'seconds': 18.25, 'raw_map@12': 0.006795364400348938, 'raw_map@12_mask_seen': 0.0019306220430648766}
+    epoch {'epoch': 7, 'loss': 0.07966007864610715, 'seconds': 14.26}
+    epoch {'epoch': 8, 'loss': 0.06436623566868631, 'seconds': 9.64}
+    epoch {'epoch': 3, 'loss': 0.16104592382907867, 'seconds': 79.48, 'raw_map@12': 0.005347031609089347, 'raw_map@12_mask_seen': 0.004313015348839625}
+    epoch {'epoch': 9, 'loss': 0.05446077229624445, 'seconds': 10.4, 'raw_map@12': 0.00789771807946367, 'raw_map@12_mask_seen': 0.002045865540075031}
+    epoch {'epoch': 10, 'loss': 0.04733733646571636, 'seconds': 14.42}
+    epoch {'epoch': 11, 'loss': 0.04227787594903599, 'seconds': 12.61}
+    epoch {'epoch': 4, 'loss': 0.12624108963287795, 'seconds': 74.95}
+    epoch {'epoch': 12, 'loss': 0.03826425568285313, 'seconds': 13.63, 'raw_map@12': 0.00817729227894099, 'raw_map@12_mask_seen': 0.002195714259710602}
+    epoch {'epoch': 13, 'loss': 0.03514667788351124, 'seconds': 12.56}
+    epoch {'epoch': 5, 'loss': 0.10651750045900162, 'seconds': 68.51}
+    epoch {'epoch': 14, 'loss': 0.03274067496372895, 'seconds': 12.41}
+    epoch {'epoch': 15, 'loss': 0.030658949877728114, 'seconds': 12.09, 'raw_map@12': 0.008310193408484566, 'raw_map@12_mask_seen': 0.0022553203466844974}
+    epoch {'epoch': 16, 'loss': 0.029108712026341396, 'seconds': 12.23}
+    epoch {'epoch': 17, 'loss': 0.027734709107740358, 'seconds': 7.86}
+    epoch {'epoch': 6, 'loss': 0.09311406486309491, 'seconds': 69.48, 'raw_map@12': 0.006500040151561258, 'raw_map@12_mask_seen': 0.004722392230260409}
+    epoch {'epoch': 18, 'loss': 0.026493378152901478, 'seconds': 7.97, 'raw_map@12': 0.008378134751520352, 'raw_map@12_mask_seen': 0.002360589123926847}
+    epoch {'epoch': 19, 'loss': 0.02526639760895209, 'seconds': 14.19}
+    epoch {'epoch': 20, 'loss': 0.024407786588099868, 'seconds': 14.74}
+    epoch {'epoch': 7, 'loss': 0.0828549863340763, 'seconds': 70.96}
+    epoch {'epoch': 21, 'loss': 0.023436216510493647, 'seconds': 14.55, 'raw_map@12': 0.008381083242855214, 'raw_map@12_mask_seen': 0.0023522338703180295}
+    epoch {'epoch': 22, 'loss': 0.02283079323612831, 'seconds': 12.76}
+    epoch {'epoch': 23, 'loss': 0.021982623492790895, 'seconds': 12.27}
+    epoch {'epoch': 8, 'loss': 0.07477291243580672, 'seconds': 69.7}
+    epoch {'epoch': 24, 'loss': 0.021535253533246843, 'seconds': 12.12, 'raw_map@12': 0.008510031371866398, 'raw_map@12_mask_seen': 0.002391907799319447}
+    epoch {'epoch': 25, 'loss': 0.02077593995596875, 'seconds': 12.39}
+    epoch {'epoch': 26, 'loss': 0.0203262038867582, 'seconds': 12.33}
+    epoch {'epoch': 9, 'loss': 0.06781816812088856, 'seconds': 68.23, 'raw_map@12': 0.007539607443320086, 'raw_map@12_mask_seen': 0.005062454490939075}
+    epoch {'epoch': 27, 'loss': 0.019973695735362444, 'seconds': 10.72, 'raw_map@12': 0.00850298565901514, 'raw_map@12_mask_seen': 0.0023430809401173776}
+    epoch {'epoch': 28, 'loss': 0.019443718995898963, 'seconds': 11.87}
+    epoch {'epoch': 29, 'loss': 0.019118878740647976, 'seconds': 11.73}
+    epoch {'epoch': 10, 'loss': 0.06245628887644181, 'seconds': 67.81}
+    epoch {'epoch': 30, 'loss': 0.01876014205203815, 'seconds': 12.18, 'raw_map@12': 0.008398175225490832, 'raw_map@12_mask_seen': 0.0023582529272627734}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_14f82bbd96ba
+    epoch {'epoch': 11, 'loss': 0.05787209127671444, 'seconds': 76.89}
+    epoch {'epoch': 1, 'loss': 0.6935009548386324, 'seconds': 55.1}
+    epoch {'epoch': 2, 'loss': 0.41398549014792857, 'seconds': 44.06}
+    epoch {'epoch': 12, 'loss': 0.054076093463943556, 'seconds': 78.6, 'raw_map@12': 0.008349938136283286, 'raw_map@12_mask_seen': 0.005275394350593168}
+    epoch {'epoch': 3, 'loss': 0.18325937061923223, 'seconds': 36.47, 'raw_map@12': 0.005575231571242654, 'raw_map@12_mask_seen': 0.0022956559459214815}
+    epoch {'epoch': 4, 'loss': 0.1095231135818854, 'seconds': 38.18}
+    epoch {'epoch': 13, 'loss': 0.05092632304877043, 'seconds': 73.03}
+    epoch {'epoch': 5, 'loss': 0.07364093770896926, 'seconds': 37.13}
+    epoch {'epoch': 14, 'loss': 0.048256430130165354, 'seconds': 72.93}
+    epoch {'epoch': 6, 'loss': 0.055112815416842986, 'seconds': 37.13, 'raw_map@12': 0.008301932351423695, 'raw_map@12_mask_seen': 0.002547851124269484}
+    epoch {'epoch': 7, 'loss': 0.044313620079706594, 'seconds': 36.64}
+    epoch {'epoch': 8, 'loss': 0.03750669303377276, 'seconds': 40.66}
+    epoch {'epoch': 15, 'loss': 0.04612172387826901, 'seconds': 77.19, 'raw_map@12': 0.008781952407926282, 'raw_map@12_mask_seen': 0.0052877250452295155}
+    epoch {'epoch': 16, 'loss': 0.044351619453384325, 'seconds': 144.12}
+    epoch {'epoch': 9, 'loss': 0.03284054293378609, 'seconds': 110.19, 'raw_map@12': 0.008386706097610231, 'raw_map@12_mask_seen': 0.0026984349680587473}
+    epoch {'epoch': 17, 'loss': 0.042706034146249294, 'seconds': 94.5}
+    epoch {'epoch': 10, 'loss': 0.02941447869847411, 'seconds': 53.86}
+    epoch {'epoch': 11, 'loss': 0.026896528899669647, 'seconds': 45.6}
+    epoch {'epoch': 18, 'loss': 0.04111285908864094, 'seconds': 79.68, 'raw_map@12': 0.009024027689914095, 'raw_map@12_mask_seen': 0.005376932238145256}
+    epoch {'epoch': 12, 'loss': 0.0248951712234434, 'seconds': 33.66, 'raw_map@12': 0.008537606666885392, 'raw_map@12_mask_seen': 0.0027164377818014976}
+    epoch {'epoch': 13, 'loss': 0.023293171742551244, 'seconds': 38.67}
+    epoch {'epoch': 19, 'loss': 0.03991510812193155, 'seconds': 71.15}
+    epoch {'epoch': 14, 'loss': 0.021872064247908232, 'seconds': 41.77}
+    epoch {'epoch': 20, 'loss': 0.03864596905903174, 'seconds': 73.89}
+    epoch {'epoch': 15, 'loss': 0.020827391795199185, 'seconds': 38.72, 'raw_map@12': 0.00847495160859316, 'raw_map@12_mask_seen': 0.002678364224974525}
+    epoch {'epoch': 16, 'loss': 0.01984945703659532, 'seconds': 34.41}
+    epoch {'epoch': 17, 'loss': 0.018983239995189083, 'seconds': 25.01}
+    epoch {'epoch': 21, 'loss': 0.037795139190096125, 'seconds': 68.57, 'raw_map@12': 0.009158387203975146, 'raw_map@12_mask_seen': 0.005352721412190848}
+    epoch {'epoch': 22, 'loss': 0.036812243123467155, 'seconds': 71.35}
+    epoch {'epoch': 18, 'loss': 0.018289272506151675, 'seconds': 36.13, 'raw_map@12': 0.008545572985139627, 'raw_map@12_mask_seen': 0.0027251431945452785}
+    epoch {'epoch': 23, 'loss': 0.036048800039749876, 'seconds': 89.41}
+    epoch {'epoch': 19, 'loss': 0.01771281844511339, 'seconds': 71.95}
+    epoch {'epoch': 20, 'loss': 0.017089891943682746, 'seconds': 56.91}
+    epoch {'epoch': 24, 'loss': 0.035442445713740126, 'seconds': 87.53, 'raw_map@12': 0.009300413948001835, 'raw_map@12_mask_seen': 0.005310639930885974}
+    epoch {'epoch': 21, 'loss': 0.016768723432408664, 'seconds': 33.11, 'raw_map@12': 0.008695438087798072, 'raw_map@12_mask_seen': 0.002839243882715935}
+    epoch {'epoch': 25, 'loss': 0.03453847085340665, 'seconds': 75.17}
+    epoch {'epoch': 22, 'loss': 0.016048494079918825, 'seconds': 39.86}
+    epoch {'epoch': 23, 'loss': 0.015760356790919618, 'seconds': 41.44}
+    epoch {'epoch': 26, 'loss': 0.03397949319332838, 'seconds': 74.99}
+    epoch {'epoch': 24, 'loss': 0.015468638851442963, 'seconds': 41.39, 'raw_map@12': 0.008778699864571556, 'raw_map@12_mask_seen': 0.002868939262782197}
+    epoch {'epoch': 25, 'loss': 0.015126943041217847, 'seconds': 24.65}
+    epoch {'epoch': 27, 'loss': 0.033473264712553755, 'seconds': 67.48, 'raw_map@12': 0.009351619114164, 'raw_map@12_mask_seen': 0.005330403138276015}
+    epoch {'epoch': 26, 'loss': 0.014798488174067828, 'seconds': 31.88}
+    epoch {'epoch': 28, 'loss': 0.03293406490523081, 'seconds': 70.71}
+    epoch {'epoch': 27, 'loss': 0.014520389859754484, 'seconds': 37.56, 'raw_map@12': 0.008741813419513404, 'raw_map@12_mask_seen': 0.0028937350896031107}
+    epoch {'epoch': 29, 'loss': 0.03242343492232836, 'seconds': 67.25}
+    epoch {'epoch': 28, 'loss': 0.014223716639940745, 'seconds': 39.63}
+    epoch {'epoch': 29, 'loss': 0.014004924757297612, 'seconds': 38.15}
+    epoch {'epoch': 30, 'loss': 0.031827372462990194, 'seconds': 72.41, 'raw_map@12': 0.009243104539974421, 'raw_map@12_mask_seen': 0.005237827870556315}
+    epoch {'epoch': 30, 'loss': 0.013727210333245327, 'seconds': 33.65, 'raw_map@12': 0.008692881642014061, 'raw_map@12_mask_seen': 0.002787038679694523}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-22_s0_fcefe7cff312
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_44ad8e80fd38
+    epoch {'epoch': 1, 'loss': 0.5742838067504076, 'seconds': 46.7}
+    epoch {'epoch': 2, 'loss': 0.29869535794624913, 'seconds': 45.17}
+    epoch {'epoch': 3, 'loss': 0.26630584723674333, 'seconds': 43.99, 'raw_map@12': 0.003882419885668828, 'raw_map@12_mask_seen': 0.0032691060196532685}
+    epoch {'epoch': 4, 'loss': 0.23621996434835288, 'seconds': 42.95}
+    epoch {'epoch': 5, 'loss': 0.20882461965084076, 'seconds': 43.73}
+    epoch {'epoch': 6, 'loss': 0.18495338295514768, 'seconds': 43.84, 'raw_map@12': 0.0050280387197050155, 'raw_map@12_mask_seen': 0.004057165654010466}
+    epoch {'epoch': 7, 'loss': 0.164119286605945, 'seconds': 44.27}
+    epoch {'epoch': 8, 'loss': 0.14747227556430376, 'seconds': 44.3}
+    epoch {'epoch': 9, 'loss': 0.1338108818118389, 'seconds': 44.03, 'raw_map@12': 0.005871793638581939, 'raw_map@12_mask_seen': 0.004616899004869944}
+    epoch {'epoch': 10, 'loss': 0.12318511823048958, 'seconds': 43.96}
+    epoch {'epoch': 11, 'loss': 0.11434456820671375, 'seconds': 43.64}
+    epoch {'epoch': 12, 'loss': 0.10696598801475304, 'seconds': 43.56, 'raw_map@12': 0.0062717341905305524, 'raw_map@12_mask_seen': 0.004737386745700759}
+    epoch {'epoch': 13, 'loss': 0.10052010875481826, 'seconds': 44.49}
+    epoch {'epoch': 14, 'loss': 0.09493880045528595, 'seconds': 43.64}
+    epoch {'epoch': 15, 'loss': 0.09000791236758232, 'seconds': 43.11, 'raw_map@12': 0.006627549956208879, 'raw_map@12_mask_seen': 0.0047751982536921676}
+    epoch {'epoch': 16, 'loss': 0.08570964118609062, 'seconds': 43.89}
+    epoch {'epoch': 17, 'loss': 0.08145555237737986, 'seconds': 43.77}
+    epoch {'epoch': 18, 'loss': 0.07750310061069635, 'seconds': 43.38, 'raw_map@12': 0.0070374889330912654, 'raw_map@12_mask_seen': 0.004870986658827584}
+    epoch {'epoch': 19, 'loss': 0.07414475928705472, 'seconds': 44.22}
+    epoch {'epoch': 20, 'loss': 0.07104035509893528, 'seconds': 42.57}
+    epoch {'epoch': 21, 'loss': 0.0682079432388911, 'seconds': 41.18, 'raw_map@12': 0.007282043958793706, 'raw_map@12_mask_seen': 0.004917675661172795}
+    epoch {'epoch': 22, 'loss': 0.06524801340240699, 'seconds': 43.93}
+    epoch {'epoch': 23, 'loss': 0.06297041640545313, 'seconds': 43.86}
+    epoch {'epoch': 24, 'loss': 0.06061649114753191, 'seconds': 43.99, 'raw_map@12': 0.007757211367473758, 'raw_map@12_mask_seen': 0.005071046825855868}
+    epoch {'epoch': 25, 'loss': 0.05824395534224235, 'seconds': 44.24}
+    epoch {'epoch': 26, 'loss': 0.05639051968375078, 'seconds': 43.54}
+    epoch {'epoch': 27, 'loss': 0.054530391397957616, 'seconds': 43.46, 'raw_map@12': 0.008139589946941835, 'raw_map@12_mask_seen': 0.005151356466637696}
+    epoch {'epoch': 28, 'loss': 0.052840459160506725, 'seconds': 44.26}
+    epoch {'epoch': 29, 'loss': 0.05119304015086247, 'seconds': 43.57}
+    epoch {'epoch': 30, 'loss': 0.04945331919365204, 'seconds': 47.63, 'raw_map@12': 0.008403894641761835, 'raw_map@12_mask_seen': 0.00523181383468548}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-22_s0_86be9f304d09
+    epoch {'epoch': 1, 'loss': 3.0627403922722047, 'seconds': 54.21, 'raw_map@12': 0.006773570047830313, 'raw_map@12_mask_seen': 0.004233017838042274}
+    epoch {'epoch': 2, 'loss': 1.3796284228179116, 'seconds': 50.13, 'raw_map@12': 0.00937713452601012, 'raw_map@12_mask_seen': 0.005370409765764536}
+    epoch {'epoch': 3, 'loss': 1.345272723701997, 'seconds': 49.03, 'raw_map@12': 0.010021790732988598, 'raw_map@12_mask_seen': 0.005660906396508996}
+    epoch {'epoch': 4, 'loss': 1.3304366049845575, 'seconds': 49.37, 'raw_map@12': 0.011131546422174166, 'raw_map@12_mask_seen': 0.006162192084178865}
+    epoch {'epoch': 5, 'loss': 1.32156354068173, 'seconds': 49.33, 'raw_map@12': 0.01183111627782389, 'raw_map@12_mask_seen': 0.006426792223518825}
+    epoch {'epoch': 6, 'loss': 1.3158891459196311, 'seconds': 49.27, 'raw_map@12': 0.011832346960535419, 'raw_map@12_mask_seen': 0.006515860605343409}
+    epoch {'epoch': 7, 'loss': 1.3116528883823373, 'seconds': 49.17, 'raw_map@12': 0.011994184649190415, 'raw_map@12_mask_seen': 0.0064430431715030365}
+    epoch {'epoch': 8, 'loss': 1.3084743298219712, 'seconds': 49.69, 'raw_map@12': 0.011778023044685296, 'raw_map@12_mask_seen': 0.006314298857221149}
+    epoch {'epoch': 9, 'loss': 1.3063164822523985, 'seconds': 49.44, 'raw_map@12': 0.012390742058947083, 'raw_map@12_mask_seen': 0.006499629262017809}
+    epoch {'epoch': 10, 'loss': 1.3044594593030532, 'seconds': 49.12, 'raw_map@12': 0.011987142277956818, 'raw_map@12_mask_seen': 0.006541206080752937}
+    epoch {'epoch': 11, 'loss': 1.30302960481872, 'seconds': 49.55, 'raw_map@12': 0.01207675736299952, 'raw_map@12_mask_seen': 0.006463004822921467}
+    epoch {'epoch': 12, 'loss': 1.3021986847204836, 'seconds': 49.17, 'raw_map@12': 0.012461900649288113, 'raw_map@12_mask_seen': 0.0066831775617035155}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-22_s0_2103faa8bc06
+    epoch {'epoch': 1, 'loss': 4.67297339347186, 'seconds': 50.85, 'raw_map@12': 0.0023547408567921395, 'raw_map@12_mask_seen': 0.001811443906696693}
+    epoch {'epoch': 2, 'loss': 1.5349736093377102, 'seconds': 49.38, 'raw_map@12': 0.005872427491145987, 'raw_map@12_mask_seen': 0.003958489218562617}
+    epoch {'epoch': 3, 'loss': 1.4586309639349389, 'seconds': 49.27, 'raw_map@12': 0.006760152908680538, 'raw_map@12_mask_seen': 0.004244378331867812}
+    epoch {'epoch': 4, 'loss': 1.430684323029843, 'seconds': 49.22, 'raw_map@12': 0.008143982352425253, 'raw_map@12_mask_seen': 0.00509381563518471}
+    epoch {'epoch': 5, 'loss': 1.417331506402453, 'seconds': 49.19, 'raw_map@12': 0.008912923380205157, 'raw_map@12_mask_seen': 0.005407494443114471}
+    epoch {'epoch': 6, 'loss': 1.4091166760600953, 'seconds': 49.21, 'raw_map@12': 0.009212056979254694, 'raw_map@12_mask_seen': 0.005618511213181936}
+    epoch {'epoch': 7, 'loss': 1.403059962133896, 'seconds': 49.29, 'raw_map@12': 0.009767266059039574, 'raw_map@12_mask_seen': 0.005760578387531652}
+    epoch {'epoch': 8, 'loss': 1.3984580574334216, 'seconds': 49.18, 'raw_map@12': 0.009967753929228792, 'raw_map@12_mask_seen': 0.005985183546947168}
+    epoch {'epoch': 9, 'loss': 1.395505204077803, 'seconds': 49.21, 'raw_map@12': 0.010258508006121403, 'raw_map@12_mask_seen': 0.00602706884321035}
+    epoch {'epoch': 10, 'loss': 1.3928953523354854, 'seconds': 49.11, 'raw_map@12': 0.010359690753980725, 'raw_map@12_mask_seen': 0.006080830841488626}
+    epoch {'epoch': 11, 'loss': 1.3906287674087188, 'seconds': 49.17, 'raw_map@12': 0.010466076959380542, 'raw_map@12_mask_seen': 0.006092178805600361}
+    epoch {'epoch': 12, 'loss': 1.3891378840908382, 'seconds': 49.25, 'raw_map@12': 0.010610849710181159, 'raw_map@12_mask_seen': 0.006199576202011976}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-22_s0_36957a8b29a6
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.6930601861741807, 'seconds': 37.79}
+    epoch {'epoch': 2, 'loss': 0.4099368082296445, 'seconds': 30.84}
+    epoch {'epoch': 1, 'loss': 0.38402753667189526, 'seconds': 70.95}
+    epoch {'epoch': 3, 'loss': 0.18174667937168176, 'seconds': 35.02}
+    epoch {'epoch': 4, 'loss': 0.10872991503652743, 'seconds': 39.38}
+    epoch {'epoch': 2, 'loss': 0.23120193412670723, 'seconds': 72.8}
+    epoch {'epoch': 5, 'loss': 0.07321971833058026, 'seconds': 41.61}
+    epoch {'epoch': 3, 'loss': 0.16516680299089506, 'seconds': 75.92}
+    epoch {'epoch': 6, 'loss': 0.054503474348553134, 'seconds': 44.73}
+    epoch {'epoch': 7, 'loss': 0.043937015873582466, 'seconds': 41.2}
+    epoch {'epoch': 4, 'loss': 0.13026424110508883, 'seconds': 76.59}
+    epoch {'epoch': 8, 'loss': 0.03724436786763622, 'seconds': 40.08}
+    epoch {'epoch': 9, 'loss': 0.03273079931232088, 'seconds': 40.56}
+    epoch {'epoch': 5, 'loss': 0.10925048718658778, 'seconds': 74.44}
+    epoch {'epoch': 10, 'loss': 0.02929621626249546, 'seconds': 41.23}
+    epoch {'epoch': 11, 'loss': 0.026922046688299825, 'seconds': 39.32}
+    epoch {'epoch': 6, 'loss': 0.09469826992314595, 'seconds': 75.27}
+    epoch {'epoch': 12, 'loss': 0.02483105794009235, 'seconds': 39.53}
+    epoch {'epoch': 13, 'loss': 0.023223747350815414, 'seconds': 40.14}
+    epoch {'epoch': 7, 'loss': 0.08366022445261478, 'seconds': 73.87}
+    epoch {'epoch': 14, 'loss': 0.02199579393356175, 'seconds': 40.59}
+    epoch {'epoch': 15, 'loss': 0.020774817427143384, 'seconds': 38.71}
+    epoch {'epoch': 8, 'loss': 0.07498068964252105, 'seconds': 73.33}
+    epoch {'epoch': 16, 'loss': 0.019780929087872667, 'seconds': 39.96}
+    epoch {'epoch': 9, 'loss': 0.06797649940619102, 'seconds': 75.26}
+    epoch {'epoch': 17, 'loss': 0.019068042394493657, 'seconds': 40.6}
+    epoch {'epoch': 18, 'loss': 0.018370691290944093, 'seconds': 40.02}
+    epoch {'epoch': 10, 'loss': 0.06225474250431244, 'seconds': 73.93}
+    epoch {'epoch': 19, 'loss': 0.01777337410752684, 'seconds': 38.17}
+    epoch {'epoch': 20, 'loss': 0.01716277174030741, 'seconds': 38.87}
+    epoch {'epoch': 11, 'loss': 0.057699739933013916, 'seconds': 73.39}
+    epoch {'epoch': 21, 'loss': 0.016680703095749812, 'seconds': 39.28}
+    epoch {'epoch': 22, 'loss': 0.016291568314449653, 'seconds': 38.98}
+    epoch {'epoch': 12, 'loss': 0.05382153656906807, 'seconds': 74.84}
+    epoch {'epoch': 23, 'loss': 0.01581740257181767, 'seconds': 40.45}
+    epoch {'epoch': 13, 'loss': 0.05075312391496622, 'seconds': 71.58}
+    epoch {'epoch': 24, 'loss': 0.01553135324080569, 'seconds': 39.73, 'raw_map@12': 0.00806151552490832, 'raw_map@12_mask_seen': 0.0024920721089979067}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-29_s0_e1704eb9e6df
+    epoch {'epoch': 14, 'loss': 0.048084635502443865, 'seconds': 63.9}
+    epoch {'epoch': 1, 'loss': 0.6947994910346137, 'seconds': 18.33}
+    epoch {'epoch': 2, 'loss': 0.6263356966442531, 'seconds': 13.04}
+    epoch {'epoch': 3, 'loss': 0.3839281784163581, 'seconds': 13.2}
+    epoch {'epoch': 4, 'loss': 0.21445064220163557, 'seconds': 12.58}
+    epoch {'epoch': 15, 'loss': 0.04586413466873077, 'seconds': 71.7}
+    epoch {'epoch': 5, 'loss': 0.1443550862206353, 'seconds': 12.67}
+    epoch {'epoch': 6, 'loss': 0.10589109361171722, 'seconds': 12.88}
+    epoch {'epoch': 7, 'loss': 0.08210928327507443, 'seconds': 12.81}
+    epoch {'epoch': 8, 'loss': 0.06676468781299061, 'seconds': 12.97}
+    epoch {'epoch': 9, 'loss': 0.05636804560820262, 'seconds': 12.35}
+    epoch {'epoch': 10, 'loss': 0.04926662915282779, 'seconds': 13.39}
+    epoch {'epoch': 16, 'loss': 0.04394534960962259, 'seconds': 71.75}
+    epoch {'epoch': 11, 'loss': 0.0438964123527209, 'seconds': 12.49}
+    epoch {'epoch': 12, 'loss': 0.039843940056032603, 'seconds': 12.62}
+    epoch {'epoch': 13, 'loss': 0.0366415239042706, 'seconds': 12.54}
+    epoch {'epoch': 14, 'loss': 0.03418392058047983, 'seconds': 12.38}
+    epoch {'epoch': 15, 'loss': 0.031947850435972217, 'seconds': 12.83}
+    epoch {'epoch': 16, 'loss': 0.030152394788132773, 'seconds': 12.9}
+    epoch {'epoch': 17, 'loss': 0.042240467424002975, 'seconds': 71.4}
+    epoch {'epoch': 17, 'loss': 0.028784013100796275, 'seconds': 13.01}
+    epoch {'epoch': 18, 'loss': 0.027425034162071017, 'seconds': 13.27}
+    epoch {'epoch': 19, 'loss': 0.026229528999990887, 'seconds': 12.89}
+    epoch {'epoch': 20, 'loss': 0.02532613545656204, 'seconds': 12.49}
+    epoch {'epoch': 21, 'loss': 0.024342505046063, 'seconds': 13.19}
+    epoch {'epoch': 18, 'loss': 0.04098571930080652, 'seconds': 70.32}
+    epoch {'epoch': 22, 'loss': 0.023497254244155354, 'seconds': 12.87}
+    epoch {'epoch': 23, 'loss': 0.02273480873141024, 'seconds': 12.8}
+    epoch {'epoch': 19, 'loss': 0.03974736904582152, 'seconds': 68.04}
+    epoch {'epoch': 24, 'loss': 0.0221776671293709, 'seconds': 13.07, 'raw_map@12': 0.007498180340766717, 'raw_map@12_mask_seen': 0.0021278855081993636}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-29_s0_016bfa430087
+    epoch {'epoch': 20, 'loss': 0.0385957475608358, 'seconds': 60.85}
+    epoch {'epoch': 21, 'loss': 0.037669393592155896, 'seconds': 54.85}
+    epoch {'epoch': 22, 'loss': 0.03673995823527758, 'seconds': 55.07}
+    epoch {'epoch': 23, 'loss': 0.035950206291790195, 'seconds': 54.69}
+    epoch {'epoch': 24, 'loss': 0.03528683281575258, 'seconds': 55.33}
+    epoch {'epoch': 25, 'loss': 0.03454505021755512, 'seconds': 54.94}
+    epoch {'epoch': 26, 'loss': 0.03402722340363722, 'seconds': 54.81}
+    epoch {'epoch': 27, 'loss': 0.033312420862225384, 'seconds': 55.25, 'raw_map@12': 0.00836655045385165, 'raw_map@12_mask_seen': 0.00467611435499093}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-29_s0_1de8f67ebab4
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.5703585629279797, 'seconds': 45.64}
+    epoch {'epoch': 2, 'loss': 0.29878459068445057, 'seconds': 44.06}
+    epoch {'epoch': 3, 'loss': 0.269399751837437, 'seconds': 44.27}
+    epoch {'epoch': 4, 'loss': 0.2394887079986242, 'seconds': 44.28}
+    epoch {'epoch': 5, 'loss': 0.21017272827716973, 'seconds': 44.24}
+    epoch {'epoch': 6, 'loss': 0.18641867488622665, 'seconds': 44.24}
+    epoch {'epoch': 7, 'loss': 0.1670488239480899, 'seconds': 43.86}
+    epoch {'epoch': 8, 'loss': 0.15145887405826494, 'seconds': 43.65}
+    epoch {'epoch': 9, 'loss': 0.13831349175709945, 'seconds': 44.41}
+    epoch {'epoch': 10, 'loss': 0.12722092351088157, 'seconds': 44.42}
+    epoch {'epoch': 11, 'loss': 0.11821623261158283, 'seconds': 44.31}
+    epoch {'epoch': 12, 'loss': 0.11025374898543724, 'seconds': 44.01}
+    epoch {'epoch': 13, 'loss': 0.10322779460022083, 'seconds': 43.54}
+    epoch {'epoch': 14, 'loss': 0.09713222444630586, 'seconds': 44.14}
+    epoch {'epoch': 15, 'loss': 0.09164477354631974, 'seconds': 43.83}
+    epoch {'epoch': 16, 'loss': 0.08671903438293017, 'seconds': 44.59}
+    epoch {'epoch': 17, 'loss': 0.08231339732614848, 'seconds': 44.23}
+    epoch {'epoch': 18, 'loss': 0.07830925887593856, 'seconds': 43.67}
+    epoch {'epoch': 19, 'loss': 0.07455597273432292, 'seconds': 44.19}
+    epoch {'epoch': 20, 'loss': 0.07105049705849244, 'seconds': 44.29}
+    epoch {'epoch': 21, 'loss': 0.06797413785870259, 'seconds': 43.56}
+    epoch {'epoch': 22, 'loss': 0.06518908991263463, 'seconds': 44.11}
+    epoch {'epoch': 23, 'loss': 0.06251520498727377, 'seconds': 43.92}
+    epoch {'epoch': 24, 'loss': 0.06009591435297178, 'seconds': 44.16}
+    epoch {'epoch': 25, 'loss': 0.057785276180276506, 'seconds': 43.85}
+    epoch {'epoch': 26, 'loss': 0.055902588611038834, 'seconds': 44.08}
+    epoch {'epoch': 27, 'loss': 0.05373047965650375, 'seconds': 44.77}
+    epoch {'epoch': 28, 'loss': 0.05205268133431673, 'seconds': 44.39}
+    epoch {'epoch': 29, 'loss': 0.050427304580807686, 'seconds': 43.64}
+    epoch {'epoch': 30, 'loss': 0.04896299741589106, 'seconds': 44.44, 'raw_map@12': 0.007590808541558838, 'raw_map@12_mask_seen': 0.00482334840681245}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-29_s0_e2ad9ba196e9
+    epoch {'epoch': 1, 'loss': 3.0861013764577194, 'seconds': 49.71}
+    epoch {'epoch': 2, 'loss': 1.3791795637433892, 'seconds': 49.13}
+    epoch {'epoch': 3, 'loss': 1.3446686814776934, 'seconds': 49.37}
+    epoch {'epoch': 4, 'loss': 1.3300593643613035, 'seconds': 50.38}
+    epoch {'epoch': 5, 'loss': 1.3220480792745235, 'seconds': 51.86}
+    epoch {'epoch': 6, 'loss': 1.316914723233496, 'seconds': 52.04}
+    epoch {'epoch': 7, 'loss': 1.3129815041273285, 'seconds': 52.23}
+    epoch {'epoch': 8, 'loss': 1.310284390310929, 'seconds': 54.04}
+    epoch {'epoch': 9, 'loss': 1.3080448729751564, 'seconds': 54.18}
+    epoch {'epoch': 10, 'loss': 1.3062399597269723, 'seconds': 52.48}
+    epoch {'epoch': 11, 'loss': 1.3046440101441783, 'seconds': 52.05}
+    epoch {'epoch': 12, 'loss': 1.3033093539470255, 'seconds': 52.19, 'raw_map@12': 0.012031995054567986, 'raw_map@12_mask_seen': 0.006805027456255465}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-29_s0_fb3c4a0d0897
+    epoch {'epoch': 1, 'loss': 4.429921175075682, 'seconds': 50.31}
+    epoch {'epoch': 2, 'loss': 1.4302363894369954, 'seconds': 53.08}
+    epoch {'epoch': 3, 'loss': 1.3681171927669629, 'seconds': 52.99}
+    epoch {'epoch': 4, 'loss': 1.3436187910981, 'seconds': 53.13}
+    epoch {'epoch': 5, 'loss': 1.330627839998606, 'seconds': 53.11}
+    epoch {'epoch': 6, 'loss': 1.322383910571064, 'seconds': 52.87}
+    epoch {'epoch': 7, 'loss': 1.3165313130007499, 'seconds': 53.56}
+    epoch {'epoch': 8, 'loss': 1.3122300553006052, 'seconds': 52.76}
+    epoch {'epoch': 9, 'loss': 1.3088982378936498, 'seconds': 52.63}
+    epoch {'epoch': 10, 'loss': 1.3062816209614145, 'seconds': 55.28}
+    epoch {'epoch': 11, 'loss': 1.3041476002504406, 'seconds': 54.32}
+    epoch {'epoch': 12, 'loss': 1.3024852716633288, 'seconds': 52.64, 'raw_map@12': 0.01147852435549634, 'raw_map@12_mask_seen': 0.0065034796022498615}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-29_s0_282337d26685
+    epoch {'epoch': 1, 'loss': 3.062853940635316, 'seconds': 67.39, 'raw_map@12': 0.006794017204613323, 'raw_map@12_mask_seen': 0.004249050322021173}
+    epoch {'epoch': 2, 'loss': 1.379276949749028, 'seconds': 92.46, 'raw_map@12': 0.009433895378285612, 'raw_map@12_mask_seen': 0.0053416413300869554}
+    epoch {'epoch': 3, 'loss': 1.3451375498517002, 'seconds': 70.27, 'raw_map@12': 0.01025077318628548, 'raw_map@12_mask_seen': 0.00564098555951723}
+    epoch {'epoch': 4, 'loss': 1.3302051198197113, 'seconds': 70.54, 'raw_map@12': 0.011014256828511544, 'raw_map@12_mask_seen': 0.006098064751031281}
+    epoch {'epoch': 5, 'loss': 1.3214289183555168, 'seconds': 57.71, 'raw_map@12': 0.011704750152118856, 'raw_map@12_mask_seen': 0.006346189241905466}
+    epoch {'epoch': 6, 'loss': 1.315815113130854, 'seconds': 83.58, 'raw_map@12': 0.01182584515387013, 'raw_map@12_mask_seen': 0.006545048332835508}
+    epoch {'epoch': 7, 'loss': 1.3118400888987447, 'seconds': 71.84, 'raw_map@12': 0.011813151983849492, 'raw_map@12_mask_seen': 0.006394739301826808}
+    epoch {'epoch': 8, 'loss': 1.3088322714547427, 'seconds': 66.79, 'raw_map@12': 0.011600358339220825, 'raw_map@12_mask_seen': 0.006322944056932056}
+    epoch {'epoch': 9, 'loss': 1.3068367903184277, 'seconds': 78.66, 'raw_map@12': 0.012251092588695644, 'raw_map@12_mask_seen': 0.0064760453263493795}
+    epoch {'epoch': 10, 'loss': 1.3051804016088693, 'seconds': 83.65, 'raw_map@12': 0.012052783992525512, 'raw_map@12_mask_seen': 0.00661892310996959}
+    epoch {'epoch': 11, 'loss': 1.303905860758618, 'seconds': 71.0, 'raw_map@12': 0.011772930945984481, 'raw_map@12_mask_seen': 0.006374825043994521}
+    epoch {'epoch': 12, 'loss': 1.3031649162756145, 'seconds': 59.92, 'raw_map@12': 0.01251600237528244, 'raw_map@12_mask_seen': 0.006765751963737398}
+    epoch {'epoch': 13, 'loss': 1.3025341971803106, 'seconds': 81.72, 'raw_map@12': 0.012121004535384785, 'raw_map@12_mask_seen': 0.006568850368704038}
+    epoch {'epoch': 14, 'loss': 1.3016161779452864, 'seconds': 75.0, 'raw_map@12': 0.01224643922332161, 'raw_map@12_mask_seen': 0.006555672501686931}
+    epoch {'epoch': 15, 'loss': 1.3009534598275003, 'seconds': 73.62, 'raw_map@12': 0.012556068265330617, 'raw_map@12_mask_seen': 0.006734059190587789}
+    epoch {'epoch': 16, 'loss': 1.3000372454606368, 'seconds': 64.2, 'raw_map@12': 0.012294473402169659, 'raw_map@12_mask_seen': 0.006540715594604476}
+    epoch {'epoch': 17, 'loss': 1.2998446351695896, 'seconds': 87.56, 'raw_map@12': 0.012475356078157454, 'raw_map@12_mask_seen': 0.00658168422645906}
+    epoch {'epoch': 18, 'loss': 1.2989992463127684, 'seconds': 73.17, 'raw_map@12': 0.012299253676040556, 'raw_map@12_mask_seen': 0.006721141439066313}
+    epoch {'epoch': 19, 'loss': 1.2983330895668015, 'seconds': 132.76, 'raw_map@12': 0.012118497386168034, 'raw_map@12_mask_seen': 0.006602490232637012}
+    epoch {'epoch': 20, 'loss': 1.2978986286107128, 'seconds': 133.88, 'raw_map@12': 0.012376807216726656, 'raw_map@12_mask_seen': 0.006595595381421993}
+    epoch {'epoch': 21, 'loss': 1.2975639494743136, 'seconds': 67.18, 'raw_map@12': 0.012537138222036228, 'raw_map@12_mask_seen': 0.006780251542232849}
+    epoch {'epoch': 22, 'loss': 1.2972779662130507, 'seconds': 100.25, 'raw_map@12': 0.012735186995334203, 'raw_map@12_mask_seen': 0.006845881683729609}
+    epoch {'epoch': 23, 'loss': 1.2968895227210957, 'seconds': 176.14, 'raw_map@12': 0.012637578051147737, 'raw_map@12_mask_seen': 0.006779797493027928}
+    epoch {'epoch': 24, 'loss': 1.296658557159466, 'seconds': 73.65, 'raw_map@12': 0.012891136368745754, 'raw_map@12_mask_seen': 0.0069177418020587005}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-22_s0_3b9a8a28c462
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.6941374123832326, 'seconds': 349.74}
+    epoch {'epoch': 1, 'loss': 3.07990941708951, 'seconds': 399.35}
+    epoch {'epoch': 1, 'loss': 0.3880452326699799, 'seconds': 410.69}
+    epoch {'epoch': 2, 'loss': 0.4261560669651738, 'seconds': 96.23}
+    epoch {'epoch': 3, 'loss': 0.18464636695973666, 'seconds': 98.58}
+    epoch {'epoch': 2, 'loss': 1.3816900015230662, 'seconds': 159.05}
+    epoch {'epoch': 2, 'loss': 0.24299086688780316, 'seconds': 157.9}
+    epoch {'epoch': 4, 'loss': 0.10862309739545539, 'seconds': 94.14}
+    epoch {'epoch': 3, 'loss': 1.3458333432387317, 'seconds': 157.58}
+    epoch {'epoch': 3, 'loss': 0.17186343231621912, 'seconds': 150.41}
+    epoch {'epoch': 5, 'loss': 0.07270969437596239, 'seconds': 92.47}
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.6941374123832326, 'seconds': 70.29}
+    epoch {'epoch': 1, 'loss': 0.3880452326699799, 'seconds': 98.99}
+    epoch {'epoch': 2, 'loss': 0.4261560669651738, 'seconds': 57.66}
+    epoch {'epoch': 3, 'loss': 0.18464636695973666, 'seconds': 55.44}
+    epoch {'epoch': 2, 'loss': 0.2429908663034439, 'seconds': 85.05}
+    epoch {'epoch': 4, 'loss': 0.10862309739545539, 'seconds': 55.92}
+    epoch {'epoch': 3, 'loss': 0.17186343173185983, 'seconds': 83.7}
+    epoch {'epoch': 5, 'loss': 0.07270969437596239, 'seconds': 53.32}
+    epoch {'epoch': 6, 'loss': 0.054009370027500905, 'seconds': 53.63}
+    epoch {'epoch': 4, 'loss': 0.13008362127869738, 'seconds': 84.63}
+    epoch {'epoch': 7, 'loss': 0.043303124864160276, 'seconds': 53.95}
+    epoch {'epoch': 5, 'loss': 0.108552480153009, 'seconds': 83.68}
+    epoch {'epoch': 8, 'loss': 0.03656544087477672, 'seconds': 56.15}
+    epoch {'epoch': 9, 'loss': 0.032210357027289305, 'seconds': 56.29}
+    epoch {'epoch': 6, 'loss': 0.09465722505952798, 'seconds': 84.75}
+    epoch {'epoch': 10, 'loss': 0.028939735181169747, 'seconds': 56.71}
+    epoch {'epoch': 7, 'loss': 0.08379945524182975, 'seconds': 84.22}
+    epoch {'epoch': 11, 'loss': 0.026383715513863683, 'seconds': 55.94}
+    epoch {'epoch': 12, 'loss': 0.02436237017405622, 'seconds': 50.98}
+    epoch {'epoch': 8, 'loss': 0.07531293364716511, 'seconds': 83.7}
+    epoch {'epoch': 13, 'loss': 0.022838527051570974, 'seconds': 48.61}
+    epoch {'epoch': 9, 'loss': 0.06805789003185198, 'seconds': 83.26}
+    epoch {'epoch': 14, 'loss': 0.02147456145396939, 'seconds': 48.64}
+    epoch {'epoch': 15, 'loss': 0.020538010333239296, 'seconds': 48.48}
+    epoch {'epoch': 10, 'loss': 0.062382978916752575, 'seconds': 83.42}
+    epoch {'epoch': 16, 'loss': 0.019543623169999063, 'seconds': 49.54}
+    epoch {'epoch': 17, 'loss': 0.01872502130306797, 'seconds': 47.64}
+    epoch {'epoch': 11, 'loss': 0.057904429733753204, 'seconds': 82.03}
+    epoch {'epoch': 18, 'loss': 0.017990527865419416, 'seconds': 48.52}
+    epoch {'epoch': 19, 'loss': 0.01735288858367705, 'seconds': 47.44}
+    epoch {'epoch': 12, 'loss': 0.05393999654288385, 'seconds': 83.48}
+    epoch {'epoch': 20, 'loss': 0.016829810213343597, 'seconds': 46.93}
+    epoch {'epoch': 13, 'loss': 0.05082846973456588, 'seconds': 82.07}
+    epoch {'epoch': 21, 'loss': 0.016325805071787335, 'seconds': 48.57}
+    epoch {'epoch': 22, 'loss': 0.01584300143805183, 'seconds': 48.47}
+    epoch {'epoch': 14, 'loss': 0.04806838922348677, 'seconds': 84.27}
+    epoch {'epoch': 23, 'loss': 0.015432703094901861, 'seconds': 49.3}
+    epoch {'epoch': 24, 'loss': 0.015095315917314571, 'seconds': 47.07}
+    epoch {'epoch': 15, 'loss': 0.045730569345109606, 'seconds': 83.64}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-08_s0_1ff975a521c7
+    epoch {'epoch': 16, 'loss': 0.04379683440806819, 'seconds': 89.14}
+    epoch {'epoch': 1, 'loss': 0.6942034292162633, 'seconds': 60.55}
+    epoch {'epoch': 2, 'loss': 0.42489343859693585, 'seconds': 50.49}
+    epoch {'epoch': 17, 'loss': 0.042292720546909406, 'seconds': 83.81}
+    epoch {'epoch': 3, 'loss': 0.18455190843372954, 'seconds': 49.16}
+    epoch {'epoch': 4, 'loss': 0.10896564223894886, 'seconds': 47.3}
+    epoch {'epoch': 18, 'loss': 0.04069256994361971, 'seconds': 82.97}
+    epoch {'epoch': 5, 'loss': 0.07315844898203425, 'seconds': 49.41}
+    epoch {'epoch': 6, 'loss': 0.05449698469145041, 'seconds': 48.4}
+    epoch {'epoch': 19, 'loss': 0.039571165673288645, 'seconds': 82.28}
+    epoch {'epoch': 7, 'loss': 0.04365609983420547, 'seconds': 46.76}
+    epoch {'epoch': 20, 'loss': 0.038314808233111515, 'seconds': 82.62}
+    epoch {'epoch': 8, 'loss': 0.03697599690663172, 'seconds': 51.64}
+    epoch {'epoch': 9, 'loss': 0.03232889908694608, 'seconds': 49.52}
+    epoch {'epoch': 21, 'loss': 0.037482319071012384, 'seconds': 82.68}
+    epoch {'epoch': 10, 'loss': 0.029115456215781616, 'seconds': 48.2}
+    epoch {'epoch': 11, 'loss': 0.026551456857180477, 'seconds': 50.03}
+    epoch {'epoch': 22, 'loss': 0.036574310531803204, 'seconds': 83.24}
+    epoch {'epoch': 12, 'loss': 0.02456883363443993, 'seconds': 47.98}
+    epoch {'epoch': 23, 'loss': 0.03566978280158604, 'seconds': 84.61}
+    epoch {'epoch': 13, 'loss': 0.023020538296002674, 'seconds': 50.62}
+    epoch {'epoch': 14, 'loss': 0.021636336886634428, 'seconds': 48.28}
+    epoch {'epoch': 24, 'loss': 0.03500640618742681, 'seconds': 85.37}
+    epoch {'epoch': 15, 'loss': 0.020428027208967536, 'seconds': 51.3}
+    epoch {'epoch': 16, 'loss': 0.019580760317872845, 'seconds': 47.91}
+    epoch {'epoch': 25, 'loss': 0.034366134261968086, 'seconds': 82.65}
+    epoch {'epoch': 17, 'loss': 0.01881503872116845, 'seconds': 48.29}
+    epoch {'epoch': 26, 'loss': 0.033744410995174855, 'seconds': 81.75}
+    epoch {'epoch': 18, 'loss': 0.018155925779366026, 'seconds': 48.79}
+    epoch {'epoch': 19, 'loss': 0.017430767750221433, 'seconds': 49.32}
+    epoch {'epoch': 27, 'loss': 0.03305263086861255, 'seconds': 82.8}
+    epoch {'epoch': 20, 'loss': 0.016958207784531016, 'seconds': 43.89}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-08_s0_d0b8199b4e82
+    epoch {'epoch': 21, 'loss': 0.01628889422178926, 'seconds': 52.48}
+    epoch {'epoch': 1, 'loss': 3.079719819992549, 'seconds': 89.55}
+    epoch {'epoch': 22, 'loss': 0.01597906666460867, 'seconds': 68.05}
+    epoch {'epoch': 23, 'loss': 0.015607346903861445, 'seconds': 66.29}
+    epoch {'epoch': 2, 'loss': 1.3811874014220886, 'seconds': 82.87}
+    epoch {'epoch': 24, 'loss': 0.015195585590988105, 'seconds': 65.85}
+    epoch {'epoch': 3, 'loss': 1.3456657900108855, 'seconds': 81.5}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-15_s0_a6b86d983402
+    epoch {'epoch': 4, 'loss': 1.3299858253856376, 'seconds': 85.12}
+    epoch {'epoch': 1, 'loss': 0.6935009548386324, 'seconds': 70.47}
+    epoch {'epoch': 2, 'loss': 0.41398549014792857, 'seconds': 66.16}
+    epoch {'epoch': 5, 'loss': 1.3209199589594685, 'seconds': 82.29}
+    epoch {'epoch': 3, 'loss': 0.18325937061923223, 'seconds': 67.15}
+    epoch {'epoch': 6, 'loss': 1.3150169371056883, 'seconds': 83.25}
+    epoch {'epoch': 4, 'loss': 0.1095231135818854, 'seconds': 67.62}
+    epoch {'epoch': 7, 'loss': 1.311012363690012, 'seconds': 84.33}
+    epoch {'epoch': 5, 'loss': 0.07364093770896926, 'seconds': 67.93}
+    epoch {'epoch': 8, 'loss': 1.3076521886547834, 'seconds': 82.37}
+    epoch {'epoch': 6, 'loss': 0.055112815416842986, 'seconds': 66.49}
+    epoch {'epoch': 7, 'loss': 0.044313620079706594, 'seconds': 66.43}
+    epoch {'epoch': 9, 'loss': 1.3054386572556922, 'seconds': 82.34}
+    epoch {'epoch': 8, 'loss': 0.03750669303377276, 'seconds': 69.07}
+    epoch {'epoch': 10, 'loss': 1.303928326350223, 'seconds': 84.88}
+    epoch {'epoch': 9, 'loss': 0.03284054293378609, 'seconds': 67.31}
+    epoch {'epoch': 11, 'loss': 1.3025352800276686, 'seconds': 83.62}
+    epoch {'epoch': 10, 'loss': 0.02941447869847411, 'seconds': 66.64}
+    epoch {'epoch': 12, 'loss': 1.3012375137725554, 'seconds': 134.19}
+    epoch {'epoch': 11, 'loss': 0.026896528899669647, 'seconds': 409.46}
+    epoch {'epoch': 13, 'loss': 1.3005927863409008, 'seconds': 415.09}
+    epoch {'epoch': 12, 'loss': 0.0248951712234434, 'seconds': 107.87}
+    epoch {'epoch': 13, 'loss': 0.023293171742551244, 'seconds': 106.77}
+    epoch {'epoch': 14, 'loss': 1.2996365000645997, 'seconds': 124.38}
+    epoch {'epoch': 14, 'loss': 0.021872064247908232, 'seconds': 99.05}
+    epoch {'epoch': 15, 'loss': 1.2991769447641135, 'seconds': 116.75}
+    epoch {'epoch': 15, 'loss': 0.020827391795199185, 'seconds': 95.47}
+    epoch {'epoch': 16, 'loss': 1.2984939761937393, 'seconds': 102.69}
+    epoch {'epoch': 16, 'loss': 0.01984945703659532, 'seconds': 67.44}
+    epoch {'epoch': 17, 'loss': 1.2980309566686488, 'seconds': 83.24}
+    epoch {'epoch': 17, 'loss': 0.018983239995189083, 'seconds': 66.94}
+    epoch {'epoch': 18, 'loss': 0.018289272506151675, 'seconds': 65.91}
+    epoch {'epoch': 18, 'loss': 1.2976526749845168, 'seconds': 81.69}
+    epoch {'epoch': 19, 'loss': 0.01771281844511339, 'seconds': 66.46}
+    epoch {'epoch': 19, 'loss': 1.2973669738670595, 'seconds': 82.12}
+    epoch {'epoch': 20, 'loss': 0.017089891943682746, 'seconds': 66.02}
+    epoch {'epoch': 20, 'loss': 1.2969166347829444, 'seconds': 82.04}
+    epoch {'epoch': 21, 'loss': 0.016768723432408664, 'seconds': 66.66}
+    epoch {'epoch': 21, 'loss': 1.296675439453337, 'seconds': 82.39}
+    epoch {'epoch': 22, 'loss': 0.016048494079918825, 'seconds': 66.41}
+    epoch {'epoch': 23, 'loss': 0.015760356790919618, 'seconds': 66.12}
+    epoch {'epoch': 22, 'loss': 1.2965020934667089, 'seconds': 81.99}
+    epoch {'epoch': 24, 'loss': 0.015468638851442963, 'seconds': 67.17}
+    epoch {'epoch': 23, 'loss': 1.2961567313461757, 'seconds': 82.69}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-22_s0_67607ad12911
+    epoch {'epoch': 24, 'loss': 1.2961016773250025, 'seconds': 84.65}
+    epoch {'epoch': 1, 'loss': 0.6930601861741807, 'seconds': 61.49}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-08_s0_0afc4bdcb0d5
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 2, 'loss': 0.4099368082296445, 'seconds': 48.39}
+    epoch {'epoch': 3, 'loss': 0.18174667937168176, 'seconds': 51.58}
+    epoch {'epoch': 1, 'loss': 0.3887978406513439, 'seconds': 90.2}
+    epoch {'epoch': 4, 'loss': 0.10872991503652743, 'seconds': 50.58}
+    epoch {'epoch': 5, 'loss': 0.07321971833058026, 'seconds': 49.23}
+    epoch {'epoch': 2, 'loss': 0.23657398188815398, 'seconds': 83.19}
+    epoch {'epoch': 6, 'loss': 0.054503474348553134, 'seconds': 51.96}
+    epoch {'epoch': 3, 'loss': 0.1642118484950533, 'seconds': 84.48}
+    epoch {'epoch': 7, 'loss': 0.043937015873582466, 'seconds': 49.02}
+    epoch {'epoch': 8, 'loss': 0.03724436786763622, 'seconds': 48.23}
+    epoch {'epoch': 4, 'loss': 0.12634722786206826, 'seconds': 84.22}
+    epoch {'epoch': 9, 'loss': 0.03273079931232088, 'seconds': 50.03}
+    epoch {'epoch': 10, 'loss': 0.02929621626249546, 'seconds': 47.53}
+    epoch {'epoch': 5, 'loss': 0.10727454196004306, 'seconds': 83.35}
+    epoch {'epoch': 11, 'loss': 0.026922046688299825, 'seconds': 48.77}
+    epoch {'epoch': 6, 'loss': 0.0938359320748086, 'seconds': 81.84}
+    epoch {'epoch': 12, 'loss': 0.02483105794009235, 'seconds': 49.0}
+    epoch {'epoch': 13, 'loss': 0.023223747350815414, 'seconds': 48.6}
+    epoch {'epoch': 7, 'loss': 0.0835592137540088, 'seconds': 82.64}
+    epoch {'epoch': 14, 'loss': 0.02199579393356175, 'seconds': 49.55}
+    epoch {'epoch': 15, 'loss': 0.020774817427143384, 'seconds': 48.95}
+    epoch {'epoch': 8, 'loss': 0.07521239668130875, 'seconds': 82.69}
+    epoch {'epoch': 16, 'loss': 0.019780929087872667, 'seconds': 48.8}
+    epoch {'epoch': 9, 'loss': 0.06826391114908106, 'seconds': 84.61}
+    epoch {'epoch': 17, 'loss': 0.019068042394493657, 'seconds': 51.34}
+    epoch {'epoch': 18, 'loss': 0.018370691290944093, 'seconds': 50.24}
+    epoch {'epoch': 10, 'loss': 0.06257215288339876, 'seconds': 82.95}
+    epoch {'epoch': 19, 'loss': 0.01777337410752684, 'seconds': 48.38}
+    epoch {'epoch': 20, 'loss': 0.01716277174030741, 'seconds': 47.55}
+    epoch {'epoch': 11, 'loss': 0.05797512383729804, 'seconds': 83.02}
+    epoch {'epoch': 21, 'loss': 0.016680703095749812, 'seconds': 48.54}
+    epoch {'epoch': 22, 'loss': 0.016291568314449653, 'seconds': 48.97}
+    epoch {'epoch': 12, 'loss': 0.054034549085532915, 'seconds': 82.2}
+    epoch {'epoch': 23, 'loss': 0.01581740257181767, 'seconds': 49.92}
+    epoch {'epoch': 13, 'loss': 0.050752302814348074, 'seconds': 83.49}
+    epoch {'epoch': 24, 'loss': 0.01553135324080569, 'seconds': 49.57}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-07-29_s0_9c2e257b068d
+    epoch {'epoch': 14, 'loss': 0.04812739146690743, 'seconds': 84.83}
+    epoch {'epoch': 1, 'loss': 0.6933086032230131, 'seconds': 56.74}
+    epoch {'epoch': 15, 'loss': 0.04563652731332125, 'seconds': 82.71}
+    epoch {'epoch': 2, 'loss': 0.4111966601704072, 'seconds': 50.93}
+    epoch {'epoch': 3, 'loss': 0.17989074817563014, 'seconds': 48.22}
+    epoch {'epoch': 16, 'loss': 0.043710361654851954, 'seconds': 83.98}
+    epoch {'epoch': 4, 'loss': 0.10738522769229793, 'seconds': 48.92}
+    epoch {'epoch': 5, 'loss': 0.07250857856435822, 'seconds': 50.93}
+    epoch {'epoch': 17, 'loss': 0.04228733092838643, 'seconds': 83.41}
+    epoch {'epoch': 6, 'loss': 0.0541447150767703, 'seconds': 50.33}
+    epoch {'epoch': 18, 'loss': 0.04083565454564843, 'seconds': 82.71}
+    epoch {'epoch': 7, 'loss': 0.04381646354613839, 'seconds': 49.7}
+    epoch {'epoch': 8, 'loss': 0.037255918593779386, 'seconds': 51.27}
+    epoch {'epoch': 19, 'loss': 0.03946504617730776, 'seconds': 82.98}
+    epoch {'epoch': 9, 'loss': 0.032697934301698976, 'seconds': 50.29}
+    epoch {'epoch': 10, 'loss': 0.029404061884221427, 'seconds': 50.34}
+    epoch {'epoch': 20, 'loss': 0.03845494014083171, 'seconds': 82.73}
+    epoch {'epoch': 11, 'loss': 0.0269392199485356, 'seconds': 51.39}
+    epoch {'epoch': 21, 'loss': 0.037343442732212594, 'seconds': 84.47}
+    epoch {'epoch': 12, 'loss': 0.024893770287778044, 'seconds': 49.96}
+    epoch {'epoch': 13, 'loss': 0.0232682531579511, 'seconds': 49.35}
+    epoch {'epoch': 22, 'loss': 0.036367713966790366, 'seconds': 81.96}
+    epoch {'epoch': 14, 'loss': 0.021997603269956277, 'seconds': 49.5}
+    epoch {'epoch': 15, 'loss': 0.020926039981564646, 'seconds': 50.0}
+    epoch {'epoch': 23, 'loss': 0.035691641051979625, 'seconds': 84.25}
+    epoch {'epoch': 16, 'loss': 0.019952296250475336, 'seconds': 50.34}
+    epoch {'epoch': 24, 'loss': 0.034969708206606845, 'seconds': 83.94}
+    epoch {'epoch': 17, 'loss': 0.019087565004790027, 'seconds': 50.14}
+    epoch {'epoch': 18, 'loss': 0.01843917745261104, 'seconds': 49.74}
+    epoch {'epoch': 25, 'loss': 0.034288240340994855, 'seconds': 82.44}
+    epoch {'epoch': 19, 'loss': 0.017789083261816344, 'seconds': 49.04}
+    epoch {'epoch': 20, 'loss': 0.017209638330223025, 'seconds': 49.39}
+    epoch {'epoch': 26, 'loss': 0.0337185319878307, 'seconds': 82.5}
+    epoch {'epoch': 21, 'loss': 0.016780590678527416, 'seconds': 50.12}
+    epoch {'epoch': 27, 'loss': 0.033222159042077905, 'seconds': 83.53}
+    epoch {'epoch': 22, 'loss': 0.016444764091124255, 'seconds': 49.81}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-15_s0_6eb4f691a1f0
+    epoch {'epoch': 23, 'loss': 0.01590764737712455, 'seconds': 48.07}
+    epoch {'epoch': 1, 'loss': 3.071444022549758, 'seconds': 89.03}
+    epoch {'epoch': 24, 'loss': 0.015553965424420868, 'seconds': 70.72}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-05_s0_733d4dfb8323
+    epoch {'epoch': 2, 'loss': 1.3825488244703057, 'seconds': 84.65}
+    epoch {'epoch': 1, 'loss': 0.6937192398125656, 'seconds': 71.25}
+    epoch {'epoch': 3, 'loss': 1.3462807916308541, 'seconds': 84.94}
+    epoch {'epoch': 2, 'loss': 0.41262304216552514, 'seconds': 69.06}
+    epoch {'epoch': 4, 'loss': 1.3305427624134336, 'seconds': 81.95}
+    epoch {'epoch': 3, 'loss': 0.17892594458513192, 'seconds': 69.88}
+    epoch {'epoch': 4, 'loss': 0.10628759268131505, 'seconds': 173.74}
+    epoch {'epoch': 5, 'loss': 1.3212823897754362, 'seconds': 195.95}
+    epoch {'epoch': 5, 'loss': 0.07179879878521532, 'seconds': 69.91}
+    epoch {'epoch': 6, 'loss': 1.3154697622181484, 'seconds': 91.35}
+    epoch {'epoch': 6, 'loss': 0.05377948877010096, 'seconds': 75.32}
+    epoch {'epoch': 7, 'loss': 1.3115156989844745, 'seconds': 92.08}
+    epoch {'epoch': 7, 'loss': 0.043554923499352576, 'seconds': 71.54}
+    epoch {'epoch': 8, 'loss': 1.3080821422762283, 'seconds': 86.39}
+    epoch {'epoch': 8, 'loss': 0.036973174555213886, 'seconds': 69.85}
+    epoch {'epoch': 9, 'loss': 0.03251460541898026, 'seconds': 68.13}
+    epoch {'epoch': 9, 'loss': 1.3057203619284534, 'seconds': 82.16}
+    epoch {'epoch': 10, 'loss': 0.029372325543128398, 'seconds': 69.13}
+    epoch {'epoch': 10, 'loss': 1.3035149538155757, 'seconds': 83.31}
+    epoch {'epoch': 11, 'loss': 0.026764731318855796, 'seconds': 68.15}
+    epoch {'epoch': 11, 'loss': 1.3017308220366417, 'seconds': 82.64}
+    epoch {'epoch': 12, 'loss': 0.024937306099400952, 'seconds': 68.34}
+    epoch {'epoch': 12, 'loss': 1.3005185547971057, 'seconds': 82.58}
+    epoch {'epoch': 13, 'loss': 0.023237638777197114, 'seconds': 67.65}
+    epoch {'epoch': 13, 'loss': 1.2994385334358158, 'seconds': 84.84}
+    epoch {'epoch': 14, 'loss': 0.022174875183371637, 'seconds': 69.99}
+    epoch {'epoch': 15, 'loss': 0.020916096259996898, 'seconds': 68.44}
+    epoch {'epoch': 14, 'loss': 1.2984922041473614, 'seconds': 83.4}
+    epoch {'epoch': 16, 'loss': 0.02001475122029453, 'seconds': 67.76}
+    epoch {'epoch': 15, 'loss': 1.2975952567564322, 'seconds': 82.89}
+    epoch {'epoch': 17, 'loss': 0.019196724612044608, 'seconds': 68.33}
+    epoch {'epoch': 16, 'loss': 1.2969564018386959, 'seconds': 82.3}
+    epoch {'epoch': 18, 'loss': 0.018469665787954795, 'seconds': 68.27}
+    epoch {'epoch': 17, 'loss': 1.2964112994323724, 'seconds': 82.63}
+    epoch {'epoch': 19, 'loss': 0.01795810636469205, 'seconds': 68.42}
+    epoch {'epoch': 18, 'loss': 1.296220897350678, 'seconds': 82.91}
+    epoch {'epoch': 20, 'loss': 0.01739683867854701, 'seconds': 68.08}
+    epoch {'epoch': 21, 'loss': 0.01687221925909191, 'seconds': 68.6}
+    epoch {'epoch': 19, 'loss': 1.2955991998039522, 'seconds': 82.78}
+    epoch {'epoch': 22, 'loss': 0.016448315987341335, 'seconds': 67.93}
+    epoch {'epoch': 20, 'loss': 1.2951598088563325, 'seconds': 82.59}
+    epoch {'epoch': 23, 'loss': 0.01603118081150174, 'seconds': 68.03}
+    epoch {'epoch': 21, 'loss': 1.2949431290119027, 'seconds': 84.37}
+    epoch {'epoch': 24, 'loss': 0.015723555244841654, 'seconds': 68.64}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-12_s0_5252614828cc
+    epoch {'epoch': 22, 'loss': 1.29479761121014, 'seconds': 78.5}
+    epoch {'epoch': 1, 'loss': 0.6938031979486452, 'seconds': 72.94}
+    epoch {'epoch': 23, 'loss': 1.2943377183792948, 'seconds': 87.65}
+    epoch {'epoch': 2, 'loss': 0.413333263098489, 'seconds': 69.03}
+    epoch {'epoch': 24, 'loss': 1.2943029521750418, 'seconds': 83.58}
+    epoch {'epoch': 3, 'loss': 0.17850587797080372, 'seconds': 54.36}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-15_s0_d9eb454c6ff9
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 4, 'loss': 0.10608713501452273, 'seconds': 54.38}
+    epoch {'epoch': 1, 'loss': 0.38203810441952485, 'seconds': 96.29}
+    epoch {'epoch': 5, 'loss': 0.07190231735824693, 'seconds': 60.99}
+    epoch {'epoch': 6, 'loss': 0.05376420105778861, 'seconds': 52.57}
+    epoch {'epoch': 2, 'loss': 0.22591049424730814, 'seconds': 85.28}
+    epoch {'epoch': 7, 'loss': 0.043497855596719905, 'seconds': 50.31}
+    epoch {'epoch': 8, 'loss': 0.037228890784947864, 'seconds': 51.94}
+    epoch {'epoch': 3, 'loss': 0.16104592411563948, 'seconds': 85.76}
+    epoch {'epoch': 9, 'loss': 0.032628186130742094, 'seconds': 49.68}
+    epoch {'epoch': 4, 'loss': 0.12624108920303675, 'seconds': 86.77}
+    epoch {'epoch': 10, 'loss': 0.029418085981380574, 'seconds': 54.63}
+    epoch {'epoch': 11, 'loss': 0.027041804441746246, 'seconds': 50.83}
+    epoch {'epoch': 5, 'loss': 0.10651749974259964, 'seconds': 83.97}
+    epoch {'epoch': 12, 'loss': 0.025159494819264886, 'seconds': 49.7}
+    epoch {'epoch': 13, 'loss': 0.0234749325359544, 'seconds': 50.12}
+    epoch {'epoch': 6, 'loss': 0.09311406514965571, 'seconds': 84.24}
+    epoch {'epoch': 14, 'loss': 0.02218168822885546, 'seconds': 51.09}
+    epoch {'epoch': 7, 'loss': 0.0828549863340763, 'seconds': 85.66}
+    epoch {'epoch': 15, 'loss': 0.021117274937865017, 'seconds': 50.22}
+    epoch {'epoch': 16, 'loss': 0.02025341547708562, 'seconds': 49.49}
+    epoch {'epoch': 8, 'loss': 0.07477291171940473, 'seconds': 85.27}
+    epoch {'epoch': 17, 'loss': 0.01930322983339605, 'seconds': 50.98}
+    epoch {'epoch': 18, 'loss': 0.01861160016678115, 'seconds': 49.11}
+    epoch {'epoch': 9, 'loss': 0.06781816769104737, 'seconds': 85.73}
+    epoch {'epoch': 19, 'loss': 0.018045415764951958, 'seconds': 49.86}
+    epoch {'epoch': 20, 'loss': 0.017475270153184026, 'seconds': 50.02}
+    epoch {'epoch': 10, 'loss': 0.062456289234642796, 'seconds': 84.38}
+    epoch {'epoch': 21, 'loss': 0.016924303901287116, 'seconds': 51.38}
+    epoch {'epoch': 11, 'loss': 0.05787209149163503, 'seconds': 84.47}
+    epoch {'epoch': 22, 'loss': 0.016486001216385944, 'seconds': 49.29}
+    epoch {'epoch': 23, 'loss': 0.01617621923037243, 'seconds': 48.31}
+    epoch {'epoch': 12, 'loss': 0.05407609317738276, 'seconds': 83.6}
+    epoch {'epoch': 24, 'loss': 0.015909373496018404, 'seconds': 48.71}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-19_s0_a7fac1a7b2a3
+    epoch {'epoch': 13, 'loss': 0.05092632269056944, 'seconds': 86.77}
+    epoch {'epoch': 1, 'loss': 0.6929274121264242, 'seconds': 63.61}
+    epoch {'epoch': 14, 'loss': 0.048256430130165354, 'seconds': 91.78}
+    epoch {'epoch': 2, 'loss': 0.40448056512846137, 'seconds': 51.45}
+    epoch {'epoch': 3, 'loss': 0.17985109517456227, 'seconds': 54.17}
+    epoch {'epoch': 15, 'loss': 0.04612172359170822, 'seconds': 84.33}
+    epoch {'epoch': 4, 'loss': 0.10814754007700479, 'seconds': 51.02}
+    epoch {'epoch': 5, 'loss': 0.07351435539927685, 'seconds': 51.88}
+    epoch {'epoch': 16, 'loss': 0.044351619166823536, 'seconds': 86.02}
+    epoch {'epoch': 6, 'loss': 0.05512699769493544, 'seconds': 49.82}
+    epoch {'epoch': 17, 'loss': 0.042706034146249294, 'seconds': 86.12}
+    epoch {'epoch': 7, 'loss': 0.0445657953057649, 'seconds': 52.08}
+    epoch {'epoch': 8, 'loss': 0.03797936522103143, 'seconds': 50.32}
+    epoch {'epoch': 18, 'loss': 0.041112859160281144, 'seconds': 84.08}
+    epoch {'epoch': 9, 'loss': 0.03346504657617155, 'seconds': 50.33}
+    epoch {'epoch': 10, 'loss': 0.030092126738174626, 'seconds': 50.56}
+    epoch {'epoch': 19, 'loss': 0.039915108193571754, 'seconds': 84.67}
+    epoch {'epoch': 11, 'loss': 0.027528198826882355, 'seconds': 49.58}
+    epoch {'epoch': 20, 'loss': 0.038645968915751346, 'seconds': 84.62}
+    epoch {'epoch': 12, 'loss': 0.02558949186888365, 'seconds': 49.86}
+    epoch {'epoch': 13, 'loss': 0.02390057785998819, 'seconds': 51.04}
+    epoch {'epoch': 21, 'loss': 0.037795138760254934, 'seconds': 85.87}
+    epoch {'epoch': 14, 'loss': 0.022705850151877077, 'seconds': 50.41}
+    epoch {'epoch': 15, 'loss': 0.021544195808259385, 'seconds': 50.76}
+    epoch {'epoch': 22, 'loss': 0.03681224362494854, 'seconds': 84.08}
+    epoch {'epoch': 16, 'loss': 0.020518009603585838, 'seconds': 50.41}
+    epoch {'epoch': 23, 'loss': 0.03604879996810968, 'seconds': 84.42}
+    epoch {'epoch': 17, 'loss': 0.01967848916010896, 'seconds': 48.64}
+    epoch {'epoch': 18, 'loss': 0.018916924257833017, 'seconds': 48.37}
+    epoch {'epoch': 24, 'loss': 0.03544244585702053, 'seconds': 84.35}
+    epoch {'epoch': 19, 'loss': 0.018246748137621664, 'seconds': 49.17}
+    epoch {'epoch': 20, 'loss': 0.017659445829197484, 'seconds': 55.77}
+    epoch {'epoch': 25, 'loss': 0.03453847113996744, 'seconds': 86.36}
+    epoch {'epoch': 21, 'loss': 0.017156775140221108, 'seconds': 50.25}
+    epoch {'epoch': 26, 'loss': 0.03397949347988917, 'seconds': 85.17}
+    epoch {'epoch': 22, 'loss': 0.016793134376266092, 'seconds': 50.13}
+    epoch {'epoch': 23, 'loss': 0.01628360956169243, 'seconds': 48.66}
+    epoch {'epoch': 27, 'loss': 0.033473264855834156, 'seconds': 82.63}
+    epoch {'epoch': 24, 'loss': 0.015996684979225666, 'seconds': 44.14}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-22_s0_1d9301d8cdbe
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-26_s0_80410bc3461b
+    epoch {'epoch': 1, 'loss': 3.063600657482393, 'seconds': 85.07}
+    epoch {'epoch': 1, 'loss': 0.6928663770077934, 'seconds': 73.94}
+    epoch {'epoch': 2, 'loss': 0.40415462473748437, 'seconds': 76.61}
+    epoch {'epoch': 2, 'loss': 1.3801001724836797, 'seconds': 98.0}
+    epoch {'epoch': 3, 'loss': 0.18028791832951874, 'seconds': 238.89}
+    epoch {'epoch': 3, 'loss': 1.3459311173985238, 'seconds': 255.8}
+    epoch {'epoch': 4, 'loss': 0.10831504575733288, 'seconds': 68.9}
+    epoch {'epoch': 4, 'loss': 1.330777098680289, 'seconds': 82.55}
+    epoch {'epoch': 5, 'loss': 0.07334621637150156, 'seconds': 68.3}
+    epoch {'epoch': 5, 'loss': 1.3217474933048199, 'seconds': 82.74}
+    epoch {'epoch': 6, 'loss': 0.05503759259454241, 'seconds': 69.15}
+    epoch {'epoch': 6, 'loss': 1.3159481888976545, 'seconds': 83.88}
+    epoch {'epoch': 7, 'loss': 0.04452428588110237, 'seconds': 68.83}
+    epoch {'epoch': 8, 'loss': 0.03794611871522357, 'seconds': 68.44}
+    epoch {'epoch': 7, 'loss': 1.3118058247680382, 'seconds': 82.19}
+    epoch {'epoch': 9, 'loss': 0.033478572977785497, 'seconds': 68.26}
+    epoch {'epoch': 8, 'loss': 1.3086723735977932, 'seconds': 83.05}
+    epoch {'epoch': 10, 'loss': 0.029946312627497133, 'seconds': 69.36}
+    epoch {'epoch': 9, 'loss': 1.306624432646328, 'seconds': 82.94}
+    epoch {'epoch': 11, 'loss': 0.027465716721446303, 'seconds': 68.12}
+    epoch {'epoch': 10, 'loss': 1.3048985954147676, 'seconds': 82.68}
+    epoch {'epoch': 12, 'loss': 0.025434448995885435, 'seconds': 68.44}
+    epoch {'epoch': 11, 'loss': 1.3033974737093594, 'seconds': 83.0}
+    epoch {'epoch': 13, 'loss': 0.023855519826423394, 'seconds': 69.26}
+    epoch {'epoch': 14, 'loss': 0.022587077735875136, 'seconds': 69.96}
+    epoch {'epoch': 12, 'loss': 1.3025387994053175, 'seconds': 84.71}
+    epoch {'epoch': 15, 'loss': 0.021400081754570276, 'seconds': 68.5}
+    epoch {'epoch': 13, 'loss': 1.301940084030615, 'seconds': 82.53}
+    epoch {'epoch': 16, 'loss': 0.020451979125749337, 'seconds': 68.43}
+    epoch {'epoch': 14, 'loss': 1.3009709009149457, 'seconds': 82.92}
+    epoch {'epoch': 17, 'loss': 0.01965959526668412, 'seconds': 68.7}
+    epoch {'epoch': 15, 'loss': 1.300246662549112, 'seconds': 82.86}
+    epoch {'epoch': 18, 'loss': 0.018944145167167758, 'seconds': 69.14}
+    epoch {'epoch': 19, 'loss': 0.0183027502359219, 'seconds': 68.24}
+    epoch {'epoch': 16, 'loss': 1.2992130849462407, 'seconds': 82.69}
+    epoch {'epoch': 20, 'loss': 0.017765600793938123, 'seconds': 69.23}
+    epoch {'epoch': 17, 'loss': 1.2989324962236604, 'seconds': 82.68}
+    epoch {'epoch': 21, 'loss': 0.017152829876195798, 'seconds': 69.41}
+    epoch {'epoch': 18, 'loss': 1.2981735909182723, 'seconds': 83.24}
+    epoch {'epoch': 22, 'loss': 0.016821063215463932, 'seconds': 68.79}
+    epoch {'epoch': 19, 'loss': 1.2976513006410546, 'seconds': 83.04}
+    epoch {'epoch': 23, 'loss': 0.016347024950500524, 'seconds': 68.73}
+    epoch {'epoch': 20, 'loss': 1.2972488781804319, 'seconds': 82.92}
+    epoch {'epoch': 24, 'loss': 0.016039835627982175, 'seconds': 69.11}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-09-02_s0_77e1801005cd
+    epoch {'epoch': 21, 'loss': 1.296783026366822, 'seconds': 82.2}
+    epoch {'epoch': 1, 'loss': 0.6934781865972393, 'seconds': 72.92}
+    epoch {'epoch': 22, 'loss': 1.296321230918224, 'seconds': 83.33}
+    epoch {'epoch': 2, 'loss': 0.41091960457698357, 'seconds': 67.72}
+    epoch {'epoch': 23, 'loss': 1.296061714314624, 'seconds': 82.64}
+    epoch {'epoch': 3, 'loss': 0.1794839824708003, 'seconds': 68.5}
+    epoch {'epoch': 24, 'loss': 1.2958016479432473, 'seconds': 83.57}
+    epoch {'epoch': 4, 'loss': 0.10672592027288563, 'seconds': 68.82}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-22_s0_1add3ac21b06
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 5, 'loss': 0.07227994559578738, 'seconds': 34.83}
+    epoch {'epoch': 6, 'loss': 0.05411174307348875, 'seconds': 62.85}
+    epoch {'epoch': 1, 'loss': 0.3840275389643816, 'seconds': 97.12}
+    epoch {'epoch': 7, 'loss': 0.043780243164807, 'seconds': 51.64}
+    epoch {'epoch': 8, 'loss': 0.03741514923507875, 'seconds': 51.37}
+    epoch {'epoch': 2, 'loss': 0.23120193384014642, 'seconds': 84.26}
+    epoch {'epoch': 9, 'loss': 0.03287852332347407, 'seconds': 49.69}
+    epoch {'epoch': 10, 'loss': 0.029537748646447964, 'seconds': 49.7}
+    epoch {'epoch': 3, 'loss': 0.16516680413713822, 'seconds': 84.86}
+    epoch {'epoch': 11, 'loss': 0.02717395315719944, 'seconds': 50.78}
+    epoch {'epoch': 4, 'loss': 0.13026424053196722, 'seconds': 85.66}
+    epoch {'epoch': 12, 'loss': 0.02521128625222394, 'seconds': 48.94}
+    epoch {'epoch': 13, 'loss': 0.0235486779326819, 'seconds': 49.37}
+    epoch {'epoch': 5, 'loss': 0.10925048690002698, 'seconds': 85.39}
+    epoch {'epoch': 14, 'loss': 0.022333255419859064, 'seconds': 50.36}
+    epoch {'epoch': 15, 'loss': 0.021164501722866914, 'seconds': 51.82}
+    epoch {'epoch': 6, 'loss': 0.09469827063954793, 'seconds': 86.08}
+    epoch {'epoch': 16, 'loss': 0.02020965754669511, 'seconds': 51.58}
+    epoch {'epoch': 7, 'loss': 0.08366022516901676, 'seconds': 84.56}
+    epoch {'epoch': 17, 'loss': 0.019431163715022914, 'seconds': 48.75}
+    epoch {'epoch': 18, 'loss': 0.018710314680576184, 'seconds': 51.31}
+    epoch {'epoch': 8, 'loss': 0.07498068978580144, 'seconds': 85.15}
+    epoch {'epoch': 19, 'loss': 0.01814723458088372, 'seconds': 50.78}
+    epoch {'epoch': 20, 'loss': 0.017619423649519822, 'seconds': 49.83}
+    epoch {'epoch': 9, 'loss': 0.06797649926291062, 'seconds': 86.43}
+    epoch {'epoch': 21, 'loss': 0.01701945126636551, 'seconds': 53.65}
+    epoch {'epoch': 10, 'loss': 0.06225474243267225, 'seconds': 85.83}
+    epoch {'epoch': 22, 'loss': 0.01655030493703583, 'seconds': 49.45}
+    epoch {'epoch': 23, 'loss': 0.01626770609093584, 'seconds': 48.27}
+    epoch {'epoch': 11, 'loss': 0.057699739933013916, 'seconds': 84.83}
+    epoch {'epoch': 24, 'loss': 0.015872855134800357, 'seconds': 50.02}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-09-09_s0_c9ebd2fc0e49
+    epoch {'epoch': 12, 'loss': 0.05382153628250727, 'seconds': 91.17}
+    epoch {'epoch': 1, 'loss': 0.6933805831576874, 'seconds': 60.07}
+    epoch {'epoch': 2, 'loss': 0.41033725216451294, 'seconds': 52.62}
+    epoch {'epoch': 13, 'loss': 0.05075312420152701, 'seconds': 84.91}
+    epoch {'epoch': 3, 'loss': 0.18017768507783338, 'seconds': 51.25}
+    epoch {'epoch': 14, 'loss': 0.04808463535916347, 'seconds': 86.7}
+    epoch {'epoch': 4, 'loss': 0.10779480598778031, 'seconds': 51.7}
+    epoch {'epoch': 5, 'loss': 0.07285164819412414, 'seconds': 48.97}
+    epoch {'epoch': 15, 'loss': 0.045864134740370974, 'seconds': 86.97}
+    epoch {'epoch': 6, 'loss': 0.05461723743304432, 'seconds': 53.6}
+    epoch {'epoch': 7, 'loss': 0.04397499093648073, 'seconds': 49.19}
+    epoch {'epoch': 16, 'loss': 0.043945349752902985, 'seconds': 86.33}
+    epoch {'epoch': 8, 'loss': 0.03730953015333713, 'seconds': 49.39}
+    epoch {'epoch': 17, 'loss': 0.04224046771056377, 'seconds': 85.84}
+    epoch {'epoch': 9, 'loss': 0.03274969684142344, 'seconds': 48.53}
+    epoch {'epoch': 10, 'loss': 0.02952490336659558, 'seconds': 49.92}
+    epoch {'epoch': 18, 'loss': 0.04098571915752613, 'seconds': 84.35}
+    epoch {'epoch': 11, 'loss': 0.026917838058067675, 'seconds': 48.57}
+    epoch {'epoch': 12, 'loss': 0.0249765686432971, 'seconds': 49.11}
+    epoch {'epoch': 19, 'loss': 0.03974736918910192, 'seconds': 85.46}
+    epoch {'epoch': 13, 'loss': 0.02333981795392059, 'seconds': 49.78}
+    epoch {'epoch': 14, 'loss': 0.022098655125619687, 'seconds': 54.55}
+    epoch {'epoch': 20, 'loss': 0.0385957478473966, 'seconds': 88.18}
+    epoch {'epoch': 15, 'loss': 0.020963963241203018, 'seconds': 49.72}
+    epoch {'epoch': 21, 'loss': 0.0376693933772353, 'seconds': 84.25}
+    epoch {'epoch': 16, 'loss': 0.020009069185623975, 'seconds': 49.07}
+    epoch {'epoch': 17, 'loss': 0.019141696366817115, 'seconds': 49.44}
+    epoch {'epoch': 22, 'loss': 0.036739958091997184, 'seconds': 86.94}
+    epoch {'epoch': 18, 'loss': 0.018414070047349237, 'seconds': 54.84}
+    epoch {'epoch': 19, 'loss': 0.017858527256242557, 'seconds': 49.94}
+    epoch {'epoch': 23, 'loss': 0.0359502060052294, 'seconds': 85.94}
+    epoch {'epoch': 20, 'loss': 0.017208364847736312, 'seconds': 49.89}
+    epoch {'epoch': 24, 'loss': 0.03528683310231337, 'seconds': 86.1}
+    epoch {'epoch': 21, 'loss': 0.01666292683543695, 'seconds': 48.43}
+    epoch {'epoch': 22, 'loss': 0.016203688764344536, 'seconds': 48.59}
+    epoch {'epoch': 25, 'loss': 0.03454505021755512, 'seconds': 84.43}
+    epoch {'epoch': 23, 'loss': 0.01592472626612053, 'seconds': 48.9}
+    epoch {'epoch': 24, 'loss': 0.015574308383436363, 'seconds': 49.45}
+    epoch {'epoch': 26, 'loss': 0.034027223475277424, 'seconds': 84.35}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-05_s1_354450eca653
+    epoch {'epoch': 1, 'loss': 0.6935985010480088, 'seconds': 66.2}
+    epoch {'epoch': 27, 'loss': 0.03331242079058519, 'seconds': 96.72}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-07-29_s0_bc8e4ae83ce3
+    epoch {'epoch': 2, 'loss': 0.41185764108304457, 'seconds': 38.0}
+    epoch {'epoch': 3, 'loss': 0.17939724084741995, 'seconds': 70.74}
+    epoch {'epoch': 1, 'loss': 3.088291159441052, 'seconds': 86.46}
+    epoch {'epoch': 4, 'loss': 0.10732865317629522, 'seconds': 70.55}
+    epoch {'epoch': 2, 'loss': 1.379515141358351, 'seconds': 87.51}
+    epoch {'epoch': 5, 'loss': 0.07265853814586042, 'seconds': 69.77}
+    epoch {'epoch': 3, 'loss': 1.3447745793263994, 'seconds': 83.82}
+    epoch {'epoch': 6, 'loss': 0.05422413608417658, 'seconds': 67.37}
+    epoch {'epoch': 4, 'loss': 1.3301866446197514, 'seconds': 81.78}
+    epoch {'epoch': 7, 'loss': 0.04411605480093854, 'seconds': 66.81}
+    epoch {'epoch': 8, 'loss': 0.03752579194031249, 'seconds': 67.79}
+    epoch {'epoch': 5, 'loss': 1.322104842413691, 'seconds': 82.61}
+    epoch {'epoch': 9, 'loss': 0.03292030509286992, 'seconds': 67.4}
+    epoch {'epoch': 6, 'loss': 1.3169633947460857, 'seconds': 82.56}
+    epoch {'epoch': 10, 'loss': 0.029658780944248276, 'seconds': 67.29}
+    epoch {'epoch': 7, 'loss': 1.3130248961332882, 'seconds': 81.9}
+    epoch {'epoch': 11, 'loss': 0.027195184949493464, 'seconds': 67.25}
+    epoch {'epoch': 8, 'loss': 1.3101356695731656, 'seconds': 82.87}
+    epoch {'epoch': 12, 'loss': 0.02529406053348137, 'seconds': 68.16}
+    epoch {'epoch': 9, 'loss': 1.3077726269399883, 'seconds': 83.1}
+    epoch {'epoch': 13, 'loss': 0.023495340786184097, 'seconds': 68.14}
+    epoch {'epoch': 14, 'loss': 0.022178421190756234, 'seconds': 68.05}
+    epoch {'epoch': 10, 'loss': 1.3057926187978413, 'seconds': 83.58}
+    epoch {'epoch': 15, 'loss': 0.021187080176560444, 'seconds': 68.91}
+    epoch {'epoch': 11, 'loss': 1.3040439753606092, 'seconds': 82.69}
+    epoch {'epoch': 16, 'loss': 0.020249515174580582, 'seconds': 67.5}
+    epoch {'epoch': 12, 'loss': 1.3025899743051368, 'seconds': 82.32}
+    epoch {'epoch': 17, 'loss': 0.019344644528103555, 'seconds': 67.54}
+    epoch {'epoch': 13, 'loss': 1.3011641108086216, 'seconds': 82.77}
+    epoch {'epoch': 18, 'loss': 0.018526125650614005, 'seconds': 67.49}
+    epoch {'epoch': 19, 'loss': 0.01804367819194839, 'seconds': 67.98}
+    epoch {'epoch': 14, 'loss': 1.3001543510214557, 'seconds': 82.91}
+    epoch {'epoch': 20, 'loss': 0.017520263908329173, 'seconds': 68.1}
+    epoch {'epoch': 15, 'loss': 1.299307275116663, 'seconds': 82.96}
+    epoch {'epoch': 21, 'loss': 0.016961222824213622, 'seconds': 66.77}
+    epoch {'epoch': 16, 'loss': 1.2984989449063848, 'seconds': 82.19}
+    epoch {'epoch': 22, 'loss': 0.016547296848811757, 'seconds': 67.83}
+    epoch {'epoch': 17, 'loss': 1.2977805177107553, 'seconds': 83.62}
+    epoch {'epoch': 23, 'loss': 0.01609459416078063, 'seconds': 68.48}
+    epoch {'epoch': 18, 'loss': 1.2973320246883138, 'seconds': 82.81}
+    epoch {'epoch': 24, 'loss': 0.015933047856188726, 'seconds': 67.5}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-12_s1_8ecdd98ebab3
+    epoch {'epoch': 19, 'loss': 1.2968355911983296, 'seconds': 82.85}
+    epoch {'epoch': 1, 'loss': 0.6937856874285578, 'seconds': 71.96}
+    epoch {'epoch': 20, 'loss': 1.2961063863952165, 'seconds': 82.93}
+    epoch {'epoch': 2, 'loss': 0.4133163069861437, 'seconds': 68.0}
+    epoch {'epoch': 21, 'loss': 1.2960986127916552, 'seconds': 83.73}
+    epoch {'epoch': 3, 'loss': 0.1781739790882061, 'seconds': 68.53}
+    epoch {'epoch': 4, 'loss': 0.10587653787212169, 'seconds': 70.14}
+    epoch {'epoch': 22, 'loss': 1.2955758722061792, 'seconds': 85.42}
+    epoch {'epoch': 5, 'loss': 0.071698446452054, 'seconds': 70.23}
+    epoch {'epoch': 23, 'loss': 1.2951691584432712, 'seconds': 85.7}
+    epoch {'epoch': 6, 'loss': 0.053797526377524045, 'seconds': 68.67}
+    epoch {'epoch': 24, 'loss': 1.2948831680331536, 'seconds': 83.28}
+    epoch {'epoch': 7, 'loss': 0.04356412253129003, 'seconds': 57.15}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-07-29_s0_5774d99b3ddb
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 8, 'loss': 0.03710441522071266, 'seconds': 49.87}
+    epoch {'epoch': 9, 'loss': 0.03268927700342016, 'seconds': 61.98}
+    epoch {'epoch': 1, 'loss': 0.3800895051011499, 'seconds': 97.96}
+    epoch {'epoch': 10, 'loss': 0.029519385814525838, 'seconds': 51.09}
+    epoch {'epoch': 2, 'loss': 0.2192193463725864, 'seconds': 89.42}
+    epoch {'epoch': 11, 'loss': 0.027066270704105954, 'seconds': 51.69}
+    epoch {'epoch': 12, 'loss': 0.025197692514874973, 'seconds': 49.88}
+    epoch {'epoch': 3, 'loss': 0.15438208461932415, 'seconds': 88.0}
+    epoch {'epoch': 13, 'loss': 0.023507613340837452, 'seconds': 52.87}
+    epoch {'epoch': 14, 'loss': 0.022193333939880343, 'seconds': 48.76}
+    epoch {'epoch': 4, 'loss': 0.12339363289329242, 'seconds': 87.17}
+    epoch {'epoch': 15, 'loss': 0.021132277703489535, 'seconds': 51.56}
+    epoch {'epoch': 16, 'loss': 0.020209017696286205, 'seconds': 51.28}
+    epoch {'epoch': 5, 'loss': 0.10527728497982025, 'seconds': 87.64}
+    epoch {'epoch': 17, 'loss': 0.019293988999815978, 'seconds': 51.97}
+    epoch {'epoch': 6, 'loss': 0.0925476167280719, 'seconds': 87.33}
+    epoch {'epoch': 18, 'loss': 0.018697976537630067, 'seconds': 49.73}
+    epoch {'epoch': 19, 'loss': 0.01802949851321554, 'seconds': 50.86}
+    epoch {'epoch': 7, 'loss': 0.08277456223402384, 'seconds': 86.65}
+    epoch {'epoch': 20, 'loss': 0.01744944698465702, 'seconds': 51.46}
+    epoch {'epoch': 21, 'loss': 0.01694289743944333, 'seconds': 48.62}
+    epoch {'epoch': 8, 'loss': 0.07500278274967985, 'seconds': 88.02}
+    epoch {'epoch': 22, 'loss': 0.016630013640661752, 'seconds': 50.35}
+    epoch {'epoch': 9, 'loss': 0.06802217310891961, 'seconds': 87.11}
+    epoch {'epoch': 23, 'loss': 0.016143550548094805, 'seconds': 53.11}
+    epoch {'epoch': 24, 'loss': 0.015764847946029607, 'seconds': 54.45}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-19_s1_5a61a2e5a833
+    epoch {'epoch': 10, 'loss': 0.06235472429192291, 'seconds': 88.83}
+    epoch {'epoch': 1, 'loss': 0.6932581183764169, 'seconds': 63.29}
+    epoch {'epoch': 11, 'loss': 0.05809191572216322, 'seconds': 96.06}
+    epoch {'epoch': 2, 'loss': 0.4079880821255018, 'seconds': 53.02}
+    epoch {'epoch': 3, 'loss': 0.18010556792734927, 'seconds': 48.97}
+    epoch {'epoch': 12, 'loss': 0.05418745428323746, 'seconds': 86.86}
+    epoch {'epoch': 4, 'loss': 0.10808058288651255, 'seconds': 50.33}
+    epoch {'epoch': 13, 'loss': 0.051195911149371345, 'seconds': 87.24}
+    epoch {'epoch': 5, 'loss': 0.07304091510837371, 'seconds': 51.33}
+    epoch {'epoch': 6, 'loss': 0.054774757044143835, 'seconds': 50.18}
+    epoch {'epoch': 14, 'loss': 0.04854996270447407, 'seconds': 87.89}
+    epoch {'epoch': 7, 'loss': 0.04414214580407683, 'seconds': 49.81}
+    epoch {'epoch': 8, 'loss': 0.037750511597139096, 'seconds': 49.06}
+    epoch {'epoch': 15, 'loss': 0.04639583615199575, 'seconds': 87.45}
+    epoch {'epoch': 9, 'loss': 0.033146158836008806, 'seconds': 49.83}
+    epoch {'epoch': 10, 'loss': 0.02983865635645277, 'seconds': 48.74}
+    epoch {'epoch': 16, 'loss': 0.0442918560836675, 'seconds': 86.18}
+    epoch {'epoch': 11, 'loss': 0.027293681158280035, 'seconds': 50.46}
+    epoch {'epoch': 17, 'loss': 0.0427007294910134, 'seconds': 87.52}
+    epoch {'epoch': 12, 'loss': 0.025419890182092786, 'seconds': 50.68}
+    epoch {'epoch': 13, 'loss': 0.023719149224354693, 'seconds': 49.81}
+    epoch {'epoch': 18, 'loss': 0.04130624396339903, 'seconds': 87.25}
+    epoch {'epoch': 14, 'loss': 0.022404161505928298, 'seconds': 50.05}
+    epoch {'epoch': 15, 'loss': 0.021260125241857372, 'seconds': 49.33}
+    epoch {'epoch': 19, 'loss': 0.039952100026157664, 'seconds': 86.54}
+    epoch {'epoch': 16, 'loss': 0.020413861952651786, 'seconds': 51.87}
+    epoch {'epoch': 17, 'loss': 0.019557209645907552, 'seconds': 50.14}
+    epoch {'epoch': 20, 'loss': 0.03896756435059152, 'seconds': 86.68}
+    epoch {'epoch': 18, 'loss': 0.018842139105611253, 'seconds': 49.7}
+    epoch {'epoch': 21, 'loss': 0.03802032635178206, 'seconds': 181.01}
+    epoch {'epoch': 19, 'loss': 0.0181648772811728, 'seconds': 145.92}
+    epoch {'epoch': 20, 'loss': 0.017765513895835094, 'seconds': 55.59}
+    epoch {'epoch': 22, 'loss': 0.037004027867092275, 'seconds': 93.95}
+    epoch {'epoch': 21, 'loss': 0.01700102741707046, 'seconds': 52.78}
+    epoch {'epoch': 22, 'loss': 0.016613484298775218, 'seconds': 143.13}
+    epoch {'epoch': 23, 'loss': 0.03629082813858986, 'seconds': 183.47}
+    epoch {'epoch': 23, 'loss': 0.016342151549838063, 'seconds': 52.61}
+    epoch {'epoch': 24, 'loss': 0.03533868245639891, 'seconds': 88.91}
+    epoch {'epoch': 24, 'loss': 0.01588825783077276, 'seconds': 52.29}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-26_s1_39326984a424
+    epoch {'epoch': 25, 'loss': 0.0347840890710084, 'seconds': 93.42}
+    epoch {'epoch': 1, 'loss': 0.6934286921236996, 'seconds': 64.88}
+    epoch {'epoch': 2, 'loss': 0.4088186758085036, 'seconds': 52.65}
+    epoch {'epoch': 26, 'loss': 0.03430238000626834, 'seconds': 88.36}
+    epoch {'epoch': 3, 'loss': 0.17990208987339001, 'seconds': 51.37}
+    epoch {'epoch': 4, 'loss': 0.10775320928001628, 'seconds': 51.13}
+    epoch {'epoch': 27, 'loss': 0.033678473799296144, 'seconds': 87.03}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-05_s0_24f1e9f83a16
+    epoch {'epoch': 5, 'loss': 0.07295139039486227, 'seconds': 41.59}
+    epoch {'epoch': 6, 'loss': 0.05481747668149046, 'seconds': 72.27}
+    epoch {'epoch': 1, 'loss': 3.072200497865764, 'seconds': 87.83}
+    epoch {'epoch': 7, 'loss': 0.04449830525183062, 'seconds': 68.82}
+    epoch {'epoch': 2, 'loss': 1.3805933875568979, 'seconds': 82.8}
+    epoch {'epoch': 8, 'loss': 0.037918359119917304, 'seconds': 68.42}
+    epoch {'epoch': 3, 'loss': 1.345341856286427, 'seconds': 83.91}
+    epoch {'epoch': 9, 'loss': 0.03336601409221619, 'seconds': 69.16}
+    epoch {'epoch': 4, 'loss': 1.3303415106468075, 'seconds': 82.71}
+    epoch {'epoch': 10, 'loss': 0.030177477567933254, 'seconds': 68.4}
+    epoch {'epoch': 5, 'loss': 1.3217945810110963, 'seconds': 82.83}
+    epoch {'epoch': 11, 'loss': 0.027517493718037023, 'seconds': 68.46}
+    epoch {'epoch': 12, 'loss': 0.025599360286734752, 'seconds': 69.23}
+    epoch {'epoch': 6, 'loss': 1.3161532561946012, 'seconds': 83.99}
+    epoch {'epoch': 13, 'loss': 0.02404830140442076, 'seconds': 68.2}
+    epoch {'epoch': 7, 'loss': 1.3121424082394786, 'seconds': 83.09}
+    epoch {'epoch': 14, 'loss': 0.0226892334203555, 'seconds': 69.88}
+    epoch {'epoch': 8, 'loss': 1.3092484339978785, 'seconds': 83.66}
+    epoch {'epoch': 15, 'loss': 0.021473335696847787, 'seconds': 69.22}
+    epoch {'epoch': 9, 'loss': 1.3069307466632156, 'seconds': 83.98}
+    epoch {'epoch': 16, 'loss': 0.020599048195555456, 'seconds': 68.83}
+    epoch {'epoch': 10, 'loss': 1.304913729593174, 'seconds': 84.7}
+    epoch {'epoch': 17, 'loss': 0.019743293602491767, 'seconds': 69.26}
+    epoch {'epoch': 18, 'loss': 0.019003561800651846, 'seconds': 71.7}
+    epoch {'epoch': 11, 'loss': 1.3034490803724512, 'seconds': 87.06}
+    epoch {'epoch': 19, 'loss': 0.018408295840567128, 'seconds': 69.89}
+    epoch {'epoch': 12, 'loss': 1.3018343126026317, 'seconds': 83.59}
+    epoch {'epoch': 20, 'loss': 0.017748306103120667, 'seconds': 69.38}
+    epoch {'epoch': 13, 'loss': 1.3005981982125876, 'seconds': 83.68}
+    epoch {'epoch': 21, 'loss': 0.017319280265047796, 'seconds': 69.08}
+    epoch {'epoch': 14, 'loss': 1.3002588158349742, 'seconds': 83.23}
+    epoch {'epoch': 22, 'loss': 0.016834958119781366, 'seconds': 68.46}
+    epoch {'epoch': 23, 'loss': 0.01653303849366559, 'seconds': 68.7}
+    epoch {'epoch': 15, 'loss': 1.2992928431153865, 'seconds': 83.31}
+    epoch {'epoch': 24, 'loss': 0.016148306752944215, 'seconds': 68.42}
+    epoch {'epoch': 16, 'loss': 1.298450243835883, 'seconds': 81.69}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-09-02_s1_cf4355e0174f
+    epoch {'epoch': 17, 'loss': 1.2976079203070936, 'seconds': 85.24}
+    epoch {'epoch': 1, 'loss': 0.6933939094251057, 'seconds': 72.41}
+    epoch {'epoch': 18, 'loss': 1.2968220999706872, 'seconds': 84.89}
+    epoch {'epoch': 2, 'loss': 0.40819853277138946, 'seconds': 69.73}
+    epoch {'epoch': 3, 'loss': 0.17935310662636217, 'seconds': 68.61}
+    epoch {'epoch': 19, 'loss': 1.2964237527529048, 'seconds': 83.18}
+    epoch {'epoch': 4, 'loss': 0.10746539080128917, 'seconds': 68.0}
+    epoch {'epoch': 20, 'loss': 1.2960235519552563, 'seconds': 83.28}
+    epoch {'epoch': 5, 'loss': 0.07277128669732022, 'seconds': 68.77}
+    epoch {'epoch': 21, 'loss': 1.295436995082781, 'seconds': 82.54}
+    epoch {'epoch': 6, 'loss': 0.05469414675256835, 'seconds': 67.99}
+    epoch {'epoch': 22, 'loss': 1.295301826174197, 'seconds': 86.63}
+    epoch {'epoch': 7, 'loss': 0.0441458858286013, 'seconds': 70.95}
+    epoch {'epoch': 8, 'loss': 0.037614831639418624, 'seconds': 68.37}
+    epoch {'epoch': 23, 'loss': 1.2949375157658767, 'seconds': 82.85}
+    epoch {'epoch': 9, 'loss': 0.0330689153238639, 'seconds': 68.0}
+    epoch {'epoch': 24, 'loss': 1.2947054030390768, 'seconds': 82.81}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-05_s0_c685f60340f7
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 10, 'loss': 0.029800969202352583, 'seconds': 46.97}
+    epoch {'epoch': 11, 'loss': 0.027273542006095906, 'seconds': 62.5}
+    epoch {'epoch': 1, 'loss': 0.3826333391216566, 'seconds': 97.88}
+    epoch {'epoch': 12, 'loss': 0.025310932469712395, 'seconds': 54.12}
+    epoch {'epoch': 13, 'loss': 0.02368941230541271, 'seconds': 52.08}
+    epoch {'epoch': 2, 'loss': 0.22847561678796444, 'seconds': 88.53}
+    epoch {'epoch': 14, 'loss': 0.022387832297750238, 'seconds': 49.28}
+    epoch {'epoch': 15, 'loss': 0.021377512912775547, 'seconds': 52.24}
+    epoch {'epoch': 3, 'loss': 0.16056791313414304, 'seconds': 87.94}
+    epoch {'epoch': 16, 'loss': 0.020179537827816774, 'seconds': 48.91}
+    epoch {'epoch': 4, 'loss': 0.12626967579126358, 'seconds': 87.84}
+    epoch {'epoch': 17, 'loss': 0.019441290719012887, 'seconds': 51.7}
+    epoch {'epoch': 18, 'loss': 0.018743968516025902, 'seconds': 50.75}
+    epoch {'epoch': 5, 'loss': 0.10741270460047812, 'seconds': 87.63}
+    epoch {'epoch': 19, 'loss': 0.018142701205709634, 'seconds': 49.05}
+    epoch {'epoch': 20, 'loss': 0.017616769331858826, 'seconds': 49.9}
+    epoch {'epoch': 6, 'loss': 0.09344458973632669, 'seconds': 86.82}
+    epoch {'epoch': 21, 'loss': 0.0171475429900588, 'seconds': 51.21}
+    epoch {'epoch': 22, 'loss': 0.016583845908929296, 'seconds': 51.19}
+    epoch {'epoch': 7, 'loss': 0.08290530431945368, 'seconds': 87.46}
+    epoch {'epoch': 23, 'loss': 0.01619534677922515, 'seconds': 50.18}
+    epoch {'epoch': 8, 'loss': 0.0746705950993412, 'seconds': 87.63}
+    epoch {'epoch': 24, 'loss': 0.015787655984069098, 'seconds': 50.88}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-09-09_s1_5335ffe84bb6
+    epoch {'epoch': 9, 'loss': 0.06776010793335033, 'seconds': 91.36}
+    epoch {'epoch': 1, 'loss': 0.6935878037552845, 'seconds': 60.36}
+    epoch {'epoch': 2, 'loss': 0.41234137576633534, 'seconds': 50.29}
+    epoch {'epoch': 10, 'loss': 0.062459497308393695, 'seconds': 88.98}
+    epoch {'epoch': 3, 'loss': 0.17928036076499057, 'seconds': 49.33}
+    epoch {'epoch': 4, 'loss': 0.10698597524359574, 'seconds': 48.31}
+    epoch {'epoch': 11, 'loss': 0.05805262360932692, 'seconds': 88.19}
+    epoch {'epoch': 5, 'loss': 0.0724222741149775, 'seconds': 51.47}
+    epoch {'epoch': 12, 'loss': 0.05424198979195559, 'seconds': 88.25}
+    epoch {'epoch': 6, 'loss': 0.05409114907422327, 'seconds': 49.16}
+    epoch {'epoch': 7, 'loss': 0.043657055413594964, 'seconds': 48.75}
+    epoch {'epoch': 13, 'loss': 0.0513302632519659, 'seconds': 87.15}
+    epoch {'epoch': 8, 'loss': 0.03720931550554558, 'seconds': 49.2}
+    epoch {'epoch': 9, 'loss': 0.03274446356428125, 'seconds': 48.71}
+    epoch {'epoch': 14, 'loss': 0.04846640331846363, 'seconds': 89.4}
+    epoch {'epoch': 10, 'loss': 0.02956310850801502, 'seconds': 53.02}
+    epoch {'epoch': 11, 'loss': 0.026903025272495707, 'seconds': 51.17}
+    epoch {'epoch': 15, 'loss': 0.04645023951834103, 'seconds': 93.11}
+    epoch {'epoch': 12, 'loss': 0.02496665526794932, 'seconds': 81.5}
+    epoch {'epoch': 13, 'loss': 0.0234825100465222, 'seconds': 61.22}
+    epoch {'epoch': 16, 'loss': 0.044569607121202184, 'seconds': 131.77}
+    epoch {'epoch': 14, 'loss': 0.022065304517568152, 'seconds': 52.52}
+    epoch {'epoch': 17, 'loss': 0.04274815117131989, 'seconds': 89.32}
+    epoch {'epoch': 15, 'loss': 0.020919464759724237, 'seconds': 50.73}
+    epoch {'epoch': 16, 'loss': 0.01995860086865101, 'seconds': 50.62}
+    epoch {'epoch': 18, 'loss': 0.04127452656064393, 'seconds': 88.49}
+    epoch {'epoch': 17, 'loss': 0.01915658390491774, 'seconds': 48.76}
+    epoch {'epoch': 18, 'loss': 0.018449324343202365, 'seconds': 49.49}
+    epoch {'epoch': 19, 'loss': 0.04022876159200128, 'seconds': 87.35}
+    epoch {'epoch': 19, 'loss': 0.017946717867223204, 'seconds': 48.12}
+    epoch {'epoch': 20, 'loss': 0.017359651340647358, 'seconds': 48.78}
+    epoch {'epoch': 20, 'loss': 0.039071713908101026, 'seconds': 87.58}
+    epoch {'epoch': 21, 'loss': 0.016870282841557394, 'seconds': 47.73}
+    epoch {'epoch': 21, 'loss': 0.03809656582351001, 'seconds': 87.06}
+    epoch {'epoch': 22, 'loss': 0.01633376439006417, 'seconds': 49.0}
+    epoch {'epoch': 23, 'loss': 0.01585724776464032, 'seconds': 48.58}
+    epoch {'epoch': 22, 'loss': 0.03726260596007671, 'seconds': 87.1}
+    epoch {'epoch': 24, 'loss': 0.015606861197009577, 'seconds': 48.08}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-05_s2_3b11e1674fe9
+    epoch {'epoch': 23, 'loss': 0.03643697837613664, 'seconds': 92.32}
+    epoch {'epoch': 1, 'loss': 0.6933081826801255, 'seconds': 59.56}
+    epoch {'epoch': 2, 'loss': 0.4082343593912283, 'seconds': 49.07}
+    epoch {'epoch': 24, 'loss': 0.03571867190723149, 'seconds': 86.92}
+    epoch {'epoch': 3, 'loss': 0.1798539381837052, 'seconds': 50.38}
+    epoch {'epoch': 4, 'loss': 0.10749423779954254, 'seconds': 48.01}
+    epoch {'epoch': 25, 'loss': 0.03500925131001562, 'seconds': 86.88}
+    epoch {'epoch': 5, 'loss': 0.07261549720359245, 'seconds': 51.41}
+    epoch {'epoch': 26, 'loss': 0.034544574483385625, 'seconds': 88.07}
+    epoch {'epoch': 6, 'loss': 0.054443348659259976, 'seconds': 51.07}
+    epoch {'epoch': 7, 'loss': 0.043828608596480655, 'seconds': 49.72}
+    epoch {'epoch': 27, 'loss': 0.03378794222788991, 'seconds': 87.69}
+    epoch {'epoch': 8, 'loss': 0.037202884954114994, 'seconds': 42.01}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-12_s0_5621d396a731
+    epoch {'epoch': 9, 'loss': 0.032689614721403554, 'seconds': 56.41}
+    epoch {'epoch': 1, 'loss': 3.0333494041899964, 'seconds': 87.7}
+    epoch {'epoch': 10, 'loss': 0.029535622877951473, 'seconds': 68.4}
+    epoch {'epoch': 2, 'loss': 1.3815051022358718, 'seconds': 81.99}
+    epoch {'epoch': 11, 'loss': 0.027057472488128374, 'seconds': 67.77}
+    epoch {'epoch': 12, 'loss': 0.02500189013442914, 'seconds': 67.53}
+    epoch {'epoch': 3, 'loss': 1.3465511210456615, 'seconds': 82.35}
+    epoch {'epoch': 13, 'loss': 0.02350927549115694, 'seconds': 66.99}
+    epoch {'epoch': 4, 'loss': 1.3314196238722196, 'seconds': 82.35}
+    epoch {'epoch': 14, 'loss': 0.02215072506875012, 'seconds': 67.83}
+    epoch {'epoch': 5, 'loss': 1.3231332389458321, 'seconds': 83.01}
+    epoch {'epoch': 15, 'loss': 0.02105330607263181, 'seconds': 66.9}
+    epoch {'epoch': 6, 'loss': 1.317330856251603, 'seconds': 82.13}
+    epoch {'epoch': 16, 'loss': 0.020059730216082088, 'seconds': 66.96}
+    epoch {'epoch': 17, 'loss': 0.01917377136417636, 'seconds': 67.77}
+    epoch {'epoch': 7, 'loss': 1.3136405012641648, 'seconds': 82.73}
+    epoch {'epoch': 18, 'loss': 0.0185790979823279, 'seconds': 68.42}
+    epoch {'epoch': 8, 'loss': 1.3107630678392146, 'seconds': 84.08}
+    epoch {'epoch': 19, 'loss': 0.018076896081256046, 'seconds': 68.13}
+    epoch {'epoch': 9, 'loss': 1.3085637860963877, 'seconds': 83.72}
+    epoch {'epoch': 20, 'loss': 0.017424179884801994, 'seconds': 68.55}
+    epoch {'epoch': 10, 'loss': 1.306620308749184, 'seconds': 84.86}
+    epoch {'epoch': 21, 'loss': 0.016879170896339446, 'seconds': 68.41}
+    epoch {'epoch': 11, 'loss': 1.3050424145796047, 'seconds': 84.34}
+    epoch {'epoch': 22, 'loss': 0.01648678275979967, 'seconds': 69.94}
+    epoch {'epoch': 23, 'loss': 0.016195971430268255, 'seconds': 68.42}
+    epoch {'epoch': 12, 'loss': 1.3035093721516973, 'seconds': 84.32}
+    epoch {'epoch': 24, 'loss': 0.015751956300610884, 'seconds': 67.23}
+    epoch {'epoch': 13, 'loss': 1.3019937567765043, 'seconds': 80.79}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-12_s2_9a792dac5cb0
+    epoch {'epoch': 14, 'loss': 1.301282857310951, 'seconds': 84.91}
+    epoch {'epoch': 1, 'loss': 0.6929637248634447, 'seconds': 71.92}
+    epoch {'epoch': 2, 'loss': 0.40439040701721857, 'seconds': 69.72}
+    epoch {'epoch': 15, 'loss': 1.3003749762231416, 'seconds': 84.36}
+    epoch {'epoch': 3, 'loss': 0.17945344975090477, 'seconds': 71.51}
+    epoch {'epoch': 16, 'loss': 1.299374028412402, 'seconds': 87.12}
+    epoch {'epoch': 4, 'loss': 0.10807414536075953, 'seconds': 69.07}
+    epoch {'epoch': 17, 'loss': 1.2983161768401312, 'seconds': 84.72}
+    epoch {'epoch': 5, 'loss': 0.07336506564566429, 'seconds': 68.83}
+    epoch {'epoch': 18, 'loss': 1.2976074383432676, 'seconds': 83.65}
+    epoch {'epoch': 6, 'loss': 0.05504562991977301, 'seconds': 68.1}
+    epoch {'epoch': 19, 'loss': 1.2970328875276447, 'seconds': 82.55}
+    epoch {'epoch': 7, 'loss': 0.044417310206673104, 'seconds': 67.8}
+    epoch {'epoch': 8, 'loss': 0.03797067737924573, 'seconds': 67.85}
+    epoch {'epoch': 20, 'loss': 1.2969653526039167, 'seconds': 82.19}
+    epoch {'epoch': 9, 'loss': 0.03333390927730441, 'seconds': 67.69}
+    epoch {'epoch': 21, 'loss': 1.2966191725837481, 'seconds': 82.92}
+    epoch {'epoch': 10, 'loss': 0.03003536821309979, 'seconds': 69.18}
+    epoch {'epoch': 22, 'loss': 1.2962874803581532, 'seconds': 84.24}
+    epoch {'epoch': 11, 'loss': 0.02742468468386935, 'seconds': 68.82}
+    epoch {'epoch': 23, 'loss': 1.2960268242012323, 'seconds': 82.86}
+    epoch {'epoch': 12, 'loss': 0.02538479513645031, 'seconds': 67.37}
+    epoch {'epoch': 13, 'loss': 0.023865882734422424, 'seconds': 67.75}
+    epoch {'epoch': 24, 'loss': 1.2959435310674787, 'seconds': 82.65}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-12_s0_204f46f035b2
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 14, 'loss': 0.022517707185648012, 'seconds': 40.17}
+    epoch {'epoch': 15, 'loss': 0.021447697861327067, 'seconds': 60.49}
+    epoch {'epoch': 1, 'loss': 0.3835676689192934, 'seconds': 96.94}
+    epoch {'epoch': 16, 'loss': 0.0204625684794382, 'seconds': 52.57}
+    epoch {'epoch': 17, 'loss': 0.01956168570980676, 'seconds': 48.84}
+    epoch {'epoch': 2, 'loss': 0.2314502017677955, 'seconds': 87.2}
+    epoch {'epoch': 18, 'loss': 0.01889261406082352, 'seconds': 49.51}
+    epoch {'epoch': 19, 'loss': 0.01831605253921685, 'seconds': 51.54}
+    epoch {'epoch': 3, 'loss': 0.16590786092686202, 'seconds': 90.3}
+    epoch {'epoch': 20, 'loss': 0.017546944615230774, 'seconds': 49.68}
+    epoch {'epoch': 4, 'loss': 0.13100122280840604, 'seconds': 87.41}
+    epoch {'epoch': 21, 'loss': 0.01716116677978501, 'seconds': 50.12}
+    epoch {'epoch': 22, 'loss': 0.01670142975646835, 'seconds': 49.65}
+    epoch {'epoch': 5, 'loss': 0.1108829841580031, 'seconds': 89.72}
+    epoch {'epoch': 23, 'loss': 0.01634663792578041, 'seconds': 50.41}
+    epoch {'epoch': 24, 'loss': 0.015887270690366873, 'seconds': 54.09}
+    epoch {'epoch': 6, 'loss': 0.09602180165502261, 'seconds': 90.62}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-19_s2_b2a2fb6de639
+    epoch {'epoch': 1, 'loss': 0.6929912998710038, 'seconds': 70.27}
+    epoch {'epoch': 7, 'loss': 0.08507370906618406, 'seconds': 101.54}
+    epoch {'epoch': 2, 'loss': 0.4044173463195, 'seconds': 52.97}
+    epoch {'epoch': 8, 'loss': 0.0758818600256488, 'seconds': 91.09}
+    epoch {'epoch': 3, 'loss': 0.1798853174836006, 'seconds': 54.29}
+    epoch {'epoch': 4, 'loss': 0.1080590214510009, 'seconds': 55.28}
+    epoch {'epoch': 9, 'loss': 0.06889588399878088, 'seconds': 94.53}
+    epoch {'epoch': 5, 'loss': 0.07324935497610637, 'seconds': 52.01}
+    epoch {'epoch': 6, 'loss': 0.054937654394515846, 'seconds': 53.57}
+    epoch {'epoch': 10, 'loss': 0.06287504549858705, 'seconds': 90.54}
+    epoch {'epoch': 7, 'loss': 0.04439171769146649, 'seconds': 54.87}
+    epoch {'epoch': 8, 'loss': 0.03787499415811221, 'seconds': 50.79}
+    epoch {'epoch': 11, 'loss': 0.05826126882490122, 'seconds': 91.2}
+    epoch {'epoch': 9, 'loss': 0.033271581984458946, 'seconds': 53.4}
+    epoch {'epoch': 12, 'loss': 0.054330321274838354, 'seconds': 87.78}
+    epoch {'epoch': 10, 'loss': 0.029899118024469266, 'seconds': 49.44}
+    epoch {'epoch': 11, 'loss': 0.027502856169001392, 'seconds': 50.75}
+    epoch {'epoch': 13, 'loss': 0.05138980196613186, 'seconds': 88.72}
+    epoch {'epoch': 12, 'loss': 0.02535114302475638, 'seconds': 48.96}
+    epoch {'epoch': 13, 'loss': 0.02379556032301823, 'seconds': 48.65}
+    epoch {'epoch': 14, 'loss': 0.0486921433289096, 'seconds': 87.59}
+    epoch {'epoch': 14, 'loss': 0.022349412394863256, 'seconds': 51.22}
+    epoch {'epoch': 15, 'loss': 0.021423707000102918, 'seconds': 48.8}
+    epoch {'epoch': 15, 'loss': 0.04652560375771433, 'seconds': 89.07}
+    epoch {'epoch': 16, 'loss': 0.020446708755356806, 'seconds': 49.96}
+    epoch {'epoch': 16, 'loss': 0.044574217062513785, 'seconds': 87.27}
+    epoch {'epoch': 17, 'loss': 0.019529450254268804, 'seconds': 49.15}
+    epoch {'epoch': 18, 'loss': 0.01888118112319202, 'seconds': 48.08}
+    epoch {'epoch': 17, 'loss': 0.04288425929141494, 'seconds': 87.5}
+    epoch {'epoch': 19, 'loss': 0.018258359939966985, 'seconds': 49.86}
+    epoch {'epoch': 20, 'loss': 0.017658268424401165, 'seconds': 50.09}
+    epoch {'epoch': 18, 'loss': 0.04146392172518766, 'seconds': 87.93}
+    epoch {'epoch': 21, 'loss': 0.017161527305911733, 'seconds': 49.58}
+    epoch {'epoch': 22, 'loss': 0.016585701373669336, 'seconds': 49.32}
+    epoch {'epoch': 19, 'loss': 0.040344949811697006, 'seconds': 87.94}
+    epoch {'epoch': 23, 'loss': 0.01637489733479495, 'seconds': 50.49}
+    epoch {'epoch': 24, 'loss': 0.015964542436501326, 'seconds': 48.04}
+    epoch {'epoch': 20, 'loss': 0.03922112967889264, 'seconds': 88.12}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-08-26_s2_3d135a6563df
+    epoch {'epoch': 21, 'loss': 0.038159886480502364, 'seconds': 93.75}
+    epoch {'epoch': 1, 'loss': 0.693526137882555, 'seconds': 60.11}
+    epoch {'epoch': 2, 'loss': 0.4108066633693489, 'seconds': 52.55}
+    epoch {'epoch': 22, 'loss': 0.03742227759563698, 'seconds': 87.37}
+    epoch {'epoch': 3, 'loss': 0.17968542961307535, 'seconds': 51.44}
+    epoch {'epoch': 4, 'loss': 0.10740244189198588, 'seconds': 49.71}
+    epoch {'epoch': 23, 'loss': 0.036559763874085445, 'seconds': 87.5}
+    epoch {'epoch': 5, 'loss': 0.07266177158330528, 'seconds': 50.21}
+    epoch {'epoch': 24, 'loss': 0.03578615385406422, 'seconds': 87.03}
+    epoch {'epoch': 6, 'loss': 0.054506655528861594, 'seconds': 49.23}
+    epoch {'epoch': 7, 'loss': 0.04411310894073735, 'seconds': 52.02}
+    epoch {'epoch': 25, 'loss': 0.03510494080354583, 'seconds': 89.62}
+    epoch {'epoch': 8, 'loss': 0.037604939962077026, 'seconds': 57.13}
+    epoch {'epoch': 9, 'loss': 0.03325290697683611, 'seconds': 50.62}
+    epoch {'epoch': 26, 'loss': 0.0345887819410495, 'seconds': 89.43}
+    epoch {'epoch': 10, 'loss': 0.02983960923367123, 'seconds': 52.3}
+    epoch {'epoch': 27, 'loss': 0.034019111392070665, 'seconds': 89.0}
+    epoch {'epoch': 11, 'loss': 0.027323264532455815, 'seconds': 50.79}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-19_s0_a155ae6d2c29
+    epoch {'epoch': 12, 'loss': 0.025323984785958636, 'seconds': 43.29}
+    epoch {'epoch': 13, 'loss': 0.02370096214482902, 'seconds': 76.4}
+    epoch {'epoch': 1, 'loss': 3.0212297337283394, 'seconds': 92.67}
+    epoch {'epoch': 14, 'loss': 0.02240190398770039, 'seconds': 69.96}
+    epoch {'epoch': 2, 'loss': 1.3799232628304399, 'seconds': 84.07}
+    epoch {'epoch': 15, 'loss': 0.021359796815075226, 'seconds': 68.95}
+    epoch {'epoch': 3, 'loss': 1.3459544031008899, 'seconds': 82.89}
+    epoch {'epoch': 16, 'loss': 0.020388989860165706, 'seconds': 69.17}
+    epoch {'epoch': 4, 'loss': 1.3306638023815707, 'seconds': 83.43}
+    epoch {'epoch': 17, 'loss': 0.019436212505777956, 'seconds': 69.57}
+    epoch {'epoch': 5, 'loss': 1.3226258250265537, 'seconds': 86.98}
+    epoch {'epoch': 18, 'loss': 0.01883221648965783, 'seconds': 71.75}
+    epoch {'epoch': 19, 'loss': 0.018247636876772968, 'seconds': 69.6}
+    epoch {'epoch': 6, 'loss': 1.3165915150934409, 'seconds': 83.26}
+    epoch {'epoch': 20, 'loss': 0.01766965398783555, 'seconds': 69.37}
+    epoch {'epoch': 7, 'loss': 1.3127402334716847, 'seconds': 83.54}
+    epoch {'epoch': 21, 'loss': 0.017187707445326265, 'seconds': 70.27}
+    epoch {'epoch': 8, 'loss': 1.3098649565536198, 'seconds': 85.71}
+    epoch {'epoch': 22, 'loss': 0.016701021341021072, 'seconds': 69.74}
+    epoch {'epoch': 9, 'loss': 1.3078330125308621, 'seconds': 82.96}
+    epoch {'epoch': 23, 'loss': 0.01634986288058506, 'seconds': 69.38}
+    epoch {'epoch': 10, 'loss': 1.306314329240713, 'seconds': 83.79}
+    epoch {'epoch': 24, 'loss': 0.015881896950304508, 'seconds': 69.39}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-09-02_s2_a35fcdb4b8e7
+    epoch {'epoch': 11, 'loss': 1.3049632041586332, 'seconds': 84.7}
+    epoch {'epoch': 1, 'loss': 0.6934639752473472, 'seconds': 75.02}
+    epoch {'epoch': 12, 'loss': 1.3038461776194137, 'seconds': 84.59}
+    epoch {'epoch': 2, 'loss': 0.41012019755424195, 'seconds': 68.67}
+    epoch {'epoch': 13, 'loss': 1.30290659002039, 'seconds': 83.83}
+    epoch {'epoch': 3, 'loss': 0.17875644880926833, 'seconds': 69.94}
+    epoch {'epoch': 14, 'loss': 1.302270011845901, 'seconds': 86.79}
+    epoch {'epoch': 4, 'loss': 0.10631728702980392, 'seconds': 70.31}
+    epoch {'epoch': 5, 'loss': 0.07179151148588028, 'seconds': 68.12}
+    epoch {'epoch': 15, 'loss': 1.301327449872374, 'seconds': 82.84}
+    epoch {'epoch': 6, 'loss': 0.053741307112054444, 'seconds': 68.31}
+    epoch {'epoch': 16, 'loss': 1.3008710333922429, 'seconds': 82.54}
+    epoch {'epoch': 7, 'loss': 0.0436659456793008, 'seconds': 68.09}
+    epoch {'epoch': 17, 'loss': 1.3006253800726129, 'seconds': 82.2}
+    epoch {'epoch': 8, 'loss': 0.03726576490081706, 'seconds': 68.73}
+    epoch {'epoch': 18, 'loss': 1.300324544654821, 'seconds': 83.6}
+    epoch {'epoch': 9, 'loss': 0.032791065021400466, 'seconds': 68.67}
+    epoch {'epoch': 10, 'loss': 0.029474066025665345, 'seconds': 69.02}
+    epoch {'epoch': 19, 'loss': 1.2998983527348948, 'seconds': 83.21}
+    epoch {'epoch': 11, 'loss': 0.02699919734677335, 'seconds': 69.09}
+    epoch {'epoch': 20, 'loss': 1.2994286005078195, 'seconds': 83.2}
+    epoch {'epoch': 12, 'loss': 0.02519140278323079, 'seconds': 68.14}
+    epoch {'epoch': 21, 'loss': 1.2990380983716365, 'seconds': 82.76}
+    epoch {'epoch': 13, 'loss': 0.02367847892543617, 'seconds': 68.33}
+    epoch {'epoch': 22, 'loss': 1.2987430789857983, 'seconds': 83.42}
+    epoch {'epoch': 14, 'loss': 0.02223557026020058, 'seconds': 69.18}
+    epoch {'epoch': 23, 'loss': 1.298031976208129, 'seconds': 85.02}
+    epoch {'epoch': 15, 'loss': 0.021252683113452117, 'seconds': 70.02}
+    epoch {'epoch': 16, 'loss': 0.020127618070340383, 'seconds': 72.28}
+    epoch {'epoch': 24, 'loss': 1.2974059993546656, 'seconds': 87.64}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-19_s0_2fc563724b30
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 17, 'loss': 0.019406802020967007, 'seconds': 43.79}
+    epoch {'epoch': 18, 'loss': 0.018677416246577677, 'seconds': 65.89}
+    epoch {'epoch': 1, 'loss': 0.3815618506017721, 'seconds': 99.79}
+    epoch {'epoch': 19, 'loss': 0.018047318066786625, 'seconds': 52.06}
+    epoch {'epoch': 20, 'loss': 0.017523814265106647, 'seconds': 49.87}
+    epoch {'epoch': 2, 'loss': 0.22785492128921006, 'seconds': 89.25}
+    epoch {'epoch': 21, 'loss': 0.017049086409761518, 'seconds': 48.92}
+    epoch {'epoch': 22, 'loss': 0.016668125563125424, 'seconds': 81.48}
+    epoch {'epoch': 3, 'loss': 0.16406589268513447, 'seconds': 119.17}
+    epoch {'epoch': 23, 'loss': 0.016170239177058048, 'seconds': 193.16}
+    epoch {'epoch': 4, 'loss': 0.12987691360824513, 'seconds': 231.43}
+    epoch {'epoch': 24, 'loss': 0.015870085952557483, 'seconds': 52.05}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/bpr/2020-09-09_s2_651ca6a264dc
+    epoch {'epoch': 5, 'loss': 0.10951917070262837, 'seconds': 85.88}
+    epoch {'epoch': 6, 'loss': 0.09525641180434317, 'seconds': 127.08}
+    epoch {'epoch': 7, 'loss': 0.08474497651716448, 'seconds': 100.38}
+    epoch {'epoch': 8, 'loss': 0.07625049465107468, 'seconds': 113.05}
+    epoch {'epoch': 9, 'loss': 0.06916883700298813, 'seconds': 122.19}
+    epoch {'epoch': 10, 'loss': 0.063509418365528, 'seconds': 104.11}
+    epoch {'epoch': 11, 'loss': 0.05894310737274728, 'seconds': 96.17}
+    epoch {'epoch': 12, 'loss': 0.05504563865515421, 'seconds': 105.37}
+    epoch {'epoch': 13, 'loss': 0.05186827241812112, 'seconds': 103.15}
+    epoch {'epoch': 14, 'loss': 0.04922547880208717, 'seconds': 110.19}
+    epoch {'epoch': 15, 'loss': 0.04705610815084205, 'seconds': 116.27}
+    epoch {'epoch': 16, 'loss': 0.0449071079492569, 'seconds': 107.81}
+    epoch {'epoch': 17, 'loss': 0.0433072695895186, 'seconds': 104.93}
+    epoch {'epoch': 18, 'loss': 0.0417133666012647, 'seconds': 115.67}
+    epoch {'epoch': 19, 'loss': 0.040578921940529124, 'seconds': 80.84}
+    epoch {'epoch': 20, 'loss': 0.03928064076967959, 'seconds': 101.42}
+    epoch {'epoch': 21, 'loss': 0.03837442587850229, 'seconds': 103.04}
+    epoch {'epoch': 22, 'loss': 0.03743230185981067, 'seconds': 105.35}
+    epoch {'epoch': 23, 'loss': 0.036749804146447275, 'seconds': 106.73}
+    epoch {'epoch': 24, 'loss': 0.03603262925204241, 'seconds': 93.17}
+    epoch {'epoch': 25, 'loss': 0.03534319427496982, 'seconds': 83.3}
+    epoch {'epoch': 26, 'loss': 0.03466365795652821, 'seconds': 94.61}
+    epoch {'epoch': 27, 'loss': 0.034190129348129594, 'seconds': 88.36}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-26_s0_b3d3a09c2411
+    epoch {'epoch': 1, 'loss': 3.037071162626284, 'seconds': 85.86}
+    epoch {'epoch': 2, 'loss': 1.3791571087356007, 'seconds': 89.27}
+    epoch {'epoch': 3, 'loss': 1.345504036693398, 'seconds': 85.05}
+    epoch {'epoch': 4, 'loss': 1.3308777990253693, 'seconds': 80.73}
+    epoch {'epoch': 5, 'loss': 1.3223766953792047, 'seconds': 69.89}
+    epoch {'epoch': 6, 'loss': 1.317005601322979, 'seconds': 70.46}
+    epoch {'epoch': 7, 'loss': 1.3128070051735694, 'seconds': 68.95}
+    epoch {'epoch': 8, 'loss': 1.3099994000163646, 'seconds': 68.39}
+    epoch {'epoch': 9, 'loss': 1.307774495641026, 'seconds': 68.7}
+    epoch {'epoch': 10, 'loss': 1.3059875638331842, 'seconds': 68.55}
+    epoch {'epoch': 11, 'loss': 1.3045302370491378, 'seconds': 68.84}
+    epoch {'epoch': 12, 'loss': 1.3033233201175656, 'seconds': 68.84}
+    epoch {'epoch': 13, 'loss': 1.301855182560212, 'seconds': 68.75}
+    epoch {'epoch': 14, 'loss': 1.3010673310341092, 'seconds': 68.73}
+    epoch {'epoch': 15, 'loss': 1.3001361921292927, 'seconds': 68.89}
+    epoch {'epoch': 16, 'loss': 1.299730394302158, 'seconds': 69.22}
+    epoch {'epoch': 17, 'loss': 1.2987976192771842, 'seconds': 68.92}
+    epoch {'epoch': 18, 'loss': 1.2984475858058404, 'seconds': 68.93}
+    epoch {'epoch': 19, 'loss': 1.2978360691857995, 'seconds': 73.72}
+    epoch {'epoch': 20, 'loss': 1.2972102229529565, 'seconds': 74.64}
+    epoch {'epoch': 21, 'loss': 1.2970421123504638, 'seconds': 382.85}
+    epoch {'epoch': 22, 'loss': 1.2967354812534577, 'seconds': 69.22}
+    epoch {'epoch': 23, 'loss': 1.2965548490384302, 'seconds': 69.92}
+    epoch {'epoch': 24, 'loss': 1.2962194078340443, 'seconds': 69.33}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-26_s0_8b8ca9a18f39
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.38181889829812227, 'seconds': 75.53}
+    epoch {'epoch': 2, 'loss': 0.2213758944913193, 'seconds': 71.67}
+    epoch {'epoch': 3, 'loss': 0.15880022860235637, 'seconds': 70.25}
+    epoch {'epoch': 4, 'loss': 0.12634035434435914, 'seconds': 69.03}
+    epoch {'epoch': 5, 'loss': 0.10783457576676651, 'seconds': 69.15}
+    epoch {'epoch': 6, 'loss': 0.09425838415821393, 'seconds': 68.49}
+    epoch {'epoch': 7, 'loss': 0.08368924329126323, 'seconds': 68.41}
+    epoch {'epoch': 8, 'loss': 0.0754229687154293, 'seconds': 70.36}
+    epoch {'epoch': 9, 'loss': 0.06873259307057769, 'seconds': 68.23}
+    epoch {'epoch': 10, 'loss': 0.06305237204112389, 'seconds': 68.93}
+    epoch {'epoch': 11, 'loss': 0.05855615271462335, 'seconds': 69.51}
+    epoch {'epoch': 12, 'loss': 0.05477568486498462, 'seconds': 68.85}
+    epoch {'epoch': 13, 'loss': 0.05175176387031873, 'seconds': 68.09}
+    epoch {'epoch': 14, 'loss': 0.0491143345694851, 'seconds': 68.19}
+    epoch {'epoch': 15, 'loss': 0.046980269322240795, 'seconds': 69.08}
+    epoch {'epoch': 16, 'loss': 0.04517248079732612, 'seconds': 69.03}
+    epoch {'epoch': 17, 'loss': 0.04354524971158416, 'seconds': 68.93}
+    epoch {'epoch': 18, 'loss': 0.04219994480135264, 'seconds': 68.6}
+    epoch {'epoch': 19, 'loss': 0.04086032482209029, 'seconds': 69.26}
+    epoch {'epoch': 20, 'loss': 0.03968258526314188, 'seconds': 71.61}
+    epoch {'epoch': 21, 'loss': 0.03864499947263135, 'seconds': 70.49}
+    epoch {'epoch': 22, 'loss': 0.037735886940801586, 'seconds': 69.62}
+    epoch {'epoch': 23, 'loss': 0.03694003282321824, 'seconds': 69.16}
+    epoch {'epoch': 24, 'loss': 0.03637147522358983, 'seconds': 69.01}
+    epoch {'epoch': 25, 'loss': 0.03565812269570651, 'seconds': 68.89}
+    epoch {'epoch': 26, 'loss': 0.03492011854218112, 'seconds': 68.38}
+    epoch {'epoch': 27, 'loss': 0.03449652323292361, 'seconds': 67.85}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-09-02_s0_868228ebdfc7
+    epoch {'epoch': 1, 'loss': 3.0647280091493667, 'seconds': 94.96}
+    epoch {'epoch': 2, 'loss': 1.3765126592787351, 'seconds': 79.35}
+    epoch {'epoch': 3, 'loss': 1.3429550629617883, 'seconds': 89.68}
+    epoch {'epoch': 4, 'loss': 1.3292856653618919, 'seconds': 127.04}
+    epoch {'epoch': 5, 'loss': 1.3212864175329475, 'seconds': 132.21}
+    epoch {'epoch': 6, 'loss': 1.3159175150632507, 'seconds': 135.74}
+    epoch {'epoch': 7, 'loss': 1.312342107952429, 'seconds': 127.82}
+    epoch {'epoch': 8, 'loss': 1.309410505576631, 'seconds': 101.91}
+    epoch {'epoch': 9, 'loss': 1.3069318756132924, 'seconds': 108.73}
+    epoch {'epoch': 10, 'loss': 1.3048855938487816, 'seconds': 102.1}
+    epoch {'epoch': 11, 'loss': 1.3031416749814184, 'seconds': 105.68}
+    epoch {'epoch': 12, 'loss': 1.3017943457272259, 'seconds': 98.65}
+    epoch {'epoch': 13, 'loss': 1.300362924340888, 'seconds': 111.63}
+    epoch {'epoch': 14, 'loss': 1.2999930165150093, 'seconds': 94.26}
+    epoch {'epoch': 15, 'loss': 1.29912599304174, 'seconds': 127.9}
+    epoch {'epoch': 16, 'loss': 1.2986495784550862, 'seconds': 409.18}
+    epoch {'epoch': 17, 'loss': 1.2979503209195298, 'seconds': 141.54}
+    epoch {'epoch': 18, 'loss': 1.297138428548009, 'seconds': 148.85}
+    epoch {'epoch': 19, 'loss': 1.2962469147865643, 'seconds': 146.13}
+    epoch {'epoch': 20, 'loss': 1.2954733240884482, 'seconds': 126.29}
+    epoch {'epoch': 21, 'loss': 1.2950887357961063, 'seconds': 92.48}
+    epoch {'epoch': 22, 'loss': 1.2946178068060883, 'seconds': 143.53}
+    epoch {'epoch': 23, 'loss': 1.2945321732243078, 'seconds': 150.63}
+    epoch {'epoch': 24, 'loss': 1.2940110534035687, 'seconds': 145.86}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-09-02_s0_b70e9c1535dd
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3816772558779087, 'seconds': 130.74}
+    epoch {'epoch': 2, 'loss': 0.22064429971407046, 'seconds': 119.83}
+    epoch {'epoch': 3, 'loss': 0.15975029738444202, 'seconds': 121.27}
+    epoch {'epoch': 4, 'loss': 0.1273478964027369, 'seconds': 104.75}
+    epoch {'epoch': 5, 'loss': 0.1078908808951108, 'seconds': 98.34}
+    epoch {'epoch': 6, 'loss': 0.09467061187298793, 'seconds': 114.91}
+    epoch {'epoch': 7, 'loss': 0.08412518942693495, 'seconds': 109.97}
+    epoch {'epoch': 8, 'loss': 0.07569256199980681, 'seconds': 111.22}
+    epoch {'epoch': 9, 'loss': 0.06899175314970736, 'seconds': 110.71}
+    epoch {'epoch': 10, 'loss': 0.06342571151425254, 'seconds': 112.22}
+    epoch {'epoch': 11, 'loss': 0.05883300550422579, 'seconds': 111.75}
+    epoch {'epoch': 12, 'loss': 0.0552657757587028, 'seconds': 114.17}
+    epoch {'epoch': 13, 'loss': 0.051858331797257906, 'seconds': 113.9}
+    epoch {'epoch': 14, 'loss': 0.04931036488346334, 'seconds': 114.32}
+    epoch {'epoch': 15, 'loss': 0.04693837941817518, 'seconds': 114.51}
+    epoch {'epoch': 16, 'loss': 0.04514176883506325, 'seconds': 115.34}
+    epoch {'epoch': 17, 'loss': 0.04338176372759747, 'seconds': 102.84}
+    epoch {'epoch': 18, 'loss': 0.042083159510819416, 'seconds': 97.99}
+    epoch {'epoch': 19, 'loss': 0.04077490594870639, 'seconds': 114.07}
+    epoch {'epoch': 20, 'loss': 0.039544888684209786, 'seconds': 113.9}
+    epoch {'epoch': 21, 'loss': 0.03840491435718986, 'seconds': 118.46}
+    epoch {'epoch': 22, 'loss': 0.037682332801369, 'seconds': 112.94}
+    epoch {'epoch': 23, 'loss': 0.03684480804598556, 'seconds': 218.7}
+    epoch {'epoch': 24, 'loss': 0.03614815598670042, 'seconds': 378.89}
+    epoch {'epoch': 25, 'loss': 0.03534047910065021, 'seconds': 115.35}
+    epoch {'epoch': 26, 'loss': 0.03479151744044052, 'seconds': 122.13}
+    epoch {'epoch': 27, 'loss': 0.03415625921960147, 'seconds': 115.81}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-09-09_s0_e15838effb09
+    epoch {'epoch': 1, 'loss': 3.0195665005457735, 'seconds': 116.03}
+    epoch {'epoch': 2, 'loss': 1.3728729950786511, 'seconds': 126.22}
+    epoch {'epoch': 3, 'loss': 1.3409752988867822, 'seconds': 148.57}
+    epoch {'epoch': 4, 'loss': 1.3270245001879732, 'seconds': 142.8}
+    epoch {'epoch': 5, 'loss': 1.3190086154423095, 'seconds': 150.66}
+    epoch {'epoch': 6, 'loss': 1.3136778544311831, 'seconds': 148.37}
+    epoch {'epoch': 7, 'loss': 1.3103071940452866, 'seconds': 126.33}
+    epoch {'epoch': 8, 'loss': 1.3071538346016809, 'seconds': 111.65}
+    epoch {'epoch': 9, 'loss': 1.3049616278880842, 'seconds': 148.0}
+    epoch {'epoch': 10, 'loss': 1.3028266301239115, 'seconds': 147.71}
+    epoch {'epoch': 11, 'loss': 1.300902716651362, 'seconds': 148.47}
+    epoch {'epoch': 12, 'loss': 1.299468458442786, 'seconds': 155.86}
+    epoch {'epoch': 13, 'loss': 1.2982463297077214, 'seconds': 156.65}
+    epoch {'epoch': 14, 'loss': 1.2971246677523318, 'seconds': 131.36}
+    epoch {'epoch': 15, 'loss': 1.2961349671545184, 'seconds': 107.76}
+    epoch {'epoch': 16, 'loss': 1.2954047503450368, 'seconds': 145.72}
+    epoch {'epoch': 17, 'loss': 1.2950777789569636, 'seconds': 144.6}
+    epoch {'epoch': 18, 'loss': 1.2947457543028609, 'seconds': 145.8}
+    epoch {'epoch': 19, 'loss': 1.29423418076553, 'seconds': 150.28}
+    epoch {'epoch': 20, 'loss': 1.2936452803982863, 'seconds': 149.95}
+    epoch {'epoch': 21, 'loss': 1.2931891473642005, 'seconds': 121.77}
+    epoch {'epoch': 22, 'loss': 1.2931555525321792, 'seconds': 113.25}
+    epoch {'epoch': 23, 'loss': 1.2928417680809676, 'seconds': 150.54}
+    epoch {'epoch': 24, 'loss': 1.292289005721018, 'seconds': 149.08}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-09-09_s0_b5fac94bbb21
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3813593865565534, 'seconds': 127.66}
+    epoch {'epoch': 2, 'loss': 0.22840147198371166, 'seconds': 116.12}
+    epoch {'epoch': 3, 'loss': 0.16499403344010408, 'seconds': 114.74}
+    epoch {'epoch': 4, 'loss': 0.12919473170109516, 'seconds': 111.79}
+    epoch {'epoch': 5, 'loss': 0.10902155851418117, 'seconds': 113.27}
+    epoch {'epoch': 6, 'loss': 0.09500744235965441, 'seconds': 100.69}
+    epoch {'epoch': 7, 'loss': 0.08435019541461512, 'seconds': 97.86}
+    epoch {'epoch': 8, 'loss': 0.0754552978389668, 'seconds': 112.87}
+    epoch {'epoch': 9, 'loss': 0.06859499750272283, 'seconds': 112.11}
+    epoch {'epoch': 10, 'loss': 0.06257963363292082, 'seconds': 109.73}
+    epoch {'epoch': 11, 'loss': 0.057834726740729134, 'seconds': 109.19}
+    epoch {'epoch': 12, 'loss': 0.054109983357056135, 'seconds': 111.3}
+    epoch {'epoch': 13, 'loss': 0.050765328320129866, 'seconds': 113.18}
+    epoch {'epoch': 14, 'loss': 0.04817447094422466, 'seconds': 111.14}
+    epoch {'epoch': 15, 'loss': 0.04585992432427856, 'seconds': 114.3}
+    epoch {'epoch': 16, 'loss': 0.04395786609570935, 'seconds': 111.36}
+    epoch {'epoch': 17, 'loss': 0.04228573629878602, 'seconds': 98.55}
+    epoch {'epoch': 18, 'loss': 0.040911040426987524, 'seconds': 105.71}
+    epoch {'epoch': 19, 'loss': 0.039893709052846116, 'seconds': 113.74}
+    epoch {'epoch': 20, 'loss': 0.03870563947086064, 'seconds': 109.83}
+    epoch {'epoch': 21, 'loss': 0.03760033353882016, 'seconds': 110.43}
+    epoch {'epoch': 22, 'loss': 0.03680988815876673, 'seconds': 110.53}
+    epoch {'epoch': 23, 'loss': 0.03600941710876969, 'seconds': 113.98}
+    epoch {'epoch': 24, 'loss': 0.03547651805686501, 'seconds': 112.66}
+    epoch {'epoch': 25, 'loss': 0.03468192382803503, 'seconds': 112.26}
+    epoch {'epoch': 26, 'loss': 0.03412012601236127, 'seconds': 113.84}
+    epoch {'epoch': 27, 'loss': 0.03351322730194847, 'seconds': 114.44}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-05_s1_d8108a363190
+    epoch {'epoch': 1, 'loss': 3.066218557050038, 'seconds': 108.56}
+    epoch {'epoch': 2, 'loss': 1.3791694457512615, 'seconds': 148.79}
+    epoch {'epoch': 3, 'loss': 1.3447598157717624, 'seconds': 148.74}
+    epoch {'epoch': 4, 'loss': 1.330220795263508, 'seconds': 147.27}
+    epoch {'epoch': 5, 'loss': 1.321690441401922, 'seconds': 153.84}
+    epoch {'epoch': 6, 'loss': 1.3161077873585292, 'seconds': 150.19}
+    epoch {'epoch': 7, 'loss': 1.312403869969879, 'seconds': 134.67}
+    epoch {'epoch': 8, 'loss': 1.3090648973298502, 'seconds': 460.22}
+    epoch {'epoch': 9, 'loss': 1.3066695394820245, 'seconds': 147.62}
+    epoch {'epoch': 10, 'loss': 1.3049728428438814, 'seconds': 149.92}
+    epoch {'epoch': 11, 'loss': 1.3034021631894113, 'seconds': 147.49}
+    epoch {'epoch': 12, 'loss': 1.3020956984010423, 'seconds': 157.2}
+    epoch {'epoch': 13, 'loss': 1.301047691024176, 'seconds': 152.02}
+    epoch {'epoch': 14, 'loss': 1.2998848551570779, 'seconds': 124.73}
+    epoch {'epoch': 15, 'loss': 1.2991127852865485, 'seconds': 113.47}
+    epoch {'epoch': 16, 'loss': 1.2980712260962144, 'seconds': 150.52}
+    epoch {'epoch': 17, 'loss': 1.297349819080883, 'seconds': 146.26}
+    epoch {'epoch': 18, 'loss': 1.2969744020999898, 'seconds': 152.9}
+    epoch {'epoch': 19, 'loss': 1.2965955807693197, 'seconds': 152.01}
+    epoch {'epoch': 20, 'loss': 1.2961297507333283, 'seconds': 133.2}
+    epoch {'epoch': 21, 'loss': 1.295684384259279, 'seconds': 102.64}
+    epoch {'epoch': 22, 'loss': 1.2954156842474802, 'seconds': 148.72}
+    epoch {'epoch': 23, 'loss': 1.2956750055875452, 'seconds': 146.17}
+    epoch {'epoch': 24, 'loss': 1.2958522033988664, 'seconds': 152.31}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-05_s1_4c9749ecb625
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3813136304324528, 'seconds': 130.73}
+    epoch {'epoch': 2, 'loss': 0.2254474508874821, 'seconds': 112.8}
+    epoch {'epoch': 3, 'loss': 0.16161628545455212, 'seconds': 97.68}
+    epoch {'epoch': 4, 'loss': 0.1268351339506653, 'seconds': 112.59}
+    epoch {'epoch': 5, 'loss': 0.10675905855759135, 'seconds': 113.65}
+    epoch {'epoch': 6, 'loss': 0.09306544079533163, 'seconds': 112.04}
+    epoch {'epoch': 7, 'loss': 0.08293972361200261, 'seconds': 113.06}
+    epoch {'epoch': 8, 'loss': 0.07467679848086159, 'seconds': 113.54}
+    epoch {'epoch': 9, 'loss': 0.06793672113486056, 'seconds': 113.49}
+    epoch {'epoch': 10, 'loss': 0.06271417017252941, 'seconds': 113.3}
+    epoch {'epoch': 11, 'loss': 0.05820076863439578, 'seconds': 243.7}
+    epoch {'epoch': 12, 'loss': 0.05439868154671957, 'seconds': 164.62}
+    epoch {'epoch': 13, 'loss': 0.051263160863012636, 'seconds': 107.14}
+    epoch {'epoch': 14, 'loss': 0.04852946418917404, 'seconds': 125.3}
+    epoch {'epoch': 15, 'loss': 0.046352354563632105, 'seconds': 113.13}
+    epoch {'epoch': 16, 'loss': 0.04448897180692205, 'seconds': 113.45}
+    epoch {'epoch': 17, 'loss': 0.042823483640292904, 'seconds': 112.87}
+    epoch {'epoch': 18, 'loss': 0.04142198219614209, 'seconds': 113.02}
+    epoch {'epoch': 19, 'loss': 0.04014305447070104, 'seconds': 111.48}
+    epoch {'epoch': 20, 'loss': 0.03910553132025701, 'seconds': 112.39}
+    epoch {'epoch': 21, 'loss': 0.038126225249384936, 'seconds': 112.04}
+    epoch {'epoch': 22, 'loss': 0.03728321461745028, 'seconds': 115.86}
+    epoch {'epoch': 23, 'loss': 0.03631837223217173, 'seconds': 117.32}
+    epoch {'epoch': 24, 'loss': 0.035685695918663496, 'seconds': 115.64}
+    epoch {'epoch': 25, 'loss': 0.03505333456790672, 'seconds': 101.41}
+    epoch {'epoch': 26, 'loss': 0.034415442777692144, 'seconds': 97.44}
+    epoch {'epoch': 27, 'loss': 0.03389022358745899, 'seconds': 102.86}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-12_s1_9c21c84bd23a
+    epoch {'epoch': 1, 'loss': 3.0282214909256835, 'seconds': 106.19}
+    epoch {'epoch': 2, 'loss': 1.3797904954545444, 'seconds': 143.8}
+    epoch {'epoch': 3, 'loss': 1.3455843955616935, 'seconds': 147.71}
+    epoch {'epoch': 4, 'loss': 1.3305765203435416, 'seconds': 146.38}
+    epoch {'epoch': 5, 'loss': 1.322296500249676, 'seconds': 152.81}
+    epoch {'epoch': 6, 'loss': 1.3169356541303368, 'seconds': 155.51}
+    epoch {'epoch': 7, 'loss': 1.3129203003288932, 'seconds': 152.39}
+    epoch {'epoch': 8, 'loss': 1.3096632559511765, 'seconds': 133.25}
+    epoch {'epoch': 9, 'loss': 1.3074453988761945, 'seconds': 106.59}
+    epoch {'epoch': 10, 'loss': 1.3052714215656391, 'seconds': 149.24}
+    epoch {'epoch': 11, 'loss': 1.3037098305877988, 'seconds': 148.82}
+    epoch {'epoch': 12, 'loss': 1.3020427200373996, 'seconds': 149.42}
+    epoch {'epoch': 13, 'loss': 1.3008982851724564, 'seconds': 153.42}
+    epoch {'epoch': 14, 'loss': 1.2998198568274923, 'seconds': 152.87}
+    epoch {'epoch': 15, 'loss': 1.2990266267700308, 'seconds': 374.16}
+    epoch {'epoch': 16, 'loss': 1.298096075168063, 'seconds': 113.76}
+    epoch {'epoch': 17, 'loss': 1.2974050034092826, 'seconds': 147.8}
+    epoch {'epoch': 18, 'loss': 1.2970115298882383, 'seconds': 144.53}
+    epoch {'epoch': 19, 'loss': 1.2965895536837888, 'seconds': 123.61}
+    epoch {'epoch': 20, 'loss': 1.2963317201529811, 'seconds': 78.9}
+    epoch {'epoch': 21, 'loss': 1.2964303436712625, 'seconds': 74.34}
+    epoch {'epoch': 22, 'loss': 1.2964227929924295, 'seconds': 70.7}
+    epoch {'epoch': 23, 'loss': 1.2963760717747717, 'seconds': 89.01}
+    epoch {'epoch': 24, 'loss': 1.2962142522189153, 'seconds': 84.59}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-12_s1_19ed2d6769d5
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3808611029723905, 'seconds': 91.6}
+    epoch {'epoch': 2, 'loss': 0.23364222583905705, 'seconds': 92.28}
+    epoch {'epoch': 3, 'loss': 0.1676623672246933, 'seconds': 87.96}
+    epoch {'epoch': 4, 'loss': 0.13136331146618105, 'seconds': 85.11}
+    epoch {'epoch': 5, 'loss': 0.1108073835384171, 'seconds': 77.98}
+    epoch {'epoch': 6, 'loss': 0.09670797637048757, 'seconds': 68.54}
+    epoch {'epoch': 7, 'loss': 0.08527152099699345, 'seconds': 86.59}
+    epoch {'epoch': 8, 'loss': 0.07649325382597041, 'seconds': 79.14}
+    epoch {'epoch': 9, 'loss': 0.06914763475926418, 'seconds': 99.67}
+    epoch {'epoch': 10, 'loss': 0.06335931819564891, 'seconds': 93.78}
+    epoch {'epoch': 11, 'loss': 0.05842991883181176, 'seconds': 90.51}
+    epoch {'epoch': 12, 'loss': 0.05450126191355147, 'seconds': 81.87}
+    epoch {'epoch': 13, 'loss': 0.051384196458560114, 'seconds': 88.42}
+    epoch {'epoch': 14, 'loss': 0.04863737207257523, 'seconds': 90.61}
+    epoch {'epoch': 15, 'loss': 0.04624607617843826, 'seconds': 91.56}
+    epoch {'epoch': 16, 'loss': 0.044493554124854645, 'seconds': 77.8}
+    epoch {'epoch': 17, 'loss': 0.04278957119809007, 'seconds': 76.57}
+    epoch {'epoch': 18, 'loss': 0.041437240914916094, 'seconds': 81.8}
+    epoch {'epoch': 19, 'loss': 0.040142425318371575, 'seconds': 90.64}
+    epoch {'epoch': 20, 'loss': 0.039183736409781116, 'seconds': 88.1}
+    epoch {'epoch': 21, 'loss': 0.03805534330741415, 'seconds': 90.37}
+    epoch {'epoch': 22, 'loss': 0.03717538552745333, 'seconds': 93.81}
+    epoch {'epoch': 23, 'loss': 0.03650597602410136, 'seconds': 89.94}
+    epoch {'epoch': 24, 'loss': 0.035786156243873095, 'seconds': 92.31}
+    epoch {'epoch': 25, 'loss': 0.03519320951880149, 'seconds': 80.89}
+    epoch {'epoch': 26, 'loss': 0.034345739433225594, 'seconds': 66.14}
+    epoch {'epoch': 27, 'loss': 0.03400673499366023, 'seconds': 79.17}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-19_s1_dbb08bd90006
+    epoch {'epoch': 1, 'loss': 3.0379547908011486, 'seconds': 82.87}
+    epoch {'epoch': 2, 'loss': 1.3807023801688183, 'seconds': 75.25}
+    epoch {'epoch': 3, 'loss': 1.346679225831754, 'seconds': 76.68}
+    epoch {'epoch': 4, 'loss': 1.3320449896684092, 'seconds': 81.88}
+    epoch {'epoch': 5, 'loss': 1.3232425657610865, 'seconds': 82.65}
+    epoch {'epoch': 6, 'loss': 1.3177390903354695, 'seconds': 1762.71}
+    epoch {'epoch': 7, 'loss': 1.3134003800265204, 'seconds': 3990.01}
+    epoch {'epoch': 8, 'loss': 1.3105139447342664, 'seconds': 209.04}
+    epoch {'epoch': 9, 'loss': 1.3080406508954576, 'seconds': 204.72}
+    epoch {'epoch': 10, 'loss': 1.3062302874784397, 'seconds': 2489.39}
+    epoch {'epoch': 11, 'loss': 1.304365339452284, 'seconds': 482.24}
+    epoch {'epoch': 12, 'loss': 1.303433522008302, 'seconds': 191.49}
+    epoch {'epoch': 13, 'loss': 1.3026583761271864, 'seconds': 541.27}
+    epoch {'epoch': 14, 'loss': 1.301657650293253, 'seconds': 4177.54}
+    epoch {'epoch': 15, 'loss': 1.3010356171383803, 'seconds': 1105.49}
+    epoch {'epoch': 16, 'loss': 1.3004012777991552, 'seconds': 124.4}
+    epoch {'epoch': 17, 'loss': 1.2995327302812436, 'seconds': 54.55}
+    epoch {'epoch': 18, 'loss': 1.2991021079898186, 'seconds': 56.18}
+    epoch {'epoch': 19, 'loss': 1.2984817480053008, 'seconds': 59.76}
+    epoch {'epoch': 20, 'loss': 1.2979084729361456, 'seconds': 59.69}
+    epoch {'epoch': 21, 'loss': 1.2974711686296256, 'seconds': 87.41}
+    epoch {'epoch': 22, 'loss': 1.2969389620568668, 'seconds': 80.92}
+    epoch {'epoch': 23, 'loss': 1.29632275459484, 'seconds': 81.62}
+    epoch {'epoch': 24, 'loss': 1.2957242433081453, 'seconds': 78.31}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-19_s1_d9d26873999f
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3849105267029888, 'seconds': 90.9}
+    epoch {'epoch': 2, 'loss': 0.23523305103463946, 'seconds': 87.29}
+    epoch {'epoch': 3, 'loss': 0.16491542981480653, 'seconds': 73.49}
+    epoch {'epoch': 4, 'loss': 0.12911531708712848, 'seconds': 83.6}
+    epoch {'epoch': 5, 'loss': 0.10951034626308477, 'seconds': 86.36}
+    epoch {'epoch': 6, 'loss': 0.09545183701897567, 'seconds': 82.53}
+    epoch {'epoch': 7, 'loss': 0.08441348781563202, 'seconds': 84.52}
+    epoch {'epoch': 8, 'loss': 0.07582044348401844, 'seconds': 158.78}
+    epoch {'epoch': 9, 'loss': 0.06868439097449465, 'seconds': 86.16}
+    epoch {'epoch': 10, 'loss': 0.06324797587574653, 'seconds': 77.69}
+    epoch {'epoch': 11, 'loss': 0.058622180642384406, 'seconds': 68.9}
+    epoch {'epoch': 12, 'loss': 0.05497006312856134, 'seconds': 93.86}
+    epoch {'epoch': 13, 'loss': 0.051561343290333475, 'seconds': 88.12}
+    epoch {'epoch': 14, 'loss': 0.048967232962824264, 'seconds': 85.52}
+    epoch {'epoch': 15, 'loss': 0.04695665857420778, 'seconds': 87.92}
+    epoch {'epoch': 16, 'loss': 0.044969978478719606, 'seconds': 87.03}
+    epoch {'epoch': 17, 'loss': 0.043551730800349756, 'seconds': 88.97}
+    epoch {'epoch': 18, 'loss': 0.0419019619530102, 'seconds': 89.61}
+    epoch {'epoch': 19, 'loss': 0.04058775643132768, 'seconds': 87.44}
+    epoch {'epoch': 20, 'loss': 0.03947431453556385, 'seconds': 80.31}
+    epoch {'epoch': 21, 'loss': 0.03860011753046288, 'seconds': 70.99}
+    epoch {'epoch': 22, 'loss': 0.037639585446636634, 'seconds': 85.65}
+    epoch {'epoch': 23, 'loss': 0.03677298437874272, 'seconds': 1302.29}
+    epoch {'epoch': 24, 'loss': 0.03606851616839193, 'seconds': 1124.74}
+    epoch {'epoch': 25, 'loss': 0.03548386123663974, 'seconds': 78.23}
+    epoch {'epoch': 26, 'loss': 0.034893304461015844, 'seconds': 87.82}
+    epoch {'epoch': 27, 'loss': 0.0343271885418667, 'seconds': 86.73}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-26_s1_6378f8b58b3b
+    epoch {'epoch': 1, 'loss': 3.0236801423064064, 'seconds': 68.15}
+    epoch {'epoch': 2, 'loss': 1.3768296434682443, 'seconds': 66.58}
+    epoch {'epoch': 3, 'loss': 1.344209229574291, 'seconds': 69.53}
+    epoch {'epoch': 4, 'loss': 1.3300535946592278, 'seconds': 69.5}
+    epoch {'epoch': 5, 'loss': 1.3215311735923136, 'seconds': 75.0}
+    epoch {'epoch': 6, 'loss': 1.3159174285241224, 'seconds': 76.26}
+    epoch {'epoch': 7, 'loss': 1.3118098314967723, 'seconds': 80.63}
+    epoch {'epoch': 8, 'loss': 1.3090071266944254, 'seconds': 78.32}
+    epoch {'epoch': 9, 'loss': 1.3066854951578544, 'seconds': 70.63}
+    epoch {'epoch': 10, 'loss': 1.304910471636221, 'seconds': 64.46}
+    epoch {'epoch': 11, 'loss': 1.3031874385886235, 'seconds': 84.32}
+    epoch {'epoch': 12, 'loss': 1.3019976649153122, 'seconds': 80.35}
+    epoch {'epoch': 13, 'loss': 1.3010109716817873, 'seconds': 79.49}
+    epoch {'epoch': 14, 'loss': 1.300264598513962, 'seconds': 84.02}
+    epoch {'epoch': 15, 'loss': 1.2994836490526112, 'seconds': 86.74}
+    epoch {'epoch': 16, 'loss': 1.2992533919570644, 'seconds': 83.12}
+    epoch {'epoch': 17, 'loss': 1.298563954108352, 'seconds': 72.45}
+    epoch {'epoch': 18, 'loss': 1.2978328545159157, 'seconds': 67.71}
+    epoch {'epoch': 19, 'loss': 1.297661827332383, 'seconds': 83.77}
+    epoch {'epoch': 20, 'loss': 1.2971977369500955, 'seconds': 85.07}
+    epoch {'epoch': 21, 'loss': 1.2967761200283645, 'seconds': 82.14}
+    epoch {'epoch': 22, 'loss': 1.296396484375, 'seconds': 77.0}
+    epoch {'epoch': 23, 'loss': 1.2960723683156006, 'seconds': 81.83}
+    epoch {'epoch': 24, 'loss': 1.2960840144726113, 'seconds': 84.7}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-26_s1_49d36014bd1e
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3835532919124321, 'seconds': 89.33}
+    epoch {'epoch': 2, 'loss': 0.22608109370425897, 'seconds': 80.61}
+    epoch {'epoch': 3, 'loss': 0.15854213138421377, 'seconds': 69.54}
+    epoch {'epoch': 4, 'loss': 0.1263509361004388, 'seconds': 74.39}
+    epoch {'epoch': 5, 'loss': 0.10781816241365892, 'seconds': 85.48}
+    epoch {'epoch': 6, 'loss': 0.0944254648078371, 'seconds': 84.67}
+    epoch {'epoch': 7, 'loss': 0.08395933387456117, 'seconds': 86.99}
+    epoch {'epoch': 8, 'loss': 0.07571529555651876, 'seconds': 83.48}
+    epoch {'epoch': 9, 'loss': 0.0692592826154497, 'seconds': 88.2}
+    epoch {'epoch': 10, 'loss': 0.06347540414167775, 'seconds': 86.28}
+    epoch {'epoch': 11, 'loss': 0.05891832592034781, 'seconds': 85.48}
+    epoch {'epoch': 12, 'loss': 0.05529626072556884, 'seconds': 70.42}
+    epoch {'epoch': 13, 'loss': 0.052110034627494986, 'seconds': 73.51}
+    epoch {'epoch': 14, 'loss': 0.04944862432225987, 'seconds': 84.89}
+    epoch {'epoch': 15, 'loss': 0.04723999918335014, 'seconds': 83.14}
+    epoch {'epoch': 16, 'loss': 0.045438918112604705, 'seconds': 80.8}
+    epoch {'epoch': 17, 'loss': 0.043533760157448274, 'seconds': 81.6}
+    epoch {'epoch': 18, 'loss': 0.042153083546846, 'seconds': 87.59}
+    epoch {'epoch': 19, 'loss': 0.04100076198853828, 'seconds': 93.72}
+    epoch {'epoch': 20, 'loss': 0.03983583991174345, 'seconds': 83.25}
+    epoch {'epoch': 21, 'loss': 0.03890050223304166, 'seconds': 74.13}
+    epoch {'epoch': 22, 'loss': 0.03775781924249949, 'seconds': 68.43}
+    epoch {'epoch': 23, 'loss': 0.0371664283728158, 'seconds': 81.72}
+    epoch {'epoch': 24, 'loss': 0.03647373113091345, 'seconds': 83.21}
+    epoch {'epoch': 25, 'loss': 0.035584173544689464, 'seconds': 85.72}
+    epoch {'epoch': 26, 'loss': 0.034879408638786386, 'seconds': 81.79}
+    epoch {'epoch': 27, 'loss': 0.03443416546064394, 'seconds': 86.36}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-09-02_s1_102a950ce4d6
+    epoch {'epoch': 1, 'loss': 3.0597487678436806, 'seconds': 86.16}
+    epoch {'epoch': 2, 'loss': 1.376978906065707, 'seconds': 78.6}
+    epoch {'epoch': 3, 'loss': 1.3432781249941184, 'seconds': 71.41}
+    epoch {'epoch': 4, 'loss': 1.328785780724275, 'seconds': 65.48}
+    epoch {'epoch': 5, 'loss': 1.3210018864024577, 'seconds': 73.63}
+    epoch {'epoch': 6, 'loss': 1.3153664857455463, 'seconds': 80.48}
+    epoch {'epoch': 7, 'loss': 1.3114271759549252, 'seconds': 78.47}
+    epoch {'epoch': 8, 'loss': 1.3084874076990305, 'seconds': 77.85}
+    epoch {'epoch': 9, 'loss': 1.3062186452085576, 'seconds': 80.18}
+    epoch {'epoch': 10, 'loss': 1.3044732017401557, 'seconds': 83.1}
+    epoch {'epoch': 11, 'loss': 1.3025724584573166, 'seconds': 82.09}
+    epoch {'epoch': 12, 'loss': 1.3012731945287113, 'seconds': 82.19}
+    epoch {'epoch': 13, 'loss': 1.2998794961430777, 'seconds': 80.76}
+    epoch {'epoch': 14, 'loss': 1.2987399048304593, 'seconds': 76.83}
+    epoch {'epoch': 15, 'loss': 1.298198684109115, 'seconds': 67.15}
+    epoch {'epoch': 16, 'loss': 1.297073291130528, 'seconds': 63.59}
+    epoch {'epoch': 17, 'loss': 1.296382652067753, 'seconds': 81.17}
+    epoch {'epoch': 18, 'loss': 1.2960833136905832, 'seconds': 82.23}
+    epoch {'epoch': 19, 'loss': 1.2957850410637177, 'seconds': 79.18}
+    epoch {'epoch': 20, 'loss': 1.2954246411414574, 'seconds': 80.94}
+    epoch {'epoch': 21, 'loss': 1.2952018335964885, 'seconds': 89.11}
+    epoch {'epoch': 22, 'loss': 1.2945035364309248, 'seconds': 81.58}
+    epoch {'epoch': 23, 'loss': 1.2938913103854954, 'seconds': 81.56}
+    epoch {'epoch': 24, 'loss': 1.2939318472768417, 'seconds': 72.69}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-09-02_s1_6145128a0243
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.38427978810274377, 'seconds': 76.88}
+    epoch {'epoch': 2, 'loss': 0.228766087372348, 'seconds': 82.06}
+    epoch {'epoch': 3, 'loss': 0.160443292473847, 'seconds': 81.67}
+    epoch {'epoch': 4, 'loss': 0.12784307998306346, 'seconds': 81.12}
+    epoch {'epoch': 5, 'loss': 0.10869167323382396, 'seconds': 84.43}
+    epoch {'epoch': 6, 'loss': 0.0950530489098351, 'seconds': 84.79}
+    epoch {'epoch': 7, 'loss': 0.08438680461555156, 'seconds': 83.98}
+    epoch {'epoch': 8, 'loss': 0.07613388027222652, 'seconds': 70.86}
+    epoch {'epoch': 9, 'loss': 0.06912876834284584, 'seconds': 71.83}
+    epoch {'epoch': 10, 'loss': 0.06358589941881737, 'seconds': 83.09}
+    epoch {'epoch': 11, 'loss': 0.05886464706569348, 'seconds': 133.92}
+    epoch {'epoch': 12, 'loss': 0.05514653870519602, 'seconds': 164.18}
+    epoch {'epoch': 13, 'loss': 0.0521141657570623, 'seconds': 162.03}
+    epoch {'epoch': 14, 'loss': 0.04914033799520079, 'seconds': 163.68}
+    epoch {'epoch': 15, 'loss': 0.04704107133285055, 'seconds': 169.21}
+    epoch {'epoch': 16, 'loss': 0.04505312723933526, 'seconds': 161.38}
+    epoch {'epoch': 17, 'loss': 0.043390843806401735, 'seconds': 141.52}
+    epoch {'epoch': 18, 'loss': 0.04203635461206706, 'seconds': 144.05}
+    epoch {'epoch': 19, 'loss': 0.04075688102616454, 'seconds': 156.97}
+    epoch {'epoch': 20, 'loss': 0.03958075943420518, 'seconds': 160.08}
+    epoch {'epoch': 21, 'loss': 0.038624823796299265, 'seconds': 156.55}
+    epoch {'epoch': 22, 'loss': 0.0375310018799215, 'seconds': 183.34}
+    epoch {'epoch': 23, 'loss': 0.03684736725013211, 'seconds': 8374.73}
+    epoch {'epoch': 24, 'loss': 0.0361568310631896, 'seconds': 196.23}
+    epoch {'epoch': 25, 'loss': 0.03538350908542579, 'seconds': 75.27}
+    epoch {'epoch': 26, 'loss': 0.03481696040000556, 'seconds': 67.6}
+    epoch {'epoch': 27, 'loss': 0.034159113986874524, 'seconds': 85.19}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-09-09_s1_4bba59bcd2ef
+    epoch {'epoch': 1, 'loss': 3.031129405843354, 'seconds': 76.36}
+    epoch {'epoch': 2, 'loss': 1.3750333403088097, 'seconds': 76.53}
+    epoch {'epoch': 3, 'loss': 1.3417660731401038, 'seconds': 77.9}
+    epoch {'epoch': 4, 'loss': 1.3276126349287412, 'seconds': 77.8}
+    epoch {'epoch': 5, 'loss': 1.3196934077358107, 'seconds': 74.03}
+    epoch {'epoch': 6, 'loss': 1.3142480358765865, 'seconds': 66.47}
+    epoch {'epoch': 7, 'loss': 1.3104824353769837, 'seconds': 76.77}
+    epoch {'epoch': 8, 'loss': 1.3069141259452495, 'seconds': 102.5}
+    epoch {'epoch': 9, 'loss': 1.3045517373365103, 'seconds': 87.21}
+    epoch {'epoch': 10, 'loss': 1.3025235128035104, 'seconds': 87.02}
+    epoch {'epoch': 11, 'loss': 1.3010883704156078, 'seconds': 94.67}
+    epoch {'epoch': 12, 'loss': 1.2998874461423282, 'seconds': 91.31}
+    epoch {'epoch': 13, 'loss': 1.298828540350722, 'seconds': 86.74}
+    epoch {'epoch': 14, 'loss': 1.298244594346059, 'seconds': 73.14}
+    epoch {'epoch': 15, 'loss': 1.2971719236450923, 'seconds': 71.19}
+    epoch {'epoch': 16, 'loss': 1.29651501083339, 'seconds': 84.48}
+    epoch {'epoch': 17, 'loss': 1.2959385857795653, 'seconds': 83.67}
+    epoch {'epoch': 18, 'loss': 1.2950827178713509, 'seconds': 88.65}
+    epoch {'epoch': 19, 'loss': 1.2946542982400426, 'seconds': 94.51}
+    epoch {'epoch': 20, 'loss': 1.2942609663139182, 'seconds': 97.23}
+    epoch {'epoch': 21, 'loss': 1.2940712162401533, 'seconds': 93.7}
+    epoch {'epoch': 22, 'loss': 1.2937313251733429, 'seconds': 86.85}
+    epoch {'epoch': 23, 'loss': 1.2935682872143437, 'seconds': 72.28}
+    epoch {'epoch': 24, 'loss': 1.2935320756859017, 'seconds': 71.29}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-09-09_s1_328b5056f006
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3816845894984479, 'seconds': 105.15}
+    epoch {'epoch': 2, 'loss': 0.2355402559041977, 'seconds': 100.8}
+    epoch {'epoch': 3, 'loss': 0.16584783314533955, 'seconds': 95.76}
+    epoch {'epoch': 4, 'loss': 0.12862460512035298, 'seconds': 87.7}
+    epoch {'epoch': 5, 'loss': 0.10858467347779364, 'seconds': 94.97}
+    epoch {'epoch': 6, 'loss': 0.09459861747498782, 'seconds': 109.6}
+    epoch {'epoch': 7, 'loss': 0.0835406392250421, 'seconds': 105.75}
+    epoch {'epoch': 8, 'loss': 0.07527475536994215, 'seconds': 111.25}
+    epoch {'epoch': 9, 'loss': 0.06846369324990038, 'seconds': 104.18}
+    epoch {'epoch': 10, 'loss': 0.06273007891931624, 'seconds': 89.34}
+    epoch {'epoch': 11, 'loss': 0.0582769697286048, 'seconds': 92.66}
+    epoch {'epoch': 12, 'loss': 0.05447225673299915, 'seconds': 111.24}
+    epoch {'epoch': 13, 'loss': 0.05148817057598312, 'seconds': 103.81}
+    epoch {'epoch': 14, 'loss': 0.04880171346495736, 'seconds': 92.23}
+    epoch {'epoch': 15, 'loss': 0.046477522560448015, 'seconds': 92.01}
+    epoch {'epoch': 16, 'loss': 0.04466291587307768, 'seconds': 90.81}
+    epoch {'epoch': 17, 'loss': 0.04278495148667749, 'seconds': 92.69}
+    epoch {'epoch': 18, 'loss': 0.04157632659628706, 'seconds': 92.51}
+    epoch {'epoch': 19, 'loss': 0.040201093579800624, 'seconds': 86.48}
+    epoch {'epoch': 20, 'loss': 0.03913454149129256, 'seconds': 87.1}
+    epoch {'epoch': 21, 'loss': 0.03813532634444956, 'seconds': 86.88}
+    epoch {'epoch': 22, 'loss': 0.037093956937205116, 'seconds': 76.9}
+    epoch {'epoch': 23, 'loss': 0.03635540281264287, 'seconds': 134.36}
+    epoch {'epoch': 24, 'loss': 0.03564812074292381, 'seconds': 149.22}
+    epoch {'epoch': 25, 'loss': 0.03495463609414281, 'seconds': 144.34}
+    epoch {'epoch': 26, 'loss': 0.034296073933255, 'seconds': 134.77}
+    epoch {'epoch': 27, 'loss': 0.03370548222424849, 'seconds': 133.93}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-05_s2_6d5b8e8f034b
+    epoch {'epoch': 1, 'loss': 3.053101701224117, 'seconds': 106.64}
+    epoch {'epoch': 2, 'loss': 1.3791485022047216, 'seconds': 93.54}
+    epoch {'epoch': 3, 'loss': 1.344536184434013, 'seconds': 86.57}
+    epoch {'epoch': 4, 'loss': 1.3298177873428199, 'seconds': 75.26}
+    epoch {'epoch': 5, 'loss': 1.3209340001446535, 'seconds': 87.45}
+    epoch {'epoch': 6, 'loss': 1.3155614580914001, 'seconds': 91.6}
+    epoch {'epoch': 7, 'loss': 1.3111438364785015, 'seconds': 88.25}
+    epoch {'epoch': 8, 'loss': 1.3081907957606496, 'seconds': 85.56}
+    epoch {'epoch': 9, 'loss': 1.3059416919301883, 'seconds': 89.61}
+    epoch {'epoch': 10, 'loss': 1.3040198200912672, 'seconds': 91.11}
+    epoch {'epoch': 11, 'loss': 1.302304926659976, 'seconds': 89.48}
+    epoch {'epoch': 12, 'loss': 1.3009411247387708, 'seconds': 84.68}
+    epoch {'epoch': 13, 'loss': 1.2996777107219886, 'seconds': 79.81}
+    epoch {'epoch': 14, 'loss': 1.2986432168349968, 'seconds': 70.5}
+    epoch {'epoch': 15, 'loss': 1.2978506072082492, 'seconds': 66.19}
+    epoch {'epoch': 16, 'loss': 1.2971033321705152, 'seconds': 92.96}
+    epoch {'epoch': 17, 'loss': 1.2965895742735323, 'seconds': 89.34}
+    epoch {'epoch': 18, 'loss': 1.2962046038068429, 'seconds': 82.7}
+    epoch {'epoch': 19, 'loss': 1.2956882209449099, 'seconds': 85.27}
+    epoch {'epoch': 20, 'loss': 1.2954269484980534, 'seconds': 87.75}
+    epoch {'epoch': 21, 'loss': 1.2947283059981527, 'seconds': 85.81}
+    epoch {'epoch': 22, 'loss': 1.294306868810902, 'seconds': 82.56}
+    epoch {'epoch': 23, 'loss': 1.2940487116302026, 'seconds': 68.86}
+    epoch {'epoch': 24, 'loss': 1.2936367242818005, 'seconds': 75.18}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-05_s2_c34e9bb15f23
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.38413203324911727, 'seconds': 98.59}
+    epoch {'epoch': 2, 'loss': 0.22731907862537312, 'seconds': 84.25}
+    epoch {'epoch': 3, 'loss': 0.1591432659693484, 'seconds': 81.41}
+    epoch {'epoch': 4, 'loss': 0.12595952780179256, 'seconds': 84.55}
+    epoch {'epoch': 5, 'loss': 0.10737555277235103, 'seconds': 86.01}
+    epoch {'epoch': 6, 'loss': 0.09418438248476892, 'seconds': 86.73}
+    epoch {'epoch': 7, 'loss': 0.08346434598261455, 'seconds': 82.06}
+    epoch {'epoch': 8, 'loss': 0.07526719837256197, 'seconds': 67.07}
+    epoch {'epoch': 9, 'loss': 0.06837629273814975, 'seconds': 74.77}
+    epoch {'epoch': 10, 'loss': 0.06294556144835814, 'seconds': 87.41}
+    epoch {'epoch': 11, 'loss': 0.058316565347167684, 'seconds': 83.19}
+    epoch {'epoch': 12, 'loss': 0.05458051915157516, 'seconds': 79.7}
+    epoch {'epoch': 13, 'loss': 0.051480634383997824, 'seconds': 82.77}
+    epoch {'epoch': 14, 'loss': 0.048814535984453164, 'seconds': 84.83}
+    epoch {'epoch': 15, 'loss': 0.04652266120010952, 'seconds': 84.27}
+    epoch {'epoch': 16, 'loss': 0.0447017676987738, 'seconds': 78.53}
+    epoch {'epoch': 17, 'loss': 0.0430014617038223, 'seconds': 68.61}
+    epoch {'epoch': 18, 'loss': 0.041602680213608835, 'seconds': 80.84}
+    epoch {'epoch': 19, 'loss': 0.040230737542206386, 'seconds': 89.15}
+    epoch {'epoch': 20, 'loss': 0.03925955239331947, 'seconds': 84.17}
+    epoch {'epoch': 21, 'loss': 0.038215096969649476, 'seconds': 80.15}
+    epoch {'epoch': 22, 'loss': 0.03737073672829934, 'seconds': 85.85}
+    epoch {'epoch': 23, 'loss': 0.0364995834962377, 'seconds': 83.28}
+    epoch {'epoch': 24, 'loss': 0.03588249471108868, 'seconds': 82.37}
+    epoch {'epoch': 25, 'loss': 0.03513255012485216, 'seconds': 70.89}
+    epoch {'epoch': 26, 'loss': 0.034559129754889686, 'seconds': 68.89}
+    epoch {'epoch': 27, 'loss': 0.033965547832677946, 'seconds': 88.87}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-12_s2_c17ee609815c
+    epoch {'epoch': 1, 'loss': 3.048017069593634, 'seconds': 89.7}
+    epoch {'epoch': 2, 'loss': 1.3790234882956505, 'seconds': 82.36}
+    epoch {'epoch': 3, 'loss': 1.344944845804499, 'seconds': 86.81}
+    epoch {'epoch': 4, 'loss': 1.3305440876413153, 'seconds': 86.6}
+    epoch {'epoch': 5, 'loss': 1.3223291429769166, 'seconds': 85.19}
+    epoch {'epoch': 6, 'loss': 1.316935170391358, 'seconds': 71.39}
+    epoch {'epoch': 7, 'loss': 1.3129727508437288, 'seconds': 67.69}
+    epoch {'epoch': 8, 'loss': 1.3103077821829416, 'seconds': 83.54}
+    epoch {'epoch': 9, 'loss': 1.3079057949809811, 'seconds': 79.91}
+    epoch {'epoch': 10, 'loss': 1.3064571881128257, 'seconds': 76.93}
+    epoch {'epoch': 11, 'loss': 1.304616688415217, 'seconds': 77.42}
+    epoch {'epoch': 12, 'loss': 1.3033299832258438, 'seconds': 80.64}
+    epoch {'epoch': 13, 'loss': 1.3025509230860777, 'seconds': 80.27}
+    epoch {'epoch': 14, 'loss': 1.3014587966807818, 'seconds': 79.75}
+    epoch {'epoch': 15, 'loss': 1.3005542983149119, 'seconds': 74.27}
+    epoch {'epoch': 16, 'loss': 1.2999111112110253, 'seconds': 68.99}
+    epoch {'epoch': 17, 'loss': 1.29909152677095, 'seconds': 67.52}
+    epoch {'epoch': 18, 'loss': 1.298422242180687, 'seconds': 90.55}
+    epoch {'epoch': 19, 'loss': 1.2977129603183588, 'seconds': 81.11}
+    epoch {'epoch': 20, 'loss': 1.2971252391258847, 'seconds': 79.62}
+    epoch {'epoch': 21, 'loss': 1.2969482418991962, 'seconds': 84.39}
+    epoch {'epoch': 22, 'loss': 1.2965855546467642, 'seconds': 83.66}
+    epoch {'epoch': 23, 'loss': 1.2962706186868367, 'seconds': 82.13}
+    epoch {'epoch': 24, 'loss': 1.2959693016784013, 'seconds': 75.67}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-12_s2_0b101c2c2888
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.383995901301222, 'seconds': 78.74}
+    epoch {'epoch': 2, 'loss': 0.24025379767957725, 'seconds': 84.76}
+    epoch {'epoch': 3, 'loss': 0.17086060345172882, 'seconds': 84.1}
+    epoch {'epoch': 4, 'loss': 0.13295163509418378, 'seconds': 82.32}
+    epoch {'epoch': 5, 'loss': 0.11172881371007776, 'seconds': 82.08}
+    epoch {'epoch': 6, 'loss': 0.09683817498526483, 'seconds': 84.75}
+    epoch {'epoch': 7, 'loss': 0.08528715189335481, 'seconds': 83.8}
+    epoch {'epoch': 8, 'loss': 0.0765841524555998, 'seconds': 83.0}
+    epoch {'epoch': 9, 'loss': 0.0694857065407735, 'seconds': 75.1}
+    epoch {'epoch': 10, 'loss': 0.06361863909746115, 'seconds': 67.22}
+    epoch {'epoch': 11, 'loss': 0.05883726126180505, 'seconds': 87.9}
+    epoch {'epoch': 12, 'loss': 0.055257588554665726, 'seconds': 89.8}
+    epoch {'epoch': 13, 'loss': 0.05184483640598801, 'seconds': 83.61}
+    epoch {'epoch': 14, 'loss': 0.049292956742475615, 'seconds': 82.47}
+    epoch {'epoch': 15, 'loss': 0.04704342698151211, 'seconds': 81.89}
+    epoch {'epoch': 16, 'loss': 0.04503006038238418, 'seconds': 81.35}
+    epoch {'epoch': 17, 'loss': 0.04326568255728146, 'seconds': 84.53}
+    epoch {'epoch': 18, 'loss': 0.04186267497123412, 'seconds': 86.15}
+    epoch {'epoch': 19, 'loss': 0.04080246044498569, 'seconds': 81.84}
+    epoch {'epoch': 20, 'loss': 0.039674231325680355, 'seconds': 84.1}
+    epoch {'epoch': 21, 'loss': 0.03862345970745357, 'seconds': 79.59}
+    epoch {'epoch': 22, 'loss': 0.0375661090156942, 'seconds': 68.31}
+    epoch {'epoch': 23, 'loss': 0.036837952176354966, 'seconds': 66.84}
+    epoch {'epoch': 24, 'loss': 0.03609583358157356, 'seconds': 91.41}
+    epoch {'epoch': 25, 'loss': 0.03547399547302498, 'seconds': 85.47}
+    epoch {'epoch': 26, 'loss': 0.0347538763340914, 'seconds': 86.44}
+    epoch {'epoch': 27, 'loss': 0.03415453391817381, 'seconds': 83.01}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-19_s2_93145d98332e
+    epoch {'epoch': 1, 'loss': 3.056341672144751, 'seconds': 93.17}
+    epoch {'epoch': 2, 'loss': 1.3787233997798902, 'seconds': 90.06}
+    epoch {'epoch': 3, 'loss': 1.3450024462812848, 'seconds': 84.51}
+    epoch {'epoch': 4, 'loss': 1.3301119722636314, 'seconds': 81.38}
+    epoch {'epoch': 5, 'loss': 1.3218635557158596, 'seconds': 73.98}
+    epoch {'epoch': 6, 'loss': 1.3162599845731655, 'seconds': 68.26}
+    epoch {'epoch': 7, 'loss': 1.3124021899800709, 'seconds': 71.93}
+    epoch {'epoch': 8, 'loss': 1.3094803294201758, 'seconds': 82.7}
+    epoch {'epoch': 9, 'loss': 1.3069643843160867, 'seconds': 79.29}
+    epoch {'epoch': 10, 'loss': 1.3054425514439414, 'seconds': 79.39}
+    epoch {'epoch': 11, 'loss': 1.3037994213492432, 'seconds': 76.86}
+    epoch {'epoch': 12, 'loss': 1.3028043316186109, 'seconds': 81.06}
+    epoch {'epoch': 13, 'loss': 1.301641555115728, 'seconds': 81.38}
+    epoch {'epoch': 14, 'loss': 1.3006962675903146, 'seconds': 80.3}
+    epoch {'epoch': 15, 'loss': 1.300172515740795, 'seconds': 78.21}
+    epoch {'epoch': 16, 'loss': 1.2993736853300542, 'seconds': 72.07}
+    epoch {'epoch': 17, 'loss': 1.2990623484350274, 'seconds': 69.25}
+    epoch {'epoch': 18, 'loss': 1.2984084861812724, 'seconds': 69.14}
+    epoch {'epoch': 19, 'loss': 1.2979884261301597, 'seconds': 85.5}
+    epoch {'epoch': 20, 'loss': 1.2976202335731861, 'seconds': 85.92}
+    epoch {'epoch': 21, 'loss': 1.2971399724374204, 'seconds': 84.65}
+    epoch {'epoch': 22, 'loss': 1.296801096885074, 'seconds': 79.63}
+    epoch {'epoch': 23, 'loss': 1.2965666725384608, 'seconds': 83.82}
+    epoch {'epoch': 24, 'loss': 1.2961685288988456, 'seconds': 83.4}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-19_s2_df935070f572
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.3822319395137283, 'seconds': 91.15}
+    epoch {'epoch': 2, 'loss': 0.2326556716887456, 'seconds': 72.67}
+    epoch {'epoch': 3, 'loss': 0.1667777676627321, 'seconds': 67.32}
+    epoch {'epoch': 4, 'loss': 0.13035228904688134, 'seconds': 84.15}
+    epoch {'epoch': 5, 'loss': 0.11052435805212776, 'seconds': 86.4}
+    epoch {'epoch': 6, 'loss': 0.09615659165494847, 'seconds': 82.22}
+    epoch {'epoch': 7, 'loss': 0.08501406632504373, 'seconds': 80.61}
+    epoch {'epoch': 8, 'loss': 0.07615315211269091, 'seconds': 84.58}
+    epoch {'epoch': 9, 'loss': 0.06902913186910017, 'seconds': 84.89}
+    epoch {'epoch': 10, 'loss': 0.06317561935141401, 'seconds': 85.12}
+    epoch {'epoch': 11, 'loss': 0.058481029674129666, 'seconds': 72.41}
+    epoch {'epoch': 12, 'loss': 0.05467915724752084, 'seconds': 67.71}
+    epoch {'epoch': 13, 'loss': 0.05155443730500509, 'seconds': 86.26}
+    epoch {'epoch': 14, 'loss': 0.04879128117606325, 'seconds': 86.13}
+    epoch {'epoch': 15, 'loss': 0.046617009729709266, 'seconds': 85.82}
+    epoch {'epoch': 16, 'loss': 0.04468976678151005, 'seconds': 83.3}
+    epoch {'epoch': 17, 'loss': 0.043126851249978226, 'seconds': 85.43}
+    epoch {'epoch': 18, 'loss': 0.04166475535844857, 'seconds': 84.75}
+    epoch {'epoch': 19, 'loss': 0.04044701665077569, 'seconds': 84.03}
+    epoch {'epoch': 20, 'loss': 0.03931999965658728, 'seconds': 77.9}
+    epoch {'epoch': 21, 'loss': 0.03826491612027276, 'seconds': 68.48}
+    epoch {'epoch': 22, 'loss': 0.037547756197317594, 'seconds': 80.62}
+    epoch {'epoch': 23, 'loss': 0.036672600246263, 'seconds': 89.98}
+    epoch {'epoch': 24, 'loss': 0.036004100205763334, 'seconds': 81.92}
+    epoch {'epoch': 25, 'loss': 0.03537486303808554, 'seconds': 80.55}
+    epoch {'epoch': 26, 'loss': 0.03466293454732535, 'seconds': 84.54}
+    epoch {'epoch': 27, 'loss': 0.034076355960009234, 'seconds': 87.1}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-08-26_s2_98056e5d6596
+    epoch {'epoch': 1, 'loss': 3.0575761295458594, 'seconds': 90.05}
+    epoch {'epoch': 2, 'loss': 1.377853829270109, 'seconds': 69.52}
+    epoch {'epoch': 3, 'loss': 1.344133380268692, 'seconds': 64.74}
+    epoch {'epoch': 4, 'loss': 1.32950890436085, 'seconds': 86.07}
+    epoch {'epoch': 5, 'loss': 1.3213215153370428, 'seconds': 79.92}
+    epoch {'epoch': 6, 'loss': 1.3156032731992389, 'seconds': 78.39}
+    epoch {'epoch': 7, 'loss': 1.3121437444599398, 'seconds': 79.83}
+    epoch {'epoch': 8, 'loss': 1.3090959646067488, 'seconds': 82.75}
+    epoch {'epoch': 9, 'loss': 1.307031110054856, 'seconds': 81.12}
+    epoch {'epoch': 10, 'loss': 1.3054156853737087, 'seconds': 74.91}
+    epoch {'epoch': 11, 'loss': 1.303878504814358, 'seconds': 68.16}
+    epoch {'epoch': 12, 'loss': 1.3024599182933843, 'seconds': 72.3}
+    epoch {'epoch': 13, 'loss': 1.3015264548730412, 'seconds': 85.18}
+    epoch {'epoch': 14, 'loss': 1.3006766079981393, 'seconds': 80.81}
+    epoch {'epoch': 15, 'loss': 1.2997500207446038, 'seconds': 82.04}
+    epoch {'epoch': 16, 'loss': 1.2991248828118, 'seconds': 83.22}
+    epoch {'epoch': 17, 'loss': 1.2988367385601778, 'seconds': 82.45}
+    epoch {'epoch': 18, 'loss': 1.2984102528685824, 'seconds': 82.38}
+    epoch {'epoch': 19, 'loss': 1.298046624332393, 'seconds': 70.87}
+    epoch {'epoch': 20, 'loss': 1.2976140685475201, 'seconds': 63.32}
+    epoch {'epoch': 21, 'loss': 1.2972640559870168, 'seconds': 84.34}
+    epoch {'epoch': 22, 'loss': 1.2971757063734422, 'seconds': 91.07}
+    epoch {'epoch': 23, 'loss': 1.2969061842752159, 'seconds': 85.46}
+    epoch {'epoch': 24, 'loss': 1.2965425388966132, 'seconds': 81.04}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-08-26_s2_5aa523bc4d48
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.38301431856773516, 'seconds': 94.01}
+    epoch {'epoch': 2, 'loss': 0.22878771247687163, 'seconds': 84.7}
+    epoch {'epoch': 3, 'loss': 0.1612086425776835, 'seconds': 75.9}
+    epoch {'epoch': 4, 'loss': 0.12720786628347855, 'seconds': 70.41}
+    epoch {'epoch': 5, 'loss': 0.10824226767376617, 'seconds': 84.52}
+    epoch {'epoch': 6, 'loss': 0.09435529013474782, 'seconds': 86.02}
+    epoch {'epoch': 7, 'loss': 0.0835503394956942, 'seconds': 83.78}
+    epoch {'epoch': 8, 'loss': 0.07529582221198965, 'seconds': 83.3}
+    epoch {'epoch': 9, 'loss': 0.06868206378486422, 'seconds': 87.16}
+    epoch {'epoch': 10, 'loss': 0.06318824903832541, 'seconds': 85.83}
+    epoch {'epoch': 11, 'loss': 0.058703774862267355, 'seconds': 72.33}
+    epoch {'epoch': 12, 'loss': 0.054715755568058404, 'seconds': 72.33}
+    epoch {'epoch': 13, 'loss': 0.05165911217530569, 'seconds': 89.1}
+    epoch {'epoch': 14, 'loss': 0.04903592548712536, 'seconds': 85.35}
+    epoch {'epoch': 15, 'loss': 0.046937809291261214, 'seconds': 83.18}
+    epoch {'epoch': 16, 'loss': 0.04516201514612745, 'seconds': 87.57}
+    epoch {'epoch': 17, 'loss': 0.043381947127205354, 'seconds': 86.86}
+    epoch {'epoch': 18, 'loss': 0.041894706862944144, 'seconds': 86.16}
+    epoch {'epoch': 19, 'loss': 0.0406781977939385, 'seconds': 70.0}
+    epoch {'epoch': 20, 'loss': 0.039773365689648524, 'seconds': 79.8}
+    epoch {'epoch': 21, 'loss': 0.03860632819985902, 'seconds': 86.0}
+    epoch {'epoch': 22, 'loss': 0.03785451660277667, 'seconds': 83.44}
+    epoch {'epoch': 23, 'loss': 0.03691261096133126, 'seconds': 87.28}
+    epoch {'epoch': 24, 'loss': 0.036315002720113156, 'seconds': 85.64}
+    epoch {'epoch': 25, 'loss': 0.03559621099244665, 'seconds': 72.86}
+    epoch {'epoch': 26, 'loss': 0.03496639409826861, 'seconds': 75.81}
+    epoch {'epoch': 27, 'loss': 0.03443391517632537, 'seconds': 94.22}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-09-02_s2_b4593def93d0
+    epoch {'epoch': 1, 'loss': 3.056359209240621, 'seconds': 86.72}
+    epoch {'epoch': 2, 'loss': 1.3778130244053408, 'seconds': 84.27}
+    epoch {'epoch': 3, 'loss': 1.344674075752628, 'seconds': 87.83}
+    epoch {'epoch': 4, 'loss': 1.330300927949897, 'seconds': 82.1}
+    epoch {'epoch': 5, 'loss': 1.3220273170964834, 'seconds': 82.23}
+    epoch {'epoch': 6, 'loss': 1.3160531510340485, 'seconds': 69.65}
+    epoch {'epoch': 7, 'loss': 1.3122064571023513, 'seconds': 63.72}
+    epoch {'epoch': 8, 'loss': 1.3092490885401262, 'seconds': 80.62}
+    epoch {'epoch': 9, 'loss': 1.3066798093648033, 'seconds': 82.86}
+    epoch {'epoch': 10, 'loss': 1.304953124204571, 'seconds': 78.01}
+    epoch {'epoch': 11, 'loss': 1.3036469162035618, 'seconds': 77.68}
+    epoch {'epoch': 12, 'loss': 1.3027423982578228, 'seconds': 82.87}
+    epoch {'epoch': 13, 'loss': 1.301720528000427, 'seconds': 86.32}
+    epoch {'epoch': 14, 'loss': 1.3011780582072976, 'seconds': 81.36}
+    epoch {'epoch': 15, 'loss': 1.3002677757221872, 'seconds': 76.83}
+    epoch {'epoch': 16, 'loss': 1.2997995862264116, 'seconds': 67.2}
+    epoch {'epoch': 17, 'loss': 1.299006539206848, 'seconds': 64.57}
+    epoch {'epoch': 18, 'loss': 1.2980141978869528, 'seconds': 86.55}
+    epoch {'epoch': 19, 'loss': 1.2973025179469464, 'seconds': 81.63}
+    epoch {'epoch': 20, 'loss': 1.297016358541847, 'seconds': 78.7}
+    epoch {'epoch': 21, 'loss': 1.2962937732275013, 'seconds': 78.3}
+    epoch {'epoch': 22, 'loss': 1.2955287143084797, 'seconds': 83.82}
+    epoch {'epoch': 23, 'loss': 1.2953865069912394, 'seconds': 82.91}
+    epoch {'epoch': 24, 'loss': 1.294974290370591, 'seconds': 82.63}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-09-02_s2_f6f7ebed0dd6
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/research/models.py:114: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  R = torch.sparse_coo_tensor(idx, torch.from_numpy(val), (n_users, n_items)).coalesce()
+    epoch {'epoch': 1, 'loss': 0.38540178537368774, 'seconds': 80.47}
+    epoch {'epoch': 2, 'loss': 0.2352093536898775, 'seconds': 68.27}
+    epoch {'epoch': 3, 'loss': 0.16502708674601788, 'seconds': 78.92}
+    epoch {'epoch': 4, 'loss': 0.12849744240630348, 'seconds': 85.33}
+    epoch {'epoch': 5, 'loss': 0.10849190081627864, 'seconds': 86.41}
+    epoch {'epoch': 6, 'loss': 0.09502686616384758, 'seconds': 81.85}
+    epoch {'epoch': 7, 'loss': 0.08456149430207487, 'seconds': 80.2}
+    epoch {'epoch': 8, 'loss': 0.07586653488424588, 'seconds': 87.58}
+    epoch {'epoch': 9, 'loss': 0.06897106527719858, 'seconds': 87.07}
+    epoch {'epoch': 10, 'loss': 0.06320408977708726, 'seconds': 83.9}
+    epoch {'epoch': 11, 'loss': 0.05855252797592361, 'seconds': 84.32}
+    epoch {'epoch': 12, 'loss': 0.05478991912502163, 'seconds': 81.66}
+    epoch {'epoch': 13, 'loss': 0.05189086503858836, 'seconds': 71.36}
+    epoch {'epoch': 14, 'loss': 0.04913501546911474, 'seconds': 68.52}
+    epoch {'epoch': 15, 'loss': 0.04682532255098505, 'seconds': 78.27}
+    epoch {'epoch': 16, 'loss': 0.04500449744035613, 'seconds': 91.84}
+    epoch {'epoch': 17, 'loss': 0.043283581944569105, 'seconds': 84.25}
+    epoch {'epoch': 18, 'loss': 0.04186239838600159, 'seconds': 81.27}
+    epoch {'epoch': 19, 'loss': 0.04044857895318067, 'seconds': 81.35}
+    epoch {'epoch': 20, 'loss': 0.039409231605394834, 'seconds': 84.29}
+    epoch {'epoch': 21, 'loss': 0.0383607121008747, 'seconds': 82.68}
+    epoch {'epoch': 22, 'loss': 0.03745326786389891, 'seconds': 82.26}
+    epoch {'epoch': 23, 'loss': 0.036730166524648666, 'seconds': 74.52}
+    epoch {'epoch': 24, 'loss': 0.03587076398280432, 'seconds': 68.21}
+    epoch {'epoch': 25, 'loss': 0.03528460621271493, 'seconds': 72.73}
+    epoch {'epoch': 26, 'loss': 0.03467070571375343, 'seconds': 89.84}
+    epoch {'epoch': 27, 'loss': 0.03415073524668531, 'seconds': 84.98}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/lightgcn/2020-09-09_s2_1e1d7e5c0401
+    epoch {'epoch': 1, 'loss': 3.0554780918946176, 'seconds': 89.68}
+    epoch {'epoch': 2, 'loss': 1.3745492788225895, 'seconds': 86.98}
+    epoch {'epoch': 3, 'loss': 1.3413817084308237, 'seconds': 87.25}
+    epoch {'epoch': 4, 'loss': 1.327246870807264, 'seconds': 67.08}
+    epoch {'epoch': 5, 'loss': 1.3188401380124422, 'seconds': 70.26}
+    epoch {'epoch': 6, 'loss': 1.3136161781530198, 'seconds': 82.5}
+    epoch {'epoch': 7, 'loss': 1.3096912802578595, 'seconds': 78.47}
+    epoch {'epoch': 8, 'loss': 1.3066913649199117, 'seconds': 76.45}
+    epoch {'epoch': 9, 'loss': 1.3044718160415711, 'seconds': 79.61}
+    epoch {'epoch': 10, 'loss': 1.3026870496122498, 'seconds': 82.79}
+    epoch {'epoch': 11, 'loss': 1.301287098646864, 'seconds': 81.52}
+    epoch {'epoch': 12, 'loss': 1.3001492128935854, 'seconds': 80.28}
+    epoch {'epoch': 13, 'loss': 1.2988513549694056, 'seconds': 78.95}
+    epoch {'epoch': 14, 'loss': 1.2978951165592092, 'seconds': 68.02}
+    epoch {'epoch': 15, 'loss': 1.2967048130283971, 'seconds': 74.01}
+    epoch {'epoch': 16, 'loss': 1.295973730288588, 'seconds': 82.77}
+    epoch {'epoch': 17, 'loss': 1.29519776739563, 'seconds': 81.33}
+    epoch {'epoch': 18, 'loss': 1.2943587049776237, 'seconds': 84.29}
+    epoch {'epoch': 19, 'loss': 1.2934810944153174, 'seconds': 84.68}
+    epoch {'epoch': 20, 'loss': 1.2927157697260991, 'seconds': 81.55}
+    epoch {'epoch': 21, 'loss': 1.2922862671457898, 'seconds': 82.14}
+    epoch {'epoch': 22, 'loss': 1.2920634972804093, 'seconds': 80.06}
+    epoch {'epoch': 23, 'loss': 1.291480720086945, 'seconds': 68.96}
+    epoch {'epoch': 24, 'loss': 1.2912694322555252, 'seconds': 63.45}
+/Users/yilacao/Documents/Codex/ensemble/data/interim/track_a_research/neural/sasrec/2020-09-09_s2_3ce0c3b42bce

@@ -1,0 +1,51 @@
+  resuming .tmp-1791092230: rankers and pools already built
+  rankers: compatibility 132 trees / 74 features, personalized 138 trees / 95 features (276s)
+  pools: 156,990 keys, 15,699,000 rows
+    profiles partition 1/16: 84,768 customers so far
+    profiles partition 2/16: 169,553 customers so far
+    profiles partition 3/16: 254,367 customers so far
+    profiles partition 4/16: 339,142 customers so far
+    profiles partition 5/16: 423,981 customers so far
+    profiles partition 6/16: 508,740 customers so far
+    profiles partition 7/16: 593,544 customers so far
+    profiles partition 8/16: 678,340 customers so far
+    profiles partition 9/16: 763,140 customers so far
+    profiles partition 10/16: 847,868 customers so far
+    profiles partition 11/16: 932,704 customers so far
+    profiles partition 12/16: 1,017,516 customers so far
+    profiles partition 13/16: 1,102,344 customers so far
+    profiles partition 14/16: 1,187,130 customers so far
+    profiles partition 15/16: 1,271,912 customers so far
+    profiles partition 16/16: 1,356,683 customers so far
+  profiles: 1,356,683 customers, 1034 MB compressed blobs (510s)
+  build failed; leaving .tmp-1791092230 for inspection (CURRENT unchanged)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/serving/bundle.py", line 508, in <module>
+    build(log=lambda s: print(s, flush=True), resume=sys.argv[2] if len(sys.argv) > 2 else None)
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/serving/bundle.py", line 252, in build
+    eq = equivalence_gate(con, cfg, week, uni, q, tmp, b_pers, pers_names, pool_feats, n_equivalence, log)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/serving/bundle.py", line 460, in equivalence_gate
+    del bundle
+        ^^^^^^
+UnboundLocalError: cannot access local variable 'bundle' where it is not associated with a value
+      565.40 real       974.56 user       126.25 sys
+          3073474560  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            11135712  page reclaims
+                5588  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+              486789  voluntary context switches
+             2846174  involuntary context switches
+       5109475425529  instructions retired
+       2054024723258  cycles elapsed
+          7121362048  peak memory footprint

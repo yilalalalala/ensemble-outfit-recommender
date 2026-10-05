@@ -1,0 +1,67 @@
+stage A
+  done lightgcn 2020-07-22 s0 {'window_weeks': 12, 'epochs': 30, 'curve_every': 3} (1081s)
+  done bpr 2020-07-22 s0 {'lr': 0.005, 'reg': 0.0001, 'epochs': 30, 'curve_every': 3} (1468s)
+  done bpr 2020-07-22 s0 {'lr': 0.02, 'reg': 0.0001, 'epochs': 30, 'curve_every': 3} (1412s)
+  done lightgcn 2020-07-22 s0 {'window_weeks': 26, 'epochs': 30, 'curve_every': 3} (2545s)
+  done bpr 2020-07-22 s0 {'lr': 0.005, 'reg': 1e-05, 'epochs': 30, 'curve_every': 3} (1549s)
+  done sasrec 2020-07-22 s0 {'loss': 'gbce', 'epochs': 12, 'curve_every': 1} (1181s)
+  done bpr 2020-07-22 s0 {'lr': 0.02, 'reg': 1e-05, 'epochs': 30, 'curve_every': 3} (1466s)
+  done sasrec 2020-07-22 s0 {'loss': 'bce', 'epochs': 12, 'curve_every': 1} (1105s)
+stage A2
+  done bpr 2020-07-22 s0 {'lr': 0.005, 'reg': 1e-05, 'window_weeks': 12, 'epochs': 30, 'curve_every': 3} (887s)
+  done lightgcn 2020-07-22 s0 {'window_weeks': 26, 'lr': 0.02, 'epochs': 30, 'curve_every': 3} (2817s)
+  done bpr 2020-07-22 s0 {'lr': 0.005, 'reg': 1e-05, 'dim': 128, 'epochs': 30, 'curve_every': 3} (1937s)
+  done lightgcn 2020-07-22 s0 {'window_weeks': 26, 'layers': 2, 'epochs': 30, 'curve_every': 3} (1620s)
+  done sasrec 2020-07-22 s0 {'loss': 'gbce', 'lr': 0.002, 'epochs': 12, 'curve_every': 1} (969s)
+  done sasrec 2020-07-22 s0 {'loss': 'gbce', 'dropout': 0.5, 'epochs': 12, 'curve_every': 1} (973s)
+stage B
+  done bpr 2020-07-29 s0 {'lr': 0.005, 'reg': 1e-05, 'dim': 128, 'epochs': 24, 'curve_every': 24} (1028s)
+  done bpr 2020-07-29 s0 {'lr': 0.005, 'reg': 1e-05, 'window_weeks': 12, 'epochs': 24, 'curve_every': 24} (385s)
+  done lightgcn 2020-07-29 s0 {'window_weeks': 26, 'lr': 0.02, 'epochs': 27, 'curve_every': 27} (1874s)
+  done lightgcn 2020-07-29 s0 {'window_weeks': 26, 'layers': 2, 'epochs': 30, 'curve_every': 30} (1372s)
+  done sasrec 2020-07-29 s0 {'loss': 'gbce', 'lr': 0.002, 'epochs': 12, 'curve_every': 12} (672s)
+  done sasrec 2020-07-29 s0 {'loss': 'gbce', 'epochs': 12, 'curve_every': 12} (687s)
+{
+ "bpr": {
+  "window_weeks": 26,
+  "min_item_count": 3,
+  "dim": 128,
+  "reg": 1e-05,
+  "lr": 0.005,
+  "batch_size": 16384,
+  "epochs": 24,
+  "mask_seen": false,
+  "device": "cpu"
+ },
+ "lightgcn": {
+  "window_weeks": 26,
+  "min_item_count": 3,
+  "dim": 64,
+  "layers": 3,
+  "reg": 0.0001,
+  "lr": 0.02,
+  "batch_size": 131072,
+  "epochs": 27,
+  "mask_seen": false,
+  "device": "mps"
+ },
+ "sasrec": {
+  "vocab_weeks": 26,
+  "min_item_count": 3,
+  "train_weeks": 26,
+  "history_weeks": 104,
+  "max_len": 50,
+  "dim": 64,
+  "blocks": 2,
+  "heads": 1,
+  "dropout": 0.2,
+  "lr": 0.002,
+  "batch_size": 256,
+  "epochs": 12,
+  "loss": "gbce",
+  "negatives": 256,
+  "gbce_t": 0.75,
+  "mask_seen": false,
+  "device": "mps"
+ }
+}
