@@ -53,6 +53,25 @@ The test week is touched once. All model selection happens on validation.
 
 All are configuration. A full-data run changes values, not code.
 
+**What `WINDOW_WEEKS` does and does not limit (Phase 2 clarification).** The
+16-week window applies to Track B basket mining and to the documented sampling
+plan. Track A reads further back where it measurably helps: ranker features
+built from `_past` use the customer's *entire* history before the cutoff and are
+suffixed `_life`; windowed features carry their window (`_1w`, `_4w`, `_12w`);
+`ca_w_*` are recency-weighted sums over the whole history. Retrieval seeds use
+their own configured windows (e.g. colourway variants and category affinity
+seeded from 104 weeks), chosen on validation recall (D-027).
+
+**Launch proxy.** The dataset has no launch dates. "New arrival" means *first
+observed sale* within a window before the cutoff. An article launched earlier but
+unsold looks new; one that launches inside the label week cannot be retrieved
+from history at all (item cold start, ~5% of label-week purchases).
+
+**Availability proxy.** There is no stock feed. An article whose last observed
+sale is more than 28 days before the cutoff is treated as likely unavailable in
+the re-ranking stage. Only pre-cutoff sales are read, so the rule cannot leak;
+a slow seller with stock looks the same as a discontinued article.
+
 ## Integrity checks
 
 Run at ingestion and asserted in tests:

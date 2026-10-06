@@ -1,0 +1,49 @@
+Track B rolling backtest (test): weeks 2020-09-02..2020-09-16, 1 folds, cache 7ad0aa24ad
+[2020-09-02] preparing
+  96,881 queries, 27,064 eligible items, towers best epoch 6 (holdout R@12 0.0830), 4s
+[2020-09-09] preparing
+  93,672 queries, 27,070 eligible items, towers best epoch 6 (holdout R@12 0.0886), 4s
+  train matrix 2020-09-09: 1,960,701 rows, 29,958 groups, pos rate 0.0098 (15s)
+[2020-09-16] preparing
+  training towers for 2020-09-16 in a subprocess (PyTorch / LightGBM OpenMP clash)
+/Users/yilacao/Documents/Codex/ensemble/src/ensemble/completion/towers.py:197: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  slot_ids = torch.as_tensor(pos.dst_slot.map(SLOT_IDS).to_numpy(dtype=np.int64), device=dev)
+    epoch 1: loss 6.4004 holdout R@12 0.0772 (27s)
+    epoch 2: loss 6.2331 holdout R@12 0.0823 (26s)
+    epoch 3: loss 6.1689 holdout R@12 0.0837 (27s)
+    epoch 4: loss 6.1313 holdout R@12 0.0842 (27s)
+    epoch 5: loss 6.1060 holdout R@12 0.0853 (27s)
+    epoch 6: loss 6.0868 holdout R@12 0.0871 (27s)
+  towers 2020-09-16: best epoch 6 holdout R@12 0.0871, 4,431,945 candidate keys (178s)
+  86,350 queries, 26,793 eligible items, towers best epoch 6 (holdout R@12 0.0871), 184s
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_personalized: 3,934,092 rows, 95 features, 203 trees (83s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: 3,934,092 rows, 74 features, 94 trees (41s)
+    candidate union: recall 0.4719 at 184 candidates/query (15,872,707 rows)
+    slot_popularity            R@12=0.0884 R@5=0.0480 NDCG=0.0461 vs_pop=+0.0% vs_shipped=-29.9% tail=0.0136 cov=0.003
+    assoc_npmi                 R@12=0.1202 R@5=0.0763 NDCG=0.0747 vs_pop=+36.0% vs_shipped=-4.7% tail=0.0455 cov=0.217
+    shipped_rrf_hybrid         R@12=0.1261 R@5=0.0776 NDCG=0.0752 vs_pop=+42.7% vs_shipped=+0.0% tail=0.0438 cov=0.224
+    rrf_all_sources            R@12=0.1304 R@5=0.0796 NDCG=0.0747 vs_pop=+47.5% vs_shipped=+3.4% tail=0.0497 cov=0.258
+    lgbm_personalized          R@12=0.1820 R@5=0.1187 NDCG=0.1124 vs_pop=+106.0% vs_shipped=+44.3% tail=0.1080 cov=0.279
+    lgbm_compatibility         R@12=0.1596 R@5=0.0996 NDCG=0.0956 vs_pop=+80.6% vs_shipped=+26.6% tail=0.0927 cov=0.222
+    rrf_all_sources_union      R@12=0.1322 R@5=0.0837 NDCG=0.0781 vs_pop=+49.6% vs_shipped=+4.9% tail=0.0577 cov=0.397
+    lgbm_compatibility+one_colourway R@12=0.1471 R@5=0.0944 NDCG=0.0904 vs_pop=+66.5% vs_shipped=+16.7% tail=0.0870 cov=0.228
+    lgbm_compatibility+max2_per_type R@12=0.1502 R@5=0.0893 NDCG=0.0907 vs_pop=+69.9% vs_shipped=+19.1% tail=0.0874 cov=0.225
+    lgbm_compatibility+shipped R@12=0.1494 R@5=0.0878 NDCG=0.0897 vs_pop=+69.1% vs_shipped=+18.5% tail=0.0864 cov=0.227
+    lgbm_compatibility+shipped_strict R@12=0.0943 R@5=0.0799 NDCG=0.0710 vs_pop=+6.7% vs_shipped=-25.2% tail=0.0542 cov=0.187
+
+== summary (452s, peak 5359 MB) ==
+slot_popularity            R@12 0.0884±0.0000 NDCG 0.0461 vs_shipped -29.92% wins 0/1
+assoc_npmi                 R@12 0.1202±0.0000 NDCG 0.0747 vs_shipped -4.67% wins 0/1
+shipped_rrf_hybrid         R@12 0.1261±0.0000 NDCG 0.0752 vs_shipped +0.00% wins -/1
+rrf_all_sources            R@12 0.1304±0.0000 NDCG 0.0747 vs_shipped +3.38% wins 1/1
+lgbm_personalized          R@12 0.1820±0.0000 NDCG 0.1124 vs_shipped +44.33% wins 1/1
+lgbm_compatibility         R@12 0.1596±0.0000 NDCG 0.0956 vs_shipped +26.57% wins 1/1
+rrf_all_sources_union      R@12 0.1322±0.0000 NDCG 0.0781 vs_shipped +4.86% wins 1/1
+lgbm_compatibility+one_colourway R@12 0.1471±0.0000 NDCG 0.0904 vs_shipped +16.66% wins 1/1
+lgbm_compatibility+max2_per_type R@12 0.1502±0.0000 NDCG 0.0907 vs_shipped +19.09% wins 1/1
+lgbm_compatibility+shipped R@12 0.1494±0.0000 NDCG 0.0897 vs_shipped +18.48% wins 1/1
+lgbm_compatibility+shipped_strict R@12 0.0943±0.0000 NDCG 0.0710 vs_shipped -25.21% wins 0/1

@@ -1,0 +1,11 @@
+pool 2020-08-19: 18,216 customers, 58,884 true pairs, 17,536,402 rows (184s)
+pool 2020-08-26: 20,151 customers, 63,482 true pairs, 19,309,645 rows (120s)
+pool 2020-09-02: 19,140 customers, 60,533 true pairs, 18,082,642 rows (28s)
+budget   80: recall=0.1263 cand=82.5 caps={'repeat': 10, 'pop': 5, 'pop_age': 35, 'new_arrival': 0, 'cf': 0, 'variant': 10, 'dept_pop': 20, 'section_pop': 20, 'covis': 15, 'als': 0, 'new_arrival_pers': 5, 'visual': 0}
+budget  100: recall=0.1420 cand=101.7 caps={'repeat': 10, 'pop': 5, 'pop_age': 35, 'new_arrival': 0, 'cf': 0, 'variant': 10, 'dept_pop': 20, 'section_pop': 35, 'covis': 25, 'als': 0, 'new_arrival_pers': 10, 'visual': 0}
+budget  116: recall=0.1529 cand=116.3 caps={'repeat': 10, 'pop': 10, 'pop_age': 40, 'new_arrival': 0, 'cf': 0, 'variant': 10, 'dept_pop': 25, 'section_pop': 45, 'covis': 25, 'als': 5, 'new_arrival_pers': 10, 'visual': 0}
+budget  130: recall=0.1628 cand=131.3 caps={'repeat': 10, 'pop': 10, 'pop_age': 40, 'new_arrival': 0, 'cf': 0, 'variant': 15, 'dept_pop': 40, 'section_pop': 50, 'covis': 25, 'als': 5, 'new_arrival_pers': 10, 'visual': 0}
+budget  160: recall=0.1834 cand=163.6 caps={'repeat': 10, 'pop': 10, 'pop_age': 75, 'new_arrival': 0, 'cf': 0, 'variant': 15, 'dept_pop': 50, 'section_pop': 50, 'covis': 25, 'als': 5, 'new_arrival_pers': 10, 'visual': 0}
+budget  200: recall=0.2055 cand=200.6 caps={'repeat': 15, 'pop': 10, 'pop_age': 105, 'new_arrival': 0, 'cf': 5, 'variant': 15, 'dept_pop': 50, 'section_pop': 60, 'covis': 35, 'als': 5, 'new_arrival_pers': 10, 'visual': 0}
+budget  250: recall=0.2362 cand=257.9 caps={'repeat': 15, 'pop': 30, 'pop_age': 145, 'new_arrival': 20, 'cf': 5, 'variant': 15, 'dept_pop': 65, 'section_pop': 60, 'covis': 35, 'als': 5, 'new_arrival_pers': 10, 'visual': 0}
+budget  300: recall=0.2573 cand=301.7 caps={'repeat': 15, 'pop': 30, 'pop_age': 145, 'new_arrival': 25, 'cf': 5, 'variant': 20, 'dept_pop': 80, 'section_pop': 85, 'covis': 55, 'als': 10, 'new_arrival_pers': 15, 'visual': 0}

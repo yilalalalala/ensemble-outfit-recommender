@@ -1,0 +1,176 @@
+{
+  "what": "Frozen Round-1 (M4/M5 + D-022) Track B baseline, as observed before the Round-3 upgrade.",
+  "protocol_caveats": [
+    "Eligible catalogue included articles whose only sales were inside the target week (ensemble.completion.data.universe reads week.end), so every truth article was eligible by construction and 'item cold-start recall' was an artefact of that leak.",
+    "Model selection used the single validation week; the test week was scored once but has now been observed, so Round 3 selects on rolling historical folds and treats the test week as a single final confirmation, not a fresh holdout.",
+    "Confidence intervals were not reported; (anchor, target slot) queries from one basket were treated as independent."
+  ],
+  "selected_config": {
+    "min_support": 3,
+    "rrf_weight": 0.5,
+    "use_clip": true,
+    "use_backoff": false
+  },
+  "validation": {
+    "popularity": {
+      "recall@12": 0.0749831884295433,
+      "recall@5": 0.04046502339965796,
+      "ndcg@12": 0.03833730477130479,
+      "recall@12_tail": 0.018614119737715245,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.0,
+      "catalog_coverage@12": 0.0029359337317814826,
+      "novelty": 12.028310726479127
+    },
+    "association_npmi_support3": {
+      "recall@12": 0.11032861926657175,
+      "recall@5": 0.07141777008598649,
+      "ndcg@12": 0.06937188329730147,
+      "recall@12_tail": 0.04953267874616189,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.0020477815699658703,
+      "catalog_coverage@12": 0.21163188983258188,
+      "novelty": 12.285801758597982,
+      "relative_lift_recall@12_vs_popularity": 0.4713780725694294
+    },
+    "two_tower_clip": {
+      "recall@12": 0.11303792758565367,
+      "recall@5": 0.07082876775455449,
+      "ndcg@12": 0.06754903401440412,
+      "recall@12_tail": 0.049645150768746274,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.013310580204778157,
+      "catalog_coverage@12": 0.22033483625179126,
+      "novelty": 12.212891190118189,
+      "relative_lift_recall@12_vs_popularity": 0.507510282679802
+    },
+    "two_tower_clip_content_only": {
+      "recall@12": 0.10408000600778965,
+      "recall@5": 0.06562844551856441,
+      "ndcg@12": 0.06271454254259318,
+      "recall@12_tail": 0.04207578364881736,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.005119453924914676,
+      "catalog_coverage@12": 0.21323966306665268,
+      "novelty": 12.1125386329725,
+      "relative_lift_recall@12_vs_popularity": 0.3880445495537535
+    },
+    "hybrid_rrf_clip_w0.5": {
+      "recall@12": 0.12143876321457707,
+      "recall@5": 0.07724396063532374,
+      "ndcg@12": 0.07390206149835098,
+      "recall@12_tail": 0.04943145392583595,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.019453924914675767,
+      "catalog_coverage@12": 0.2150571458529936,
+      "novelty": 11.997812547749957,
+      "relative_lift_recall@12_vs_popularity": 0.6195465378040703
+    },
+    "hybrid_rrf_w0.5": {
+      "recall@12": 0.11889193829726952,
+      "recall@5": 0.07658003160916597,
+      "ndcg@12": 0.07327384471954294,
+      "recall@12_tail": 0.04640595651831607,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.016382252559726963,
+      "catalog_coverage@12": 0.20065708993044634,
+      "novelty": 11.93546063367116,
+      "relative_lift_recall@12_vs_popularity": 0.5855812587775505
+    }
+  },
+  "test": {
+    "popularity": {
+      "recall@12": 0.08373596405030306,
+      "recall@5": 0.045457155160040195,
+      "ndcg@12": 0.043739520499569695,
+      "recall@12_tail": 0.01200375196471125,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.0,
+      "catalog_coverage@12": 0.002984014209591474,
+      "novelty": 11.897782452876756
+    },
+    "association_npmi_support3": {
+      "recall@12": 0.11396878323819619,
+      "recall@5": 0.0723695590567989,
+      "ndcg@12": 0.07089694080869682,
+      "recall@12_tail": 0.04110682958981899,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.00036536353671903543,
+      "catalog_coverage@12": 0.20785079928952044,
+      "novelty": 12.226895283877527,
+      "relative_lift_recall@12_vs_popularity": 0.36104939533187
+    },
+    "two_tower_clip": {
+      "recall@12": 0.12444509464030061,
+      "recall@5": 0.07898646733869928,
+      "ndcg@12": 0.0751925770580985,
+      "recall@12_tail": 0.051196572529534044,
+      "recall@12_cold": 0.0001550147263990079,
+      "recall@12_jewellery": 0.014614541468761417,
+      "catalog_coverage@12": 0.20742451154529307,
+      "novelty": 12.143541014696018,
+      "relative_lift_recall@12_vs_popularity": 0.4861606485540929
+    },
+    "two_tower_clip_content_only": {
+      "recall@12": 0.1153351146246223,
+      "recall@5": 0.07159447652486263,
+      "ndcg@12": 0.06921269386579532,
+      "recall@12_tail": 0.0418673629772347,
+      "recall@12_cold": 0.0001550147263990079,
+      "recall@12_jewellery": 0.006211180124223602,
+      "catalog_coverage@12": 0.20234458259325044,
+      "novelty": 12.029758892405379,
+      "relative_lift_recall@12_vs_popularity": 0.37736653459123665
+    },
+    "hybrid_rrf_clip_w0.5": {
+      "recall@12": 0.13032280384081735,
+      "recall@5": 0.08256745168615415,
+      "ndcg@12": 0.07914579183911206,
+      "recall@12_tail": 0.047330527810170865,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.010595542564852027,
+      "catalog_coverage@12": 0.2047602131438721,
+      "novelty": 11.987651840815856,
+      "relative_lift_recall@12_vs_popularity": 0.556354014895296
+    },
+    "hybrid_rrf_w0.5": {
+      "recall@12": 0.12692546915311376,
+      "recall@5": 0.08113432187639164,
+      "ndcg@12": 0.07779425803904998,
+      "recall@12_tail": 0.04352786087309233,
+      "recall@12_cold": 0.0,
+      "recall@12_jewellery": 0.010230179028132993,
+      "catalog_coverage@12": 0.1966607460035524,
+      "novelty": 11.960405491660651,
+      "relative_lift_recall@12_vs_popularity": 0.5157820249954401
+    }
+  },
+  "headline": {
+    "validation_popularity_recall@12": 0.0749831884295433,
+    "validation_shipped_recall@12": 0.12143876321457707,
+    "validation_shipped_lift_vs_popularity": 0.6195465378040703,
+    "test_popularity_recall@12": 0.08373596405030306,
+    "test_shipped_recall@12": 0.13032280384081735,
+    "test_shipped_ndcg@12": 0.07914579183911206,
+    "test_shipped_lift_vs_popularity": 0.556354014895296,
+    "test_shipped_item_cold_start_recall@12": 0.0
+  },
+  "funnel_validation": {
+    "baskets_all": 1536586,
+    "baskets_size_2_6": 886980,
+    "baskets_multi_slot": 498958,
+    "pairs_cross_slot": 1364862.0,
+    "style_pairs_support_ge_3": 139784,
+    "pairs_support_ge_3": 39793.0,
+    "pairs_support_ge_3_lift_gt_1": 39455.0,
+    "pairs_support_ge_10": 1562.0,
+    "pairs_support_ge_10_lift_gt_1": 1560.0,
+    "pairs_support_ge_10_lift_ge_2": 1532.0
+  },
+  "git_commit": "24b57da1cdddf850fbe135945320b7f9eb8bb8a9",
+  "source_files": [
+    "reports/m4_track_b_val.json",
+    "reports/m4_track_b_test.json",
+    "reports/MODEL_CARD_track_b.md"
+  ]
+}

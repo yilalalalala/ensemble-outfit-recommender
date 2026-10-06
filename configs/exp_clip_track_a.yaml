@@ -1,6 +1,6 @@
-# Experiment: Track A with FashionCLIP retrieval channel and ranker features (M7a).
+# Experiment: Track A with FashionCLIP retrieval channel and ranker features (M7a, D-023).
 extends: default
 retrieval:
-  use_visual: true
+  channels: [repeat, pop, pop_age, new_arrival, cf, variant, visual]
 features:
   use_clip: true

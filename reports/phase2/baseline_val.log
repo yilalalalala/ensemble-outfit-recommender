@@ -1,0 +1,9 @@
+  train week 2020-08-12: 2,590,809 rows, pos rate 0.0113 (16s)
+  train week 2020-08-19: 2,701,693 rows, pos rate 0.0111 (16s)
+  train week 2020-08-26: 3,087,432 rows, pos rate 0.0109 (19s)
+  train week 2020-09-02: 2,922,356 rows, pos rate 0.0111 (16s)
+  rounds=100: MAP@12=0.03509
+  rounds=200: MAP@12=0.03555
+  rounds=300: MAP@12=0.03555
+val: MAP@12=0.03555 returning=0.03774 new=0.00851 recall@12=0.0568 (142.5s train)
+top features: [('ca_days_since_article', 0.131), ('product_type_no', 0.083), ('a_n_1w', 0.069), ('c_days_since_last', 0.06), ('repeat_score', 0.056), ('cf_rank', 0.04), ('colour_group_code', 0.04), ('ca_share_prod', 0.039), ('repeat_rank', 0.034), ('cf_score', 0.028), ('a_trend_1w_4w', 0.023), ('garment_group_no', 0.023), ('a_online_share', 0.022), ('c_n_tx_4w', 0.021), ('c_online_share', 0.019)]

@@ -1,0 +1,41 @@
+training on label weeks ['2020-08-26', '2020-09-02', '2020-09-09', '2020-09-16'] for 2020-09-23..2020-09-29
+  train week 2020-08-26: 2,629,530 rows, pos rate 0.0182 (retrieval 14s, features 7s)
+  train week 2020-09-02: 2,511,704 rows, pos rate 0.0182 (retrieval 14s, features 9s)
+  train week 2020-09-09: 2,321,315 rows, pos rate 0.0182 (retrieval 12s, features 7s)
+  train week 2020-09-16: 2,260,791 rows, pos rate 0.0190 (retrieval 12s, features 7s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  customers 0–100,000 ranked (205s)
+  customers 100,000–200,000 ranked (384s)
+  customers 200,000–300,000 ranked (152s)
+  customers 300,000–400,000 ranked (153s)
+  customers 400,000–500,000 ranked (153s)
+  customers 500,000–600,000 ranked (157s)
+  customers 600,000–700,000 ranked (145s)
+  customers 700,000–800,000 ranked (133s)
+  customers 800,000–900,000 ranked (133s)
+  customers 900,000–1,000,000 ranked (134s)
+  customers 1,000,000–1,100,000 ranked (133s)
+  customers 1,100,000–1,200,000 ranked (133s)
+  customers 1,200,000–1,300,000 ranked (134s)
+  customers 1,300,000–1,371,980 ranked (95s)
+wrote /Users/yilacao/Documents/Codex/ensemble/reports/submission.csv (1,371,980 rows)
+     2917.52 real     15322.92 user       478.15 sys
+          6284886016  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            77669194  page reclaims
+                2766  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               29705  voluntary context switches
+            14489323  involuntary context switches
+      41589097860293  instructions retired
+      32020628593063  cycles elapsed
+         13638380488  peak memory footprint

@@ -1,0 +1,163 @@
+{
+  "model": "lgbm_compatibility",
+  "n_features": 74,
+  "trees": 132,
+  "train_weeks": [
+    "2020-09-09",
+    "2020-09-16"
+  ],
+  "serving_week": "2020-09-23",
+  "cutoff": "2020-09-22",
+  "n_live_articles": 26165,
+  "n_keys": 156990,
+  "n_scored_rows": 26335587,
+  "n_rows": 1255920,
+  "n_anchors": 26165,
+  "per_slot": 8,
+  "pool": 48,
+  "max_per_product_type": 2,
+  "one_per_product_code": true,
+  "diversity_fill_back": true,
+  "source_mix": {
+    "visual_compatibility": 762188,
+    "popular_in_slot": 394137,
+    "style_co_purchase": 63801,
+    "co_purchase": 35794
+  },
+  "mean_distinct_product_types_per_module": 3.8623670297471175,
+  "seconds": 131.5,
+  "fit": {
+    "train_rows": 3881396,
+    "train_groups": 59575,
+    "positive_rate": 0.010078590280404268,
+    "best_iteration": 132,
+    "early_stopping_metric": "ndcg@12",
+    "best_score": 0.610205445693465,
+    "curve": [
+      0.56344,
+      0.603571,
+      0.605557,
+      0.607862,
+      0.609555,
+      0.609862,
+      0.609804,
+      0.609814
+    ],
+    "num_boost_round": 132
+  },
+  "top_features": [
+    {
+      "feature": "a_co_share",
+      "gain_share": 0.15691
+    },
+    {
+      "feature": "cand_product_type_no",
+      "gain_share": 0.08242
+    },
+    {
+      "feature": "anchor_product_type_no",
+      "gain_share": 0.07561
+    },
+    {
+      "feature": "cand_section_no",
+      "gain_share": 0.07039
+    },
+    {
+      "feature": "cand_colour_group_code",
+      "gain_share": 0.05966
+    },
+    {
+      "feature": "a_rank_co",
+      "gain_share": 0.04029
+    },
+    {
+      "feature": "tt_rank",
+      "gain_share": 0.03737
+    },
+    {
+      "feature": "cand_slot_pop_rank",
+      "gain_share": 0.03584
+    },
+    {
+      "feature": "cand_slot_pop_pct",
+      "gain_share": 0.03446
+    },
+    {
+      "feature": "a_co_d14",
+      "gain_share": 0.02813
+    },
+    {
+      "feature": "cand_age_days",
+      "gain_share": 0.02601
+    },
+    {
+      "feature": "cand_pop_window",
+      "gain_share": 0.02504
+    },
+    {
+      "feature": "ttc_rank",
+      "gain_share": 0.02419
+    },
+    {
+      "feature": "cand_pop_recent",
+      "gain_share": 0.02371
+    },
+    {
+      "feature": "a_npmi",
+      "gain_share": 0.02286
+    },
+    {
+      "feature": "anchor_garment_group_no",
+      "gain_share": 0.02068
+    },
+    {
+      "feature": "ttc_pair_sim",
+      "gain_share": 0.02026
+    },
+    {
+      "feature": "cand_days_sold",
+      "gain_share": 0.01998
+    },
+    {
+      "feature": "cand_garment_group_no",
+      "gain_share": 0.01604
+    },
+    {
+      "feature": "tt_pair_sim",
+      "gain_share": 0.0151
+    },
+    {
+      "feature": "anchor_index_group_no",
+      "gain_share": 0.01405
+    },
+    {
+      "feature": "clip_sim",
+      "gain_share": 0.01371
+    },
+    {
+      "feature": "same_section",
+      "gain_share": 0.0127
+    },
+    {
+      "feature": "same_index_group",
+      "gain_share": 0.00977
+    },
+    {
+      "feature": "s_co_d14",
+      "gain_share": 0.00845
+    }
+  ],
+  "manifest": {
+    "git_commit": "dbd226e8f23ce8785d6768b549f2e859541eefa2",
+    "git_dirty": true,
+    "config_name": "default",
+    "track_b_config_sha1": "7a47dc6137c9",
+    "data_fingerprint": {
+      "rows": 31788324,
+      "min_date": "2018-09-20",
+      "max_date": "2020-09-22",
+      "article_id_sum": "22131896419443968"
+    },
+    "stage": "serve_round3"
+  }
+}

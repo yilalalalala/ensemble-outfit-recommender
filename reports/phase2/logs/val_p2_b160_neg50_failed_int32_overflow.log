@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/ranking/train.py", line 334, in <module>
+    run_eval(sys.argv[1] if len(sys.argv) > 1 else "val", sys.argv[2] if len(sys.argv) > 2 else None)
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/ranking/train.py", line 277, in run_eval
+    data = build_training_data(con, cfg, weeks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/ranking/train.py", line 107, in build_training_data
+    df = week_frame(con, cfg, w, buyers_sql(w), True, True, neg_rate)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/ranking/train.py", line 65, in week_frame
+    con.execute(f"""DELETE FROM cand WHERE (customer_idx, article_id) NOT IN (
+_duckdb.OutOfRangeException: Out of Range Error: Overflow in multiplication of INT32 (780301 * 1000003)!
+       12.75 real        48.30 user         9.88 sys
+          4615749632  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1349346  page reclaims
+                4098  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                4894  voluntary context switches
+              376471  involuntary context switches
+        307067557816  instructions retired
+        137557091296  cycles elapsed
+          8363367264  peak memory footprint

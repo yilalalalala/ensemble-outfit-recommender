@@ -1,0 +1,5390 @@
+{
+  "mode": "val",
+  "weeks": [
+    "2020-07-22",
+    "2020-07-29",
+    "2020-08-05",
+    "2020-08-12",
+    "2020-08-19",
+    "2020-08-26",
+    "2020-09-02",
+    "2020-09-09"
+  ],
+  "folds": [
+    "2020-08-05",
+    "2020-08-12",
+    "2020-08-19",
+    "2020-08-26",
+    "2020-09-02",
+    "2020-09-09"
+  ],
+  "cache_key": "7ad0aa24ad",
+  "week_meta": {
+    "2020-07-22": {
+      "funnel": {
+        "baskets_all": 1420184,
+        "baskets_multi_slot": 461799,
+        "pairs_support_ge_2": 298182,
+        "pairs_support_ge_3": 86970,
+        "pairs_support_ge_10": 2972,
+        "pairs_npmi_positive": 293130,
+        "style_pairs": 379500,
+        "training_examples": 3119556
+      },
+      "basket_audit": {
+        "baskets": 461799.0,
+        "mean_articles": 3.4411811199244693,
+        "mean_slots": 2.271587855322337,
+        "share_repeated_quantity": 0.1721917977301813,
+        "share_multi_colourway": 0.1537898522950461,
+        "share_heterogeneous_4plus": 0.029363424346956143,
+        "mean_units_per_article": 1.1455229078740312
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.07052701505757307,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.4615789090690505,
+            "holdout_recall@12": 0.06045172719220549,
+            "seconds": 26.7
+          },
+          {
+            "epoch": 2,
+            "loss": 6.322977635853802,
+            "holdout_recall@12": 0.06349645704162976,
+            "seconds": 26.0
+          },
+          {
+            "epoch": 3,
+            "loss": 6.277213300503064,
+            "holdout_recall@12": 0.06676262178919398,
+            "seconds": 25.8
+          },
+          {
+            "epoch": 4,
+            "loss": 6.246266952796235,
+            "holdout_recall@12": 0.06864481842338352,
+            "seconds": 28.1
+          },
+          {
+            "epoch": 5,
+            "loss": 6.224059907838827,
+            "holdout_recall@12": 0.0695859167404783,
+            "seconds": 28.3
+          },
+          {
+            "epoch": 6,
+            "loss": 6.206376606375394,
+            "holdout_recall@12": 0.07052701505757307,
+            "seconds": 29.0
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 190.5,
+        "n_candidate_keys": 6656199,
+        "n_keys": 38830
+      },
+      "n_queries": 126776,
+      "n_eligible_items": 28252,
+      "n_truth_dropped": 4603,
+      "source_rows": {
+        "_tb_assoc": 237734,
+        "_tb_style": 236024,
+        "_tb_pop": 700,
+        "_tb_tt": 3106400,
+        "_tb_ttc": 1553200
+      },
+      "n_candidate_keys": 6656199,
+      "prepare_seconds": 198.5
+    },
+    "2020-07-29": {
+      "funnel": {
+        "baskets_all": 1434963,
+        "baskets_multi_slot": 467095,
+        "pairs_support_ge_2": 294856,
+        "pairs_support_ge_3": 84868,
+        "pairs_support_ge_10": 2864,
+        "pairs_npmi_positive": 290194,
+        "style_pairs": 378320,
+        "training_examples": 3128734
+      },
+      "basket_audit": {
+        "baskets": 467095.0,
+        "mean_articles": 3.4262216465601214,
+        "mean_slots": 2.2692707051028163,
+        "share_repeated_quantity": 0.1677367559061861,
+        "share_multi_colourway": 0.15211252528928804,
+        "share_heterogeneous_4plus": 0.02910114644772477,
+        "mean_units_per_article": 1.1422044052423115
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.06991841893599908,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.446097266524823,
+            "holdout_recall@12": 0.06135815236125474,
+            "seconds": 29.4
+          },
+          {
+            "epoch": 2,
+            "loss": 6.3159979878612615,
+            "holdout_recall@12": 0.06486269102608296,
+            "seconds": 28.5
+          },
+          {
+            "epoch": 3,
+            "loss": 6.269143503796573,
+            "holdout_recall@12": 0.06733310352751924,
+            "seconds": 27.5
+          },
+          {
+            "epoch": 4,
+            "loss": 6.238643652872184,
+            "holdout_recall@12": 0.06894174422612892,
+            "seconds": 27.3
+          },
+          {
+            "epoch": 5,
+            "loss": 6.217994838497072,
+            "holdout_recall@12": 0.06796506951625876,
+            "seconds": 31.5
+          },
+          {
+            "epoch": 6,
+            "loss": 6.201239869723897,
+            "holdout_recall@12": 0.06991841893599908,
+            "seconds": 31.9
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 205.6,
+        "n_candidate_keys": 6666679,
+        "n_keys": 38802
+      },
+      "n_queries": 135154,
+      "n_eligible_items": 27773,
+      "n_truth_dropped": 6173,
+      "source_rows": {
+        "_tb_assoc": 235891,
+        "_tb_style": 236236,
+        "_tb_pop": 700,
+        "_tb_tt": 3104160,
+        "_tb_ttc": 1552080
+      },
+      "n_candidate_keys": 6666679,
+      "prepare_seconds": 215.0
+    },
+    "2020-08-05": {
+      "funnel": {
+        "baskets_all": 1447850,
+        "baskets_multi_slot": 472001,
+        "pairs_support_ge_2": 289092,
+        "pairs_support_ge_3": 81994,
+        "pairs_support_ge_10": 2786,
+        "pairs_npmi_positive": 284988,
+        "style_pairs": 375012,
+        "training_examples": 3126526
+      },
+      "basket_audit": {
+        "baskets": 472001.0,
+        "mean_articles": 3.4065033760521692,
+        "mean_slots": 2.266660451990568,
+        "share_repeated_quantity": 0.16350177224200796,
+        "share_multi_colourway": 0.14951239510085784,
+        "share_heterogeneous_4plus": 0.028644007110154426,
+        "mean_units_per_article": 1.1389442324627606
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.06829320264223311,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.461867818632326,
+            "holdout_recall@12": 0.0597165991902834,
+            "seconds": 29.3
+          },
+          {
+            "epoch": 2,
+            "loss": 6.31978189228298,
+            "holdout_recall@12": 0.06440443213296398,
+            "seconds": 25.8
+          },
+          {
+            "epoch": 3,
+            "loss": 6.2698555486185565,
+            "holdout_recall@12": 0.06573620285531642,
+            "seconds": 26.7
+          },
+          {
+            "epoch": 4,
+            "loss": 6.23815723232456,
+            "holdout_recall@12": 0.06685489026209247,
+            "seconds": 26.7
+          },
+          {
+            "epoch": 5,
+            "loss": 6.216741553219882,
+            "holdout_recall@12": 0.06754741103771575,
+            "seconds": 25.6
+          },
+          {
+            "epoch": 6,
+            "loss": 6.199698097389061,
+            "holdout_recall@12": 0.06829320264223311,
+            "seconds": 25.3
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 182.9,
+        "n_candidate_keys": 6195765,
+        "n_keys": 35390
+      },
+      "n_queries": 118124,
+      "n_eligible_items": 27524,
+      "n_truth_dropped": 4202,
+      "source_rows": {
+        "_tb_assoc": 227048,
+        "_tb_style": 231533,
+        "_tb_pop": 700,
+        "_tb_tt": 2831200,
+        "_tb_ttc": 1415600
+      },
+      "n_candidate_keys": 6195765,
+      "prepare_seconds": 190.0
+    },
+    "2020-08-12": {
+      "funnel": {
+        "baskets_all": 1477225,
+        "baskets_multi_slot": 482575,
+        "pairs_support_ge_2": 293358,
+        "pairs_support_ge_3": 82926,
+        "pairs_support_ge_10": 2746,
+        "pairs_npmi_positive": 289350,
+        "style_pairs": 381333,
+        "training_examples": 3181236
+      },
+      "basket_audit": {
+        "baskets": 482575.0,
+        "mean_articles": 3.3974283790084443,
+        "mean_slots": 2.265902709423406,
+        "share_repeated_quantity": 0.1609490752732736,
+        "share_multi_colourway": 0.14778635445267574,
+        "share_heterogeneous_4plus": 0.028501269232761747,
+        "mean_units_per_article": 1.13715688407671
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.07105035660255025,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.446949995181217,
+            "holdout_recall@12": 0.056678193213745405,
+            "seconds": 26.3
+          },
+          {
+            "epoch": 2,
+            "loss": 6.306380634411804,
+            "holdout_recall@12": 0.0643505511130322,
+            "seconds": 26.6
+          },
+          {
+            "epoch": 3,
+            "loss": 6.256808751285563,
+            "holdout_recall@12": 0.06570131834882213,
+            "seconds": 26.2
+          },
+          {
+            "epoch": 4,
+            "loss": 6.225584073677375,
+            "holdout_recall@12": 0.06905122109358115,
+            "seconds": 27.7
+          },
+          {
+            "epoch": 5,
+            "loss": 6.204120447590176,
+            "holdout_recall@12": 0.06910525178301274,
+            "seconds": 26.8
+          },
+          {
+            "epoch": 6,
+            "loss": 6.187278433131912,
+            "holdout_recall@12": 0.07105035660255025,
+            "seconds": 27.4
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 184.6,
+        "n_candidate_keys": 5960023,
+        "n_keys": 33694
+      },
+      "n_queries": 108057,
+      "n_eligible_items": 27282,
+      "n_truth_dropped": 4959,
+      "source_rows": {
+        "_tb_assoc": 217626,
+        "_tb_style": 227827,
+        "_tb_pop": 700,
+        "_tb_tt": 2695520,
+        "_tb_ttc": 1347760
+      },
+      "n_candidate_keys": 5960023,
+      "prepare_seconds": 192.1
+    },
+    "2020-08-19": {
+      "funnel": {
+        "baskets_all": 1486520,
+        "baskets_multi_slot": 485797,
+        "pairs_support_ge_2": 290056,
+        "pairs_support_ge_3": 81390,
+        "pairs_support_ge_10": 2734,
+        "pairs_npmi_positive": 286496,
+        "style_pairs": 378488,
+        "training_examples": 3182186
+      },
+      "basket_audit": {
+        "baskets": 485797.0,
+        "mean_articles": 3.3867438456803973,
+        "mean_slots": 2.2638447746692547,
+        "share_repeated_quantity": 0.15885030166921574,
+        "share_multi_colourway": 0.1462750902125785,
+        "share_heterogeneous_4plus": 0.02812285790155147,
+        "mean_units_per_article": 1.135672787879131
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.06988307288820894,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.449168139356908,
+            "holdout_recall@12": 0.05605944705496667,
+            "seconds": 26.2
+          },
+          {
+            "epoch": 2,
+            "loss": 6.30521817194414,
+            "holdout_recall@12": 0.059774887990383566,
+            "seconds": 26.2
+          },
+          {
+            "epoch": 3,
+            "loss": 6.253117255725189,
+            "holdout_recall@12": 0.061687247295377556,
+            "seconds": 26.5
+          },
+          {
+            "epoch": 4,
+            "loss": 6.2216873731070415,
+            "holdout_recall@12": 0.06463774450879685,
+            "seconds": 27.2
+          },
+          {
+            "epoch": 5,
+            "loss": 6.199308626696992,
+            "holdout_recall@12": 0.06857174079335591,
+            "seconds": 26.3
+          },
+          {
+            "epoch": 6,
+            "loss": 6.181979650404395,
+            "holdout_recall@12": 0.06988307288820894,
+            "seconds": 26.2
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 179.8,
+        "n_candidate_keys": 5664805,
+        "n_keys": 31740
+      },
+      "n_queries": 98537,
+      "n_eligible_items": 27151,
+      "n_truth_dropped": 6433,
+      "source_rows": {
+        "_tb_assoc": 206343,
+        "_tb_style": 219932,
+        "_tb_pop": 700,
+        "_tb_tt": 2539200,
+        "_tb_ttc": 1269600
+      },
+      "n_candidate_keys": 5664805,
+      "prepare_seconds": 186.7
+    },
+    "2020-08-26": {
+      "funnel": {
+        "baskets_all": 1512808,
+        "baskets_multi_slot": 493839,
+        "pairs_support_ge_2": 291082,
+        "pairs_support_ge_3": 81694,
+        "pairs_support_ge_10": 2876,
+        "pairs_npmi_positive": 287770,
+        "style_pairs": 380431,
+        "training_examples": 3216540
+      },
+      "basket_audit": {
+        "baskets": 493839.0,
+        "mean_articles": 3.3782325818738497,
+        "mean_slots": 2.2612572113583576,
+        "share_repeated_quantity": 0.15733062799819375,
+        "share_multi_colourway": 0.14552313608281242,
+        "share_heterogeneous_4plus": 0.027719560423538847,
+        "mean_units_per_article": 1.13470530544027
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.07474102625873283,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.437885832563739,
+            "holdout_recall@12": 0.05733558178752108,
+            "seconds": 27.2
+          },
+          {
+            "epoch": 2,
+            "loss": 6.295702824127849,
+            "holdout_recall@12": 0.06125030113225729,
+            "seconds": 27.5
+          },
+          {
+            "epoch": 3,
+            "loss": 6.240145878097881,
+            "holdout_recall@12": 0.06889906046735726,
+            "seconds": 26.9
+          },
+          {
+            "epoch": 4,
+            "loss": 6.205139136600876,
+            "holdout_recall@12": 0.07124789207419899,
+            "seconds": 26.6
+          },
+          {
+            "epoch": 5,
+            "loss": 6.180805030588473,
+            "holdout_recall@12": 0.07401830884124308,
+            "seconds": 26.8
+          },
+          {
+            "epoch": 6,
+            "loss": 6.161886049049082,
+            "holdout_recall@12": 0.07474102625873283,
+            "seconds": 26.6
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 183.0,
+        "n_candidate_keys": 5422414,
+        "n_keys": 30462
+      },
+      "n_queries": 107718,
+      "n_eligible_items": 27126,
+      "n_truth_dropped": 5615,
+      "source_rows": {
+        "_tb_assoc": 181933,
+        "_tb_style": 204900,
+        "_tb_pop": 700,
+        "_tb_tt": 2436960,
+        "_tb_ttc": 1218480
+      },
+      "n_candidate_keys": 5422414,
+      "prepare_seconds": 190.3
+    },
+    "2020-09-02": {
+      "funnel": {
+        "baskets_all": 1532229,
+        "baskets_multi_slot": 499413,
+        "pairs_support_ge_2": 289906,
+        "pairs_support_ge_3": 81220,
+        "pairs_support_ge_10": 2998,
+        "pairs_npmi_positive": 286886,
+        "style_pairs": 379261,
+        "training_examples": 3233584
+      },
+      "basket_audit": {
+        "baskets": 499413.0,
+        "mean_articles": 3.370553029256347,
+        "mean_slots": 2.257710552188269,
+        "share_repeated_quantity": 0.1566759375506845,
+        "share_multi_colourway": 0.14418327116034224,
+        "share_heterogeneous_4plus": 0.027205939773293848,
+        "mean_units_per_article": 1.1345320406156498
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.08296642087952893,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.437980453491211,
+            "holdout_recall@12": 0.06471805209272717,
+            "seconds": 28.1
+          },
+          {
+            "epoch": 2,
+            "loss": 6.287433554331462,
+            "holdout_recall@12": 0.0736300461513978,
+            "seconds": 29.2
+          },
+          {
+            "epoch": 3,
+            "loss": 6.22692234547933,
+            "holdout_recall@12": 0.07819213834809824,
+            "seconds": 29.6
+          },
+          {
+            "epoch": 4,
+            "loss": 6.191329301834107,
+            "holdout_recall@12": 0.0802609941117182,
+            "seconds": 27.7
+          },
+          {
+            "epoch": 5,
+            "loss": 6.165983752568563,
+            "holdout_recall@12": 0.08217070712429049,
+            "seconds": 27.2
+          },
+          {
+            "epoch": 6,
+            "loss": 6.146981213887533,
+            "holdout_recall@12": 0.08296642087952893,
+            "seconds": 27.1
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 189.0,
+        "n_candidate_keys": 5131772,
+        "n_keys": 28752
+      },
+      "n_queries": 96881,
+      "n_eligible_items": 27064,
+      "n_truth_dropped": 8964,
+      "source_rows": {
+        "_tb_assoc": 170342,
+        "_tb_style": 195458,
+        "_tb_pop": 700,
+        "_tb_tt": 2300160,
+        "_tb_ttc": 1150080
+      },
+      "n_candidate_keys": 5131772,
+      "prepare_seconds": 195.6
+    },
+    "2020-09-09": {
+      "funnel": {
+        "baskets_all": 1536586,
+        "baskets_multi_slot": 498958,
+        "pairs_support_ge_2": 284972,
+        "pairs_support_ge_3": 79586,
+        "pairs_support_ge_10": 3124,
+        "pairs_npmi_positive": 282334,
+        "style_pairs": 373220,
+        "training_examples": 3210200
+      },
+      "basket_audit": {
+        "baskets": 498958.0,
+        "mean_articles": 3.362321077124728,
+        "mean_slots": 2.2536425911599776,
+        "share_repeated_quantity": 0.15603517730951302,
+        "share_multi_colourway": 0.1430100329085815,
+        "share_heterogeneous_4plus": 0.02656335803815151,
+        "mean_units_per_article": 1.134582737090731
+      },
+      "tower": {
+        "epochs_run": 6,
+        "best_epoch": 6,
+        "best_holdout_recall@12": 0.08863317429132753,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 6.435266677315136,
+            "holdout_recall@12": 0.06926747123210777,
+            "seconds": 27.4
+          },
+          {
+            "epoch": 2,
+            "loss": 6.265395344500561,
+            "holdout_recall@12": 0.08083076059500421,
+            "seconds": 27.3
+          },
+          {
+            "epoch": 3,
+            "loss": 6.201416329048085,
+            "holdout_recall@12": 0.08476003367948358,
+            "seconds": 27.3
+          },
+          {
+            "epoch": 4,
+            "loss": 6.16393521320389,
+            "holdout_recall@12": 0.08605108055009823,
+            "seconds": 26.9
+          },
+          {
+            "epoch": 5,
+            "loss": 6.138690675278425,
+            "holdout_recall@12": 0.08582655065955655,
+            "seconds": 26.9
+          },
+          {
+            "epoch": 6,
+            "loss": 6.119205569327277,
+            "holdout_recall@12": 0.08863317429132753,
+            "seconds": 27.0
+          }
+        ],
+        "negatives": [
+          "in_batch",
+          "logq"
+        ],
+        "hard_negatives": 0,
+        "seed": 0,
+        "device": "mps",
+        "artifact_seconds": 181.6,
+        "n_candidate_keys": 4834729,
+        "n_keys": 27193
+      },
+      "n_queries": 93672,
+      "n_eligible_items": 27070,
+      "n_truth_dropped": 7902,
+      "source_rows": {
+        "_tb_assoc": 164769,
+        "_tb_style": 187959,
+        "_tb_pop": 700,
+        "_tb_tt": 2175440,
+        "_tb_ttc": 1087720
+      },
+      "n_candidate_keys": 4834729,
+      "prepare_seconds": 188.1
+    }
+  },
+  "per_fold": {
+    "2020-08-05": {
+      "metrics": {
+        "slot_popularity": {
+          "recall@12": 0.05270210400370232,
+          "recall@5": 0.02487047509396905,
+          "ndcg@12": 0.02674082842842507,
+          "recall@12_tail": 0.008612041076279688,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.0276153603034134,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.034503271861986914,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.05099055305879116,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.03866044135505213,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.033175887746938276,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.19089424254797877,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.3688862621486735,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.09066336815099871,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.028335422070667325,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.003051881993896236,
+          "novelty": 11.83552447495713,
+          "diversity_product_type@12": 0.3032745250753446,
+          "diversity_product_code@12": 0.7668297721038908,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.05214337008025432,
+          "ndcg@12_returning": 0.026455618536242433,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.061329157967988865,
+          "ndcg@12_new_customer": 0.03114457237120162,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 0.0,
+          "relative_lift_recall@12_vs_shipped": -0.3470528286516903,
+          "relative_lift_ndcg@12_vs_shipped": -0.4205191857386214
+        },
+        "assoc_npmi": {
+          "recall@12": 0.07048793358391746,
+          "recall@5": 0.04185262944024922,
+          "ndcg@12": 0.041369148763427364,
+          "recall@12_tail": 0.023964920586610757,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.05965549936788875,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.03390838786436645,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.05123513406096181,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.04663819214717417,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.06618407286602254,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.19079216006533278,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.3672314158129761,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.08625801722558182,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.05397783023908756,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.2251852928353437,
+          "novelty": 12.067431471131773,
+          "diversity_product_type@12": 0.3060166999650085,
+          "diversity_product_code@12": 0.8114657760771167,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.0700710901185937,
+          "ndcg@12_returning": 0.04109433110583064,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.07692414752957549,
+          "ndcg@12_new_customer": 0.04561243284361158,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 0.33747854884438167,
+          "relative_lift_recall@12_vs_shipped": -0.12669716479301893,
+          "relative_lift_ndcg@12_vs_shipped": -0.10351962075907585
+        },
+        "shipped_rrf_hybrid": {
+          "recall@12": 0.08071419299493188,
+          "recall@5": 0.0489859526147664,
+          "ndcg@12": 0.04614618425721243,
+          "recall@12_tail": 0.02899236864946513,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.04092920353982301,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.005651397977394408,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.059596747072671125,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.05420208533980989,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.09024657927667344,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.11533619164284742,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.421401365904912,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.07631482499541872,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.06787181953309435,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.2767402993750908,
+          "novelty": 11.769167048951255,
+          "diversity_product_type@12": 0.2575288115313851,
+          "diversity_product_code@12": 0.790664189044281,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.07986040376543266,
+          "ndcg@12_returning": 0.04563185431515852,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.09389700765483647,
+          "ndcg@12_new_customer": 0.05408762468052766,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 0.5315174701424009,
+          "relative_lift_recall@12_vs_shipped": 0.0,
+          "relative_lift_ndcg@12_vs_shipped": 0.0
+        },
+        "rrf_all_sources": {
+          "recall@12": 0.08843743298003227,
+          "recall@5": 0.051929328502251876,
+          "ndcg@12": 0.049303799586528356,
+          "recall@12_tail": 0.025610677127365776,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.03847977243994943,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.005651397977394408,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.06281451588247881,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.06324344318356294,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.09973434262621289,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.13069960528106708,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.3958825847123719,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.09346893897746013,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.0733064226244256,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.23121639296613863,
+          "novelty": 11.535083466124936,
+          "diversity_product_type@12": 0.24758798663551296,
+          "diversity_product_code@12": 0.7806528168139696,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.08764215770228083,
+          "ndcg@12_returning": 0.04876502191050142,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.10071677105080026,
+          "ndcg@12_new_customer": 0.057622721869166185,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 0.6780626628079126,
+          "relative_lift_recall@12_vs_shipped": 0.09568626902563898,
+          "relative_lift_ndcg@12_vs_shipped": 0.06842635810830673
+        },
+        "lgbm_personalized": {
+          "recall@12": 0.1295613084555213,
+          "recall@5": 0.08061810752542527,
+          "ndcg@12": 0.07629749222289195,
+          "recall@12_tail": 0.05843562950187684,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.08928571428571429,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.03866745984533016,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.0843911461677214,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.11468671049509374,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.13783822594210926,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.22330543078807677,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.4451930654058314,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.1379824079164376,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.10746650733972583,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.2915273942740881,
+          "novelty": 12.19018983510203,
+          "diversity_product_type@12": 0.26550348221642794,
+          "diversity_product_code@12": 0.8018374758728116,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.12969139196615556,
+          "ndcg@12_returning": 0.07633162703496586,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.12755277197865925,
+          "ndcg@12_new_customer": 0.07577043837227701,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 1.4583707027411965,
+          "relative_lift_recall@12_vs_shipped": 0.6051861964804205,
+          "relative_lift_ndcg@12_vs_shipped": 0.6533868065368159
+        },
+        "lgbm_compatibility": {
+          "recall@12": 0.11260469224430823,
+          "recall@5": 0.06682850225187091,
+          "ndcg@12": 0.0642708707742447,
+          "recall@12_tail": 0.05098463584818459,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.07814475347661189,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.02647233789411065,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.06823809960561314,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.09973409823709226,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.12141875397460357,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.19293589220089832,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.4275085369057001,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.12134506138904158,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.09023491008714407,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.22482197355035605,
+          "novelty": 12.178426665323364,
+          "diversity_product_type@12": 0.27753039179167655,
+          "diversity_product_code@12": 0.8292359441490862,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.11170883698849517,
+          "ndcg@12_returning": 0.0636044500788484,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.12643702157272094,
+          "ndcg@12_new_customer": 0.0745606474654861,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 1.1366261247634013,
+          "relative_lift_recall@12_vs_shipped": 0.3951039843931636,
+          "relative_lift_ndcg@12_vs_shipped": 0.39276674352981783
+        },
+        "rrf_all_sources_union": {
+          "recall@12": 0.08854268960301603,
+          "recall@5": 0.052901047486821756,
+          "ndcg@12": 0.05068231020068413,
+          "recall@12_tail": 0.03114537891853505,
+          "n_truth_tail": 88713,
+          "recall@12_new_item": 0.045670037926675094,
+          "n_truth_new_item": 25312,
+          "recall@12_jewellery": 0.00594883997620464,
+          "n_truth_jewellery": 3362,
+          "recall@12_slot_accessories": 0.06015469748387293,
+          "n_queries_slot_accessories": 10903,
+          "recall@12_slot_full": 0.06535879290370308,
+          "n_queries_slot_full": 23881,
+          "recall@12_slot_lower": 0.09953022750117956,
+          "n_queries_slot_lower": 32498,
+          "recall@12_slot_shoes": 0.13081870151082076,
+          "n_queries_slot_shoes": 4898,
+          "recall@12_slot_socks": 0.4044588915156292,
+          "n_queries_slot_socks": 2538,
+          "recall@12_slot_swimwear": 0.086659336631849,
+          "n_queries_slot_swimwear": 9095,
+          "recall@12_slot_upper": 0.07438868001515549,
+          "n_queries_slot_upper": 34311,
+          "catalog_coverage@12": 0.3891876180787676,
+          "novelty": 11.758696357642975,
+          "diversity_product_type@12": 0.2647366326910704,
+          "diversity_product_code@12": 0.8039891695732168,
+          "mean_list_length": 12.0,
+          "n_queries": 118124,
+          "recall@12_returning": 0.08772598755472227,
+          "ndcg@12_returning": 0.05012513245514101,
+          "n_queries_returning": 110939,
+          "recall@12_new_customer": 0.10115286476455579,
+          "ndcg@12_new_customer": 0.059285336214992955,
+          "n_queries_new_customer": 7185,
+          "relative_lift_recall@12_vs_popularity": 0.6800598624448828,
+          "relative_lift_recall@12_vs_shipped": 0.09699033487921654,
+          "relative_lift_ndcg@12_vs_shipped": 0.09829904717989166
+        }
+      },
+      "fit": {
+        "lgbm_personalized": {
+          "train_rows": 4000058,
+          "train_groups": 60296,
+          "positive_rate": 0.008455877389777848,
+          "best_iteration": 131,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6702437812902684,
+          "curve": [
+            0.620625,
+            0.666352,
+            0.667768,
+            0.669481,
+            0.669873,
+            0.669909,
+            0.669152,
+            0.668713
+          ],
+          "num_boost_round": 131,
+          "fit_seconds": 64.2,
+          "n_features": 95
+        },
+        "lgbm_compatibility": {
+          "train_rows": 4000058,
+          "train_groups": 60296,
+          "positive_rate": 0.008455877389777848,
+          "best_iteration": 138,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6519487913729136,
+          "curve": [
+            0.621349,
+            0.651221,
+            0.651146,
+            0.65154,
+            0.651283,
+            0.651556,
+            0.651223,
+            0.650821
+          ],
+          "num_boost_round": 138,
+          "fit_seconds": 56.8,
+          "n_features": 74
+        }
+      },
+      "n_eval_rows": 22503635,
+      "candidates_per_query": 190.50857573397448,
+      "union_recall": 0.4189333109959673,
+      "n_truth_pairs": 167134,
+      "eval_seconds": 140.8,
+      "bootstrap_vs_shipped": {
+        "slot_popularity": {
+          "recall@12": {
+            "diff": -0.028012088991229554,
+            "ci95": [
+              -0.030560331876130265,
+              -0.025402379315680033
+            ],
+            "relative": -0.3470528286516903,
+            "relative_ci95": [
+              -0.37862401570500964,
+              -0.31472010526420147
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          },
+          "ndcg@12": {
+            "diff": -0.01940535582878736,
+            "ci95": [
+              -0.020867959262234313,
+              -0.01789130937244895
+            ],
+            "relative": -0.4205191857386214,
+            "relative_ci95": [
+              -0.45221418841304845,
+              -0.3877093991721022
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          }
+        },
+        "assoc_npmi": {
+          "recall@12": {
+            "diff": -0.010226259411014418,
+            "ci95": [
+              -0.012198500675992758,
+              -0.008268866166838713
+            ],
+            "relative": -0.12669716479301893,
+            "relative_ci95": [
+              -0.15113204039292957,
+              -0.10244624718428298
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          },
+          "ndcg@12": {
+            "diff": -0.004777035493785067,
+            "ci95": [
+              -0.005854529367396525,
+              -0.003688961291308577
+            ],
+            "relative": -0.10351962075907585,
+            "relative_ci95": [
+              -0.12686919756494255,
+              -0.07994076543245306
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          }
+        },
+        "rrf_all_sources": {
+          "recall@12": {
+            "diff": 0.007723239985100397,
+            "ci95": [
+              0.006676589759278333,
+              0.00878007436751565
+            ],
+            "relative": 0.09568626902563898,
+            "relative_ci95": [
+              0.08271890619903197,
+              0.10877980738860835
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          },
+          "ndcg@12": {
+            "diff": 0.0031576153293159243,
+            "ci95": [
+              0.002577456406765502,
+              0.0037634819080960414
+            ],
+            "relative": 0.06842635810830673,
+            "relative_ci95": [
+              0.05585416103743524,
+              0.0815556468790337
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          }
+        },
+        "lgbm_personalized": {
+          "recall@12": {
+            "diff": 0.048847115460589424,
+            "ci95": [
+              0.04663021676935159,
+              0.05085959179968467
+            ],
+            "relative": 0.6051861964804205,
+            "relative_ci95": [
+              0.5777201634448547,
+              0.6301195602968884
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          },
+          "ndcg@12": {
+            "diff": 0.030151307965679518,
+            "ci95": [
+              0.028868068318339095,
+              0.03143865611116331
+            ],
+            "relative": 0.6533868065368159,
+            "relative_ci95": [
+              0.6255786644770559,
+              0.6812839808363916
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          }
+        },
+        "lgbm_compatibility": {
+          "recall@12": {
+            "diff": 0.031890499249376356,
+            "ci95": [
+              0.02997828528060488,
+              0.033545214110093605
+            ],
+            "relative": 0.3951039843931636,
+            "relative_ci95": [
+              0.37141281066252185,
+              0.41560490002297296
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          },
+          "ndcg@12": {
+            "diff": 0.018124686517032272,
+            "ci95": [
+              0.017160847613695043,
+              0.01908394096880798
+            ],
+            "relative": 0.39276674352981783,
+            "relative_ci95": [
+              0.3718800999459209,
+              0.4135540408376289
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          }
+        },
+        "rrf_all_sources_union": {
+          "recall@12": {
+            "diff": 0.007828496608084157,
+            "ci95": [
+              0.006680778525469874,
+              0.009009512284539707
+            ],
+            "relative": 0.09699033487921654,
+            "relative_ci95": [
+              0.08277080247694933,
+              0.11162240431624489
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          },
+          "ndcg@12": {
+            "diff": 0.0045361259434716986,
+            "ci95": [
+              0.003867572812933584,
+              0.005173724256792222
+            ],
+            "relative": 0.09829904717989166,
+            "relative_ci95": [
+              0.0838113242771335,
+              0.11211597101841836
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25677,
+            "n_queries": 118124
+          }
+        }
+      }
+    },
+    "2020-08-12": {
+      "metrics": {
+        "slot_popularity": {
+          "recall@12": 0.06291386336223782,
+          "recall@5": 0.03277992170798745,
+          "ndcg@12": 0.032004291188222726,
+          "recall@12_tail": 0.006045583023015838,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.017617499261010937,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.016671457315320496,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.06227790788446526,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.05601909398522202,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.06338816866884317,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.13719638564204592,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.31786594933871326,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.08550356859635211,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.030576874843240526,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.003078953155926985,
+          "novelty": 11.42126072679079,
+          "diversity_product_type@12": 0.23890014837847923,
+          "diversity_product_code@12": 0.8583170610572816,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.06278810408921934,
+          "ndcg@12_returning": 0.03194705769125616,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.06511621266632403,
+          "ndcg@12_new_customer": 0.03300658826890161,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 0.0,
+          "relative_lift_recall@12_vs_shipped": -0.2446883367466735,
+          "relative_lift_ndcg@12_vs_shipped": -0.35493336637707956
+        },
+        "assoc_npmi": {
+          "recall@12": 0.08032920896687241,
+          "recall@5": 0.048906904072233484,
+          "ndcg@12": 0.04775106478845409,
+          "recall@12_tail": 0.026919108080218943,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.04906887378066804,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.01609657947686117,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.06541608118657298,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.05914905738553967,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.08927646940737688,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.1362016082234933,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.321592692221475,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.08102299762093577,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.06044394281414597,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.22784253353859688,
+          "novelty": 11.812307738117724,
+          "diversity_product_type@12": 0.26478309287382273,
+          "diversity_product_code@12": 0.8693775815850276,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.07992287875823387,
+          "ndcg@12_returning": 0.04741569313958353,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.0874450345497116,
+          "ndcg@12_new_customer": 0.0536242342158223,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 0.2768125286530669,
+          "relative_lift_recall@12_vs_shipped": -0.035608605320366485,
+          "relative_lift_ndcg@12_vs_shipped": -0.037547232843165676
+        },
+        "shipped_rrf_hybrid": {
+          "recall@12": 0.0832952361562262,
+          "recall@5": 0.05301060242896495,
+          "ndcg@12": 0.04961393059268219,
+          "recall@12_tail": 0.0329759073982682,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.035234998522021874,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.005748778384593274,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.06420765027322405,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.04752952144188937,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.09816898581043244,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.10569510072121363,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.3753922887245012,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.0749431667988369,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.06881715575620767,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.2927937834469614,
+          "novelty": 11.906240262382795,
+          "diversity_product_type@12": 0.2620599930283708,
+          "diversity_product_code@12": 0.7975574619568067,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.08259440422617882,
+          "ndcg@12_returning": 0.04909320896788346,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.09556849980012562,
+          "ndcg@12_new_customer": 0.0587330267871186,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 0.32395678320752563,
+          "relative_lift_recall@12_vs_shipped": 0.0,
+          "relative_lift_ndcg@12_vs_shipped": 0.0
+        },
+        "rrf_all_sources": {
+          "recall@12": 0.09144602694257044,
+          "recall@5": 0.0580628742237893,
+          "ndcg@12": 0.05391384274233029,
+          "recall@12_tail": 0.03034007806541343,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.036180904522613064,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.006323656223052601,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.0702576112412178,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.05418306746771631,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.11035215062284066,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.13601508745751473,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.35440484196368527,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.09466032249537402,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.07241434662653626,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.25093468220804926,
+          "novelty": 11.650947536621917,
+          "diversity_product_type@12": 0.24941466078088417,
+          "diversity_product_code@12": 0.7833782170521114,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.0905431096328181,
+          "ndcg@12_returning": 0.05340058850413157,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.10725829478613443,
+          "ndcg@12_new_customer": 0.06290216692061955,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 0.4535115482585067,
+          "relative_lift_recall@12_vs_shipped": 0.09785422507305042,
+          "relative_lift_ndcg@12_vs_shipped": 0.08666743590523582
+        },
+        "lgbm_personalized": {
+          "recall@12": 0.13671195140836162,
+          "recall@5": 0.08761116817975698,
+          "ndcg@12": 0.08296561526194356,
+          "recall@12_tail": 0.07250213109605635,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.10056163168785102,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.021557918942224776,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.10424668227946916,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.11496357295766865,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.14835388337718045,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.20003315924728507,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.4216823582156467,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.1710600052868094,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.10903737145723601,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.28857854995968035,
+          "novelty": 12.535594550136832,
+          "diversity_product_type@12": 0.26290136995598,
+          "diversity_product_code@12": 0.8154469400409043,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.1369635752951151,
+          "ndcg@12_returning": 0.08319244939305824,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.13230540802923876,
+          "ndcg@12_new_customer": 0.07899320051420598,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 1.1730020078598273,
+          "relative_lift_recall@12_vs_shipped": 0.6412937608094242,
+          "relative_lift_ndcg@12_vs_shipped": 0.6722241973342176
+        },
+        "lgbm_compatibility": {
+          "recall@12": 0.11826119548016326,
+          "recall@5": 0.07135076857584421,
+          "ndcg@12": 0.06838835418484118,
+          "recall@12_tail": 0.06392166539548656,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.08427431274017144,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.012934751365334866,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.09068696330991412,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.09546647330985429,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.1311975022980126,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.17280112741440767,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.3801277740416947,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.15089611419508325,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.09185001254075746,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.22930870170808593,
+          "novelty": 12.495839783003879,
+          "diversity_product_type@12": 0.26821261001138286,
+          "diversity_product_code@12": 0.8424288415681846,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.11729293028109308,
+          "ndcg@12_returning": 0.0676845293074474,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.13521786305750672,
+          "ndcg@12_new_customer": 0.08071403158199626,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 0.8797318931004645,
+          "relative_lift_recall@12_vs_shipped": 0.4197834226480359,
+          "relative_lift_ndcg@12_vs_shipped": 0.37841032483985715
+        },
+        "rrf_all_sources_union": {
+          "recall@12": 0.09358193669390537,
+          "recall@5": 0.058919058151407744,
+          "ndcg@12": 0.055715443967288024,
+          "recall@12_tail": 0.0368118802996994,
+          "n_truth_tail": 89156,
+          "recall@12_new_item": 0.043984629027490396,
+          "n_truth_new_item": 33830,
+          "recall@12_jewellery": 0.010922678930727221,
+          "n_truth_jewellery": 3479,
+          "recall@12_slot_accessories": 0.07234192037470726,
+          "n_queries_slot_accessories": 10675,
+          "recall@12_slot_full": 0.05852410054554243,
+          "n_queries_slot_full": 19308,
+          "recall@12_slot_lower": 0.10943875664310544,
+          "n_queries_slot_lower": 31549,
+          "recall@12_slot_shoes": 0.13379756279532454,
+          "n_queries_slot_shoes": 4021,
+          "recall@12_slot_socks": 0.3718897108271688,
+          "n_queries_slot_socks": 2974,
+          "recall@12_slot_swimwear": 0.09509912767644725,
+          "n_queries_slot_swimwear": 6305,
+          "recall@12_slot_upper": 0.07565588161524957,
+          "n_queries_slot_upper": 33225,
+          "catalog_coverage@12": 0.4000806392493219,
+          "novelty": 11.872114377655668,
+          "diversity_product_type@12": 0.26981438808530067,
+          "diversity_product_code@12": 0.8093683580579385,
+          "mean_list_length": 12.0,
+          "n_queries": 108057,
+          "recall@12_returning": 0.09268848235831212,
+          "ndcg@12_returning": 0.05513080272899063,
+          "n_queries_returning": 102220,
+          "recall@12_new_customer": 0.10922848495231567,
+          "ndcg@12_new_customer": 0.06595392732839098,
+          "n_queries_new_customer": 5837,
+          "relative_lift_recall@12_vs_popularity": 0.4874612953760386,
+          "relative_lift_recall@12_vs_shipped": 0.12349686503542327,
+          "relative_lift_ndcg@12_vs_shipped": 0.12297984259093914
+        }
+      },
+      "fit": {
+        "lgbm_personalized": {
+          "train_rows": 4049317,
+          "train_groups": 60731,
+          "positive_rate": 0.00861157572993174,
+          "best_iteration": 133,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6487446424837859,
+          "curve": [
+            0.599728,
+            0.643805,
+            0.646307,
+            0.647509,
+            0.647915,
+            0.64865,
+            0.64801,
+            0.648464
+          ],
+          "num_boost_round": 133,
+          "fit_seconds": 74.1,
+          "n_features": 95
+        },
+        "lgbm_compatibility": {
+          "train_rows": 4049317,
+          "train_groups": 60731,
+          "positive_rate": 0.00861157572993174,
+          "best_iteration": 69,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6317769511758592,
+          "curve": [
+            0.596701,
+            0.630294,
+            0.631468,
+            0.631266,
+            0.630852
+          ],
+          "num_boost_round": 69,
+          "fit_seconds": 37.4,
+          "n_features": 74
+        }
+      },
+      "n_eval_rows": 20529026,
+      "candidates_per_query": 189.98330510748957,
+      "union_recall": 0.406376461791732,
+      "n_truth_pairs": 152467,
+      "eval_seconds": 117.8,
+      "bootstrap_vs_shipped": {
+        "slot_popularity": {
+          "recall@12": {
+            "diff": -0.02038137279398837,
+            "ci95": [
+              -0.023067848713744288,
+              -0.017605148157376235
+            ],
+            "relative": -0.2446883367466735,
+            "relative_ci95": [
+              -0.27694079251397863,
+              -0.21135840379102253
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          },
+          "ndcg@12": {
+            "diff": -0.017609639404459462,
+            "ci95": [
+              -0.0193686130803741,
+              -0.015837321609897093
+            ],
+            "relative": -0.35493336637707956,
+            "relative_ci95": [
+              -0.39038658798041037,
+              -0.31921118566310525
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          }
+        },
+        "assoc_npmi": {
+          "recall@12": {
+            "diff": -0.0029660271893537787,
+            "ci95": [
+              -0.0053135393216941305,
+              -0.0007860111607252472
+            ],
+            "relative": -0.035608605320366485,
+            "relative_ci95": [
+              -0.0637916352350356,
+              -0.009436447953050122
+            ],
+            "p_gain_positive": 0.002,
+            "n_customers": 24163,
+            "n_queries": 108057
+          },
+          "ndcg@12": {
+            "diff": -0.001862865804228099,
+            "ci95": [
+              -0.0031615435934812903,
+              -0.0005191047242659939
+            ],
+            "relative": -0.037547232843165676,
+            "relative_ci95": [
+              -0.06372290112300844,
+              -0.010462882461938206
+            ],
+            "p_gain_positive": 0.002,
+            "n_customers": 24163,
+            "n_queries": 108057
+          }
+        },
+        "rrf_all_sources": {
+          "recall@12": {
+            "diff": 0.008150790786344245,
+            "ci95": [
+              0.0070177317445896175,
+              0.00925192680619041
+            ],
+            "relative": 0.09785422507305042,
+            "relative_ci95": [
+              0.08425129777442923,
+              0.11107390089917936
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          },
+          "ndcg@12": {
+            "diff": 0.004299912149648102,
+            "ci95": [
+              0.003669512826435177,
+              0.004985456189036802
+            ],
+            "relative": 0.08666743590523582,
+            "relative_ci95": [
+              0.07396134074844722,
+              0.10048500752673953
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          }
+        },
+        "lgbm_personalized": {
+          "recall@12": {
+            "diff": 0.05341671525213543,
+            "ci95": [
+              0.051150032653958566,
+              0.055810058292235565
+            ],
+            "relative": 0.6412937608094242,
+            "relative_ci95": [
+              0.6140811289378304,
+              0.67002701316027
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          },
+          "ndcg@12": {
+            "diff": 0.03335168466926137,
+            "ci95": [
+              0.03178833296180697,
+              0.034899099673359205
+            ],
+            "relative": 0.6722241973342176,
+            "relative_ci95": [
+              0.6407138596371478,
+              0.7034133207439656
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          }
+        },
+        "lgbm_compatibility": {
+          "recall@12": {
+            "diff": 0.03496595932393706,
+            "ci95": [
+              0.032924053236768884,
+              0.03694748427900007
+            ],
+            "relative": 0.4197834226480359,
+            "relative_ci95": [
+              0.395269342595025,
+              0.44357259771378055
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          },
+          "ndcg@12": {
+            "diff": 0.018774423592158994,
+            "ci95": [
+              0.01766211060158384,
+              0.019853488678673665
+            ],
+            "relative": 0.37841032483985715,
+            "relative_ci95": [
+              0.35599095638249867,
+              0.4001595608633749
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          }
+        },
+        "rrf_all_sources_union": {
+          "recall@12": {
+            "diff": 0.010286700537679175,
+            "ci95": [
+              0.009079015321208608,
+              0.011524307407209538
+            ],
+            "relative": 0.12349686503542327,
+            "relative_ci95": [
+              0.1089980140542523,
+              0.13835494007838423
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          },
+          "ndcg@12": {
+            "diff": 0.006101513374605835,
+            "ci95": [
+              0.0054216938346443675,
+              0.006795487578487211
+            ],
+            "relative": 0.12297984259093914,
+            "relative_ci95": [
+              0.10927765185861006,
+              0.1369673294840605
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 24163,
+            "n_queries": 108057
+          }
+        }
+      }
+    },
+    "2020-08-19": {
+      "metrics": {
+        "slot_popularity": {
+          "recall@12": 0.07803650743713866,
+          "recall@5": 0.04337879848855421,
+          "ndcg@12": 0.04119698921371428,
+          "recall@12_tail": 0.029395601183307415,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.11197239319100719,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.005518087063151441,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.0815652113795845,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.06643274853801169,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.08593982485227225,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.10344367325146823,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.3057929724596391,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.13331884057971014,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.04091641116169593,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.0030938086994954147,
+          "novelty": 12.246493306492075,
+          "diversity_product_type@12": 0.3404727834891124,
+          "diversity_product_code@12": 0.8603358805998425,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.07804722399489471,
+          "ndcg@12_returning": 0.04112911177065038,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.07787365768134999,
+          "ndcg@12_new_customer": 0.04222846081851155,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.0,
+          "relative_lift_recall@12_vs_shipped": -0.16466933058612884,
+          "relative_lift_ndcg@12_vs_shipped": -0.27730095773052227
+        },
+        "assoc_npmi": {
+          "recall@12": 0.0996601953242606,
+          "recall@5": 0.06572268961574501,
+          "ndcg@12": 0.061752358539534785,
+          "recall@12_tail": 0.04901605416086901,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.1259560660297185,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.006437768240343348,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.08438245359328009,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.07195046439628483,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.11517929260723547,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.10544580886278697,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.31550332383665713,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.13397101449275362,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.0738213220188506,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.22816839158778682,
+          "novelty": 12.390788752024816,
+          "diversity_product_type@12": 0.3288587028222901,
+          "diversity_product_code@12": 0.8664960031933858,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.09898182499936904,
+          "ndcg@12_returning": 0.06109801216499611,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.10996877054569361,
+          "ndcg@12_new_customer": 0.0716958636948971,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.2770970741423894,
+          "relative_lift_recall@12_vs_shipped": 0.06679835384985837,
+          "relative_lift_ndcg@12_vs_shipped": 0.08329203726243721
+        },
+        "shipped_rrf_hybrid": {
+          "recall@12": 0.09341989980075167,
+          "recall@5": 0.0611604439618282,
+          "ndcg@12": 0.05700435008789299,
+          "recall@12_tail": 0.03915905662804158,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.049316267930261906,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.009809932556713672,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.07860105776210723,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.05027405114092421,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.11155836840539046,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.10035148602954261,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.3836182336182336,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.10125603864734299,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.06646123034676411,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.29450112334720635,
+          "novelty": 11.998568804101698,
+          "diversity_product_type@12": 0.27079506513627705,
+          "diversity_product_code@12": 0.801504341854667,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.09162745755500994,
+          "ndcg@12_returning": 0.05565968589736532,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.12065801008108701,
+          "ndcg@12_new_customer": 0.077437985591978,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.19713071316018224,
+          "relative_lift_recall@12_vs_shipped": 0.0,
+          "relative_lift_ndcg@12_vs_shipped": 0.0
+        },
+        "rrf_all_sources": {
+          "recall@12": 0.10026707395868219,
+          "recall@5": 0.06429090933693266,
+          "ndcg@12": 0.059675399462969646,
+          "recall@12_tail": 0.03777931082866597,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.05330792408127527,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.010423053341508276,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.08655155726088008,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.05710010319917441,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.1210118819878417,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.12433262146289374,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.3728157644824312,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.11257004830917874,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.06991028936583149,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.2556811903797282,
+          "novelty": 11.739702974894195,
+          "diversity_product_type@12": 0.26262131652746346,
+          "diversity_product_code@12": 0.7865683279715573,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.0986155127470174,
+          "ndcg@12_returning": 0.058466889118104,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.1253643436335744,
+          "ndcg@12_new_customer": 0.07804002913322995,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.28487392954446455,
+          "relative_lift_recall@12_vs_shipped": 0.07329459967880869,
+          "relative_lift_ndcg@12_vs_shipped": 0.04685693935565027
+        },
+        "lgbm_personalized": {
+          "recall@12": 0.15422666950823885,
+          "recall@5": 0.10098676977514368,
+          "ndcg@12": 0.09476048686896803,
+          "recall@12_tail": 0.09993802836663822,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.16831912647111844,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.034641324340895153,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.10470289329046975,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.13584107327141381,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.1799005228924882,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.19683217654386903,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.42606837606837605,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.22239130434782609,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.11057790578834897,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.2844094140178999,
+          "novelty": 12.896387601392671,
+          "diversity_product_type@12": 0.29040783326736824,
+          "diversity_product_code@12": 0.8285720084841227,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.1542316997104835,
+          "ndcg@12_returning": 0.09462544387156817,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.15415023011176857,
+          "ndcg@12_new_customer": 0.09681261215473562,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.9763399794958049,
+          "relative_lift_recall@12_vs_shipped": 0.650897398061627,
+          "relative_lift_ndcg@12_vs_shipped": 0.662337816725569
+        },
+        "lgbm_compatibility": {
+          "recall@12": 0.13181816644170885,
+          "recall@5": 0.08371897527493902,
+          "ndcg@12": 0.07991648814597084,
+          "recall@12_tail": 0.08343954257918923,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.1427725271046329,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.026364193746167996,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.09687337965363475,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.10393991514734548,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.15344343833694682,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.15354155543691048,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.3951329534662868,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.19165217391304348,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.09626085250911043,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.22021288350337004,
+          "novelty": 12.85171931899603,
+          "diversity_product_type@12": 0.296949369272456,
+          "diversity_product_code@12": 0.8461009570009235,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.13051460381671406,
+          "ndcg@12_returning": 0.07877370049004204,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.15162721893491124,
+          "ndcg@12_new_customer": 0.09728239004498213,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.689185879415392,
+          "relative_lift_recall@12_vs_shipped": 0.411028771416518,
+          "relative_lift_ndcg@12_vs_shipped": 0.40193665961896663
+        },
+        "rrf_all_sources_union": {
+          "recall@12": 0.10443522061087036,
+          "recall@5": 0.06773039568892902,
+          "ndcg@12": 0.06276574895675677,
+          "recall@12_tail": 0.04631502636717608,
+          "n_truth_tail": 85523,
+          "recall@12_new_item": 0.0683989595941387,
+          "n_truth_new_item": 38831,
+          "recall@12_jewellery": 0.009809932556713672,
+          "n_truth_jewellery": 3262,
+          "recall@12_slot_accessories": 0.08506515952850081,
+          "n_queries_slot_accessories": 9643,
+          "recall@12_slot_full": 0.0644054580896686,
+          "n_queries_slot_full": 14535,
+          "recall@12_slot_lower": 0.12591612464396548,
+          "n_queries_slot_lower": 31364,
+          "recall@12_slot_shoes": 0.1105401316960313,
+          "n_queries_slot_shoes": 3746,
+          "recall@12_slot_socks": 0.373338081671415,
+          "n_queries_slot_socks": 3510,
+          "recall@12_slot_swimwear": 0.11663768115942029,
+          "n_queries_slot_swimwear": 3450,
+          "recall@12_slot_upper": 0.07613067401695107,
+          "n_queries_slot_upper": 32289,
+          "catalog_coverage@12": 0.40492062907443555,
+          "novelty": 11.986438179794513,
+          "diversity_product_type@12": 0.27776283697156057,
+          "diversity_product_code@12": 0.8062250728152877,
+          "mean_list_length": 12.0,
+          "n_queries": 98537,
+          "recall@12_returning": 0.1027421140110831,
+          "ndcg@12_returning": 0.06141144695526183,
+          "n_queries_returning": 92453,
+          "recall@12_new_customer": 0.13016381766381765,
+          "ndcg@12_new_customer": 0.08334584148539129,
+          "n_queries_new_customer": 6084,
+          "relative_lift_recall@12_vs_popularity": 0.33828670760280827,
+          "relative_lift_recall@12_vs_shipped": 0.11791193132953948,
+          "relative_lift_ndcg@12_vs_shipped": 0.10106945978649846
+        }
+      },
+      "fit": {
+        "lgbm_personalized": {
+          "train_rows": 4022502,
+          "train_groups": 60149,
+          "positive_rate": 0.008694339990384095,
+          "best_iteration": 149,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6630364411987243,
+          "curve": [
+            0.598777,
+            0.657126,
+            0.660021,
+            0.661624,
+            0.661427,
+            0.662736,
+            0.662986,
+            0.662445
+          ],
+          "num_boost_round": 149,
+          "fit_seconds": 74.4,
+          "n_features": 95
+        },
+        "lgbm_compatibility": {
+          "train_rows": 4022502,
+          "train_groups": 60149,
+          "positive_rate": 0.008694339990384095,
+          "best_iteration": 110,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.644311620161691,
+          "curve": [
+            0.595154,
+            0.640774,
+            0.64171,
+            0.643011,
+            0.64369,
+            0.643834,
+            0.642995
+          ],
+          "num_boost_round": 110,
+          "fit_seconds": 46.2,
+          "n_features": 74
+        }
+      },
+      "n_eval_rows": 18781579,
+      "candidates_per_query": 190.60433136791255,
+      "union_recall": 0.41323606796081513,
+      "n_truth_pairs": 138727,
+      "eval_seconds": 127.3,
+      "bootstrap_vs_shipped": {
+        "slot_popularity": {
+          "recall@12": {
+            "diff": -0.01538339236361301,
+            "ci95": [
+              -0.018294419715060618,
+              -0.012405290377520367
+            ],
+            "relative": -0.16466933058612884,
+            "relative_ci95": [
+              -0.19583000788996155,
+              -0.13279066241752221
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          },
+          "ndcg@12": {
+            "diff": -0.015807360874178708,
+            "ci95": [
+              -0.01768309761926585,
+              -0.013938833995491453
+            ],
+            "relative": -0.27730095773052227,
+            "relative_ci95": [
+              -0.31020610869172105,
+              -0.24452228600097464
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          }
+        },
+        "assoc_npmi": {
+          "recall@12": {
+            "diff": 0.006240295523508924,
+            "ci95": [
+              0.0038853250305010308,
+              0.008550579734404923
+            ],
+            "relative": 0.06679835384985837,
+            "relative_ci95": [
+              0.04158990791884545,
+              0.09152846184423036
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          },
+          "ndcg@12": {
+            "diff": 0.004748008451641798,
+            "ci95": [
+              0.0033943827180597194,
+              0.006037881641875029
+            ],
+            "relative": 0.08329203726243721,
+            "relative_ci95": [
+              0.05954602960696931,
+              0.10591966459691994
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          }
+        },
+        "rrf_all_sources": {
+          "recall@12": {
+            "diff": 0.006847174157930513,
+            "ci95": [
+              0.005714502826468351,
+              0.007984058505209054
+            ],
+            "relative": 0.07329459967880869,
+            "relative_ci95": [
+              0.06117008087844653,
+              0.08546421610639335
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          },
+          "ndcg@12": {
+            "diff": 0.002671049375076659,
+            "ci95": [
+              0.002018633955353762,
+              0.0033336616180453423
+            ],
+            "relative": 0.04685693935565027,
+            "relative_ci95": [
+              0.03541192825181415,
+              0.05848082844388696
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          }
+        },
+        "lgbm_personalized": {
+          "recall@12": {
+            "diff": 0.06080676970748718,
+            "ci95": [
+              0.05812562960430669,
+              0.0632763586307809
+            ],
+            "relative": 0.650897398061627,
+            "relative_ci95": [
+              0.6221975160354326,
+              0.6773327606402739
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          },
+          "ndcg@12": {
+            "diff": 0.03775613678107504,
+            "ci95": [
+              0.036092830106942135,
+              0.039406011382151114
+            ],
+            "relative": 0.662337816725569,
+            "relative_ci95": [
+              0.6331592247134101,
+              0.6912807763160598
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          }
+        },
+        "lgbm_compatibility": {
+          "recall@12": {
+            "diff": 0.03839826664095718,
+            "ci95": [
+              0.03632140709088814,
+              0.04057357769407251
+            ],
+            "relative": 0.411028771416518,
+            "relative_ci95": [
+              0.3887973244282573,
+              0.4343140784844435
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          },
+          "ndcg@12": {
+            "diff": 0.022912138058077854,
+            "ci95": [
+              0.021699224882813038,
+              0.024174266475620737
+            ],
+            "relative": 0.40193665961896663,
+            "relative_ci95": [
+              0.38065910495174093,
+              0.4240775737000298
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          }
+        },
+        "rrf_all_sources_union": {
+          "recall@12": {
+            "diff": 0.01101532081011869,
+            "ci95": [
+              0.009783511453773854,
+              0.012225581888358804
+            ],
+            "relative": 0.11791193132953948,
+            "relative_ci95": [
+              0.10472620367438173,
+              0.13086699851352693
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          },
+          "ndcg@12": {
+            "diff": 0.0057613988688637804,
+            "ci95": [
+              0.00498055056157899,
+              0.006492079383913086
+            ],
+            "relative": 0.10106945978649846,
+            "relative_ci95": [
+              0.0873714120746865,
+              0.11388743795698361
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23194,
+            "n_queries": 98537
+          }
+        }
+      }
+    },
+    "2020-08-26": {
+      "metrics": {
+        "slot_popularity": {
+          "recall@12": 0.08972889086936878,
+          "recall@5": 0.04920796276697797,
+          "ndcg@12": 0.045382261836996396,
+          "recall@12_tail": 0.029779499880162978,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.1022763074984247,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.018607123870281767,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.11302144602298435,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.08517974763907625,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.09169885945548198,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.22516611994280425,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.2883650239296339,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.1342882794645772,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.03728466104853593,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.0030966600309666,
+          "novelty": 12.223946150134699,
+          "diversity_product_type@12": 0.30439202361722273,
+          "diversity_product_code@12": 0.812003719588803,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.09008908094616974,
+          "ndcg@12_returning": 0.045560302006060795,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.08476321207961565,
+          "ndcg@12_new_customer": 0.04292775143210329,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.0,
+          "relative_lift_recall@12_vs_shipped": -0.12550874076576143,
+          "relative_lift_ndcg@12_vs_shipped": -0.28158875323772964
+        },
+        "assoc_npmi": {
+          "recall@12": 0.11496407285690413,
+          "recall@5": 0.07234321716580948,
+          "ndcg@12": 0.06853429600905446,
+          "recall@12_tail": 0.0519992809778701,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.11279143037177064,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.020202020202020204,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.11417518776581305,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.08942808771790597,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.128634565857248,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.22604928925897888,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.2994890699780106,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.128656545870062,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.07176025672493885,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.22542947725429477,
+          "novelty": 12.43799149210006,
+          "diversity_product_type@12": 0.3059825965329224,
+          "diversity_product_code@12": 0.8183567277520934,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.11504867258105736,
+          "ndcg@12_returning": 0.06835654912016649,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.11379775795012582,
+          "ndcg@12_new_customer": 0.07098476317332147,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.28123809113247406,
+          "relative_lift_recall@12_vs_shipped": 0.12043151169330932,
+          "relative_lift_ndcg@12_vs_shipped": 0.08491307063283988
+        },
+        "shipped_rrf_hybrid": {
+          "recall@12": 0.10260696138683105,
+          "recall@5": 0.06802345011975713,
+          "ndcg@12": 0.0631703109347533,
+          "recall@12_tail": 0.042212590876408086,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.04450220541902961,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.008506113769271665,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.08909902572919494,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.05106869825146152,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.12418828182487125,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.10656909748507022,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.327654895873755,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.11534443356186744,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.07028890646448668,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.2997124529971245,
+          "novelty": 12.262048692016224,
+          "diversity_product_type@12": 0.27566268713987757,
+          "diversity_product_code@12": 0.7926878516125438,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.10152871400170593,
+          "ndcg@12_returning": 0.062416124205146056,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.11747197437657286,
+          "ndcg@12_new_customer": 0.07356773520580943,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.1435220071560979,
+          "relative_lift_recall@12_vs_shipped": 0.0,
+          "relative_lift_ndcg@12_vs_shipped": 0.0
+        },
+        "rrf_all_sources": {
+          "recall@12": 0.1121785588295364,
+          "recall@5": 0.07213201755200306,
+          "ndcg@12": 0.06636164745915994,
+          "recall@12_tail": 0.03902692338419749,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.04769218651543793,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.006645401382243487,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.10685458329562934,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.05966589953178318,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.13800772626931565,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.13165531163260155,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.32109041521148624,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.14160953313744692,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.07319206189034645,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.26376907763769075,
+          "novelty": 11.996640877704039,
+          "diversity_product_type@12": 0.2657842700384337,
+          "diversity_product_code@12": 0.7867456383024811,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.11107886186147316,
+          "ndcg@12_returning": 0.06564969147379039,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.12733928162891786,
+          "ndcg@12_new_customer": 0.07617686715423486,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.2501944216924605,
+          "relative_lift_recall@12_vs_shipped": 0.0932840941134604,
+          "relative_lift_ndcg@12_vs_shipped": 0.05051956333890585
+        },
+        "lgbm_personalized": {
+          "recall@12": 0.16579030431311387,
+          "recall@5": 0.10634356993879078,
+          "ndcg@12": 0.10088644401150204,
+          "recall@12_tail": 0.09326316209954462,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.15221329552614996,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.02737905369484317,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.1280231049980394,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.14609422532603233,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.19844922737306844,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.23971738581882412,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.3827415599534342,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.1884590270976167,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.11191534622412525,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.2895377128953771,
+          "novelty": 12.964701644729045,
+          "diversity_product_type@12": 0.27466239006789334,
+          "diversity_product_code@12": 0.7848897120258452,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.16616268225251327,
+          "ndcg@12_returning": 0.10104565471324756,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.16065660032029283,
+          "ndcg@12_new_customer": 0.0986915217866004,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.84768030348752,
+          "relative_lift_recall@12_vs_shipped": 0.6157802752591015,
+          "relative_lift_ndcg@12_vs_shipped": 0.5970547321779783
+        },
+        "lgbm_compatibility": {
+          "recall@12": 0.14830405936488486,
+          "recall@5": 0.09288203147725232,
+          "ndcg@12": 0.08843279101294667,
+          "recall@12_tail": 0.08418550770951506,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.14248582230623819,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.018341307814992026,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.11601514191777518,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.12200486733857101,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.17520051508462103,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.22798385061821852,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.35964622946578706,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.1655484818805093,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.10121135262406705,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.22262773722627738,
+          "novelty": 13.011289497246427,
+          "diversity_product_type@12": 0.2811825012223274,
+          "diversity_product_code@12": 0.81522509391807,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.1474153581658087,
+          "ndcg@12_returning": 0.08781451243709167,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.1605559368565546,
+          "ndcg@12_new_customer": 0.09695654835115469,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.6528016553864726,
+          "relative_lift_recall@12_vs_shipped": 0.44536060088335044,
+          "relative_lift_ndcg@12_vs_shipped": 0.3999106495500113
+        },
+        "rrf_all_sources_union": {
+          "recall@12": 0.11427678444333042,
+          "recall@5": 0.0740914548481529,
+          "ndcg@12": 0.06843685182758663,
+          "recall@12_tail": 0.04684628904689622,
+          "n_truth_tail": 100136,
+          "recall@12_new_item": 0.056592627599243855,
+          "n_truth_new_item": 50784,
+          "recall@12_jewellery": 0.013556618819776715,
+          "n_truth_jewellery": 3762,
+          "recall@12_slot_accessories": 0.10205109643169546,
+          "n_queries_slot_accessories": 11051,
+          "recall@12_slot_full": 0.06489299791021876,
+          "n_queries_slot_full": 12601,
+          "recall@12_slot_lower": 0.14111341059602647,
+          "n_queries_slot_lower": 36240,
+          "recall@12_slot_shoes": 0.12221381108587771,
+          "n_queries_slot_shoes": 3963,
+          "recall@12_slot_socks": 0.32889341611693185,
+          "n_queries_slot_socks": 5154,
+          "recall@12_slot_swimwear": 0.12543258243552072,
+          "n_queries_slot_swimwear": 2042,
+          "recall@12_slot_upper": 0.07676248397741837,
+          "n_queries_slot_upper": 36667,
+          "catalog_coverage@12": 0.40463024404630243,
+          "novelty": 12.167312215139587,
+          "diversity_product_type@12": 0.27803771576400105,
+          "diversity_product_code@12": 0.8003776837049829,
+          "mean_list_length": 12.0,
+          "n_queries": 107718,
+          "recall@12_returning": 0.11304003664134298,
+          "ndcg@12_returning": 0.06763395615845795,
+          "n_queries_returning": 100433,
+          "recall@12_new_customer": 0.13132692747655,
+          "ndcg@12_new_customer": 0.07950579084441599,
+          "n_queries_new_customer": 7285,
+          "relative_lift_recall@12_vs_popularity": 0.273578479975859,
+          "relative_lift_recall@12_vs_shipped": 0.1137332486877164,
+          "relative_lift_ndcg@12_vs_shipped": 0.08337050767840902
+        }
+      },
+      "fit": {
+        "lgbm_personalized": {
+          "train_rows": 4005073,
+          "train_groups": 59890,
+          "positive_rate": 0.008561142331238407,
+          "best_iteration": 129,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6756267849758714,
+          "curve": [
+            0.609973,
+            0.670667,
+            0.673119,
+            0.674428,
+            0.675078,
+            0.67546,
+            0.675077,
+            0.674949
+          ],
+          "num_boost_round": 129,
+          "fit_seconds": 71.6,
+          "n_features": 95
+        },
+        "lgbm_compatibility": {
+          "train_rows": 4005073,
+          "train_groups": 59890,
+          "positive_rate": 0.008561142331238407,
+          "best_iteration": 92,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.654426008330141,
+          "curve": [
+            0.61048,
+            0.651335,
+            0.653423,
+            0.653693,
+            0.654072,
+            0.653902
+          ],
+          "num_boost_round": 92,
+          "fit_seconds": 41.1,
+          "n_features": 74
+        }
+      },
+      "n_eval_rows": 20318028,
+      "candidates_per_query": 188.62240294101264,
+      "union_recall": 0.4263578925585095,
+      "n_truth_pairs": 154633,
+      "eval_seconds": 122.6,
+      "bootstrap_vs_shipped": {
+        "slot_popularity": {
+          "recall@12": {
+            "diff": -0.012878070517462273,
+            "ci95": [
+              -0.015753374270959172,
+              -0.00997210977955789
+            ],
+            "relative": -0.12550874076576143,
+            "relative_ci95": [
+              -0.15353124250087205,
+              -0.09718745828524016
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          },
+          "ndcg@12": {
+            "diff": -0.0177880490977569,
+            "ci95": [
+              -0.01965898487864708,
+              -0.016047670736495104
+            ],
+            "relative": -0.28158875323772964,
+            "relative_ci95": [
+              -0.3112060806373464,
+              -0.25403817867970063
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          }
+        },
+        "assoc_npmi": {
+          "recall@12": {
+            "diff": 0.012357111470073082,
+            "ci95": [
+              0.010042908895712271,
+              0.014884223349731834
+            ],
+            "relative": 0.12043151169330932,
+            "relative_ci95": [
+              0.09787746133374157,
+              0.1450605606925431
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          },
+          "ndcg@12": {
+            "diff": 0.005363985074301164,
+            "ci95": [
+              0.0040962158888091255,
+              0.006620779241461339
+            ],
+            "relative": 0.08491307063283988,
+            "relative_ci95": [
+              0.06484400390303577,
+              0.10480840039397213
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          }
+        },
+        "rrf_all_sources": {
+          "recall@12": {
+            "diff": 0.009571597442705346,
+            "ci95": [
+              0.008496872093762698,
+              0.01069240451276644
+            ],
+            "relative": 0.0932840941134604,
+            "relative_ci95": [
+              0.08280989885013024,
+              0.10420739848689001
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          },
+          "ndcg@12": {
+            "diff": 0.003191336524406646,
+            "ci95": [
+              0.0025214524491987147,
+              0.0038867994630285697
+            ],
+            "relative": 0.05051956333890585,
+            "relative_ci95": [
+              0.03991515020090762,
+              0.06152889554466698
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          }
+        },
+        "lgbm_personalized": {
+          "recall@12": {
+            "diff": 0.06318334292628282,
+            "ci95": [
+              0.06085414576913082,
+              0.06541969886443214
+            ],
+            "relative": 0.6157802752591015,
+            "relative_ci95": [
+              0.593080088783733,
+              0.6375756379510946
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          },
+          "ndcg@12": {
+            "diff": 0.037716133076748745,
+            "ci95": [
+              0.036305906402011597,
+              0.039087064198929156
+            ],
+            "relative": 0.5970547321779783,
+            "relative_ci95": [
+              0.574730531871386,
+              0.6187568751925411
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          }
+        },
+        "lgbm_compatibility": {
+          "recall@12": {
+            "diff": 0.04569709797805381,
+            "ci95": [
+              0.04373192329129059,
+              0.04760816484484337
+            ],
+            "relative": 0.44536060088335044,
+            "relative_ci95": [
+              0.42620815098909365,
+              0.4639857198904788
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          },
+          "ndcg@12": {
+            "diff": 0.025262480078193372,
+            "ci95": [
+              0.02412188331155897,
+              0.026329896792602447
+            ],
+            "relative": 0.3999106495500113,
+            "relative_ci95": [
+              0.38185475035058375,
+              0.41680809232992067
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          }
+        },
+        "rrf_all_sources_union": {
+          "recall@12": {
+            "diff": 0.01166982305649937,
+            "ci95": [
+              0.010409823052982485,
+              0.012942692038390734
+            ],
+            "relative": 0.1137332486877164,
+            "relative_ci95": [
+              0.10145338008536446,
+              0.12613853741946837
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          },
+          "ndcg@12": {
+            "diff": 0.005266540892833335,
+            "ci95": [
+              0.004535403830861616,
+              0.005997782241759156
+            ],
+            "relative": 0.08337050767840902,
+            "relative_ci95": [
+              0.0717964462062898,
+              0.09494622003608759
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 25750,
+            "n_queries": 107718
+          }
+        }
+      }
+    },
+    "2020-09-02": {
+      "metrics": {
+        "slot_popularity": {
+          "recall@12": 0.08920187308829045,
+          "recall@5": 0.047061343297447385,
+          "ndcg@12": 0.0435540596305553,
+          "recall@12_tail": 0.02281684297863514,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.08133960523058226,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.0,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.11434401451027812,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.10201176844783715,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.08573498777284666,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.2668882257189365,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.25874007549134453,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.1003095238095238,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.034661296486252734,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.0031037540644398465,
+          "novelty": 12.138699913251733,
+          "diversity_product_type@12": 0.2604707493385356,
+          "diversity_product_code@12": 0.8181807234304627,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.0895315361498371,
+          "ndcg@12_returning": 0.04381842759395185,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.08506342100354411,
+          "ndcg@12_new_customer": 0.04023529487685308,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 0.0,
+          "relative_lift_recall@12_vs_shipped": -0.2198560432351755,
+          "relative_lift_ndcg@12_vs_shipped": -0.3801625512272952
+        },
+        "assoc_npmi": {
+          "recall@12": 0.12259455758439047,
+          "recall@5": 0.07534913966618842,
+          "ndcg@12": 0.07302478179435412,
+          "recall@12_tail": 0.05587821798151605,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.10828025477707007,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.0009163103237629811,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.11687995431949481,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.10101781170483459,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.1365687488049593,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.26512479652740095,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.27193153715996354,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.09828571428571427,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.07926295782296507,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.22439402896837127,
+          "novelty": 12.357885741249767,
+          "diversity_product_type@12": 0.27737378846213395,
+          "diversity_product_code@12": 0.8415573401045269,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.1213429470391792,
+          "ndcg@12_returning": 0.0720213002408869,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.13830675247155383,
+          "ndcg@12_new_customer": 0.08562206918065442,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 0.37434958863530293,
+          "relative_lift_recall@12_vs_shipped": 0.07219052605605414,
+          "relative_lift_ndcg@12_vs_shipped": 0.039248575874230675
+        },
+        "shipped_rrf_hybrid": {
+          "recall@12": 0.11434027311856813,
+          "recall@5": 0.07543326348819686,
+          "ndcg@12": 0.0702669058102145,
+          "recall@12_tail": 0.055048514600474774,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.06695775472080304,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.00855222968845449,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.10313381700927045,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.06547709923664123,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.13760881160120358,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.11602459757641526,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.29228491474684365,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.14772619047619048,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.08079758241316196,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.30250517292344076,
+          "novelty": 12.322739530210393,
+          "diversity_product_type@12": 0.28110431009864334,
+          "diversity_product_code@12": 0.7965872221247371,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.1122370439711886,
+          "ndcg@12_returning": 0.06869577106005406,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.14074333146800969,
+          "ndcg@12_new_customer": 0.08999027382030793,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 0.28181471038613887,
+          "relative_lift_recall@12_vs_shipped": 0.0,
+          "relative_lift_ndcg@12_vs_shipped": 0.0
+        },
+        "rrf_all_sources": {
+          "recall@12": 0.1218844080194603,
+          "recall@5": 0.07795852643965277,
+          "ndcg@12": 0.07025396910753748,
+          "recall@12_tail": 0.04773099172601351,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.06414440368211384,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.0030543677458766036,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.1254702404944243,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.07388994910941477,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.1474539343255945,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.13630403327907395,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.307594689574385,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.14088095238095238,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.07933033649107987,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.2690289683712681,
+          "novelty": 12.056146689740498,
+          "diversity_product_type@12": 0.2644077098020596,
+          "diversity_product_code@12": 0.7806079967520292,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.11999710251523966,
+          "ndcg@12_returning": 0.06905801717792472,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.14557685133370638,
+          "ndcg@12_new_customer": 0.08526744903198387,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 0.3663884378170092,
+          "relative_lift_recall@12_vs_shipped": 0.06597968235626893,
+          "relative_lift_ndcg@12_vs_shipped": -0.0001841080452860681
+        },
+        "lgbm_personalized": {
+          "recall@12": 0.180575826701486,
+          "recall@5": 0.11843705164067257,
+          "ndcg@12": 0.1112211609861576,
+          "recall@12_tail": 0.10881790315517757,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.16963381422880422,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.020769700671960906,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.14639594249630525,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.1861673027989822,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.20700319012971852,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.29736389943931996,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.36169139658987376,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.2128095238095238,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.12029606387899998,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.29500443393437775,
+          "novelty": 12.989635184664648,
+          "diversity_product_type@12": 0.249780658746297,
+          "diversity_product_code@12": 0.7811997880561375,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.18071296698724731,
+          "ndcg@12_returning": 0.11119113177408647,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.17885422495803022,
+          "ndcg@12_new_customer": 0.11159813514491226,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 1.0243501672073099,
+          "relative_lift_recall@12_vs_shipped": 0.5792845493226448,
+          "relative_lift_ndcg@12_vs_shipped": 0.5828384600647906
+        },
+        "lgbm_compatibility": {
+          "recall@12": 0.161038112048114,
+          "recall@5": 0.10248449128312052,
+          "ndcg@12": 0.09682134434999003,
+          "recall@12_tail": 0.09677568047200903,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.1500979046161464,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.00885766646304215,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.13377502351202475,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.1594545165394402,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.18351045094546586,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.26322571893651653,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.34213523363269555,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.1874047619047619,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.1067826183149299,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.22823677209577298,
+          "novelty": 12.954718742092297,
+          "diversity_product_type@12": 0.2481033432768035,
+          "diversity_product_code@12": 0.7965218498295159,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.159576558605344,
+          "ndcg@12_returning": 0.09568991878573414,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.17938584219362058,
+          "ndcg@12_new_customer": 0.11102478729310285,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 0.8053220910363766,
+          "relative_lift_recall@12_vs_shipped": 0.4084111193360656,
+          "relative_lift_ndcg@12_vs_shipped": 0.3779081807230423
+        },
+        "rrf_all_sources_union": {
+          "recall@12": 0.12623132158696407,
+          "recall@5": 0.08116985442622048,
+          "ndcg@12": 0.07359671549751431,
+          "recall@12_tail": 0.0596118831962018,
+          "n_truth_tail": 86778,
+          "recall@12_new_item": 0.07668069591051294,
+          "n_truth_new_item": 44431,
+          "recall@12_jewellery": 0.013439218081857055,
+          "n_truth_jewellery": 3274,
+          "recall@12_slot_accessories": 0.12373203009539163,
+          "n_queries_slot_accessories": 9924,
+          "recall@12_slot_full": 0.08059637404580153,
+          "n_queries_slot_full": 10480,
+          "recall@12_slot_lower": 0.15228240195634452,
+          "n_queries_slot_lower": 33123,
+          "recall@12_slot_shoes": 0.13331976849339844,
+          "n_queries_slot_shoes": 3686,
+          "recall@12_slot_socks": 0.3126057529610829,
+          "n_queries_slot_socks": 5122,
+          "recall@12_slot_swimwear": 0.13542857142857143,
+          "n_queries_slot_swimwear": 1400,
+          "recall@12_slot_upper": 0.08539843922846396,
+          "n_queries_slot_upper": 33146,
+          "catalog_coverage@12": 0.41331658291457285,
+          "novelty": 12.27334146716423,
+          "diversity_product_type@12": 0.2785126426578311,
+          "diversity_product_code@12": 0.8033326107974387,
+          "mean_list_length": 12.0,
+          "n_queries": 96881,
+          "recall@12_returning": 0.12433701462486857,
+          "ndcg@12_returning": 0.07236621494819218,
+          "n_queries_returning": 89733,
+          "recall@12_new_customer": 0.15001165827271032,
+          "ndcg@12_new_customer": 0.08904390433247862,
+          "n_queries_new_customer": 7148,
+          "relative_lift_recall@12_vs_popularity": 0.4151196294053436,
+          "relative_lift_recall@12_vs_shipped": 0.10399702697985688,
+          "relative_lift_ndcg@12_vs_shipped": 0.04738802212656662
+        }
+      },
+      "fit": {
+        "lgbm_personalized": {
+          "train_rows": 4013987,
+          "train_groups": 60208,
+          "positive_rate": 0.008844821869129122,
+          "best_iteration": 149,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6650111952432578,
+          "curve": [
+            0.609352,
+            0.658764,
+            0.662085,
+            0.664087,
+            0.664441,
+            0.664766,
+            0.664812,
+            0.664562
+          ],
+          "num_boost_round": 149,
+          "fit_seconds": 78.1,
+          "n_features": 95
+        },
+        "lgbm_compatibility": {
+          "train_rows": 4013987,
+          "train_groups": 60208,
+          "positive_rate": 0.008844821869129122,
+          "best_iteration": 146,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6477853959114864,
+          "curve": [
+            0.607541,
+            0.64283,
+            0.644938,
+            0.646454,
+            0.647283,
+            0.647402,
+            0.647677,
+            0.647427
+          ],
+          "num_boost_round": 146,
+          "fit_seconds": 59.2,
+          "n_features": 74
+        }
+      },
+      "n_eval_rows": 18162101,
+      "candidates_per_query": 187.46814132802098,
+      "union_recall": 0.4566965127922332,
+      "n_truth_pairs": 137818,
+      "eval_seconds": 130.8,
+      "bootstrap_vs_shipped": {
+        "slot_popularity": {
+          "recall@12": {
+            "diff": -0.02513840003027769,
+            "ci95": [
+              -0.028544699878765487,
+              -0.02175582092683816
+            ],
+            "relative": -0.2198560432351755,
+            "relative_ci95": [
+              -0.2496469450371639,
+              -0.19027259891427664
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          },
+          "ndcg@12": {
+            "diff": -0.026712846179659196,
+            "ci95": [
+              -0.02869904928133417,
+              -0.02477035177234874
+            ],
+            "relative": -0.3801625512272952,
+            "relative_ci95": [
+              -0.4084291025827733,
+              -0.35251803799716974
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          }
+        },
+        "assoc_npmi": {
+          "recall@12": {
+            "diff": 0.00825428446582234,
+            "ci95": [
+              0.005760114187313599,
+              0.01088663072071707
+            ],
+            "relative": 0.07219052605605414,
+            "relative_ci95": [
+              0.050376949697684366,
+              0.09521256529996124
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          },
+          "ndcg@12": {
+            "diff": 0.002757875984139624,
+            "ci95": [
+              0.0014895509082036198,
+              0.004180441612347521
+            ],
+            "relative": 0.039248575874230675,
+            "relative_ci95": [
+              0.02119847019060128,
+              0.05949374836055214
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          }
+        },
+        "rrf_all_sources": {
+          "recall@12": {
+            "diff": 0.00754413490089216,
+            "ci95": [
+              0.0061806990568846,
+              0.008906145556629726
+            ],
+            "relative": 0.06597968235626893,
+            "relative_ci95": [
+              0.054055311294169836,
+              0.07789158897140525
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          },
+          "ndcg@12": {
+            "diff": -1.2936702677018852e-05,
+            "ci95": [
+              -0.0007932956162150074,
+              0.0008092736978786111
+            ],
+            "relative": -0.0001841080452860681,
+            "relative_ci95": [
+              -0.011289747386310674,
+              0.011517138666449852
+            ],
+            "p_gain_positive": 0.504,
+            "n_customers": 23804,
+            "n_queries": 96881
+          }
+        },
+        "lgbm_personalized": {
+          "recall@12": {
+            "diff": 0.06623555358291787,
+            "ci95": [
+              0.0636716041668858,
+              0.0688323447236284
+            ],
+            "relative": 0.5792845493226448,
+            "relative_ci95": [
+              0.5568606968505303,
+              0.601995629765996
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          },
+          "ndcg@12": {
+            "diff": 0.0409542551759431,
+            "ci95": [
+              0.03938069864466501,
+              0.04255274362878535
+            ],
+            "relative": 0.5828384600647906,
+            "relative_ci95": [
+              0.5604444679979114,
+              0.6055872695421801
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          }
+        },
+        "lgbm_compatibility": {
+          "recall@12": {
+            "diff": 0.04669783892954586,
+            "ci95": [
+              0.044543682072196014,
+              0.04898793923965862
+            ],
+            "relative": 0.4084111193360656,
+            "relative_ci95": [
+              0.38957124079986477,
+              0.4284399354972617
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          },
+          "ndcg@12": {
+            "diff": 0.02655443853977553,
+            "ci95": [
+              0.02536718600693573,
+              0.027860111086324642
+            ],
+            "relative": 0.3779081807230423,
+            "relative_ci95": [
+              0.36101185493282634,
+              0.39648979509034676
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          }
+        },
+        "rrf_all_sources_union": {
+          "recall@12": {
+            "diff": 0.011891048468395934,
+            "ci95": [
+              0.01055868421253282,
+              0.01322510818472248
+            ],
+            "relative": 0.10399702697985688,
+            "relative_ci95": [
+              0.09234440258493799,
+              0.11566447957499942
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          },
+          "ndcg@12": {
+            "diff": 0.0033298096872998173,
+            "ci95": [
+              0.002504126581739642,
+              0.004108242235178069
+            ],
+            "relative": 0.04738802212656662,
+            "relative_ci95": [
+              0.03563735378505345,
+              0.05846624648983569
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 23804,
+            "n_queries": 96881
+          }
+        }
+      }
+    },
+    "2020-09-09": {
+      "metrics": {
+        "slot_popularity": {
+          "recall@12": 0.0788366142853076,
+          "recall@5": 0.04255469439462522,
+          "ndcg@12": 0.04020331446923179,
+          "recall@12_tail": 0.021251075275331065,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.06154155226679167,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.0,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.1095916066623027,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.08568614111177254,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.06942679500083879,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.20186987216180116,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.30358589205507697,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.07867132867132867,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.03132431582258572,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.0031030661248614704,
+          "novelty": 12.009011742741302,
+          "diversity_product_type@12": 0.3221729367722834,
+          "diversity_product_code@12": 0.87426694565434,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.07928581802615789,
+          "ndcg@12_returning": 0.04030929047591777,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.07277020749458035,
+          "ndcg@12_new_customer": 0.03877212966788297,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 0.0,
+          "relative_lift_recall@12_vs_shipped": -0.32113922033669795,
+          "relative_lift_ndcg@12_vs_shipped": -0.4401122483574891
+        },
+        "assoc_npmi": {
+          "recall@12": 0.11611082642981181,
+          "recall@5": 0.07520603809035785,
+          "ndcg@12": 0.07283104834771639,
+          "recall@12_tail": 0.05592643299368768,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.10020312953414139,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.002142857142857143,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.10978434795257837,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.0882090313802194,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.12783824022814966,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.20492272467086434,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.31925115970841617,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.0793997668997669,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.07915958896927755,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.2226080531954193,
+          "novelty": 12.271790632485821,
+          "diversity_product_type@12": 0.31323038545847925,
+          "diversity_product_code@12": 0.8733114840436133,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.11512276316493528,
+          "ndcg@12_returning": 0.07172958693488858,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.12945442345411376,
+          "ndcg@12_new_customer": 0.08770606470856554,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 0.4728033095080649,
+          "relative_lift_recall@12_vs_shipped": -0.00017159701666352817,
+          "relative_lift_ndcg@12_vs_shipped": 0.014274878763475204
+        },
+        "shipped_rrf_hybrid": {
+          "recall@12": 0.11613075412076182,
+          "recall@5": 0.077548609331853,
+          "ndcg@12": 0.07180602603162796,
+          "recall@12_tail": 0.0570532003828586,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.0677470479251769,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.015357142857142857,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.10579678522074333,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.0649304079145052,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.1433279860761617,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.12645487502385042,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.3129740078050217,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.10722610722610722,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.08200482331970221,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.29656446250461765,
+          "novelty": 12.239232064521532,
+          "diversity_product_type@12": 0.27207169698522504,
+          "diversity_product_code@12": 0.7977579568423151,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.11426147178205334,
+          "ndcg@12_returning": 0.07033166957377861,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.14137503871167545,
+          "ndcg@12_new_customer": 0.09171691548887083,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 0.4730560815370347,
+          "relative_lift_recall@12_vs_shipped": 0.0,
+          "relative_lift_ndcg@12_vs_shipped": 0.0
+        },
+        "rrf_all_sources": {
+          "recall@12": 0.12157724115352862,
+          "recall@5": 0.0768936644176844,
+          "ndcg@12": 0.07001221281231236,
+          "recall@12_tail": 0.050813574518094914,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.06453269046184067,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.013928571428571429,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.11457378718452252,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.07454006859993763,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.15066368897835933,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.14949437130318638,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.3199690744422355,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.1099941724941725,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.08100398448149314,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.2614702622829701,
+          "novelty": 11.991136935562267,
+          "diversity_product_type@12": 0.26377590599823497,
+          "diversity_product_code@12": 0.7859027599851967,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.11974377202436916,
+          "ndcg@12_returning": 0.06881683446050048,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.14633787550325178,
+          "ndcg@12_new_customer": 0.08615555867402204,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 0.5421418367047555,
+          "relative_lift_recall@12_vs_shipped": 0.046899609616786964,
+          "relative_lift_ndcg@12_vs_shipped": -0.024981374383892082
+        },
+        "lgbm_personalized": {
+          "recall@12": 0.17706002505195434,
+          "recall@5": 0.11615103766333588,
+          "ndcg@12": 0.11031333753662001,
+          "recall@12_tail": 0.11407005343058264,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.1689993080202683,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.02214285714285714,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.1418975925521856,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.16948436658446014,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.2039339037074316,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.24718565159320743,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.40497754215448056,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.21037296037296033,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.12176260878683023,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.27953454008127077,
+          "novelty": 12.919662185826267,
+          "diversity_product_type@12": 0.24809708344008882,
+          "diversity_product_code@12": 0.790527941469525,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.1768099158392001,
+          "ndcg@12_returning": 0.11000425818844226,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.1804377000103231,
+          "ndcg@12_new_customer": 0.11448739239446651,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 1.2459110738974515,
+          "relative_lift_recall@12_vs_shipped": 0.5246609426804678,
+          "relative_lift_ndcg@12_vs_shipped": 0.5362685227564462
+        },
+        "lgbm_compatibility": {
+          "recall@12": 0.15553313690323683,
+          "recall@5": 0.09942085148176615,
+          "ndcg@12": 0.09513787094385259,
+          "recall@12_tail": 0.10031864497134618,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.1480390187280966,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.0125,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.12824387228162046,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.13792272585537318,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.17722854806240565,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.2339248235069643,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.37535895736690966,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.15297202797202797,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.10839100346020761,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.21739933505725895,
+          "novelty": 12.863837473911095,
+          "diversity_product_type@12": 0.2506912417798275,
+          "diversity_product_code@12": 0.826615744299257,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.1541178404078856,
+          "ndcg@12_returning": 0.09391001212904058,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.17464643336430266,
+          "ndcg@12_new_customer": 0.11171985897033375,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 0.9728540896031707,
+          "relative_lift_recall@12_vs_shipped": 0.33929326542994237,
+          "relative_lift_ndcg@12_vs_shipped": 0.324928786644561
+        },
+        "rrf_all_sources_union": {
+          "recall@12": 0.1256540552851083,
+          "recall@5": 0.08071906937683264,
+          "ndcg@12": 0.074172008580625,
+          "recall@12_tail": 0.06123314392333135,
+          "n_truth_tail": 82537,
+          "recall@12_new_item": 0.07821603160784839,
+          "n_truth_new_item": 44799,
+          "recall@12_jewellery": 0.016785714285714286,
+          "n_truth_jewellery": 2800,
+          "recall@12_slot_accessories": 0.11226089170121462,
+          "n_queries_slot_accessories": 9166,
+          "recall@12_slot_full": 0.07927403123848399,
+          "n_queries_slot_full": 11759,
+          "recall@12_slot_lower": 0.15433232679080688,
+          "n_queries_slot_lower": 31792,
+          "recall@12_slot_shoes": 0.14882655981682885,
+          "n_queries_slot_shoes": 3494,
+          "recall@12_slot_socks": 0.3201531551432148,
+          "n_queries_slot_socks": 4527,
+          "recall@12_slot_swimwear": 0.09826631701631701,
+          "n_queries_slot_swimwear": 1144,
+          "recall@12_slot_upper": 0.08873283003040788,
+          "n_queries_slot_upper": 31790,
+          "catalog_coverage@12": 0.40676025120059106,
+          "novelty": 12.209434085894532,
+          "diversity_product_type@12": 0.2769210649927406,
+          "diversity_product_code@12": 0.8072093759785919,
+          "mean_list_length": 12.0,
+          "n_queries": 93672,
+          "recall@12_returning": 0.12378498100457877,
+          "ndcg@12_returning": 0.07275566532682536,
+          "n_queries_returning": 87214,
+          "recall@12_new_customer": 0.1508955300918757,
+          "ndcg@12_new_customer": 0.0932994413054442,
+          "n_queries_new_customer": 6458,
+          "relative_lift_recall@12_vs_popularity": 0.5938540286670563,
+          "relative_lift_recall@12_vs_shipped": 0.0820049885704128,
+          "relative_lift_ndcg@12_vs_shipped": 0.03294963779160979
+        }
+      },
+      "fit": {
+        "lgbm_personalized": {
+          "train_rows": 3958503,
+          "train_groups": 59784,
+          "positive_rate": 0.009490456366964986,
+          "best_iteration": 161,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6425415889610311,
+          "curve": [
+            0.587051,
+            0.635919,
+            0.638805,
+            0.641,
+            0.641798,
+            0.641951,
+            0.642031,
+            0.642142,
+            0.642127
+          ],
+          "num_boost_round": 161,
+          "fit_seconds": 76.8,
+          "n_features": 95
+        },
+        "lgbm_compatibility": {
+          "train_rows": 3958503,
+          "train_groups": 59784,
+          "positive_rate": 0.009490456366964986,
+          "best_iteration": 86,
+          "early_stopping_metric": "ndcg@12",
+          "best_score": 0.6241218339837113,
+          "curve": [
+            0.577538,
+            0.619104,
+            0.622412,
+            0.622972,
+            0.623423,
+            0.623917
+          ],
+          "num_boost_round": 86,
+          "fit_seconds": 39.5,
+          "n_features": 74
+        }
+      },
+      "n_eval_rows": 17411381,
+      "candidates_per_query": 185.87604620377488,
+      "union_recall": 0.4496171539253072,
+      "n_truth_pairs": 132168,
+      "eval_seconds": 111.3,
+      "bootstrap_vs_shipped": {
+        "slot_popularity": {
+          "recall@12": {
+            "diff": -0.037294139835454224,
+            "ci95": [
+              -0.04059740027351625,
+              -0.03404034801387105
+            ],
+            "relative": -0.32113922033669795,
+            "relative_ci95": [
+              -0.3495835412495462,
+              -0.2931208728608895
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          },
+          "ndcg@12": {
+            "diff": -0.03160271156239617,
+            "ci95": [
+              -0.033633063454477315,
+              -0.02958147401614397
+            ],
+            "relative": -0.4401122483574891,
+            "relative_ci95": [
+              -0.4683877567554451,
+              -0.4119636700562485
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          }
+        },
+        "assoc_npmi": {
+          "recall@12": {
+            "diff": -1.992769095000846e-05,
+            "ci95": [
+              -0.0025933929606812597,
+              0.0022671475947394627
+            ],
+            "relative": -0.00017159701666352817,
+            "relative_ci95": [
+              -0.022331663824248033,
+              0.01952237038245619
+            ],
+            "p_gain_positive": 0.509,
+            "n_customers": 22897,
+            "n_queries": 93672
+          },
+          "ndcg@12": {
+            "diff": 0.0010250223160884336,
+            "ci95": [
+              -0.0003046762612064287,
+              0.002288470374136997
+            ],
+            "relative": 0.014274878763475204,
+            "relative_ci95": [
+              -0.004243045856238164,
+              0.03187017163613829
+            ],
+            "p_gain_positive": 0.934,
+            "n_customers": 22897,
+            "n_queries": 93672
+          }
+        },
+        "rrf_all_sources": {
+          "recall@12": {
+            "diff": 0.005446487032766803,
+            "ci95": [
+              0.004104169141959665,
+              0.006779069252145911
+            ],
+            "relative": 0.046899609616786964,
+            "relative_ci95": [
+              0.03534093249486548,
+              0.05837445303331541
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          },
+          "ndcg@12": {
+            "diff": -0.0017938132193155987,
+            "ci95": [
+              -0.002649089102768986,
+              -0.0009063904367679619
+            ],
+            "relative": -0.024981374383892082,
+            "relative_ci95": [
+              -0.03689229510629314,
+              -0.012622762835652954
+            ],
+            "p_gain_positive": 0.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          }
+        },
+        "lgbm_personalized": {
+          "recall@12": {
+            "diff": 0.06092927093119252,
+            "ci95": [
+              0.05819923811881097,
+              0.06336234974728397
+            ],
+            "relative": 0.5246609426804678,
+            "relative_ci95": [
+              0.5011526753567006,
+              0.5456121440612953
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          },
+          "ndcg@12": {
+            "diff": 0.03850731150499205,
+            "ci95": [
+              0.036823102453103926,
+              0.04013441400493392
+            ],
+            "relative": 0.5362685227564462,
+            "relative_ci95": [
+              0.5128135407031811,
+              0.5589282156800623
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          }
+        },
+        "lgbm_compatibility": {
+          "recall@12": {
+            "diff": 0.039402382782475015,
+            "ci95": [
+              0.03712804506452474,
+              0.041616053704001774
+            ],
+            "relative": 0.33929326542994237,
+            "relative_ci95": [
+              0.319708981015624,
+              0.3583551490652179
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          },
+          "ndcg@12": {
+            "diff": 0.023331844912224634,
+            "ci95": [
+              0.022171770194722447,
+              0.02459416201103705
+            ],
+            "relative": 0.324928786644561,
+            "relative_ci95": [
+              0.30877311306653543,
+              0.34250832931771225
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          }
+        },
+        "rrf_all_sources_union": {
+          "recall@12": {
+            "diff": 0.009523301164346493,
+            "ci95": [
+              0.008167194678444688,
+              0.01101208811049098
+            ],
+            "relative": 0.0820049885704128,
+            "relative_ci95": [
+              0.07032757808454256,
+              0.09482490830154906
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          },
+          "ndcg@12": {
+            "diff": 0.002365982548997045,
+            "ci95": [
+              0.0015936406589363817,
+              0.00324584918141385
+            ],
+            "relative": 0.03294963779160979,
+            "relative_ci95": [
+              0.022193689680507323,
+              0.045203019311835624
+            ],
+            "p_gain_positive": 1.0,
+            "n_customers": 22897,
+            "n_queries": 93672
+          }
+        }
+      }
+    }
+  },
+  "summary": {
+    "systems": {
+      "slot_popularity": {
+        "recall@12": {
+          "mean": 0.07523664217434094,
+          "std": 0.014734369885570352,
+          "per_fold": [
+            0.052702,
+            0.062914,
+            0.078037,
+            0.089729,
+            0.089202,
+            0.078837
+          ]
+        },
+        "recall@5": {
+          "mean": 0.03997553262492688,
+          "std": 0.009312575934390948,
+          "per_fold": [
+            0.02487,
+            0.03278,
+            0.043379,
+            0.049208,
+            0.047061,
+            0.042555
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.03818029079452426,
+          "std": 0.007251801747192386,
+          "per_fold": [
+            0.026741,
+            0.032004,
+            0.041197,
+            0.045382,
+            0.043554,
+            0.040203
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.01965010723612202,
+          "std": 0.01016948912336609,
+          "per_fold": [
+            0.008612,
+            0.006046,
+            0.029396,
+            0.029779,
+            0.022817,
+            0.021251
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.06706045295853835,
+          "std": 0.03870946201067666,
+          "per_fold": [
+            0.027615,
+            0.017617,
+            0.111972,
+            0.102276,
+            0.08134,
+            0.061542
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.01254999001845677,
+          "std": 0.013416960199531583,
+          "per_fold": [
+            0.034503,
+            0.016671,
+            0.005518,
+            0.018607,
+            0.0,
+            0.0
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.07531418888108884,
+          "std": 0.015082860219523635,
+          "per_fold": [
+            0.052143,
+            0.062788,
+            0.078047,
+            0.090089,
+            0.089532,
+            0.079286
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.0744859781489005,
+          "std": 0.009927925247845316,
+          "per_fold": [
+            0.061329,
+            0.065116,
+            0.077874,
+            0.084763,
+            0.085063,
+            0.07277
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.0030880206782644254,
+          "std": 1.9850788286292427e-05,
+          "per_fold": [
+            0.003052,
+            0.003079,
+            0.003094,
+            0.003097,
+            0.003104,
+            0.003103
+          ]
+        },
+        "novelty": {
+          "mean": 11.979156052394622,
+          "std": 0.31292626273006285,
+          "per_fold": [
+            11.835524,
+            11.421261,
+            12.246493,
+            12.223946,
+            12.1387,
+            12.009012
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.294947194445163,
+          "std": 0.03821587674400874,
+          "per_fold": [
+            0.303275,
+            0.2389,
+            0.340473,
+            0.304392,
+            0.260471,
+            0.322173
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.8316556837391034,
+          "std": 0.0402970853638385,
+          "per_fold": [
+            0.76683,
+            0.858317,
+            0.860336,
+            0.812004,
+            0.818181,
+            0.874267
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 0.0,
+          "std": 0.0,
+          "per_fold": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": -0.2371524167203546,
+          "std": 0.08626232840231612,
+          "per_fold": [
+            -0.347053,
+            -0.244688,
+            -0.164669,
+            -0.125509,
+            -0.219856,
+            -0.321139
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": -0.35910284377812285,
+          "std": 0.06854979110544944,
+          "per_fold": [
+            -0.420519,
+            -0.354933,
+            -0.277301,
+            -0.281589,
+            -0.380163,
+            -0.440112
+          ]
+        }
+      },
+      "assoc_npmi": {
+        "recall@12": {
+          "mean": 0.10069113245769282,
+          "std": 0.02120918576439006,
+          "per_fold": [
+            0.070488,
+            0.080329,
+            0.09966,
+            0.114964,
+            0.122595,
+            0.116111
+          ]
+        },
+        "recall@5": {
+          "mean": 0.06323010300843057,
+          "std": 0.014434031399184137,
+          "per_fold": [
+            0.041853,
+            0.048907,
+            0.065723,
+            0.072343,
+            0.075349,
+            0.075206
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.06087711637375687,
+          "std": 0.0134366271372729,
+          "per_fold": [
+            0.041369,
+            0.047751,
+            0.061752,
+            0.068534,
+            0.073025,
+            0.072831
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.04395066913012875,
+          "std": 0.014598820750627364,
+          "per_fold": [
+            0.023965,
+            0.026919,
+            0.049016,
+            0.051999,
+            0.055878,
+            0.055926
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.09265920897687624,
+          "std": 0.03099766767880673,
+          "per_fold": [
+            0.059655,
+            0.049069,
+            0.125956,
+            0.112791,
+            0.10828,
+            0.100203
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.013283987208368549,
+          "std": 0.012689292202530142,
+          "per_fold": [
+            0.033908,
+            0.016097,
+            0.006438,
+            0.020202,
+            0.000916,
+            0.002143
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.10008169611022807,
+          "std": 0.02102621687019834,
+          "per_fold": [
+            0.070071,
+            0.079923,
+            0.098982,
+            0.115049,
+            0.121343,
+            0.115123
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.10931614775012902,
+          "std": 0.023639388011771453,
+          "per_fold": [
+            0.076924,
+            0.087445,
+            0.109969,
+            0.113798,
+            0.138307,
+            0.129454
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.22560462956330213,
+          "std": 0.0021086789832782137,
+          "per_fold": [
+            0.225185,
+            0.227843,
+            0.228168,
+            0.225429,
+            0.224394,
+            0.222608
+          ]
+        },
+        "novelty": {
+          "mean": 12.22303263785166,
+          "std": 0.23992448426334048,
+          "per_fold": [
+            12.067431,
+            11.812308,
+            12.390789,
+            12.437991,
+            12.357886,
+            12.271791
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.2993742110191095,
+          "std": 0.0237894358600968,
+          "per_fold": [
+            0.306017,
+            0.264783,
+            0.328859,
+            0.305983,
+            0.277374,
+            0.31323
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.8467608187926273,
+          "std": 0.02714973998547953,
+          "per_fold": [
+            0.811466,
+            0.869378,
+            0.866496,
+            0.818357,
+            0.841557,
+            0.873311
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 0.33662985681928,
+          "std": 0.07766237226831438,
+          "per_fold": [
+            0.337479,
+            0.276813,
+            0.277097,
+            0.281238,
+            0.37435,
+            0.472803
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": 0.016157170744862146,
+          "std": 0.08936564208257197,
+          "per_fold": [
+            -0.126697,
+            -0.035609,
+            0.066798,
+            0.120432,
+            0.072191,
+            -0.000172
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": 0.013443618155123575,
+          "std": 0.07339446473565867,
+          "per_fold": [
+            -0.10352,
+            -0.037547,
+            0.083292,
+            0.084913,
+            0.039249,
+            0.014275
+          ]
+        }
+      },
+      "shipped_rrf_hybrid": {
+        "recall@12": {
+          "mean": 0.09841788626301179,
+          "std": 0.015178350447769776,
+          "per_fold": [
+            0.080714,
+            0.083295,
+            0.09342,
+            0.102607,
+            0.11434,
+            0.116131
+          ]
+        },
+        "recall@5": {
+          "mean": 0.06402705365756109,
+          "std": 0.011702304428067042,
+          "per_fold": [
+            0.048986,
+            0.053011,
+            0.06116,
+            0.068023,
+            0.075433,
+            0.077549
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.05966795128573056,
+          "std": 0.010610876548815937,
+          "per_fold": [
+            0.046146,
+            0.049614,
+            0.057004,
+            0.06317,
+            0.070267,
+            0.071806
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.04257360642258606,
+          "std": 0.011433611011719441,
+          "per_fold": [
+            0.028992,
+            0.032976,
+            0.039159,
+            0.042213,
+            0.055049,
+            0.057053
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.05078124634285272,
+          "std": 0.013637000638003285,
+          "per_fold": [
+            0.040929,
+            0.035235,
+            0.049316,
+            0.044502,
+            0.066958,
+            0.067747
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.008937599205595061,
+          "std": 0.003557355541881744,
+          "per_fold": [
+            0.005651,
+            0.005749,
+            0.00981,
+            0.008506,
+            0.008552,
+            0.015357
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.09701824921692821,
+          "std": 0.014702274180372534,
+          "per_fold": [
+            0.07986,
+            0.082594,
+            0.091627,
+            0.101529,
+            0.112237,
+            0.114261
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.11828564368205119,
+          "std": 0.02075876815716984,
+          "per_fold": [
+            0.093897,
+            0.095568,
+            0.120658,
+            0.117472,
+            0.140743,
+            0.141375
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.29380288243240693,
+          "std": 0.009065503519058209,
+          "per_fold": [
+            0.27674,
+            0.292794,
+            0.294501,
+            0.299712,
+            0.302505,
+            0.296564
+          ]
+        },
+        "novelty": {
+          "mean": 12.082999400363983,
+          "std": 0.22396682222508235,
+          "per_fold": [
+            11.769167,
+            11.90624,
+            11.998569,
+            12.262049,
+            12.32274,
+            12.239232
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.26987042731996314,
+          "std": 0.00870366938059164,
+          "per_fold": [
+            0.257529,
+            0.26206,
+            0.270795,
+            0.275663,
+            0.281104,
+            0.272072
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.7961265039058918,
+          "std": 0.003885972083008984,
+          "per_fold": [
+            0.790664,
+            0.797557,
+            0.801504,
+            0.792688,
+            0.796587,
+            0.797758
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 0.32516629426489674,
+          "std": 0.152132032639617,
+          "per_fold": [
+            0.531517,
+            0.323957,
+            0.197131,
+            0.143522,
+            0.281815,
+            0.473056
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": 0.0,
+          "std": 0.0,
+          "per_fold": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": 0.0,
+          "std": 0.0,
+          "per_fold": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "rrf_all_sources": {
+        "recall@12": {
+          "mean": 0.1059651236473017,
+          "std": 0.014739474103349283,
+          "per_fold": [
+            0.088437,
+            0.091446,
+            0.100267,
+            0.112179,
+            0.121884,
+            0.121577
+          ]
+        },
+        "recall@5": {
+          "mean": 0.06687788674538568,
+          "std": 0.010569376143975972,
+          "per_fold": [
+            0.051929,
+            0.058063,
+            0.064291,
+            0.072132,
+            0.077959,
+            0.076894
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.06158681186180635,
+          "std": 0.008744214017306096,
+          "per_fold": [
+            0.049304,
+            0.053914,
+            0.059675,
+            0.066362,
+            0.070254,
+            0.070012
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.03855025927495852,
+          "std": 0.009698826536423271,
+          "per_fold": [
+            0.025611,
+            0.03034,
+            0.037779,
+            0.039027,
+            0.047731,
+            0.050814
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.050722980283871705,
+          "std": 0.012231749280397788,
+          "per_fold": [
+            0.03848,
+            0.036181,
+            0.053308,
+            0.047692,
+            0.064144,
+            0.064533
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.007671074683107801,
+          "std": 0.0038727321420997597,
+          "per_fold": [
+            0.005651,
+            0.006324,
+            0.010423,
+            0.006645,
+            0.003054,
+            0.013929
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.10460341941386639,
+          "std": 0.014348232279461925,
+          "per_fold": [
+            0.087642,
+            0.090543,
+            0.098616,
+            0.111079,
+            0.119997,
+            0.119744
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.12543223632273084,
+          "std": 0.018908405904714837,
+          "per_fold": [
+            0.100717,
+            0.107258,
+            0.125364,
+            0.127339,
+            0.145577,
+            0.146338
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.25535009564097416,
+          "std": 0.013397674134456809,
+          "per_fold": [
+            0.231216,
+            0.250935,
+            0.255681,
+            0.263769,
+            0.269029,
+            0.26147
+          ]
+        },
+        "novelty": {
+          "mean": 11.828276413441309,
+          "std": 0.21542882548015868,
+          "per_fold": [
+            11.535083,
+            11.650948,
+            11.739703,
+            11.996641,
+            12.056147,
+            11.991137
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.2589319749637648,
+          "std": 0.008164286488079153,
+          "per_fold": [
+            0.247588,
+            0.249415,
+            0.262621,
+            0.265784,
+            0.264408,
+            0.263776
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.7839759594795576,
+          "std": 0.0028582442683730155,
+          "per_fold": [
+            0.780653,
+            0.783378,
+            0.786568,
+            0.786746,
+            0.780608,
+            0.785903
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 0.42919547280418485,
+          "std": 0.1625409724937449,
+          "per_fold": [
+            0.678063,
+            0.453512,
+            0.284874,
+            0.250194,
+            0.366388,
+            0.542142
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": 0.07883307997733573,
+          "std": 0.020348448958596423,
+          "per_fold": [
+            0.095686,
+            0.097854,
+            0.073295,
+            0.093284,
+            0.06598,
+            0.0469
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": 0.03788413571315342,
+          "std": 0.042318002092660185,
+          "per_fold": [
+            0.068426,
+            0.086667,
+            0.046857,
+            0.05052,
+            -0.000184,
+            -0.024981
+          ]
+        }
+      },
+      "lgbm_personalized": {
+        "recall@12": {
+          "mean": 0.15732101423977934,
+          "std": 0.021009775963365705,
+          "per_fold": [
+            0.129561,
+            0.136712,
+            0.154227,
+            0.16579,
+            0.180576,
+            0.17706
+          ]
+        },
+        "recall@5": {
+          "mean": 0.10169128412052086,
+          "std": 0.015191930376809099,
+          "per_fold": [
+            0.080618,
+            0.087611,
+            0.100987,
+            0.106344,
+            0.118437,
+            0.116151
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.0960740894813472,
+          "std": 0.014282998031103208,
+          "per_fold": [
+            0.076297,
+            0.082966,
+            0.09476,
+            0.100886,
+            0.111221,
+            0.110313
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.09117115127497938,
+          "std": 0.021620124492156962,
+          "per_fold": [
+            0.058436,
+            0.072502,
+            0.099938,
+            0.093263,
+            0.108818,
+            0.11407
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.14150214836998437,
+          "std": 0.03683488915520228,
+          "per_fold": [
+            0.089286,
+            0.100562,
+            0.168319,
+            0.152213,
+            0.169634,
+            0.168999
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.027526385773018552,
+          "std": 0.0075501703216226705,
+          "per_fold": [
+            0.038667,
+            0.021558,
+            0.034641,
+            0.027379,
+            0.02077,
+            0.022143
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.15742870534178582,
+          "std": 0.020940255297049994,
+          "per_fold": [
+            0.129691,
+            0.136964,
+            0.154232,
+            0.166163,
+            0.180713,
+            0.17681
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.15565948923471878,
+          "std": 0.022425900832209793,
+          "per_fold": [
+            0.127553,
+            0.132305,
+            0.15415,
+            0.160657,
+            0.178854,
+            0.180438
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.2880986741937823,
+          "std": 0.005453472029115776,
+          "per_fold": [
+            0.291527,
+            0.288579,
+            0.284409,
+            0.289538,
+            0.295004,
+            0.279535
+          ]
+        },
+        "novelty": {
+          "mean": 12.749361833641915,
+          "std": 0.3203407808056225,
+          "per_fold": [
+            12.19019,
+            12.535595,
+            12.896388,
+            12.964702,
+            12.989635,
+            12.919662
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.2652254696156759,
+          "std": 0.01587834646751895,
+          "per_fold": [
+            0.265503,
+            0.262901,
+            0.290408,
+            0.274662,
+            0.249781,
+            0.248097
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.8004123109915577,
+          "std": 0.018594690669680215,
+          "per_fold": [
+            0.801837,
+            0.815447,
+            0.828572,
+            0.78489,
+            0.7812,
+            0.790528
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 1.120942372448185,
+          "std": 0.2177601086328494,
+          "per_fold": [
+            1.458371,
+            1.173002,
+            0.97634,
+            0.84768,
+            1.02435,
+            1.245911
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": 0.6028505204356143,
+          "std": 0.04610419544131479,
+          "per_fold": [
+            0.605186,
+            0.641294,
+            0.650897,
+            0.61578,
+            0.579285,
+            0.524661
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": 0.6173517559326362,
+          "std": 0.053871853189479596,
+          "per_fold": [
+            0.653387,
+            0.672224,
+            0.662338,
+            0.597055,
+            0.582838,
+            0.536269
+          ]
+        }
+      },
+      "lgbm_compatibility": {
+        "recall@12": {
+          "mean": 0.137926560413736,
+          "std": 0.020085138294710488,
+          "per_fold": [
+            0.112605,
+            0.118261,
+            0.131818,
+            0.148304,
+            0.161038,
+            0.155533
+          ]
+        },
+        "recall@5": {
+          "mean": 0.08611427005746553,
+          "std": 0.014741038632049815,
+          "per_fold": [
+            0.066829,
+            0.071351,
+            0.083719,
+            0.092882,
+            0.102484,
+            0.099421
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.082161286568641,
+          "std": 0.013692629900044419,
+          "per_fold": [
+            0.064271,
+            0.068388,
+            0.079916,
+            0.088433,
+            0.096821,
+            0.095138
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.07993761282928845,
+          "std": 0.019099741172454433,
+          "per_fold": [
+            0.050985,
+            0.063922,
+            0.08344,
+            0.084186,
+            0.096776,
+            0.100319
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.12430238982864956,
+          "std": 0.03356603542669531,
+          "per_fold": [
+            0.078145,
+            0.084274,
+            0.142773,
+            0.142486,
+            0.150098,
+            0.148039
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.01757837621394128,
+          "std": 0.007487044062514017,
+          "per_fold": [
+            0.026472,
+            0.012935,
+            0.026364,
+            0.018341,
+            0.008858,
+            0.0125
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.13677102137755676,
+          "std": 0.019904564522690685,
+          "per_fold": [
+            0.111709,
+            0.117293,
+            0.130515,
+            0.147415,
+            0.159577,
+            0.154118
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.15464505266326944,
+          "std": 0.021115475286504197,
+          "per_fold": [
+            0.126437,
+            0.135218,
+            0.151627,
+            0.160556,
+            0.179386,
+            0.174646
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.22376790052352022,
+          "std": 0.004610403567976869,
+          "per_fold": [
+            0.224822,
+            0.229309,
+            0.220213,
+            0.222628,
+            0.228237,
+            0.217399
+          ]
+        },
+        "novelty": {
+          "mean": 12.725971913428848,
+          "std": 0.32289848380253466,
+          "per_fold": [
+            12.178427,
+            12.49584,
+            12.851719,
+            13.011289,
+            12.954719,
+            12.863837
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.27044490955907896,
+          "std": 0.018774037678891218,
+          "per_fold": [
+            0.27753,
+            0.268213,
+            0.296949,
+            0.281183,
+            0.248103,
+            0.250691
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.8260214051275062,
+          "std": 0.018274917086951076,
+          "per_fold": [
+            0.829236,
+            0.842429,
+            0.846101,
+            0.815225,
+            0.796522,
+            0.826616
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 0.8560869555508797,
+          "std": 0.18146835871647382,
+          "per_fold": [
+            1.136626,
+            0.879732,
+            0.689186,
+            0.652802,
+            0.805322,
+            0.972854
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": 0.40316352735117933,
+          "std": 0.03546993039402427,
+          "per_fold": [
+            0.395104,
+            0.419783,
+            0.411029,
+            0.445361,
+            0.408411,
+            0.339293
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": 0.3793102241510427,
+          "std": 0.0285570562635913,
+          "per_fold": [
+            0.392767,
+            0.37841,
+            0.401937,
+            0.399911,
+            0.377908,
+            0.324929
+          ]
+        }
+      },
+      "rrf_all_sources_union": {
+        "recall@12": {
+          "mean": 0.10878700137053243,
+          "std": 0.015993146534049978,
+          "per_fold": [
+            0.088543,
+            0.093582,
+            0.104435,
+            0.114277,
+            0.126231,
+            0.125654
+          ]
+        },
+        "recall@5": {
+          "mean": 0.06925514666306076,
+          "std": 0.011605066247550032,
+          "per_fold": [
+            0.052901,
+            0.058919,
+            0.06773,
+            0.074091,
+            0.08117,
+            0.080719
+          ]
+        },
+        "ndcg@12": {
+          "mean": 0.06422817983840914,
+          "std": 0.009617256060854923,
+          "per_fold": [
+            0.050682,
+            0.055715,
+            0.062766,
+            0.068437,
+            0.073597,
+            0.074172
+          ]
+        },
+        "recall@12_tail": {
+          "mean": 0.046993933625306655,
+          "std": 0.01197749031718034,
+          "per_fold": [
+            0.031145,
+            0.036812,
+            0.046315,
+            0.046846,
+            0.059612,
+            0.061233
+          ]
+        },
+        "recall@12_new_item": {
+          "mean": 0.06159049694431823,
+          "std": 0.015092275969973935,
+          "per_fold": [
+            0.04567,
+            0.043985,
+            0.068399,
+            0.056593,
+            0.076681,
+            0.078216
+          ]
+        },
+        "recall@12_jewellery": {
+          "mean": 0.011743833775165599,
+          "std": 0.0037303431203915415,
+          "per_fold": [
+            0.005949,
+            0.010923,
+            0.00981,
+            0.013557,
+            0.013439,
+            0.016786
+          ]
+        },
+        "recall@12_returning": {
+          "mean": 0.10738643603248463,
+          "std": 0.015571322328281607,
+          "per_fold": [
+            0.087726,
+            0.092688,
+            0.102742,
+            0.11304,
+            0.124337,
+            0.123785
+          ]
+        },
+        "recall@12_new_customer": {
+          "mean": 0.12879654720363753,
+          "std": 0.020463628584730362,
+          "per_fold": [
+            0.101153,
+            0.109228,
+            0.130164,
+            0.131327,
+            0.150012,
+            0.150896
+          ]
+        },
+        "catalog_coverage@12": {
+          "mean": 0.4031493274273319,
+          "std": 0.008075749541239378,
+          "per_fold": [
+            0.389188,
+            0.400081,
+            0.404921,
+            0.40463,
+            0.413317,
+            0.40676
+          ]
+        },
+        "novelty": {
+          "mean": 12.044556113881917,
+          "std": 0.20465883358398515,
+          "per_fold": [
+            11.758696,
+            11.872114,
+            11.986438,
+            12.167312,
+            12.273341,
+            12.209434
+          ]
+        },
+        "diversity_product_type@12": {
+          "mean": 0.2742975468604174,
+          "std": 0.005694853313479645,
+          "per_fold": [
+            0.264737,
+            0.269814,
+            0.277763,
+            0.278038,
+            0.278513,
+            0.276921
+          ]
+        },
+        "diversity_product_code@12": {
+          "mean": 0.8050837118212427,
+          "std": 0.0031808937285457096,
+          "per_fold": [
+            0.803989,
+            0.809368,
+            0.806225,
+            0.800378,
+            0.803333,
+            0.807209
+          ]
+        },
+        "relative_lift_recall@12_vs_popularity": {
+          "mean": 0.4647266672453314,
+          "std": 0.15397705987119806,
+          "per_fold": [
+            0.68006,
+            0.487461,
+            0.338287,
+            0.273578,
+            0.41512,
+            0.593854
+          ]
+        },
+        "relative_lift_recall@12_vs_shipped": {
+          "mean": 0.10635573258036089,
+          "std": 0.015284140769668874,
+          "per_fold": [
+            0.09699,
+            0.123497,
+            0.117912,
+            0.113733,
+            0.103997,
+            0.082005
+          ]
+        },
+        "relative_lift_ndcg@12_vs_shipped": {
+          "mean": 0.08100941952565245,
+          "std": 0.0343760631039225,
+          "per_fold": [
+            0.098299,
+            0.12298,
+            0.101069,
+            0.083371,
+            0.047388,
+            0.03295
+          ]
+        }
+      }
+    },
+    "wins_vs_shipped": {
+      "slot_popularity": 0,
+      "assoc_npmi": 3,
+      "rrf_all_sources": 6,
+      "lgbm_personalized": 6,
+      "lgbm_compatibility": 6,
+      "rrf_all_sources_union": 6
+    },
+    "n_folds": 6,
+    "candidates_per_query": {
+      "mean": 188.84380044703084,
+      "std": 1.8930629607256015,
+      "per_fold": [
+        190.508576,
+        189.983305,
+        190.604331,
+        188.622403,
+        187.468141,
+        185.876046
+      ]
+    },
+    "union_recall": {
+      "mean": 0.4285362333374274,
+      "std": 0.02029541018732837,
+      "per_fold": [
+        0.418933,
+        0.406376,
+        0.413236,
+        0.426358,
+        0.456697,
+        0.449617
+      ]
+    },
+    "pooled_bootstrap_vs_shipped": {
+      "slot_popularity": {
+        "recall@12": {
+          "diff": -0.023023098707199097,
+          "ci95": [
+            -0.02422667098966137,
+            -0.0218423596000686
+          ],
+          "relative": -0.23610703647136688,
+          "relative_ci95": [
+            -0.24844994172683574,
+            -0.22399829395171422
+          ],
+          "p_gain_positive": 0.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        },
+        "ndcg@12": {
+          "diff": -0.021215524524450302,
+          "ci95": [
+            -0.021986000703810005,
+            -0.020448972885183294
+          ],
+          "relative": -0.3594765067100525,
+          "relative_ci95": [
+            -0.37253147847275414,
+            -0.3464880313974734
+          ],
+          "p_gain_positive": 0.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        }
+      },
+      "assoc_npmi": {
+        "recall@12": {
+          "diff": 0.0019508078694343567,
+          "ci95": [
+            0.0009853138071964102,
+            0.0029461583148055136
+          ],
+          "relative": 0.0200059711933136,
+          "relative_ci95": [
+            0.010104613963885614,
+            0.030213513938577397
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        },
+        "ndcg@12": {
+          "diff": 0.001032564789056778,
+          "ci95": [
+            0.0005542309305200315,
+            0.0015360539176481188
+          ],
+          "relative": 0.017495809122920036,
+          "relative_ci95": [
+            0.009390906092629126,
+            0.026026945266865067
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        }
+      },
+      "rrf_all_sources": {
+        "recall@12": {
+          "diff": 0.007608234882354736,
+          "ci95": [
+            0.007134232452293222,
+            0.008093908573348511
+          ],
+          "relative": 0.07802415639162064,
+          "relative_ci95": [
+            0.07316315303057354,
+            0.08300484677605645
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        },
+        "ndcg@12": {
+          "diff": 0.002047073096036911,
+          "ci95": [
+            0.0017522024685527745,
+            0.0023566999535509026
+          ],
+          "relative": 0.03468567132949829,
+          "relative_ci95": [
+            0.02968937302364672,
+            0.03993199717585962
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        }
+      },
+      "lgbm_personalized": {
+        "recall@12": {
+          "diff": 0.05853089690208435,
+          "ci95": [
+            0.057576132390712194,
+            0.05946714529899478
+          ],
+          "relative": 0.6002474427223206,
+          "relative_ci95": [
+            0.590456144116273,
+            0.6098489053861973
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        },
+        "ndcg@12": {
+          "diff": 0.03615361824631691,
+          "ci95": [
+            0.03558072829892398,
+            0.036787961898367
+          ],
+          "relative": 0.6125880479812622,
+          "relative_ci95": [
+            0.6028809648877403,
+            0.623336368474831
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        }
+      },
+      "lgbm_compatibility": {
+        "recall@12": {
+          "diff": 0.039272651076316833,
+          "ci95": [
+            0.03843850590597899,
+            0.040128332652050604
+          ],
+          "relative": 0.40274983644485474,
+          "relative_ci95": [
+            0.3941954945639272,
+            0.41152504664184597
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        },
+        "ndcg@12": {
+          "diff": 0.022322628647089005,
+          "ci95": [
+            0.021845795788333667,
+            0.022803445332383418
+          ],
+          "relative": 0.3782353103160858,
+          "relative_ci95": [
+            0.37015584203231244,
+            0.38638228563657334
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        }
+      },
+      "rrf_all_sources_union": {
+        "recall@12": {
+          "diff": 0.010309696197509766,
+          "ci95": [
+            0.00979558484741181,
+            0.010817151609760827
+          ],
+          "relative": 0.10572824627161026,
+          "relative_ci95": [
+            0.10045591841975796,
+            0.11093231456531163
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        },
+        "ndcg@12": {
+          "diff": 0.004613842815160751,
+          "ci95": [
+            0.004287181698828017,
+            0.004940345473964853
+          ],
+          "relative": 0.07817709445953369,
+          "relative_ci95": [
+            0.07264213979893888,
+            0.08370936708208933
+          ],
+          "p_gain_positive": 1.0,
+          "n_customers": 145485,
+          "n_queries": 622989
+        }
+      }
+    },
+    "total_seconds": 3197.8,
+    "peak_memory_mb": 5927.9
+  },
+  "manifest": {
+    "git_commit": "24b57da1cdddf850fbe135945320b7f9eb8bb8a9",
+    "git_dirty": true,
+    "config_name": "default",
+    "track_b_config_sha1": "b88ee0017f31",
+    "data_fingerprint": {
+      "rows": 31788324,
+      "min_date": "2018-09-20",
+      "max_date": "2020-09-22",
+      "article_id_sum": "22131896419443968"
+    },
+    "mode": "val",
+    "tag": ""
+  }
+}

@@ -1,0 +1,6 @@
+# Optional: FashionCLIP visual search and the outfit-photo flow (PyTorch, loaded lazily once).
+# Without these the API serves Complete the Look by article id and answers the visual
+# endpoints with `visual_model_unavailable` (503).
+-r requirements-serve.txt
+torch==2.14.0
+transformers==5.17.0

@@ -1,0 +1,115 @@
+# Track A research benchmark (reports/TRACK_A_RESEARCH_TRACK_B_PRODUCTION_REPORT.md, D-038..).
+# One frozen, versioned protocol under which the Phase-2 ensemble and the reproduced
+# BPR-MF, LightGCN and SASRec baselines are compared. Bump `protocol_version` whenever
+# anything below `research.protocol` changes; it is part of every cache key.
+extends: default
+
+research:
+  protocol:
+    protocol_version: 1
+    # Six consecutive label weeks ending at validation (2020-09-09). The test week
+    # 2020-09-16 has already been observed (Phase 2, Kaggle) and is confirmation
+    # evidence only: never used for selection, debugging, thresholds or stopping.
+    reporting_folds: ["2020-08-05", "2020-08-12", "2020-08-19", "2020-08-26", "2020-09-02", "2020-09-09"]
+    # Hyperparameter tuning and the candidate-budget allocator use only these weeks,
+    # all of which end before the first reporting fold starts.
+    tuning_folds: ["2020-07-22", "2020-07-29"]
+    allocator_weeks: ["2020-07-15", "2020-07-22", "2020-07-29"]
+    allocator_sample: 0.25
+    confirmation_week: "2020-09-16"
+    k: 12
+    # Eligible catalogue for label week w: articles with >= 1 sale in the
+    # `eligible_days` before w.start (the D-029 availability proxy). Knowable at the
+    # cutoff. Every system's list is restricted to it, then back-filled.
+    eligible_days: 28
+    # Deterministic back-fill / new-user fallback for every system: the M1 age-band
+    # best sellers of the 7 days before the cutoff (baselines.popular_by_age).
+    fallback: popular_by_age
+    # Segments (declared before any reporting fold was scored; thresholds are the
+    # tertiles of 52-week transaction counts among buyers of tuning week 2020-07-22).
+    activity_weeks: 52
+    activity_bands: {low: [0, 12], medium: [13, 32], high: [33, 1000000]}
+    head_share: 0.10          # head = top 10% of the eligible catalogue by 7-day pre-cutoff sales
+    head_days: 7
+    recent_item_days: 28      # launch proxy: first observed sale within 28 days before the cutoff
+    bootstrap: {n_boot: 1000, seed: 0}
+    seeds: {neural: [0, 1, 2], ranker: [42, 43, 44]}
+    # Adoption rule for any addition to the ensemble (fixed before the comparison ran):
+    # pooled customer-cluster bootstrap 95% CI of ΔMAP@12 entirely above 0, a gain in at
+    # least 4 of 6 folds, and no more than +50% ranker training time or +25% peak memory.
+    adoption: {min_folds_won: 4, max_train_time_increase: 0.5, max_peak_rss_increase: 0.25}
+
+  # Faithful, minimal reproductions (src/ensemble/research/models.py). Values here are
+  # the tuning-fold winners; the grids that produced them are in `tuning`.
+  # Selected on tuning folds only by ensemble.research.tune (reports/track_a_research/tuning.json).
+  models:
+    bpr:
+      window_weeks: 26
+      min_item_count: 3
+      dim: 128
+      reg: 1.0e-05
+      lr: 0.005
+      batch_size: 16384
+      epochs: 24
+      mask_seen: false
+      device: cpu
+    lightgcn:
+      window_weeks: 26
+      min_item_count: 3
+      dim: 64
+      layers: 3
+      reg: 0.0001
+      lr: 0.02
+      batch_size: 131072
+      epochs: 27
+      mask_seen: false
+      device: mps
+    sasrec:
+      vocab_weeks: 26
+      min_item_count: 3
+      train_weeks: 26
+      history_weeks: 104
+      max_len: 50
+      dim: 64
+      blocks: 2
+      heads: 1
+      dropout: 0.2
+      lr: 0.002
+      batch_size: 256
+      epochs: 24
+      loss: gbce
+      negatives: 256
+      gbce_t: 0.75
+      mask_seen: false
+      device: mps
+  top_k: 100                 # list length cached per (model, week, seed): retrieval channel pool
+
+  tuning: {}
+
+  # Track A ensemble configurations compared on the reporting folds (ensemble.research.ensemble).
+  # phase2: the authoritative Phase-2 operating point (D-027), reproduced. phase2_nscores: same
+  # candidates + the three neural dot-product features (isolates ranking signal at a fixed
+  # candidate set). neural_channels: the allocator's caps at ~160 with the neural channels in its
+  # pool (allocator weeks only; reports/track_a_research/budget_frontier.json) + the features.
+  ensemble:
+    neural_seed: 0
+    eval_chunk_customers: 20000
+    keep_top: 50
+    final: phase2_nscores    # frozen by the D-038 adoption rule on the seed-42 comparison (D-040)
+    configs:
+      phase2:
+        caps: {repeat: 10, pop: 5, pop_age: 65, cf: 5, variant: 20, dept_pop: 40, section_pop: 65, covis: 25, new_arrival_pers: 10}
+        neural_features: []
+      phase2_nscores:
+        caps: {repeat: 10, pop: 5, pop_age: 65, cf: 5, variant: 20, dept_pop: 40, section_pop: 65, covis: 25, new_arrival_pers: 10}
+        neural_features: [bpr, lightgcn, sasrec]
+      # Allocator at ~160 candidates on allocator weeks 2020-07-15/22/29 (budget_frontier.json):
+      # with the neural channels in the pool (164.0 cand., recall 0.1555) ...
+      neural_channels:
+        caps: {repeat: 15, pop_age: 35, cf: 5, variant: 25, dept_pop: 45, section_pop: 25, covis: 65, new_arrival_pers: 10, lightgcn: 5, sasrec: 15}
+        neural_features: [bpr, lightgcn, sasrec]
+      # ... and without them on the same weeks (161.2 cand., recall 0.1529): the control
+      # that separates "new channels" from "re-allocated Phase-2 channels".
+      realloc:
+        caps: {repeat: 15, pop_age: 35, cf: 5, variant: 25, dept_pop: 50, section_pop: 25, covis: 70, new_arrival_pers: 10}
+        neural_features: []

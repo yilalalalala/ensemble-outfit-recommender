@@ -19,7 +19,7 @@ Every result is evaluated offline with temporal splits, a popularity baseline an
 
 | capability | result |
 | --- | --- |
-| **Next-purchase ranking** (H&M Kaggle task, MAP@12) | **0.0319 private leaderboard** (late submission), above the ~0.030 silver line of 3,006 teams; **+43% ± 5%** over a strong baseline across a 4-week backtest |
+| **Next-purchase ranking** (H&M Kaggle task, MAP@12) | **0.0333 private leaderboard** (late submission; MVP 0.0319), above the ~0.030 silver line of 3,006 teams. The Phase 2 upgrade adds **+7.5% [+6.9, +8.2]** MAP@12 over the MVP across a 4-week backtest (+53% over a strong rule baseline) and raises candidate recall from 13% to 18–20% ([report](reports/PHASE2_UPGRADE_REPORT.md)) |
 | **Complete the Look** (outfit completion) | **+56% Recall@12** over popularity on the held-out week; FashionCLIP image features add +4 points |
 | **Visual search** (street photo → product) | Street-to-shop adapters trained on DeepFashion2 raise exact-item **Recall@1 from 0.40 to 0.59** on 154 real outfit-post pairs, and from 0.38 to 0.59 on DeepFashion2 |
 | **Shopping assistant** (LLM + tools) | **100% tool accuracy, 0% hallucinated products** over a 24-turn eval, on a free local model (Qwen3-VL) and on Claude Opus 5 |
@@ -35,10 +35,10 @@ flowchart LR
         DF2[DeepFashion2 street↔shop pairs] --> AD[Domain adapters]
     end
     subgraph "Track A · next purchase"
-        DB --> R[6 retrieval channels<br/>~116 candidates/customer] --> LR[LightGBM LambdaRank<br/>+ SHAP reasons]
+        DB --> R[9 retrieval channels<br/>~160 candidates/customer] --> LR[LightGBM LambdaRank<br/>+ evidence-gated SHAP reasons]
     end
     subgraph "Track B · Complete the Look"
-        DB --> AR[Basket mining<br/>support + NPMI] --> H[RRF hybrid]
+        DB --> AR[Basket mining<br/>co-count · lift · NPMI · decay] --> H[LightGBM LambdaRank<br/>+ point-in-time customer features]
         CLIP --> TT[Two-tower<br/>logQ-corrected] --> H
     end
     subgraph "Visual search"
@@ -54,17 +54,24 @@ flowchart LR
 
 - **Track A: "what will this customer buy next?"** A two-stage recommender (retrieval → ranking), the
   standard industry shape for large catalogues:
-  - **Retrieval:** six channels (repeat purchase, popularity, age-band popularity, new arrivals,
-    item-to-item CF, colour variants).
+  - **Retrieval:** nine channels (repeat purchase, popularity, age-band popularity, department- and
+    section-conditioned popularity, co-visitation, item-to-item CF, colour variants, personalised new
+    arrivals), with per-channel caps chosen on a recall-vs-candidates Pareto frontier.
   - **Ranking:** a LightGBM LambdaRank model over customer, article, customer×article and
     retrieval-source features.
   - **Reasons:** every recommendation carries readable reasons derived from SHAP values.
 - **Track B: "what goes with this?"** Outfit completion across bottoms, shoes, bags and accessories,
   a question the competition never asks:
-  - **Labels** come from real baskets, filtered by association lift (NPMI) so that "both are best
-    sellers" cannot pass as "they go together".
-  - **Model:** a two-tower model with FashionCLIP image features, trained with in-batch negatives and
-    logQ correction, then fused with the association rules by reciprocal rank fusion.
+  - **Labels** come from real baskets; co-count, support, lift, PMI, NPMI and time-decayed
+    co-counts are kept as separate features so that "both are best sellers" cannot pass as
+    "they go together".
+  - **Retrieval:** a candidate union of article- and style-level association, a two-tower model
+    with FashionCLIP image features (in-batch negatives + logQ correction), and slot popularity.
+  - **Ranking:** a LightGBM LambdaRank model over the union — one query group per
+    (basket, anchor, missing slot) — with point-in-time customer affinity features. It replaced a
+    fixed reciprocal rank fusion, which is now the reported baseline.
+  - **Reasons:** every served pick stores the evidence it was ranked on, and a reason chip is
+    only shown when that pair's own evidence supports it.
 - **Visual search: "find this".**
   - **Detection:** a vision-language model finds the garments in a street photo.
   - **Matching:** FashionCLIP matches them to catalogue products.
@@ -81,6 +88,8 @@ flowchart LR
 ## Results
 
 Full readouts: [MVP](reports/MVP_REPORT.md) · [post-MVP improvements](reports/IMPROVEMENTS_REPORT.md) ·
+[Track A Phase 2](reports/PHASE2_UPGRADE_REPORT.md) ·
+[Track B Round 3](reports/TRACK_B_ROUND3_UPGRADE_REPORT.md) ·
 model cards for [Track A](reports/MODEL_CARD_track_a.md) and [Track B](reports/MODEL_CARD_track_b.md).
 
 **Track A: MAP@12**
@@ -89,15 +98,25 @@ model cards for [Track A](reports/MODEL_CARD_track_a.md) and [Track B](reports/M
 | --- | ---: | ---: | ---: |
 | popularity | 0.0066 | 0.0088 | |
 | repeat purchase + age-band popularity | 0.0252 | 0.0269 | |
-| **retrieval → LightGBM LambdaRank** | **0.0355** | **0.0370** | **0.0319** |
+| retrieval → LightGBM LambdaRank (MVP) | 0.0355 | 0.0370 | 0.0319 |
+| **Phase 2: frontier retrieval + recency features** | **0.0377** | **0.0392** | **0.0333** |
 
-**Track B: Complete the Look, relative lift in Recall@12 over popularity**
+**Track B: Complete the Look, Recall@12** (Round 3 protocol: eligible catalogue from
+sales strictly *before* the cutoff, six rolling validation weeks, test week scored once.
+Not comparable to the Round-1 numbers — the catalogue and the truth denominator changed.)
 
-| model | validation | test |
-| --- | ---: | ---: |
-| association rules (NPMI) | +47% | +36% |
-| two-tower + FashionCLIP | +51% | +49% |
-| **hybrid (RRF)** | **+62%** | **+56%** |
+| model | validation (6 folds) | test | vs shipped RRF hybrid |
+| --- | ---: | ---: | ---: |
+| popularity (per slot) | 0.0752 | 0.0884 | −30% |
+| association rules (NPMI) | 0.1007 | 0.1202 | −5% |
+| hybrid RRF of association + two-tower (Round 1) | 0.1066 | 0.1261 | — |
+| fixed RRF over the whole candidate union | 0.1088 | 0.1322 | +5% |
+| **learned LambdaRank fusion** | **0.1379** | **0.1596** | **+27%** |
+| **+ point-in-time personalization** | **0.1573** | **0.1820** | **+44%** |
+
+Both learned models win on 6/6 validation folds; pooled customer-cluster bootstrap
++47.6% Recall@12 [+46.7%, +48.5%]. Fixed fusion over the *identical* candidate union
+gains 2%, so the improvement is the ranking, not a larger candidate set.
 
 **Visual search: exact item found at rank 1** (154 street↔product pairs from real outfit posts; same-style gallery)
 

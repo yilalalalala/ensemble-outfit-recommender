@@ -608,3 +608,582 @@ background and a watermark, unlike H&M images, which can make the full-gallery n
    and the snap flow (text → image rerank, "find something like this").
 3. Background removal hurts in every evaluation (DeepFashion2, judged relevance, exact match).
 4. Jewellery exact match (n = 6): R@10 0.17 raw vs 0.50 with the adapter. Directional only.
+
+---
+
+### D-027 — Track A retrieval: channel contract and a frontier-chosen candidate budget
+**Date:** 2026-10-02 · **Status:** active
+
+**Context.** Merged candidate recall was 13.06% at 115.9 candidates/customer on the
+validation week (13.2% ± 0.3% over 4 weeks), and 92.7% of purchased articles had sold
+in the 7 days before the cutoff. The ceiling was personalisation over ~19k live
+articles, not more global popularity.
+
+**Decision.**
+1. Every channel obeys one contract, `(customer_idx, article_id, score)`, with
+   deterministic ties (score rounded to 9 decimals, then `article_id`) and per-channel caps;
+   per-channel score and rank stay as provenance and ranker features.
+2. New channels: department- and section-conditioned popularity (affinity × sales, age-banded),
+   directional time-weighted co-visitation (seeds from 52 weeks), colourway variants seeded
+   from 104 weeks, personalised new arrivals (launch proxy × department affinity), fine
+   (10-band) age popularity.
+3. Caps come from a greedy recall-per-candidate allocator on the three weeks before
+   validation (25% customer sample; `ensemble.candidates.budget`), then are confirmed on the
+   full validation week, which the allocator never saw.
+4. Operating point: **~160 candidates/customer**:
+   `repeat 10, pop 5, pop_age 65, cf 5, variant 20, dept_pop 40, section_pop 65, covis 25, new_arrival_pers 10`.
+
+**Evidence (validation week unless stated).**
+
+| candidates/customer | merged recall | ranker MAP@12 (same ranker) | training time |
+| ---: | ---: | ---: | ---: |
+| 115.9 (old channel mix) | 13.06% | 0.03582 | 435 s |
+| 116.3 (frontier) | 15.64% | 0.03736 (+4.3% [+3.1, +5.5]) | 531 s |
+| 159.7 (frontier) | 18.58% | 0.03743 | 730 s |
+| 200.7 (frontier) | 21.03% | 0.03724 | 1,594 s (swapping) |
+
+4-week backtest: recall 15.56% ± 0.63% at 116 and **18.41% ± 0.94% at 160**; MAP@12 at
+160 (with 50% negative downsampling, D-028) beat 116 by +0.55% [+0.14, +0.98] pooled, and
+in every week.
+
+**Rejected.**
+- *Implicit ALS channel:* +0.06 pt recall at 160 for +75 s per week (single-threaded fit);
+  the allocator gave it ≤ 5 slots.
+- *FashionCLIP visual channel:* the allocator gave it no budget at any target (D-023 stands).
+- *Global new arrivals, more repeat depth (all history), cosine CF beyond 5:* below the
+  frontier's marginal recall per candidate.
+- *Budgets ≥ 200:* recall keeps rising (21–26%) but MAP@12 does not, and the training
+  matrix exceeds 16 GB RAM.
+
+**Known gap.** Item cold start (first sale inside the label week, ~5% of purchases) stays
+at 0% recall: no channel may read the label week, and the dataset has no launch calendar.
+
+**Revisit if:** the ranker gains features that convert recall above 160 into MAP, memory
+grows, or a launch calendar becomes available.
+
+---
+
+### D-028 — Ranker training: temporal early stopping, seeds, vocabularies, downsampled negatives
+**Date:** 2026-10-02 · **Status:** active
+
+**Decision.**
+- Number of trees from early stopping on the **most recent training week** (MAP@12),
+  then a refit on all training weeks with that count. The validation/test week is never
+  used to pick trees. The old diagnostic reported a "300-round" MAP from a 200-tree model;
+  it now evaluates only trees that exist.
+- LightGBM `seed`, `deterministic`, `force_col_wise`; stable row order; ties in the
+  predicted score break on `article_id`. Two fits on the same data give identical predictions
+  (test).
+- Stable, versioned vocabularies (`data/processed/vocab/vocab.json`, version hash in the run
+  manifest) replace `hash(value) % N`; NULL → 0, unseen → missing.
+- Lifetime features are suffixed `_life`; new groups `recency_affinity` (recency-weighted
+  customer × article / style / type / colour / index group / garment group / department
+  affinities, days since last purchase in the type and department) and `short_velocity`
+  (1- and 3-day sales, 3-day trend, 1-week vs 4-week price change).
+- **50% deterministic negative downsampling** in training weeks.
+- LambdaRank stays: it is an NDCG-based surrogate; MAP@12 is the reported metric.
+
+**Evidence.**
+- Feature groups: +0.56% [−0.29, +1.41] on validation with the old retrieval (n.s.), but
+  **+3.39% [+2.93, +3.89] pooled over the 4-week backtest at 160 candidates**, positive every week.
+- Negative downsampling at 160: validation 0.03772 vs 0.03743 with all negatives, half the
+  training rows (9.5M vs 18.8M).
+- Infrastructure alone (seeds, early stopping, vocabularies; no new features): 0.03562 vs
+  0.03555 frozen; neutral, as intended.
+
+**Rejected.**
+- `rank_xendcg` objective: −2.61% [−3.63, −1.59] vs LambdaRank on validation.
+- 6 training weeks (with 50% negatives): 0.03762 vs 0.03772 for 4 weeks; no gain for +50% data.
+
+**Cost.** Training is slower than before: early stopping plus refit fit ~2.3× the trees,
+and `deterministic` adds overhead (≈ 10–14 min per week at 160 candidates vs ≈ 4.5 min
+before at 116).
+
+---
+
+### D-029 — Re-ranking stage: availability proxy on, diversity caps off by default
+**Date:** 2026-10-02 · **Status:** active
+
+**Decision.** After the ranker, drop articles whose last observed sale is more than
+28 days before the cutoff (*availability proxy*, no stock feed exists; reads only
+pre-cutoff sales). Diversity caps (colourways per style, items per product type) are
+implemented and reported but not applied by default.
+
+**Evidence (4-week backtest, chosen model; validation agrees).** The 28-day rule leaves
+MAP@12 unchanged in every week (e.g. 0.03289 → 0.03289) while removing likely
+unavailable articles; 14 days is also neutral but cuts coverage more. Diversity costs accuracy in every week:
+max 2 colourways per style −2.4% to −2.9%, max 4 items per product type −1.5% to −1.8%,
+max 1 colourway per style −9% to −11%; they raise distinct product types per list from
+5.1–5.5 to 5.5–6.8 (`reports/phase2/rerank_backtest_p2_b160_neg50.json`).
+
+**Revisit if:** a stock feed exists (replace the proxy), or an online test values
+diversity above the offline MAP cost.
+
+---
+
+### D-030 — Reason chips need evidence, not only SHAP attribution
+**Date:** 2026-10-02 · **Status:** active
+
+**Decision.** A reason is shown only if its features push the score up (positive summed
+SHAP) **and** the raw feature values support the sentence (e.g. "You bought this before"
+needs `ca_n_article_life ≥ 1`; "in another colour" needs a purchase of a *different*
+article of the same style). Every reason carries an evidence type: `personal_history`,
+`similarity` or `trending`. New-customer chips are derived from evidence (age-band or
+global best seller), not a fixed label.
+
+**Evidence.** Audit on 36,000 validation recommendations (3,000 customers) of the chosen
+model: **16.2% of SHAP-only chips were unsupported** by the data: "New arrival" 39%,
+"In your usual price range" 31%, "A style you bought, in another colour" 30%, "Trending"
+27%, "In a colour you often choose" 13%. With the gate, every chip is supported and 99.74%
+of recommendations still carry one (`reports/phase2/explain_audit.json`; the
+baseline-retrieval model gave 14.2%).
+
+**Note.** SHAP is model attribution, not causation; the gate makes chips truthful
+statements about the data, not claims about why a customer buys.
+
+---
+
+### D-031 — Track B catalogue eligibility is decided before the cutoff; the Round-1 universe is kept as an oracle
+**Date:** 2026-10-03 · **Status:** active · **supersedes the protocol in** D-013
+
+**Decision.** The eligible catalogue for label week *w* is "sold at least once in the
+`universe_weeks` before *w*'s cutoff" — a *proxy* for availability, because the dataset has
+no inventory or launch feed, but one that uses no target-week information. Truth articles
+outside it are dropped from the primary protocol and counted (`n_truth_dropped`), not
+scored as guaranteed misses. The Round-1 definition (sales between four weeks before *w*
+and the **end** of *w*, D-013) stays reachable as `eligible_universe(..., oracle=True)`, for
+measurement only.
+
+**Evidence** (`reports/track_b_round3/protocol_leak.json`, two weeks, towers trained once per
+week and both catalogues scored). The oracle catalogue adds ~1,600 articles (27,064 → 28,903
+and 27,070 → 28,611) and ~4,000 queries, and it **lowers** Recall@12 by 5.07–5.11% for every
+fixed-fusion system, because the extra articles contribute 5.87% more truth pairs with no
+pre-cutoff footprint — nothing can retrieve them. Under the leakage-free catalogue those
+5.87% are excluded and counted instead.
+
+**Why it still matters.** Under the Round-1 universe an article could be a legal
+recommendation purely because of sales inside the week being predicted, so eligibility was
+not knowable at prediction time and "item cold-start recall" was a property of the
+definition, not of a model. The honest protocol cannot measure true item cold start at all
+(an article with no pre-cutoff sale is never eligible), so that metric is replaced by
+*recently launched*: recall on articles whose first observed sale is within `new_item_days`
+of the cutoff (`metrics.segments`).
+
+**Consequence.** Round-1 and Round-3 Track B recall levels are **not comparable** — different
+query sets, different truth denominators. Comparisons are only meaningful inside one
+protocol. `reports/track_b_round3/baseline_frozen.json` keeps the Round-1 numbers with their
+caveats so they are not quietly restated.
+
+**Revisit if:** an inventory or launch feed becomes available (replace the proxy and restore a
+true cold-start metric).
+
+---
+
+### D-032 — Track B selects on rolling folds with customer-cluster intervals; the test week is a single confirmation
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.** Every Track B modelling decision is made on six consecutive label weeks ending
+at the validation week. For fold *w*, mining, the catalogue, the towers, every feature and
+the ranker's training labels come from weeks strictly before *w*, and the ranker trains on the
+`train_weeks` label weeks before *w*. The test week is evaluated **once**, after selection,
+with the ablation table switched off (`ENSEMBLE_CONFIG=experiments/tb3_final … backtest
+test`). Intervals come from a paired bootstrap that resamples **customers** with all of their
+queries.
+
+**Evidence.** One basket produces several (anchor, target slot) queries and one customer
+several baskets, so queries are not independent; on correlated synthetic data the clustered
+interval is more than 3× wider than the naive one
+(`test_cluster_bootstrap_is_wider_than_ignoring_clusters`). Across the six folds the same
+system moves by a factor of ~1.4 in Recall@12 (`shipped_rrf_hybrid` 0.0864 → 0.1234), which is
+why one week cannot support a model choice. The six-fold run also reproduced the two shipping
+models exactly from cached matrices (same tree counts, same metrics), so fold-to-fold
+differences are data, not training noise.
+
+**Honest caveats.** The test week was already scored in Round 1 and those numbers have been
+read, so it is a confirmation, not a fresh holdout. The relative intervals divide the paired
+difference interval by the observed baseline mean instead of resampling the denominator, so
+the relative bounds are slightly too narrow. The "±" in per-fold tables is the between-fold
+standard deviation, not a standard error — adjacent folds share most of their mining window.
+
+**Revisit if:** a later week of data arrives (then there is a genuinely untouched week).
+
+---
+
+### D-033 — Learned LambdaRank fusion replaces fixed RRF for Track B; serving ships the compatibility variant
+**Date:** 2026-10-03 · **Status:** active · **supersedes** D-015
+
+**Decision.** Track B ranks a candidate **union** — article association by raw co-count and by
+NPMI, product-code (style) association both ways, two-tower retrieval with and without the
+article-ID embedding, and slot popularity — with a LightGBM LambdaRank model, one query group
+per (basket, anchor, target slot). Trees are chosen by temporal early stopping on the most
+recent training week. The fixed RRF(w = 0.5) of D-015 is kept as a reported baseline. The
+precomputed serving table ships `lgbm_compatibility` (no customer features); `lgbm_personalized`
+is the measured upper bound.
+
+**Evidence** (six rolling folds, `reports/track_b_round3/backtest_val_ablations.json`; pooled
+customer-cluster bootstrap over 145,485 customers and 622,989 queries):
+
+| system | Recall@12 | NDCG@12 | vs shipped RRF (R@12) | folds won |
+| --- | ---: | ---: | ---: | ---: |
+| `shipped_rrf_hybrid` | 0.1066 | 0.0622 | — | — |
+| `rrf_all_sources_union` (same union, fixed fusion) | 0.1088 | 0.0642 | +1.98% [+1.36, +2.56] | 6/6 |
+| `lgbm_compatibility` | 0.1379 | 0.0822 | **+29.37% [+28.57, +30.15]** | 6/6 |
+| `lgbm_personalized` | 0.1573 | 0.0961 | **+47.58% [+46.65, +48.47]** | 6/6 |
+
+**Why it is not a retrieval-budget effect.** `rrf_all_sources_union` fuses the *identical*
+189-candidate union with equal-weight RRF and gains 2%. Candidate-set size and union recall
+(0.4285) are reported with every result.
+
+**Why the compatibility variant ships.** The table is keyed by (anchor, target slot) and must
+answer for anonymous visitors on any product page, so a row per customer is not
+precomputable; request-time personalized scoring needs an online feature store and a model
+server. The gap is reported (+15.11% Recall@12 on returning customers), not claimed.
+
+**Revisit if:** a candidate-budget change moves the union's ceiling materially, a feature
+store exists, or an online test contradicts the offline ordering.
+
+---
+
+### D-034 — Track B personalization is point-in-time, and it is taste rather than repurchase
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.** The ranker gets customer features computed only from purchases before the label
+week: history size and recency, exact-article and style affinity, recency-weighted
+product-type / department / section / garment-group / colour / slot shares, the customer's
+usual price point and distance from it, and explicit interactions between compatibility
+evidence and customer preference. Customers with no history get `c_has_history = 0` and null
+affinities, so the compatibility path answers unchanged — an explicit no-history path, not a
+fallback model.
+
+**Evidence.** Personalization is the largest single feature group: removing all 21 customer
+features costs **−12.33% Recall@12** and **−14.48% NDCG@12** on the six folds, more than any
+other group. It is concentrated where history exists: **+15.11%** over the compatibility
+ranker on 582,992 returning-customer queries, **+0.66%** on 39,997 new-customer queries.
+
+**Not a buy-it-again effect.** Over the six folds only **3.4%** of truth articles had already
+been bought by that customer (7.9% for the style —
+`reports/track_b_round3/label_audit.json`), and removing the two exact-article repeat features
+costs **0.74%**. The gain is category, section, colour and price taste.
+
+**Revisit if:** an online feature store exists (then ship the personalized model and
+re-measure), or `c_has_history` coverage changes materially.
+
+---
+
+### D-035 — Track B serving: evidence stored per row, chips gated on it, diversity caps as a re-ordering
+**Date:** 2026-10-03 · **Status:** active · **extends D-030 to Track B**
+
+**Decision.** Every row of the precomputed Complete-the-Look table carries the evidence it was
+ranked on — co-count, lift, NPMI, style co-count / NPMI / lift, backoff level, source flags,
+two-tower and FashionCLIP similarity, colour agreement, price-tier distance, model score — plus
+one provenance label (`co_purchase`, `style_co_purchase`, `visual_compatibility`,
+`popular_in_slot`, `other`). A reason chip is emitted only when the column it quotes is
+non-null for *that* pair. The diversity rules (one colourway per style, at most
+`serving.max_per_product_type` per product type) are applied as a **re-ordering** and the
+module is then back-filled to `serving.ctl_per_slot`, instead of dropping the items the caps
+reject.
+
+**Evidence** (`reports/track_b_round3/backtest_val_serving_rules.json`, six folds, re-ranked
+from the shipping model's top-48 pool, relative to the unrestricted ranker):
+
+| rule reading | Δ Recall@12 | Δ NDCG@12 | Δ distinct product types / list | mean list length |
+| --- | ---: | ---: | ---: | ---: |
+| caps as a re-ordering, back-filled | **−6.81%** | −6.27% | **+49.10%** | 12.00 |
+| caps as hard filters (Round-1 behaviour) | **−37.45%** | −23.60% | +110.54% | **8.32** |
+
+The hard filter costs 5.5× more accuracy, and the last column says why: modules come out
+part-empty, and some fall below five items, so even Recall@5 drops (0.0861 → 0.0712). Both
+readings still beat the shipped RRF hybrid except the hard filter (−18.9%).
+
+**Consequence.** `tests/test_api.py::test_product_page_and_diversity` moved from "no module
+breaks the cap" to structural assertions plus variety; the cap arithmetic is unit-tested in
+`test_apply_diversity_*`. This is a deliberate change to pre-existing serving behaviour.
+
+**Revisit if:** an online test prefers a strictly diverse but part-empty module, or the
+accuracy cost of the caps grows with a stronger ranker.
+
+---
+
+### D-037 — Association evidence stays plural; style backoff is a feature, not a switch
+**Date:** 2026-10-03 · **Status:** active · **refines** D-005
+
+**Decision.** Mining keeps raw co-count, time-decayed co-counts (14 d and 56 d half-lives),
+marginal supports, lift, PMI and NPMI as **separate** columns at article level and at
+product-code level, with a mining floor of `min_support = 2`. The ranker chooses among them.
+Style-level backoff is not a global on/off choice: both levels are always joined and
+`backoff_level` (0 = article evidence, 1 = style only, 2 = neither) is a feature.
+
+**Evidence.** The funnel shows why no single gate is right: of ~290,000 cross-slot pairs with
+support ≥ 2, ~82,000 reach support ≥ 3 and only ~2,900 reach ≥ 10, while lift > 1 removes
+almost nothing once support ≥ 2 (293,130 of 298,182 on the first fold) — D-005 stands. The
+ablation shows the evidence is highly redundant rather than individually critical: removing
+all 17 article-level association features costs **0.42%** Recall@12, removing the 14
+style-backoff features costs **0.77%**, removing the six time-decayed columns costs **0.62%**.
+Association still carries 12.8% of the model's split gain and `a_co_share` is its fifth most
+important feature, so it is doing work — the style level and the towers simply reconstruct
+most of it.
+
+**Consequence.** Effort is better spent on the towers and the customer than on more
+association statistics.
+
+**Revisit if:** other half-lives or a basket-noise filter are tested on rolling folds. Both
+are part of the artifact cache key, so each variant costs a full rebuild (~2 h).
+
+---
+
+### D-036 — Two-tower negatives: in-batch + logQ, and nothing else earns its place
+**Date:** 2026-10-03 · **Status:** active · **refines** D-016 and D-022
+
+**Decision.** The Track B towers train with in-batch negatives and the logQ correction only
+(`two_tower.negatives: [in_batch, logq]`, `hard_negatives: 0`), six epochs with held-out
+early stopping (patience 2) on baskets from the tail of the mining window.
+
+**Evidence** (`reports/track_b_round3/ablation_towers.json`; two label weeks × two seeds per
+configuration, two-tower list scored alone on the target week over the leakage-free
+catalogue):
+
+| negatives | fold Recall@12 | SD | content-only | vs in-batch + logQ | mean s |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| in-batch only | 0.0706 | 0.0015 | 0.0670 | **−26.48%** | 147 |
+| in-batch + logQ | 0.0961 | 0.0015 | 0.0919 | — | 166 |
+| + 4 retrieval-informed hard negatives | 0.0970 | 0.0010 | 0.0928 | +0.94% | 267 |
+
+**logQ is essential** — removing it costs 26.5%. **The redesigned hard negatives are not.**
+Round 1 tested popularity-sampled and (product type, price tier) hard negatives and found
+nothing; Round 3 replaced them with retrieval-informed mining (re-score a popularity-sampled
+pool with the model being trained, mask the positive, its colourways and basket co-occurring
+articles as likely false negatives) and gets +0.94% against a per-run spread of 1.0–1.5% —
+paired by (week, seed) that is +0.0009 with a paired SD of ~0.0018 and one of four pairs
+negative — for +61% training time. Off by default. The reading is that the constraint is not
+the negative-sampling design but that in-batch + logQ already saturates this architecture on
+3.1 M pairs.
+
+**The epoch budget is adequate.** In all eight weeks the 6-epoch run picks epoch 6 and the
+held-out curve still looks like it is rising, which suggests a binding budget. It is not:
+allowing 12 epochs with patience 2 on the validation week ran 8 and selected epoch 6, with a
+fold Recall@12 (0.0985) inside the seed spread of the 6-epoch runs. One week, one seed.
+
+**Determinism.** CPU is bit-identical across repeated runs with the same seed; MPS is not
+(0.08017826 vs 0.08020096 at one epoch). That spread is two orders of magnitude smaller than
+the seed spread, so every tower conclusion here is a mean over two weeks × two seeds and no
+single-run difference is reported as a result.
+
+**Revisit if:** the architecture changes (then re-test hard negatives), or a decisive tower
+comparison is needed — run it on CPU, which is reproducible.
+
+---
+
+### D-038 — Track A research protocol: six rolling folds, a sales-proxy eligible catalogue, one fallback, customer-cluster intervals
+**Date:** 2026-10-03 · **Status:** active · **frozen before any comparison was run**
+
+**Decision.** Track A's research comparison (`configs/track_a_research.yaml`, `research.protocol`,
+`src/ensemble/research/protocol.py`) uses:
+
+- **Six reporting folds**, the consecutive label weeks 2020-08-05 … 2020-09-09 (ending at
+  validation). Every per-week model, retrieval statistic, vocabulary, graph, sequence and
+  feature reads only `t_dat < week.start`; the ranker trains on the four label weeks before
+  each fold. Six are feasible: the earliest ranker training week (2020-07-08) still has 22
+  months of history behind it.
+- **Tuning folds** 2020-07-22 and 2020-07-29, and **allocator weeks** 2020-07-15/22/29, all
+  ending before the first reporting fold. Neural hyperparameters and any new candidate budget
+  are chosen there, never on a reporting fold.
+- **The test week 2020-09-16 is confirmation evidence only.** It and the Kaggle scores have
+  been observed (Phase 2); they are not used for selection, debugging, thresholds or stopping,
+  and no Kaggle submission is made.
+- **Evaluation customers:** every label-week buyer (D-014), no sampling.
+- **Eligible catalogue** `E(w)`: articles sold at least once in the 28 days before `w.start`
+  (the D-029 availability proxy; 94.3% of validation-week purchase pairs fall inside it).
+  Every system's list is restricted to `E(w)` and back-filled with the age-band best sellers
+  of the 7 days before the cutoff, which are always in `E(w)`. This is also every system's
+  new-user fallback. Ties break on `article_id`.
+- **Metrics:** MAP@12 (selection), Recall@12, NDCG@12, candidate recall and conversion,
+  catalogue coverage over `E(w)`, novelty (mean −log₂ of 28-day sales share).
+- **Segments, declared before scoring:** returning vs new customers; activity bands from
+  52-week transaction counts (low ≤ 12, medium 13–32, high ≥ 33 — the tertiles among buyers
+  of tuning week 2020-07-22); head = top 10% of `E(w)` by 7-day sales; recently launched =
+  first sale within 28 days before the cutoff; repeat vs non-repeat truth (bought before the
+  cutoff or not); cold and ineligible truth reported as ceilings.
+- **Uncertainty:** paired bootstrap, 1,000 resamples, seed 0, resampling **customers across
+  folds** (a customer who buys in three folds is one cluster carrying three rows); the relative
+  difference is computed inside every resample, fixing the fixed-denominator approximation
+  noted in D-032.
+- **Seeds:** neural baselines 0, 1, 2; ranker 42, 43, 44.
+- **Adoption rule for any change to the ensemble:** pooled ΔMAP@12 95% interval entirely above
+  zero, a gain in at least 4 of 6 folds, and at most +50% ranker training time and +25% peak
+  memory. The target (+5% over the strongest reproduced baseline with a CI above zero) is
+  reported as met or not met; the protocol is not changed to meet it.
+
+**Why.** One week cannot carry a model choice (D-032). A catalogue restriction that is
+knowable at the cutoff keeps every system from winning or losing on stale stock, and a single
+shared fallback means a model is never credited with a popularity list it did not produce.
+
+**Revisit if:** a later week of data arrives (a genuinely untouched holdout), or an inventory
+feed replaces the sales proxy.
+
+---
+
+### D-041 — Track B request-time personalization re-ranks a bounded compatibility pool; tolerance fixed before measuring
+**Date:** 2026-10-03 · **Status:** active (thresholds fixed before the regression run)
+
+**Decision.** The serving bundle stores, per (anchor, target slot), the compatibility ranker's
+top-P candidates with their compatibility features. At request time the personalized ranker
+(D-033, D-034) re-orders that pool with point-in-time customer features read from a versioned
+profile snapshot; the diversity rules (D-035) then re-order and back-fill. P is the smallest of
+{24, 48, 100} meeting both predeclared tolerances on the six rolling validation folds
+(`configs/experiments/tb_serving_pools.yaml`):
+
+1. `lgbm_personalized@poolP` keeps at least **99%** of unrestricted `lgbm_personalized`
+   pooled Recall@12, and
+2. `lgbm_personalized@poolP+shipped` (what serving shows) is **not worse** than the currently
+   served `lgbm_compatibility+shipped`: pooled customer-cluster bootstrap 95% interval of the
+   Recall@12 difference entirely above zero.
+
+If no P meets (1), the largest P is used and the shortfall is reported as a product trade-off.
+
+**Outcome (2026-10-03, `reports/track_b_production/serving_regression.json`; six folds, 622,989
+queries, customer-cluster bootstrap).** Retention of unrestricted personalized Recall@12: P = 24
+93.1%, P = 48 96.3%, **P = 100 98.9%** — no P meets the 99% bar, so by the rule **P = 100** ships
+and the 1.1% shortfall is reported. Tolerance (2) holds: served `lgbm_personalized@pool100+shipped`
+vs the current `lgbm_compatibility+shipped` = **+7.06% Recall@12**, interval of the difference
+[+0.0083, +0.0097] (6/6 folds). Observed but not acted on (it was not the predeclared criterion):
+with the diversity rules applied a smaller pool serves *better* (P = 24: +9.89%), because the caps
+then draw replacements from a shorter, stronger list. Revisit with an online test or a rule that
+selects P on the served (+shipped) metric.
+
+---
+
+### D-039 — Reproduced baselines: BPR-MF, LightGCN and SASRec (gSASRec loss), tuned on tuning folds only
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.** Track A is benchmarked against three faithful, minimal PyTorch reproductions
+(`src/ensemble/research/models.py`), each trained per label week on data before its cutoff and
+scored exactly over the eligible catalogue (D-038): BPR-MF (Rendle et al. 2009; uniform negatives
+rejecting the customer's own training positives, SparseAdam, CPU), LightGCN (He et al. 2020;
+symmetric-normalised bipartite graph, mean of layers 0..L, BPR with L2 on the ego embeddings,
+N(0, 0.1) init, MPS) and SASRec (Kang & McAuley 2018; causal self-attention over the last 50
+purchases, tied embeddings). SASRec is trained with **gSASRec's gBCE** (Petrov & Macdonald,
+RecSys 2023; 256 uniform negatives per sequence, t = 0.75): full-softmax cross-entropy
+(Klenitskiy & Vasilev 2023) costs ~9 min per epoch on a 41k-item vocabulary here, and gBCE is
+the published SASRec objective designed to recover most of that quality with sampled negatives.
+The original one-negative BCE was kept in the grid.
+
+**Selection** (`reports/track_a_research/tuning.json`; bounded grid declared before running:
+Stage A, two refinements, Stage B on the second tuning fold, Stage C convergence guard):
+BPR-MF 26-week window, dim 128, lr 0.005, reg 1e-5, 24 epochs; LightGCN 26 weeks, 3 layers,
+dim 64, lr 0.02, batch 131,072, 27 epochs; SASRec gBCE, lr 0.002, dropout 0.2, 24 epochs (Stage
+C doubled the budget because epoch 12 was the curve's last point; at 24 it was still rising
+slowly, +3.4% from epoch 12 to 24, and no further extension is in the declared budget).
+Not masking the customer's own purchases won for every model (repurchase is a large share of
+H&M purchases). gBCE beat BCE by +63% raw MAP@12 on the tuning fold.
+
+**Repeat handling and time.** Sequences keep repeats; same-day purchases are ordered by
+`article_id` (no time of day in the data); time gaps are not modelled (standard SASRec).
+**Fallback:** customers a model cannot represent (no interaction in its window or vocabulary)
+get the shared age-band fallback (D-038), and that share is reported per model.
+
+**Reproducibility.** Toy tests check the expected ranking behaviour and that identical CPU
+seed/config runs reproduce exactly (`tests/test_research_track_a.py`); MPS runs are not
+bit-reproducible (D-036), so stochastic spread is reported over three seeds.
+
+**Revisit if:** more compute allows full-softmax SASRec or longer LightGCN schedules.
+
+---
+
+### D-042 — Track B serving runtime: versioned bundles, NumPy GBDT, evidence-ordered fallbacks, exact vector search
+**Date:** 2026-10-03 · **Status:** active
+
+**Decision.**
+- **Offline/online split.** `ensemble.serving.bundle` builds a versioned, immutable bundle (pools
+  with compatibility features, profile snapshot, models, catalogue/availability snapshot, visual
+  index, sha256 manifest) and publishes it atomically (`CURRENT` pointer). No request retrains or
+  reads training tables.
+- **Ranker runtime.** The personalized LightGBM model is exported to a NumPy tree evaluator
+  (`ensemble.serving.gbdt`), equal to `Booster.predict` within 1e-9 including NaN and categorical
+  edge cases, so the API never loads LightGBM next to PyTorch (the OpenMP clash). A build-time
+  gate compares offline SQL + LightGBM with the online path on sampled real requests and refuses
+  to publish on any ordering difference.
+- **Fallback ladder** in evidence order: the anchor's own pool → a live colourway of the same
+  style → the nearest live article of the same slot in FashionCLIP space → slot popularity;
+  ordering is personalized whenever the customer has a profile. Every row carries
+  `provenance`, `evidence_types` and chips gated on its own evidence (D-030, D-035).
+- **Availability** (snapshot + runtime overrides) is applied before the top-k cut, and is part of
+  every cache key together with the bundle version.
+- **Vector search is exact**, no ANN: see the benchmark in the final report (exact top-k over the
+  live visual index takes about a millisecond on this laptop, so an ANN dependency would add
+  build and recall risk for no measurable gain).
+
+**Revisit if:** the live catalogue grows by an order of magnitude, or latency targets tighten.
+
+---
+
+### D-040 — Track A adds the reproduced baselines' scores as ranker features, not as retrieval channels
+**Date:** 2026-10-04 · **Status:** active · **frozen before seeds 43/44, ablations and any confirmation run**
+
+**Decision.** The final Track A system is `phase2_nscores`: the Phase-2 candidate set and features
+(D-027, D-028) plus three features, the BPR-MF, LightGCN and SASRec dot products of the customer
+and the candidate (`nn_<model>_dot`), from models trained per week on data before the cutoff.
+`research.ensemble.final` is set to it.
+
+**Evidence** (six reporting folds, seed 42, pooled customer-cluster bootstrap over customers
+across folds, `reports/track_a_research/comparison.json`). Under the D-038 rule, fixed before the
+comparison ran:
+
+| vs `phase2` (0.03403) | MAP@12 | relative (95% CI) | folds won | train time | peak RSS | rule |
+| --- | ---: | --- | ---: | ---: | ---: | --- |
+| `phase2_nscores` | 0.03524 | +3.55% [+3.10, +3.97] | 6/6 | −0.5% | −1.4% | **adopt** |
+| `neural_channels` (allocator caps + neural channels + features) | 0.03549 | +4.30% [+3.86, +4.78] | 6/6 | +197% | +1.9% | reject (time) |
+| `realloc` (allocator caps, no neural signal) | 0.03428 | +0.74% [+0.38, +1.09] | 5/6 | +50.01% | −3.3% | reject (time) |
+
+**Caveat on cost.** Every fit ran next to a GPU training job; two fold-09-09 fits (`realloc`
+3,129 s, `neural_channels` 8,946 s against 600–1,000 s elsewhere) were slowed by that contention.
+The verdict does not depend on them: by the median over folds `neural_channels` is still +63%
+(above +50%) and `phase2_nscores` still ≈ 0%. `realloc` misses the limit by 0.01 percentage
+points on the mean only; it is reported as a near-miss, not adopted.
+
+**Reading.** The neural signal helps the ranker (+3.6%, every fold) at no measurable cost; giving
+it candidate slots adds a further ~0.7% MAP@12 that the allocator's re-shaping of the other
+channels partly explains (`realloc` +0.7% by itself), at a cost the rule rejects.
+
+**Revisit if:** training time is measured on an otherwise idle machine (the `neural_channels`
+cost leg may then pass), or a retrieval change raises recall above 160 candidates per customer.
+
+---
+
+### D-043 — Serving performance thresholds, set after the baseline measurement and before optimization
+**Date:** 2026-10-05 · **Status:** active
+
+**Baseline** (`reports/track_b_production/bench_serving_baseline.json`; Apple M5 laptop, 16 GB, one
+uvicorn worker, real bundle, 2,000-request seeded Zipf workload, half the requests with a known
+customer): with the cache warm (82% hits) Complete the Look answers in p50 2.1 ms / p95 2.8 ms at
+concurrency 1 and ~440–500 rps; **uncached, every request computing ~6 modules, p50 196 ms, ~8 rps,
+and 37 timeouts at concurrency 16** — not acceptable for a service whose cache is cold after every
+bundle swap. Startup to ready 0.65 s; peak RSS 1.08 GB; visual search warm p95 28 ms; exact
+top-8 over the 26,127-article visual index 1.35 ms.
+
+**Thresholds** (the final benchmark must meet all of them; none may be met by changing what is
+recommended — any change to ordering has to pass the offline equivalence gate):
+
+| measure | threshold |
+| --- | --- |
+| uncached Complete the Look (all slots), concurrency 1 | p95 ≤ 60 ms |
+| uncached, concurrency 4 | ≥ 40 rps |
+| uncached, concurrency 16 | 0 errors and 0 timeouts (10 s client timeout) |
+| warm cache, concurrency 1 | p95 ≤ 10 ms |
+| startup to ready | ≤ 5 s |
+| steady-state RSS under the workload | ≤ 2 GB |
+| visual search, warm, concurrency 1 | p95 ≤ 100 ms |
+
+**Why these.** They are 3–4× tighter than the measured uncached baseline where it is weak and
+keep the measured headroom where it is already good; all are local single-worker numbers, not
+production SLOs.
+
+**Outcome (2026-10-05, `bench_serving_final.json`; same machine, workload and bundle).** One
+engineering change, no change to what is recommended: the NumPy forest now evaluates every
+(row, tree) pair per depth step over flat global arrays (categorical splits as a lookup table),
+and the catalogue lookups on the request path use NumPy arrays instead of pandas indexing.
+Uncached p95 219 → **26 ms** (c1), throughput 8 → **68 rps** (c4), **0** errors at c16 (was 37);
+warm p95 2.9 ms; startup ≤ 0.66 s; steady RSS 0.85 GB; visual warm p95 51 ms — every threshold
+met. Ranking equivalence re-proven after the change: the build gate re-run on the published bundle
+gives 400/400 identical orderings, max |score difference| 2.7e-15 against LightGBM
+(`equivalence_after_optimization.json`), and the evaluator equals the previous per-tree one
+within 1e-9 in `tests/test_serving_gbdt.py`.

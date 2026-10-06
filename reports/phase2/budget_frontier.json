@@ -1,0 +1,714 @@
+{
+ "weeks": [
+  "2020-08-19",
+  "2020-08-26",
+  "2020-09-02"
+ ],
+ "sample": 0.25,
+ "pool": {
+  "repeat": 100,
+  "pop": 200,
+  "pop_age": 150,
+  "new_arrival": 100,
+  "cf": 100,
+  "variant": 60,
+  "dept_pop": 100,
+  "section_pop": 100,
+  "covis": 100,
+  "als": 100,
+  "new_arrival_pers": 60
+ },
+ "params": {
+  "variant_seed_weeks": 104,
+  "pop_age_age_bins": "fine"
+ },
+ "targets": {
+  "80": {
+   "cand": 83.80953623037196,
+   "recall": 0.13114888545043987,
+   "caps": {
+    "repeat": 10,
+    "pop": 0,
+    "pop_age": 25,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 15,
+    "dept_pop": 15,
+    "section_pop": 35,
+    "covis": 15,
+    "als": 0,
+    "new_arrival_pers": 5
+   }
+  },
+  "100": {
+   "cand": 101.45316222372928,
+   "recall": 0.1454081214222057,
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 30,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 15,
+    "dept_pop": 25,
+    "section_pop": 40,
+    "covis": 15,
+    "als": 0,
+    "new_arrival_pers": 10
+   }
+  },
+  "116": {
+   "cand": 117.08268558610256,
+   "recall": 0.1571249706121958,
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 30,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 15,
+    "dept_pop": 25,
+    "section_pop": 55,
+    "covis": 25,
+    "als": 0,
+    "new_arrival_pers": 10
+   }
+  },
+  "130": {
+   "cand": 137.404768115186,
+   "recall": 0.1709304042121608,
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 55,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 20,
+    "dept_pop": 25,
+    "section_pop": 55,
+    "covis": 25,
+    "als": 0,
+    "new_arrival_pers": 10
+   }
+  },
+  "160": {
+   "cand": 160.32222164258263,
+   "recall": 0.18538647012832218,
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 65,
+    "new_arrival": 0,
+    "cf": 5,
+    "variant": 20,
+    "dept_pop": 40,
+    "section_pop": 65,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 10
+   }
+  },
+  "200": {
+   "cand": 200.496183073365,
+   "recall": 0.20917555590790546,
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 100,
+    "new_arrival": 0,
+    "cf": 15,
+    "variant": 25,
+    "dept_pop": 50,
+    "section_pop": 70,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 10
+   }
+  },
+  "250": {
+   "cand": 252.33830664093068,
+   "recall": 0.23661146315726167,
+   "caps": {
+    "repeat": 15,
+    "pop": 5,
+    "pop_age": 120,
+    "new_arrival": 20,
+    "cf": 15,
+    "variant": 25,
+    "dept_pop": 65,
+    "section_pop": 80,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 15
+   }
+  },
+  "300": {
+   "cand": 307.6429478150486,
+   "recall": 0.2629538707155315,
+   "caps": {
+    "repeat": 15,
+    "pop": 10,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 35,
+    "dept_pop": 75,
+    "section_pop": 100,
+    "covis": 35,
+    "als": 10,
+    "new_arrival_pers": 15
+   }
+  }
+ },
+ "frontier": [
+  {
+   "cand": 0.0,
+   "recall": 0.0,
+   "caps": {
+    "repeat": 0,
+    "pop": 0,
+    "pop_age": 0,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 0,
+    "dept_pop": 0,
+    "section_pop": 0,
+    "covis": 0,
+    "als": 0,
+    "new_arrival_pers": 0
+   }
+  },
+  {
+   "cand": 20.55574104022119,
+   "recall": 0.058770140897435194,
+   "marginal_recall_per_cand": 0.0016539114024993846,
+   "step": "section_pop",
+   "caps": {
+    "repeat": 5,
+    "pop": 0,
+    "pop_age": 0,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 5,
+    "dept_pop": 0,
+    "section_pop": 10,
+    "covis": 5,
+    "als": 0,
+    "new_arrival_pers": 0
+   }
+  },
+  {
+   "cand": 36.47801137252856,
+   "recall": 0.08136731201373436,
+   "marginal_recall_per_cand": 0.0012788082310905215,
+   "step": "variant",
+   "caps": {
+    "repeat": 5,
+    "pop": 0,
+    "pop_age": 5,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 10,
+    "dept_pop": 5,
+    "section_pop": 15,
+    "covis": 10,
+    "als": 0,
+    "new_arrival_pers": 0
+   }
+  },
+  {
+   "cand": 59.12426313318379,
+   "recall": 0.10725591720020339,
+   "marginal_recall_per_cand": 0.0010511653222946419,
+   "step": "section_pop",
+   "caps": {
+    "repeat": 10,
+    "pop": 0,
+    "pop_age": 10,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 10,
+    "dept_pop": 5,
+    "section_pop": 30,
+    "covis": 10,
+    "als": 0,
+    "new_arrival_pers": 5
+   }
+  },
+  {
+   "cand": 79.76915853722156,
+   "recall": 0.12760594645132012,
+   "marginal_recall_per_cand": 0.0009197688203858303,
+   "step": "pop_age",
+   "caps": {
+    "repeat": 10,
+    "pop": 0,
+    "pop_age": 25,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 15,
+    "dept_pop": 5,
+    "section_pop": 35,
+    "covis": 15,
+    "als": 0,
+    "new_arrival_pers": 5
+   }
+  },
+  {
+   "cand": 93.85370476637627,
+   "recall": 0.1394048081181417,
+   "marginal_recall_per_cand": 0.0008083278302192099,
+   "step": "pop_age",
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 30,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 15,
+    "dept_pop": 20,
+    "section_pop": 40,
+    "covis": 15,
+    "als": 0,
+    "new_arrival_pers": 5
+   }
+  },
+  {
+   "cand": 113.78592171387831,
+   "recall": 0.1547794137748156,
+   "marginal_recall_per_cand": 0.000736553876599763,
+   "step": "covis",
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 30,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 15,
+    "dept_pop": 25,
+    "section_pop": 50,
+    "covis": 25,
+    "als": 0,
+    "new_arrival_pers": 10
+   }
+  },
+  {
+   "cand": 141.20926148121097,
+   "recall": 0.1734837259908474,
+   "marginal_recall_per_cand": 0.0006711331925265908,
+   "step": "pop_age",
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 60,
+    "new_arrival": 0,
+    "cf": 0,
+    "variant": 20,
+    "dept_pop": 25,
+    "section_pop": 55,
+    "covis": 25,
+    "als": 0,
+    "new_arrival_pers": 10
+   }
+  },
+  {
+   "cand": 154.8618255168936,
+   "recall": 0.18201302358132085,
+   "marginal_recall_per_cand": 0.0006198552704815273,
+   "step": "dept_pop",
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 65,
+    "new_arrival": 0,
+    "cf": 5,
+    "variant": 20,
+    "dept_pop": 30,
+    "section_pop": 65,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 10
+   }
+  },
+  {
+   "cand": 188.8548524527449,
+   "recall": 0.2025380127830114,
+   "marginal_recall_per_cand": 0.0005866314841593977,
+   "step": "cf",
+   "caps": {
+    "repeat": 10,
+    "pop": 5,
+    "pop_age": 100,
+    "new_arrival": 0,
+    "cf": 15,
+    "variant": 20,
+    "dept_pop": 40,
+    "section_pop": 65,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 10
+   }
+  },
+  {
+   "cand": 206.40565496374356,
+   "recall": 0.21241778249197646,
+   "marginal_recall_per_cand": 0.0005425438126224845,
+   "step": "dept_pop",
+   "caps": {
+    "repeat": 15,
+    "pop": 5,
+    "pop_age": 100,
+    "new_arrival": 0,
+    "cf": 15,
+    "variant": 25,
+    "dept_pop": 55,
+    "section_pop": 70,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 10
+   }
+  },
+  {
+   "cand": 252.33830664093068,
+   "recall": 0.23661146315726167,
+   "marginal_recall_per_cand": 0.000510331160428296,
+   "step": "new_arrival",
+   "caps": {
+    "repeat": 15,
+    "pop": 5,
+    "pop_age": 120,
+    "new_arrival": 20,
+    "cf": 15,
+    "variant": 25,
+    "dept_pop": 65,
+    "section_pop": 80,
+    "covis": 25,
+    "als": 5,
+    "new_arrival_pers": 15
+   }
+  },
+  {
+   "cand": 267.8515832855131,
+   "recall": 0.2445557384130039,
+   "marginal_recall_per_cand": 0.00048239325108252507,
+   "step": "variant",
+   "caps": {
+    "repeat": 15,
+    "pop": 10,
+    "pop_age": 120,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 35,
+    "dept_pop": 65,
+    "section_pop": 80,
+    "covis": 35,
+    "als": 5,
+    "new_arrival_pers": 15
+   }
+  },
+  {
+   "cand": 298.71906028831273,
+   "recall": 0.25897353183997723,
+   "marginal_recall_per_cand": 0.00045819314343437437,
+   "step": "dept_pop",
+   "caps": {
+    "repeat": 15,
+    "pop": 10,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 35,
+    "dept_pop": 75,
+    "section_pop": 80,
+    "covis": 35,
+    "als": 10,
+    "new_arrival_pers": 15
+   }
+  },
+  {
+   "cand": 329.4767245726607,
+   "recall": 0.272079125637647,
+   "marginal_recall_per_cand": 0.0003987078527992787,
+   "step": "dept_pop",
+   "caps": {
+    "repeat": 15,
+    "pop": 10,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 35,
+    "dept_pop": 90,
+    "section_pop": 100,
+    "covis": 55,
+    "als": 15,
+    "new_arrival_pers": 15
+   }
+  },
+  {
+   "cand": 342.29212095918757,
+   "recall": 0.27712562671201046,
+   "marginal_recall_per_cand": 0.000383094812578439,
+   "step": "pop",
+   "caps": {
+    "repeat": 15,
+    "pop": 55,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 35,
+    "dept_pop": 95,
+    "section_pop": 100,
+    "covis": 55,
+    "als": 15,
+    "new_arrival_pers": 20
+   }
+  },
+  {
+   "cand": 360.2486653798668,
+   "recall": 0.2833585749512026,
+   "marginal_recall_per_cand": 0.00033514364417247446,
+   "step": "covis",
+   "caps": {
+    "repeat": 15,
+    "pop": 60,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 40,
+    "dept_pop": 95,
+    "section_pop": 100,
+    "covis": 80,
+    "als": 20,
+    "new_arrival_pers": 20
+   }
+  },
+  {
+   "cand": 377.8401933677639,
+   "recall": 0.2897008731595033,
+   "marginal_recall_per_cand": 0.0004526985461388153,
+   "step": "pop",
+   "caps": {
+    "repeat": 15,
+    "pop": 100,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 40,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 85,
+    "als": 20,
+    "new_arrival_pers": 20
+   }
+  },
+  {
+   "cand": 403.8809536230372,
+   "recall": 0.29975013532058675,
+   "marginal_recall_per_cand": 0.000395968542729074,
+   "step": "pop",
+   "caps": {
+    "repeat": 15,
+    "pop": 160,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 15,
+    "variant": 40,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 85,
+    "als": 20,
+    "new_arrival_pers": 20
+   }
+  },
+  {
+   "cand": 421.38480532804704,
+   "recall": 0.30601042105205606,
+   "marginal_recall_per_cand": 0.00031775978655468237,
+   "step": "cf",
+   "caps": {
+    "repeat": 15,
+    "pop": 190,
+    "pop_age": 150,
+    "new_arrival": 25,
+    "cf": 20,
+    "variant": 40,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 85,
+    "als": 20,
+    "new_arrival_pers": 20
+   }
+  },
+  {
+   "cand": 471.65609404072546,
+   "recall": 0.32142329919791796,
+   "marginal_recall_per_cand": 0.0002996328065881839,
+   "step": "new_arrival",
+   "caps": {
+    "repeat": 15,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 70,
+    "cf": 20,
+    "variant": 40,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 90,
+    "als": 20,
+    "new_arrival_pers": 20
+   }
+  },
+  {
+   "cand": 484.1887074617003,
+   "recall": 0.3250646531692355,
+   "marginal_recall_per_cand": 0.00028297550183235966,
+   "step": "als",
+   "caps": {
+    "repeat": 20,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 70,
+    "cf": 20,
+    "variant": 40,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 95,
+    "als": 35,
+    "new_arrival_pers": 25
+   }
+  },
+  {
+   "cand": 497.5028431321404,
+   "recall": 0.32882082460811707,
+   "marginal_recall_per_cand": 0.00027303999156500945,
+   "step": "variant",
+   "caps": {
+    "repeat": 20,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 70,
+    "cf": 20,
+    "variant": 50,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 50,
+    "new_arrival_pers": 25
+   }
+  },
+  {
+   "cand": 513.2708539829933,
+   "recall": 0.33286130596668106,
+   "marginal_recall_per_cand": 0.0002511632343820064,
+   "step": "variant",
+   "caps": {
+    "repeat": 25,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 70,
+    "cf": 20,
+    "variant": 60,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 60,
+    "new_arrival_pers": 45
+   }
+  },
+  {
+   "cand": 553.4035856504426,
+   "recall": 0.3426153232111712,
+   "marginal_recall_per_cand": 0.00023816246878007705,
+   "step": "als",
+   "caps": {
+    "repeat": 30,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 90,
+    "cf": 20,
+    "variant": 60,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 100,
+    "new_arrival_pers": 45
+   }
+  },
+  {
+   "cand": 568.3792407880779,
+   "recall": 0.3457044598384901,
+   "marginal_recall_per_cand": 0.0001981366990677172,
+   "step": "cf",
+   "caps": {
+    "repeat": 35,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 90,
+    "cf": 75,
+    "variant": 60,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 100,
+    "new_arrival_pers": 45
+   }
+  },
+  {
+   "cand": 584.8913001895421,
+   "recall": 0.348831868954997,
+   "marginal_recall_per_cand": 0.0001835659422419963,
+   "step": "cf",
+   "caps": {
+    "repeat": 80,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 95,
+    "cf": 95,
+    "variant": 60,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 100,
+    "new_arrival_pers": 45
+   }
+  },
+  {
+   "cand": 592.1666405828855,
+   "recall": 0.3500401861136474,
+   "marginal_recall_per_cand": 0.00014600002629478568,
+   "step": "new_arrival",
+   "caps": {
+    "repeat": 95,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 100,
+    "cf": 100,
+    "variant": 60,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 100,
+    "new_arrival_pers": 55
+   }
+  },
+  {
+   "cand": 592.3384805328047,
+   "recall": 0.3500511211105583,
+   "marginal_recall_per_cand": 0.0,
+   "step": "new_arrival_pers",
+   "caps": {
+    "repeat": 100,
+    "pop": 200,
+    "pop_age": 150,
+    "new_arrival": 100,
+    "cf": 100,
+    "variant": 60,
+    "dept_pop": 100,
+    "section_pop": 100,
+    "covis": 100,
+    "als": 100,
+    "new_arrival_pers": 60
+   }
+  }
+ ]
+}

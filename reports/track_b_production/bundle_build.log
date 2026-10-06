@@ -1,0 +1,58 @@
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  rankers: compatibility 132 trees / 74 features, personalized 138 trees / 95 features (276s)
+  pools batch 0: qids [0, 12000) (22s)
+  pools batch 1: qids [12000, 24000) (48s)
+  pools batch 2: qids [24000, 36000) (72s)
+  pools batch 3: qids [36000, 48000) (91s)
+  pools batch 4: qids [48000, 60000) (110s)
+  pools batch 5: qids [60000, 72000) (133s)
+  pools batch 6: qids [72000, 84000) (156s)
+  pools batch 7: qids [84000, 96000) (176s)
+  pools batch 8: qids [96000, 108000) (195s)
+  pools batch 9: qids [108000, 120000) (214s)
+  pools batch 10: qids [120000, 132000) (234s)
+  pools batch 11: qids [132000, 144000) (253s)
+  pools batch 12: qids [144000, 156000) (271s)
+  pools batch 13: qids [156000, 156990) (273s)
+  pools: 156,990 keys, 15,699,000 rows, 4.65 GB features
+  build failed; leaving .tmp-1791092230 for inspection (CURRENT unchanged)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/serving/bundle.py", line 472, in <module>
+    build(log=lambda s: print(s, flush=True))
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/serving/bundle.py", line 275, in build
+    prof = write_profiles(con, tmp / "profiles.sqlite", week.start, int(cfg.track_b.customer_weeks), log=log)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yilacao/Documents/Codex/ensemble/src/ensemble/serving/bundle.py", line 102, in write_profiles
+    cur = con.execute(profile_sql(week_start, weeks))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.OutOfMemoryException: Out of Memory Error: failed to allocate data of size 32.0 KiB (8.3 GiB/8.3 GiB used)
+
+Possible solutions:
+* Reducing the number of threads (SET threads=X)
+* Disabling insertion-order preservation (SET preserve_insertion_order=false)
+* Increasing the memory limit (SET memory_limit='...GB')
+
+See also https://duckdb.org/docs/stable/guides/performance/how_to_tune_workloads
+      793.26 real      2136.14 user       220.50 sys
+          3955638272  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            26774696  page reclaims
+              310282  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               87070  voluntary context switches
+             6307197  involuntary context switches
+       6991977456563  instructions retired
+       4239214514305  cycles elapsed
+         13814741824  peak memory footprint

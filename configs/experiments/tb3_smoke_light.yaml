@@ -1,0 +1,6 @@
+# Smoke-test the Round-3 probe scripts (protocol_check, ablate_towers) end to end
+# while a backtest is running: tiny model, tiny budgets, small DuckDB budget.
+extends: experiments/tb3_smoke
+duckdb:
+  memory_limit: 3GB
+  threads: 3

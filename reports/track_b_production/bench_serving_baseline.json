@@ -1,0 +1,188 @@
+{
+ "bundle": "2020-09-23_4edf27eb8e_df69b1f77f",
+ "machine": {
+  "platform": "darwin",
+  "cpu": "Apple M5",
+  "ram_gb": 16.0
+ },
+ "workload": {
+  "requests": 2000,
+  "zipf_s": 1.1,
+  "share_known_customer": 0.5,
+  "share_unknown_id": 0.25,
+  "share_anonymous": 0.25,
+  "k": 8,
+  "workers": 1
+ },
+ "bundle_files_mb": {
+  "_train_meta.json": 0.0,
+  "catalog.parquet": 3.18,
+  "equivalence.json": 0.05,
+  "feature_schema.json": 0.0,
+  "keys.npz": 3.3,
+  "manifest.json": 0.0,
+  "model_compatibility.txt": 1.11,
+  "model_personalized.json": 0.73,
+  "model_personalized.txt": 1.14,
+  "pool_article.npy": 125.59,
+  "pool_aux.npy": 376.78,
+  "pool_compat.npy": 125.59,
+  "pool_feat.npy": 4646.9,
+  "profiles.sqlite": 1250.08,
+  "slot_popularity.json": 0.02,
+  "visual/all_clip.npy": 107.62,
+  "visual/all_ids.npy": 0.84,
+  "visual/clip.npy": 26.75,
+  "visual/clip_shop_adapted.npy": 26.75,
+  "visual/live_ids.npy": 0.21
+ },
+ "bundle_total_mb": 6696.6,
+ "cold": {
+  "startup_to_ready_s": 0.6773996353149414,
+  "rss_after_ready_mb": 351.15625,
+  "first_request_ms": 14.747499953955412,
+  "first_request_status": 200,
+  "c1": {
+   "n": 2000,
+   "p50_ms": 196.43683289177716,
+   "p95_ms": 219.2420084029436,
+   "p99_ms": 233.0614131432958,
+   "mean_ms": 110.72943385865074,
+   "throughput_rps": 9.030760976534125,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c4": {
+   "n": 2000,
+   "p50_ms": 692.5232290523127,
+   "p95_ms": 992.9447101894766,
+   "p99_ms": 1069.5529412687756,
+   "mean_ms": 508.50153606780805,
+   "throughput_rps": 7.86055799306566,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c16": {
+   "n": 1963,
+   "p50_ms": 2797.0927918795496,
+   "p95_ms": 4144.31844104547,
+   "p99_ms": 7531.717014065892,
+   "mean_ms": 2151.0764443971716,
+   "throughput_rps": 6.822716262069053,
+   "errors": 0,
+   "timeouts": 37,
+   "error_rate": 0.0185
+  },
+  "cache": {
+   "hits": 0,
+   "misses": 36006,
+   "size": 0,
+   "capacity": 0
+  },
+  "mix": {
+   "ctl_cache:outcome=miss": 36006.0,
+   "ctl_items:provenance=co_purchase": 7388.0,
+   "ctl_items:provenance=popular_in_slot": 87173.0,
+   "ctl_items:provenance=style_co_purchase": 19209.0,
+   "ctl_items:provenance=visual_compatibility": 174278.0,
+   "ctl_modules:fallback_level=anchor_pool,personalized=false": 17178.0,
+   "ctl_modules:fallback_level=anchor_pool,personalized=true": 18828.0
+  },
+  "rss_steady_mb": 469.953125,
+  "rss_peak_mb": 481.234375,
+  "wall_s": 764.5
+ },
+ "warm": {
+  "startup_to_ready_s": 0.6450409889221191,
+  "rss_after_ready_mb": 349.984375,
+  "first_request_ms": 9.170958073809743,
+  "first_request_status": 200,
+  "c1": {
+   "n": 2000,
+   "p50_ms": 2.139416988939047,
+   "p95_ms": 2.762962039560079,
+   "p99_ms": 3.987767656799406,
+   "mean_ms": 2.284987082472071,
+   "throughput_rps": 436.97928055531185,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c4": {
+   "n": 2000,
+   "p50_ms": 7.678186986595392,
+   "p95_ms": 10.720012197270988,
+   "p99_ms": 13.138895800802853,
+   "mean_ms": 8.043353261076845,
+   "throughput_rps": 497.00827942061557,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "c16": {
+   "n": 2000,
+   "p50_ms": 35.48781212884933,
+   "p95_ms": 73.13930236268786,
+   "p99_ms": 99.1715992661193,
+   "mean_ms": 36.230307469610125,
+   "throughput_rps": 440.5679846424873,
+   "errors": 0,
+   "timeouts": 0,
+   "error_rate": 0.0
+  },
+  "cache": {
+   "hits": 39144,
+   "misses": 8862,
+   "size": 8862,
+   "capacity": 200000
+  },
+  "mix": {
+   "ctl_cache:outcome=hit": 39144.0,
+   "ctl_cache:outcome=miss": 8862.0,
+   "ctl_items:provenance=co_purchase": 9850.0,
+   "ctl_items:provenance=popular_in_slot": 116225.0,
+   "ctl_items:provenance=style_co_purchase": 25612.0,
+   "ctl_items:provenance=visual_compatibility": 232361.0,
+   "ctl_modules:fallback_level=anchor_pool,personalized=false": 22902.0,
+   "ctl_modules:fallback_level=anchor_pool,personalized=true": 25104.0
+  },
+  "visual": {
+   "first_call_ms": 5192.279207985848,
+   "first_call_status": 200,
+   "mode": "crop_adapter",
+   "warm_c1": {
+    "n": 40,
+    "p50_ms": 24.719562497921288,
+    "p95_ms": 28.29849192639813,
+    "p99_ms": 29.030809700489044,
+    "mean_ms": 25.168332253815606,
+    "throughput_rps": 39.623960328498825,
+    "errors": 0,
+    "timeouts": 0,
+    "error_rate": 0.0
+   },
+   "warm_c4": {
+    "n": 40,
+    "p50_ms": 84.50504159554839,
+    "p95_ms": 155.9465416939929,
+    "p99_ms": 164.66583218658343,
+    "mean_ms": 86.79051575018093,
+    "throughput_rps": 31.228989550484762,
+    "errors": 0,
+    "timeouts": 0,
+    "error_rate": 0.0
+   }
+  },
+  "rss_steady_mb": 1084.40625,
+  "rss_peak_mb": 1084.40625,
+  "wall_s": 279.0
+ },
+ "exact_vector_search": {
+  "n_vectors": 26127,
+  "dim": 512,
+  "exact_top8_ms_per_query": 1.354311458999291,
+  "index_mb": 53.508096
+ }
+}

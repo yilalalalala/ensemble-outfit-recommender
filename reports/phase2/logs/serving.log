@@ -1,0 +1,22 @@
+demo customers: 330
+for_you built (5s)
+complete_the_look: 1,008,071 rows (6s)
+wrote /Users/yilacao/Documents/Codex/ensemble/data/processed/serving.sqlite in 7s; 26,364 articles referenced
+        8.67 real        30.61 user         0.98 sys
+          2784182272  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              236703  page reclaims
+                3424  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                5566  voluntary context switches
+               21917  involuntary context switches
+        228113853897  instructions retired
+         83296768274  cycles elapsed
+          2195180304  peak memory footprint

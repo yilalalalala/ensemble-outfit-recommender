@@ -1,0 +1,28 @@
+  train week 2020-08-12: 4,237,033 rows, pos rate 0.0092 (retrieval 10s, features 15s)
+  train week 2020-08-19: 4,366,845 rows, pos rate 0.0090 (retrieval 18s, features 15s)
+  train week 2020-08-26: 5,208,005 rows, pos rate 0.0092 (retrieval 16s, features 12s)
+  train week 2020-09-02: 4,979,296 rows, pos rate 0.0092 (retrieval 11s, features 10s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+val: MAP@12=0.03645 returning=0.03854 new=0.01061 recall@12=0.0599 trees=287 (856.8s train)
+top features: [('ca_days_since_article', 0.141), ('ca_w_article', 0.069), ('product_type_no', 0.062), ('ca_wshare_prod', 0.055), ('colour_group_code', 0.035), ('n_channels', 0.03), ('ca_w_prod', 0.022), ('a_online_share_4w', 0.02), ('a_n_1d', 0.019), ('covis_rank', 0.016), ('a_trend_3d_1w', 0.016), ('garment_group_no', 0.015), ('covis_score', 0.014), ('ca_share_prod_life', 0.014), ('ca_price_ratio', 0.013)]
+      998.21 real      4950.43 user       391.38 sys
+          5700845568  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            32728047  page reclaims
+                3904  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  22  messages sent
+                  60  messages received
+                   0  signals received
+              232046  voluntary context switches
+            18382161  involuntary context switches
+      22529976879075  instructions retired
+      13127438058495  cycles elapsed
+         18994135072  peak memory footprint

@@ -1,0 +1,83 @@
+{
+  "model": "ranker_val_p2_b160_neg50",
+  "recommendations": 36000,
+  "customers": 3000,
+  "shap_only": {
+    "chips": 71994,
+    "unsupported": 11680,
+    "unsupported_share": 0.16223574186737783,
+    "by_reason": {
+      "age_group": {
+        "shown": 5013,
+        "unsupported": 56,
+        "unsupported_share": 0.011170955515659286
+      },
+      "bought_before": {
+        "shown": 3851,
+        "unsupported": 0,
+        "unsupported_share": 0.0
+      },
+      "co_purchase": {
+        "shown": 7149,
+        "unsupported": 0,
+        "unsupported_share": 0.0
+      },
+      "colour": {
+        "shown": 7454,
+        "unsupported": 935,
+        "unsupported_share": 0.12543600751274483
+      },
+      "new_arrival": {
+        "shown": 397,
+        "unsupported": 156,
+        "unsupported_share": 0.3929471032745592
+      },
+      "price": {
+        "shown": 1054,
+        "unsupported": 327,
+        "unsupported_share": 0.31024667931688804
+      },
+      "product_type": {
+        "shown": 1997,
+        "unsupported": 177,
+        "unsupported_share": 0.0886329494241362
+      },
+      "same_style": {
+        "shown": 13908,
+        "unsupported": 4134,
+        "unsupported_share": 0.2972389991371872
+      },
+      "section": {
+        "shown": 9621,
+        "unsupported": 195,
+        "unsupported_share": 0.020268163392578736
+      },
+      "trending": {
+        "shown": 21550,
+        "unsupported": 5700,
+        "unsupported_share": 0.26450116009280744
+      }
+    }
+  },
+  "gated": {
+    "chips": 70831,
+    "recs_with_a_chip": 0.9973611111111111,
+    "by_reason": {
+      "trending": 16181,
+      "same_style": 9911,
+      "co_purchase": 7910,
+      "section": 11735,
+      "bought_before": 4660,
+      "product_type": 3151,
+      "new_arrival": 899,
+      "age_group": 6479,
+      "colour": 8421,
+      "price": 1484
+    },
+    "by_evidence_type": {
+      "trending": 23559,
+      "personal_history": 39362,
+      "similarity": 7910
+    }
+  }
+}

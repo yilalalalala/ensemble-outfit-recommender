@@ -1,0 +1,11 @@
+# Local run of the serving API with mounted, non-versioned artifacts (docs/RUNBOOK_SERVING.md).
+services:
+  api:
+    build: .
+    ports: ["8010:8010"]
+    environment:
+      ENSEMBLE_BUNDLE: /bundles
+      ENSEMBLE_CACHE_SIZE: "20000"
+    volumes:
+      - ./data/processed/serving_bundles:/bundles:ro
+      - ./data/raw/images:/app/data/raw/images:ro

@@ -50,3 +50,22 @@ def ndcg_at_k(pred: Sequence, truth: set, k: int) -> float:
 def relative_lift(model: float, baseline: float) -> float:
     """(model − baseline) / baseline, as a fraction (0.18 = +18%)."""
     return (model - baseline) / baseline if baseline else float("nan")
+
+
+def paired_bootstrap(a: Sequence[float], b: Sequence[float], n_boot: int = 2000, seed: int = 0) -> dict:
+    """Customer-level paired bootstrap of mean(b) − mean(a).
+
+    ``a`` and ``b`` are per-customer scores (e.g. AP@12) for the same customers
+    in the same order. Customers are the resampling unit (cluster bootstrap), so
+    the interval reflects which customers happened to buy that week.
+    """
+    import numpy as np
+    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    d = b - a
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, len(d), size=(n_boot, len(d)))
+    boots = d[idx].mean(axis=1)
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    base = a.mean()
+    return {"diff": float(d.mean()), "ci95": [float(lo), float(hi)], "relative": float(d.mean() / base) if base else float("nan"),
+            "relative_ci95": [float(lo / base), float(hi / base)] if base else None, "n": int(len(d))}

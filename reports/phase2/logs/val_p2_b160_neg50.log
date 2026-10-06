@@ -1,0 +1,27 @@
+  train week 2020-08-12: 2,138,279 rows, pos rate 0.0182 (retrieval 9s, features 5s)
+  train week 2020-08-19: 2,203,963 rows, pos rate 0.0179 (retrieval 8s, features 5s)
+  train week 2020-08-26: 2,629,530 rows, pos rate 0.0182 (retrieval 12s, features 5s)
+  train week 2020-09-02: 2,511,702 rows, pos rate 0.0182 (retrieval 9s, features 16s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+val: MAP@12=0.03772 returning=0.03986 new=0.01133 recall@12=0.0625 trees=438 (691.6s train)
+top features: [('ca_wshare_prod', 0.095), ('product_type_no', 0.079), ('ca_w_prod', 0.064), ('ca_days_since_article', 0.064), ('c_days_since_last', 0.044), ('colour_group_code', 0.042), ('a_days_since_first_sale', 0.035), ('a_n_1d', 0.028), ('garment_group_no', 0.027), ('a_online_share_4w', 0.026), ('n_channels', 0.025), ('c_online_share_life', 0.023), ('covis_rank', 0.019), ('c_n_tx_1w', 0.018), ('ca_price_ratio', 0.017)]
+      948.82 real      4664.98 user       166.02 sys
+          6697549824  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            16855895  page reclaims
+                5104  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  22  messages sent
+                  59  messages received
+                   0  signals received
+              148974  voluntary context switches
+            11637189  involuntary context switches
+      22719203095963  instructions retired
+      13163301990870  cycles elapsed
+         13716368088  peak memory footprint

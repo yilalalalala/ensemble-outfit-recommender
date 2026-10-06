@@ -1,0 +1,11 @@
+{
+ "model": "bpr",
+ "device": "cpu",
+ "week": "2020-07-22",
+ "epochs": 2,
+ "seed": 0,
+ "user_emb_max_abs_diff": 0.0,
+ "item_emb_max_abs_diff": 0.0,
+ "topk_identical": true,
+ "tolerance": "bit-identical (0.0)"
+}

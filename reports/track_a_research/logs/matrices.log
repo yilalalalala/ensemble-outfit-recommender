@@ -1,0 +1,30 @@
+built train 2020-07-08: 3,238,195 rows (65.3s)
+built train 2020-07-15: 3,370,604 rows (79.8s)
+built train 2020-07-22: 3,526,349 rows (74.2s)
+built train 2020-07-29: 3,555,714 rows (74.0s)
+built train 2020-08-05: 3,336,923 rows (72.8s)
+built train 2020-08-12: 3,152,523 rows (66.1s)
+built train 2020-08-19: 3,211,092 rows (62.8s)
+built train 2020-08-26: 3,746,952 rows (72.0s)
+built eval 2020-08-05: 15,597,074 rows (166.4s)
+built eval 2020-08-12: 15,033,797 rows (165.8s)
+built eval 2020-08-19: 15,068,044 rows (162.4s)
+built eval 2020-08-26: 16,675,868 rows (186.9s)
+     1252.70 real      2601.65 user       603.69 sys
+          6241288192  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            55798690  page reclaims
+                5822  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+              315201  voluntary context switches
+            12217476  involuntary context switches
+      10883987844749  instructions retired
+       6456091520899  cycles elapsed
+         14302752696  peak memory footprint

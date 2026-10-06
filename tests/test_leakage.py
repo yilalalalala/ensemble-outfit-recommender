@@ -47,8 +47,9 @@ def test_retrieval_ignores_label_week():
     def cands(future_article):
         con = make_db(future_article)
         con.execute("""CREATE TABLE articles AS SELECT * FROM (VALUES
-            (1, 10, 1), (2, 10, 1), (3, 30, 2), (77, 70, 1), (99, 90, 1))
-            t(article_id, product_code, index_group_no)""")
+            (1, 10, 1, 100, 11, 21), (2, 10, 1, 100, 11, 21), (3, 30, 2, 200, 12, 22),
+            (77, 70, 1, 100, 11, 21), (99, 90, 1, 200, 12, 22))
+            t(article_id, product_code, index_group_no, department_no, section_no, product_type_no)""")
         con.execute("CREATE TABLE _users AS SELECT * FROM (VALUES (0), (1)) t(customer_idx)")
         build_candidates(con, WEEK, r)
         return con.execute("SELECT * FROM cand ORDER BY ALL").fetchall()

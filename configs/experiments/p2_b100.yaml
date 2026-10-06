@@ -1,0 +1,14 @@
+# Phase 2: caps from the greedy budget allocator at ~100 candidates/customer (reports/phase2/budget_frontier.json).
+extends: default
+retrieval:
+  variant_seed_weeks: 104
+  pop_age_age_bins: fine
+  channels: [repeat, pop, pop_age, variant, dept_pop, section_pop, covis, new_arrival_pers]
+  repeat_k: 10
+  pop_k: 5
+  pop_age_k: 30
+  variant_k: 15
+  dept_pop_k: 25
+  section_pop_k: 40
+  covis_k: 15
+  new_arrival_pers_k: 10

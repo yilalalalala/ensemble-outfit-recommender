@@ -1,4 +1,4 @@
-.PHONY: help setup data ingest test baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval
+.PHONY: help setup data ingest test baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
 PYTHON := .venv/bin/python
 PY := PYTHONPATH=src $(PYTHON)
 PORT ?= 8010
@@ -70,3 +70,35 @@ assistant-eval: ## assistant eval set on the local model (free); run with `claud
 
 mlflow:     ## browse experiment runs
 	.venv/bin/mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db
+
+# ---------------------------------------------------------------- Track A research / Track B production
+RA := ENSEMBLE_CONFIG=track_a_research $(PY)
+
+research-a: ## Track A research benchmark: tuning, per-week baselines, allocator, matrices, fits, report (many hours)
+	$(RA) -m ensemble.research.tune
+	$(RA) -m ensemble.research.tune stage_c
+	$(RA) -m ensemble.research.pipeline apply-tuning
+	$(RA) -m ensemble.research.pipeline models
+	$(RA) -m ensemble.research.pipeline baselines
+	$(RA) -m ensemble.research.pipeline allocate
+	$(RA) -m ensemble.research.pipeline matrices
+	$(RA) -m ensemble.research.pipeline fit phase2 42,43,44
+	$(RA) -m ensemble.research.report
+
+tb-serving-regression: ## Track B: personalized re-rank of a bounded compatibility pool on the six rolling folds (D-041)
+	ENSEMBLE_CONFIG=experiments/tb_serving_pools $(PY) -m ensemble.completion.backtest val 6 serving_pools
+
+serving-bundle: ## build, verify and publish a versioned Track B serving bundle (needs the ingested data)
+	$(PY) -m ensemble.serving.bundle build
+
+serve-v2:   ## run the API on the CURRENT serving bundle (override with ENSEMBLE_BUNDLE=...)
+	PYTHONPATH=src .venv/bin/uvicorn ensemble.api.app:app --port $(PORT)
+
+serve-smoke: ## end-to-end smoke test in a real server on a synthetic bundle (no H&M data needed)
+	$(PY) scripts/serve_smoke.py
+
+bench-serving: ## local latency / throughput / memory benchmark of the serving API on the CURRENT bundle
+	$(PY) scripts/bench_serving.py
+
+report-verify: ## assert every headline figure of the final report against stored artifacts
+	$(PYTHON) scripts/verify_final_report.py

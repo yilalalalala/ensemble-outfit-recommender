@@ -173,3 +173,63 @@ industry standard and are named as such wherever they appear.
 | **Batch API** | Asynchronous bulk requests at a discount (50% on Anthropic), for work that need not be real time | DS / Eng |
 | **Self-preference bias** | An LLM judge tends to rate outputs from its own model family higher; report judge scores next to objective metrics | DS |
 | **Budget guard** | A hard spending cap enforced in code before each paid call | Eng |
+
+## Retrieval and ranking engineering (added in Phase 2)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Co-visitation** / **co-visitation matrix** | Item-to-item counts of "bought (or viewed) B soon after A" by the same user, usually time-weighted and directional. The standard candidate source in session/e-commerce recommenders (e.g. Kaggle OTTO and H&M solutions) | DS |
+| **Category-conditioned popularity** | Best sellers restricted to the categories (department, section) a user buys from, weighted by the user's affinity. A personalised popularity channel | DS |
+| **Matrix factorisation (ALS)** | Learns user and item vectors whose dot product predicts interaction; ALS (alternating least squares, Hu–Koren–Volinsky 2008) is the implicit-feedback standard | DS |
+| **Candidate budget** / **recall–size Pareto frontier** | The number of candidates per user the ranker can afford, and the best recall reachable at each size. Choosing caps on the frontier rather than per channel by feel | DS |
+| **Unique recall** / **marginal contribution** | Hits only one channel finds, i.e. the recall lost if that channel were removed | DS |
+| **Early stopping** | Stop adding trees when a held-out metric stops improving; here the held-out set is the most recent *training* week (temporal), never the evaluation week | DS |
+| **Negative downsampling** | Keep every positive but only a share of negatives when training a ranker, to cut memory and time | DS |
+| **Surrogate objective** | The loss a model optimises in place of the business metric (LambdaRank optimises an NDCG-based surrogate; MAP@12 is reported) | DS |
+| **Availability proxy** *(project-specific name)* | Without a stock feed, treating an article as unavailable when its last observed sale before the cutoff is too old. A business rule in the re-ranking stage | Both |
+| **Eligibility filter** / **business rules** | Re-ranking stage rules that remove or demote items (out of stock, duplicates) before display | Both |
+| **Intra-list diversity**, **catalog coverage**, **novelty** | Beyond-accuracy metrics: distinct categories within a list, distinct items shown across users, mean −log₂(popularity share) of shown items | Both |
+| **Cluster (customer-level) bootstrap** / **paired bootstrap** | Resample customers with replacement to put a confidence interval on a metric difference between two systems scored on the same customers | DS |
+| **Feature attribution vs. explanation faithfulness** | SHAP says which features moved a score; a user-facing reason is *faithful* only if the underlying data supports the sentence ("you bought this before" needs a recorded purchase) | Both |
+| **Point-in-time correctness** / **cutoff** | Every feature for a prediction date uses only data available before it | DS |
+
+## Candidate fusion and point-in-time protocol (added in Track B Round 3)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Reciprocal rank fusion (RRF)** | Merge several ranked lists by summing `w / (c + rank)`, typically `c = 60` (Cormack et al., 2009). No training and no score calibration needed, which is why it is the usual first fusion a team ships | DS |
+| **Learned fusion** / **learning-to-rank fusion** | Replacing a fixed fusion rule with a trained ranker over the union of the sources, using each source's presence, rank and score as features. The standard next step after RRF | DS |
+| **Candidate union** | The deduplicated set of candidates from every retrieval source for one query, with each source's rank kept as a feature | DS |
+| **Query group** (learning to rank) | The set of candidates that compete for one ranking decision; LambdaRank optimises within a group. Here one group is one (basket, anchor, target slot) | DS |
+| **Hierarchical backoff** | When exact-key evidence is too sparse, fall back to a coarser key (here: all colourways of a `product_code` pooled), and expose *which* level was used as a feature instead of choosing globally | DS |
+| **Time-decayed / recency-weighted co-occurrence** | Co-occurrence counts where an older basket contributes less, `0.5 ^ (age / half_life)`. The **half-life** is the age at which a basket counts half as much | DS |
+| **Sampled softmax** / **in-batch negatives** | Train a retrieval model by scoring each positive against the other items in the batch instead of the whole catalogue | DS |
+| **logQ correction** | Subtract `log` of a candidate's sampling frequency from its logit, because in-batch sampling over-samples popular items (Yi et al., 2019, "Sampling-bias-corrected neural modeling"). Without it, in-batch training collapses toward popularity | DS |
+| **Hard negatives** | Wrong candidates the current model scores highly, mined deliberately so the model learns the fine distinctions. **Retrieval-informed** hard negatives are mined by re-scoring a pool with the model being trained | DS |
+| **False negative** (retrieval training) | A "negative" that is actually a valid answer (another colourway of the positive, an item with basket co-occurrence evidence). Masked out rather than learned against | DS |
+| **Oracle protocol** *(project-specific name)* | An evaluation variant that deliberately uses information unavailable at prediction time, kept only to measure what an earlier leak was worth. Never a reported result | DS |
+| **Evidence provenance** | Recording, per recommendation, which signal produced it (co-purchase, style co-purchase, visual compatibility, popularity fallback) and the raw values behind it, so an explanation can be checked against the data | Both |
+| **Feature store** | The serving-side system that computes and serves point-in-time-correct features at request time (Feast, Tecton). Personalised recommendations that cannot be precomputed per key need one | DS / Eng |
+| **Recently launched recall** *(project-specific name)* | Recall restricted to articles whose first observed sale is within `new_item_days` of the cutoff. Used where true item cold start is unmeasurable because the dataset has no launch or inventory feed | DS |
+
+## Research benchmark and production serving (added in the Track A research / Track B production round)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **BPR (Bayesian Personalized Ranking)** | Pairwise loss that pushes a bought item above a sampled unbought one for the same user (Rendle et al., 2009). **BPR-MF** = BPR on a matrix-factorisation model | DS |
+| **LightGCN** | Graph collaborative filtering that only averages ID embeddings over the user–item graph, no feature transforms (He et al., 2020); a standard strong CF baseline | DS |
+| **SASRec** | Self-attentive sequential recommender: a causal Transformer over the user's last purchases predicts the next item (Kang & McAuley, 2018) | DS |
+| **gBCE / gSASRec** | Generalised binary cross-entropy: BCE with k sampled negatives and the positive term raised to a calibration power, so a sampled loss stops over-predicting (Petrov & Macdonald, 2023) | DS |
+| **Reproduced baseline** | A published model re-implemented and tuned under *your* protocol, so the comparison is apples to apples; a claim may only name baselines actually reproduced | DS |
+| **Tuning fold** vs **reporting fold** | Weeks used to choose hyperparameters vs weeks used to report results; keeping them disjoint keeps the reported numbers honest | DS |
+| **Adoption rule** / **ship criterion** | A predeclared test a change must pass before it is adopted (here: CI above zero, folds won, cost limits) | Both |
+| **Ablation (refit)** | Remove one feature group and *retrain*; zeroing inputs of a trained model is not an ablation | DS |
+| **Serving bundle** *(project-specific name)* | Versioned, immutable directory of everything the online path reads (models, candidate pools, profiles, catalogue snapshot, manifest with hashes) | DS / Eng |
+| **Train–serve skew** | Online features or scores differing from what the model saw offline; checked here by an **equivalence gate** before a bundle is published | DS / Eng |
+| **Request-time (online) personalization** | Scoring with the user's features when the request arrives, instead of a precomputed per-key table | Both |
+| **Liveness / readiness probe** | `/healthz` (process up) vs `/readyz` (able to serve: artifacts loaded and validated) | Eng |
+| **p50 / p95 / p99 latency** | Median and tail response times; tails (p95, p99) are what users feel under load | Both |
+| **Cold vs warm cache** | Latency with every request computed vs with repeated requests answered from cache | Eng |
+| **Cache invalidation** | Making sure no stale answer survives a model or data change; here the bundle and availability versions are part of every cache key | Eng |
+| **Atomic swap / rollback** | Publishing a new version by switching one pointer after it is complete and validated; rolling back = switching it back | Eng |
+| **Exact vs approximate nearest-neighbour search** | Brute-force similarity over all vectors vs an index (HNSW, FAISS) that trades a little recall for speed; only worth it when exact is too slow | DS / Eng |

@@ -1,0 +1,8 @@
+val_p2_b160_neg50 none                         MAP@12=0.03772 types/list=5.04 styles/list=8.97 coverage=13023 novelty=10.54
+val_p2_b160_neg50 availability_28d             MAP@12=0.03772 types/list=5.04 styles/list=8.97 coverage=13020 novelty=10.54
+val_p2_b160_neg50 availability_14d             MAP@12=0.03772 types/list=5.04 styles/list=8.97 coverage=12899 novelty=10.54
+val_p2_b160_neg50 styles_max2                  MAP@12=0.03652 types/list=5.40 styles/list=9.91 coverage=13029 novelty=10.44
+val_p2_b160_neg50 styles_max1                  MAP@12=0.03362 types/list=6.10 styles/list=12.00 coverage=12763 novelty=10.35
+val_p2_b160_neg50 types_max4                   MAP@12=0.03700 types/list=5.83 styles/list=9.58 coverage=12894 novelty=10.44
+val_p2_b160_neg50 types_max3                   MAP@12=0.03641 types/list=6.41 styles/list=9.94 coverage=12783 novelty=10.39
+val_p2_b160_neg50 styles2_types4               MAP@12=0.03621 types/list=5.96 styles/list=10.12 coverage=12883 novelty=10.39

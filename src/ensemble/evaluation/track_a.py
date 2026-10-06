@@ -4,7 +4,7 @@ from __future__ import annotations
 from collections import defaultdict
 
 from ensemble.data.splits import Week
-from ensemble.evaluation.metrics import map_at_k, recall_at_k
+from ensemble.evaluation.metrics import average_precision_at_k, map_at_k, recall_at_k
 
 
 def load_truth(con, week: Week) -> dict[int, set[int]]:
@@ -55,3 +55,11 @@ def evaluate(preds: dict, truth: dict, segments: dict, k: int = 12) -> dict:
         "share_new_customers": len(new) / len(users),
         "share_purchases_cold_items": sum(len(t) for t in cold_truth.values()) / sum(len(t) for t in truth.values()),
     }
+
+
+def per_customer_ap(preds: dict, truth: dict, k: int = 12) -> "pandas.DataFrame":  # noqa: F821
+    """AP@k per buying customer, for paired comparisons between systems (metrics.paired_bootstrap)."""
+    import pandas as pd
+    users = sorted(truth)
+    return pd.DataFrame({"customer_idx": users,
+                         "ap": [average_precision_at_k(preds.get(u, []), truth[u], k) for u in users]})

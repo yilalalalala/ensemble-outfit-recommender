@@ -1,0 +1,18 @@
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+  lgbm_compatibility: trained on ['2020-09-09', '2020-09-16'], 3,881,396 rows, 74 features, 132 trees (42s)
+  batch   0: qids [0, 12000) 2,054,116 candidate rows -> 96,000 shown
+  batch   1: qids [12000, 24000) 2,064,855 candidate rows -> 96,000 shown
+  batch   2: qids [24000, 36000) 2,075,432 candidate rows -> 96,000 shown
+  batch   3: qids [36000, 48000) 2,029,205 candidate rows -> 96,000 shown
+  batch   4: qids [48000, 60000) 2,013,939 candidate rows -> 96,000 shown
+  batch   5: qids [60000, 72000) 2,022,750 candidate rows -> 96,000 shown
+  batch   6: qids [72000, 84000) 2,039,319 candidate rows -> 96,000 shown
+  batch   7: qids [84000, 96000) 2,042,051 candidate rows -> 96,000 shown
+  batch   8: qids [96000, 108000) 2,048,364 candidate rows -> 96,000 shown
+  batch   9: qids [108000, 120000) 1,994,637 candidate rows -> 96,000 shown
+  batch  10: qids [120000, 132000) 2,001,120 candidate rows -> 96,000 shown
+  batch  11: qids [132000, 144000) 1,927,078 candidate rows -> 96,000 shown
+  batch  12: qids [144000, 156000) 1,868,946 candidate rows -> 96,000 shown
+  batch  13: qids [156000, 156990) 153,775 candidate rows -> 7,920 shown
+wrote /Users/yilacao/Documents/Codex/ensemble/data/processed/models/complete_the_look.parquet (1,255,920 rows, 26,165 anchors, 132s); provenance {'visual_compatibility': 762188, 'popular_in_slot': 394137, 'style_co_purchase': 63801, 'co_purchase': 35794}

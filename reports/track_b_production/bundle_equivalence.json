@@ -1,0 +1,2817 @@
+{
+ "passed": true,
+ "summary": {
+  "requests": 400,
+  "identical_order": 400,
+  "identical_order_share": 1.0,
+  "max_score_abs_diff": 0.0,
+  "max_feature_abs_diff": 1.0,
+  "with_profile": 320,
+  "tolerance": {
+   "identical_order_share": 1.0,
+   "max_score_abs_diff": 1e-06
+  }
+ },
+ "requests": [
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 1.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 1.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": false,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  },
+  {
+   "customer_has_profile": true,
+   "pool": 100,
+   "same_order": true,
+   "max_score_diff": 0.0,
+   "max_feature_diff": 0.0
+  }
+ ]
+}

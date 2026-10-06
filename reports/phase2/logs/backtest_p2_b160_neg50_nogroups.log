@@ -1,0 +1,75 @@
+  train week 2020-07-22: 2,384,969 rows, pos rate 0.0175 (retrieval 17s, features 7s)
+  train week 2020-07-29: 2,390,668 rows, pos rate 0.0172 (retrieval 17s, features 6s)
+  train week 2020-08-05: 2,246,105 rows, pos rate 0.0180 (retrieval 11s, features 6s)
+  train week 2020-08-12: 2,138,279 rows, pos rate 0.0182 (retrieval 15s, features 6s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+2020-08-19: baseline 0.02226  ranker 0.03150  retrieval recall 0.1707 @ 159.9  new: ranker 0.00674 vs fallback 0.00790  (649s)
+  train week 2020-07-29: 2,390,668 rows, pos rate 0.0172 (retrieval 22s, features 7s)
+  train week 2020-08-05: 2,246,106 rows, pos rate 0.0180 (retrieval 15s, features 7s)
+  train week 2020-08-12: 2,138,280 rows, pos rate 0.0182 (retrieval 14s, features 6s)
+  train week 2020-08-19: 2,203,963 rows, pos rate 0.0179 (retrieval 15s, features 6s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+2020-08-26: baseline 0.02083  ranker 0.03155  retrieval recall 0.1875 @ 158.9  new: ranker 0.00942 vs fallback 0.00878  (614s)
+  train week 2020-08-05: 2,246,104 rows, pos rate 0.0180 (retrieval 19s, features 7s)
+  train week 2020-08-12: 2,138,280 rows, pos rate 0.0182 (retrieval 15s, features 7s)
+  train week 2020-08-19: 2,203,963 rows, pos rate 0.0179 (retrieval 15s, features 7s)
+  train week 2020-08-26: 2,629,532 rows, pos rate 0.0182 (retrieval 16s, features 7s)
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+2020-09-02: baseline 0.02429  ranker 0.03720  retrieval recall 0.1924 @ 159.1  new: ranker 0.01147 vs fallback 0.00891  (722s)
+  train week 2020-08-12: 2,138,279 rows, pos rate 0.0182 (retrieval 16s, features 6s)
+  train week 2020-08-19: 2,203,963 rows, pos rate 0.0179 (retrieval 69s, features 6s)
+  train week 2020-08-26: 2,629,529 rows, pos rate 0.0182 (retrieval 14s, features 7s)
+  train week 2020-09-02: 2,511,705 rows, pos rate 0.0182 (retrieval 15s, features 6s)
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+[LightGBM] [Warning] Met categorical feature which contains sparse values. Consider renumbering to consecutive integers started from zero
+[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
+2020-09-09: baseline 0.02524  ranker 0.03679  retrieval recall 0.1858 @ 159.7  new: ranker 0.00967 vs fallback 0.00830  (930s)
+baseline_repeat+pop_age.map@12 {'mean': 0.02315, 'std': 0.00199}
+baseline_repeat+pop_age.map@12_returning {'mean': 0.02432, 'std': 0.00217}
+baseline_repeat+pop_age.map@12_new_customers {'mean': 0.00847, 'std': 0.00046}
+baseline_repeat+pop_age.recall@12 {'mean': 0.03736, 'std': 0.00211}
+baseline_repeat+pop_age.recall@12_cold_items {'mean': 0.0, 'std': 0.0}
+ranker.map@12 {'mean': 0.03426, 'std': 0.00316}
+ranker.map@12_returning {'mean': 0.03623, 'std': 0.00336}
+ranker.map@12_new_customers {'mean': 0.00933, 'std': 0.00195}
+ranker.recall@12 {'mean': 0.05863, 'std': 0.00306}
+ranker.recall@12_cold_items {'mean': 0.0, 'std': 0.0}
+ranker+new_customer_fallback.map@12 {'mean': 0.0342, 'std': 0.00307}
+ranker+new_customer_fallback.map@12_returning {'mean': 0.03623, 'std': 0.00336}
+ranker+new_customer_fallback.map@12_new_customers {'mean': 0.00847, 'std': 0.00046}
+ranker+new_customer_fallback.recall@12 {'mean': 0.05848, 'std': 0.00306}
+ranker+new_customer_fallback.recall@12_cold_items {'mean': 0.0, 'std': 0.0}
+retrieval.recall {'mean': 0.18409, 'std': 0.00935}
+retrieval.candidates_per_customer {'mean': 159.37825, 'std': 0.45791}
+ranker_relative_lift {'mean': 0.47991, 'std': 0.05346, 'per_week': [0.4152864819804557, 0.5149573353977557, 0.5316543057099709, 0.4577226616342521]}
+fallback_minus_ranker_new_customers {'mean': -0.00085, 'per_week': [0.0011647586594627961, -0.0006449213835677658, -0.002564065502402761, -0.0013751575210527826], 'weeks_fallback_better': 1}
+seconds_per_week {'mean': 728.75, 'std': 141.50942}
+     2918.46 real     15750.75 user       666.41 sys
+          7954808832  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            52028930  page reclaims
+                5834  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  22  messages sent
+                  60  messages received
+                   0  signals received
+              199052  voluntary context switches
+            30129271  involuntary context switches
+      57775923381111  instructions retired
+      32183764017651  cycles elapsed
+         12770487024  peak memory footprint
