@@ -596,38 +596,95 @@ and their artifacts) were not modified; model cards were appended to with dated 
 
 ## 16. Git and status
 
-Commits made in this round, all local on `phase2-retrieval-ranking-upgrade` (newest first), plus the
-final commit that adds this report, its verifier and the run logs:
+Commits made in this round, all on `phase2-retrieval-ranking-upgrade` (newest first), plus the
+final commit that records this section:
 
 ```
-43ba0ba test(research): real-data CPU reproducibility check; segment trade-off and per-seed artifact
-dcdb8b6 docs: glossary terms for the research benchmark and production serving; Track B model card serving update
-e603984 perf(serving): vectorised forest evaluation and array lookups; thresholds set and met (D-043)
-45f90a3 feat(research): authoritative Track A comparison: three seeds, ablations, failure analysis
-5d21141 docs(report): render every final-report table from stored artifacts
-d1106f7 feat(research): neural retrieval coverage, Phase-2 reproduction check, direct channel comparison in the report
-d327889 feat(research): adopt neural dot-product ranker features (D-040); seed-42 six-fold comparison
-a23b378 feat(research): allocator with neural channels on allocator weeks; neural_channels and realloc configs
-b6cfb67 fix(serving): bundle key order, partitioned profiles, resumable build; deterministic price tiers
-b9e342d docs(adr): D-039 baseline reproductions, D-042 serving runtime; two-lane production runs
-e78180e feat: tuned baseline configuration; serving pool P = 100 by the predeclared D-041 rule
-3a0b608 feat: product page shows v2 personalization, fallback and provenance; Track A report aggregator
-2dbd4fe build(serving): pinned serving requirements, Dockerfile, smoke test, benchmark harness, runbook
-00b1b0d feat(serving): request-time personalized Complete the Look over versioned bundles
-f2b8bf4 feat(research): frozen Track A protocol, BPR-MF/LightGCN/SASRec reproductions, NumPy GBDT runtime
+af78bfc docs(report): Track A research benchmark and Track B production prototype readout
+c1d14ed test(research): real-data CPU reproducibility check; segment trade-off and per-seed artifact
+6f2a1fa docs: glossary terms for the research benchmark and production serving; Track B model card serving update
+2d0d48d perf(serving): vectorised forest evaluation and array lookups; thresholds set and met (D-043)
+6be37b6 feat(research): authoritative Track A comparison: three seeds, ablations, failure analysis
+05163e2 docs(report): render every final-report table from stored artifacts
+18da176 feat(research): neural retrieval coverage, Phase-2 reproduction check, direct channel comparison in the report
+d51e4e9 feat(research): adopt neural dot-product ranker features (D-040); seed-42 six-fold comparison
+e65a665 feat(research): allocator with neural channels on allocator weeks; neural_channels and realloc configs
+0df67d5 fix(serving): bundle key order, partitioned profiles, resumable build; deterministic price tiers
+78c1515 docs(adr): D-039 baseline reproductions, D-042 serving runtime; two-lane production runs
+81a56dc feat: tuned baseline configuration; serving pool P = 100 by the predeclared D-041 rule
+955fcb8 feat: product page shows v2 personalization, fallback and provenance; Track A report aggregator
+2741c3d build(serving): pinned serving requirements, Dockerfile, smoke test, benchmark harness, runbook
+39c321c feat(serving): request-time personalized Complete the Look over versioned bundles
 ```
 
-- **Nothing left the machine.** No push, no merge, no pull request, no Kaggle submission, no
-  published artifact, no contact with anyone, no paid API. `origin/main` is still at `2d78709`;
-  this branch has no upstream.
+**History rewrite before pushing (2026-10-05, at the owner's request).** Earlier rounds had
+accidentally committed some of the owner's `* 2.*` sync duplicates and later untracked them, so
+their contents were still in the branch history. Before the branch was pushed, the 48 commits not
+yet on `origin/main` were rewritten with `git filter-branch --index-filter` to remove every
+`* 2.*` path. Verified: no `* 2.*` path remains in `origin/main..HEAD`; each rewritten commit
+differs from its original **only** in those paths; the final tree is identical; the 27 files are
+still on disk, untracked and unmodified. The originals are kept locally on
+`backup/before-dup-history-filter` (never pushed, since it contains the duplicates). Commit ids
+quoted in earlier reports (`PHASE2_UPGRADE_REPORT.md`, `TRACK_B_ROUND3_UPGRADE_REPORT.md`) and in
+artifact manifests are the pre-rewrite ids; the mapping:
+
+| original | rewritten | subject |
+| --- | --- | --- |
+| `3876eec` | `3876eec` | refactor(retrieval): channel registry with a common output contract |
+| `7b5dd24` | `7b5dd24` | feat(ranker): reproducible training, temporal early stopping, stable v |
+| `b218942` | `b218942` | feat(ranker): memory-bounded training and scoring, re-ranking layer, e |
+| `d25f3c5` | `d25f3c5` | chore(experiments): budget-frontier configs and sequential experiment  |
+| `9d22e6c` | `9d22e6c` | docs: channel contract, budget frontier, re-ranking stage, lifetime vs |
+| `3b43ad2` | `3b43ad2` | fix(ranker): INT32 overflow in negative-downsampling hash; runner reco |
+| `58b1ecf` | `58b1ecf` | test: run LightGBM training tests in a subprocess (torch + LightGBM Op |
+| `044c59b` | `044c59b` | test: ignore sync-duplicate '* 2.py' files in the canonical suite |
+| `af99dd3` | `af99dd3` | feat(serving): chunked scoring and the shipped re-ranking policy in su |
+| `804ba30` | `804ba30` | feat(track-a): adopt the 160-candidate frontier operating point, 50% n |
+| `4f62ca7` | `4f62ca7` | docs(adr): D-027..D-030 retrieval budget, ranker training, re-ranking, |
+| `a00568e` | `a00568e` | docs(report): Phase 2 upgrade report, model card, README results; expe |
+| `937c158` | `937c158` | docs(report): serving rebuilt with the Phase 2 model; validation re-ra |
+| `cfcd243` | `cfcd243` | docs(report): list Phase 2 commits |
+| `5e5dbe3` | `5e5dbe3` | docs(report): test-week retrieval recall (single final evaluation) |
+| `b8507e2` | `b8507e2` | docs: Phase 2 Kaggle late submission, private MAP@12 0.03330 (MVP 0.03 |
+| `24b57da` | `24b57da` | feat(track-b): leakage-free rolling protocol, candidate union, learned |
+| `4868d5b` | `4868d5b` | feat(track-b): ablation harness, tower/protocol probes, stronger leaka |
+| `fd3de84` | `da95195` | feat(track-b): Round-3 serving path, evidence-gated reasons, diversity |
+| `ce3ab80` | `e86191f` | feat(track-b): label-composition audit; strict serving caps; batch sub |
+| `010668c` | `16ca1df` | test: evidence rows, label-audit point-in-time history; report table r |
+| `26b4a7e` | `0db0614` | fix(serving): keep the Round-1 Complete-the-Look table when the Round- |
+| `bd7c6ee` | `573c672` | docs(glossary): candidate fusion and point-in-time protocol terms (D-0 |
+| `46b70d4` | `06a7418` | feat(track-b): six-fold ablation results; diversity caps become a re-o |
+| `5978fbe` | `200afd1` | docs(adr): D-031..D-037 for the Round-3 Track B protocol, fusion and s |
+| `86e0069` | `b3e0b55` | docs(report): Round-3 upgrade report; single final test-week evaluatio |
+| `dbd226e` | `5ff8175` | docs: Track B model card and README for Round 3 |
+| `bcb1f04` | `c68d92b` | feat(serving): rebuild Complete the Look with the learned ranker; hone |
+| `aaf02d6` | `0002b8b` | test(report): assert every headline figure against the stored artifact |
+| `0cc6d62` | `7633195` | docs: correct the leak claim, cross-references and stale ADR ids |
+| `af49025` | `5e6e3b6` | fix: untrack the '* 2.*' sync duplicates I should never have staged |
+| `a790a27` | `a643f93` | docs(report): record the staging slip; refresh the commit list and sta |
+| `f2b8bf4` | `88041b2` | feat(research): frozen Track A protocol, BPR-MF/LightGCN/SASRec reprod |
+| `00b1b0d` | `39c321c` | feat(serving): request-time personalized Complete the Look over versio |
+| `2dbd4fe` | `2741c3d` | build(serving): pinned serving requirements, Dockerfile, smoke test, b |
+| `3a0b608` | `955fcb8` | feat: product page shows v2 personalization, fallback and provenance;  |
+| `e78180e` | `81a56dc` | feat: tuned baseline configuration; serving pool P = 100 by the predec |
+| `b9e342d` | `78c1515` | docs(adr): D-039 baseline reproductions, D-042 serving runtime; two-la |
+| `b6cfb67` | `0df67d5` | fix(serving): bundle key order, partitioned profiles, resumable build; |
+| `a23b378` | `e65a665` | feat(research): allocator with neural channels on allocator weeks; neu |
+| `d327889` | `d51e4e9` | feat(research): adopt neural dot-product ranker features (D-040); seed |
+| `d1106f7` | `18da176` | feat(research): neural retrieval coverage, Phase-2 reproduction check, |
+| `5d21141` | `05163e2` | docs(report): render every final-report table from stored artifacts |
+| `45f90a3` | `6be37b6` | feat(research): authoritative Track A comparison: three seeds, ablatio |
+| `e603984` | `2d0d48d` | perf(serving): vectorised forest evaluation and array lookups; thresho |
+| `dcdb8b6` | `6f2a1fa` | docs: glossary terms for the research benchmark and production serving |
+| `43ba0ba` | `c1d14ed` | test(research): real-data CPU reproducibility check; segment trade-off |
+| `9442f1d` | `af78bfc` | docs(report): Track A research benchmark and Track B production protot |
+
+- **Nothing else left the machine.** No merge, no pull request, no Kaggle submission, no
+  published artifact, no contact with anyone, no paid API. The branch push is done by the owner;
+  `main` is not changed.
 - **Staging discipline.** Every commit used explicit paths; `git add -A` / `git add .` were never
   used.
-- **User-owned sync duplicates.** All 27 `* 2.*` files are on disk, untracked
-  (`git ls-files | grep ' 2\.'` is empty), and unmodified — the newest was last modified
-  2026-09-28, before this round started.
-- **Working tree after the final commit**: only those 27 untracked duplicates remain. Large
-  generated artifacts (per-week models, matrices, per-customer evaluations, the 6.7 GB serving
-  bundle) live under the gitignored `data/` tree.
+- **Large generated artifacts** (per-week models, matrices, per-customer evaluations, the 6.7 GB
+  serving bundle) live under the gitignored `data/` tree.
 - **Verification at the final commit**: `make test` 162 passed; `scripts/verify_final_report.py`
   78/78 headline figures verified.
-
