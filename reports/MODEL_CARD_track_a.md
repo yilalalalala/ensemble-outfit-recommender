@@ -89,3 +89,16 @@ reproduced baseline, +147% [+143, +151]. Every ablation hurts: recency/velocity 
 **Serving status.** The served Track A recommendations (`make submission serving`) are still the
 Phase-2 model: shipping the new features needs the three neural models retrained on all data and
 scored for every customer, which this round did not do.
+
+---
+
+## Update 2026-10-06 — retrieval ceiling: SASRec appended to 300 candidates (D-044)
+
+Readout: [`TRACK_A_RETRIEVAL_UPGRADE_REPORT.md`](TRACK_A_RETRIEVAL_UPGRADE_REPORT.md).
+
+| | |
+| --- | --- |
+| **Change** | Retrieval: the current union (Phase-2 caps, ~160 candidates) followed by the customer's exact SASRec top list, de-duplicated, up to 300 candidates. Nothing is evicted; the ranker is unchanged. |
+| **Six-fold result** (vs the 2026-10-05 final system, same ranker) | candidate recall 0.1757 → 0.2247 (+27.9%); MAP@12 0.03524 → 0.03535 (+0.33% [+0.18, +0.48]); Recall@12 +0.43%; 6/6 folds |
+| **Cost** | rank + score time 1.63×, peak RSS +17% (idle machine, one fold at a time) |
+| **Limitation** | The ranker was trained on ~160 candidates and converts only ~0.5% of the added candidate recall into Recall@12; 55.7% of purchased pairs are proposed by no channel. New customers are unchanged. Not yet in the served recommendations. |

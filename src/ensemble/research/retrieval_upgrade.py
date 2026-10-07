@@ -533,7 +533,9 @@ def eval_config(name: str, fold_start: str) -> Path:
     lists = ranked.groupby("customer_idx", sort=False)["article_id"].agg(list).to_dict()
     cs = pd.concat(stats, ignore_index=True)
     res = score_lists(ctx, lists, cs).assign(fold=str(week.start))
+    attrs = dict(res.attrs)                      # merge() drops DataFrame.attrs
     res = res.merge(cs[["customer_idx", "cand_hits_tail"]], on="customer_idx", how="left")
+    res.attrs.update(attrs)
     res["cand_hits_tail"] = res.cand_hits_tail.fillna(0).astype(int)
     res.to_parquet(out, index=False)
     wall = time.time() - t_start
@@ -547,6 +549,164 @@ def eval_config(name: str, fold_start: str) -> Path:
     print(f"{system} {week.start}: cand/cust {meta['summary']['candidates_per_customer']:.1f} cand-recall "
           f"{meta['summary']['candidate_recall']:.4f} MAP@12 {meta['summary']['map@12']:.5f} "
           f"({wall:.0f}s, {meta['peak_rss_bytes'] / 1e9:.1f} GB)", flush=True)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Report: pooled results, bootstrap, the SASRec gate and the predeclared decision
+# ---------------------------------------------------------------------------
+
+def _load_system(cfg, system: str, seed: int) -> tuple[pd.DataFrame, dict] | None:
+    from ensemble.research.ensemble import eval_path
+    rows, metas = [], {}
+    for f in P.reporting_folds(cfg):
+        p = eval_path(cfg, system, f, seed)
+        if not p.with_suffix(".json").exists():
+            return None
+        rows.append(pd.read_parquet(p))
+        metas[str(f.start)] = json.loads(p.with_suffix(".json").read_text())
+    return pd.concat(rows, ignore_index=True), metas
+
+
+def _boot(a: pd.DataFrame, b: pd.DataFrame, cfg) -> dict:
+    from ensemble.research.evaluate import cluster_bootstrap, cluster_bootstrap_ratio
+    bs = P.proto(cfg).bootstrap
+    n, sd = int(bs.n_boot), int(bs.seed)
+    out = {"map@12": cluster_bootstrap(a, b, "ap", n, sd), "ndcg@12": cluster_bootstrap(a, b, "ndcg", n, sd),
+           "recall@12": cluster_bootstrap_ratio(a, b, "hits", "n_truth", n, sd),
+           "candidate_recall": cluster_bootstrap_ratio(a, b, "cand_hits", "n_truth", n, sd),
+           "tail_candidate_recall": cluster_bootstrap_ratio(a, b, "cand_hits_tail", "t_tail", n, sd),
+           "tail_recall@12": cluster_bootstrap_ratio(a, b, "h_tail", "t_tail", n, sd)}
+    na, nb = a[~a.returning], b[~b.returning]
+    out["new_customer_candidate_recall"] = cluster_bootstrap_ratio(na, nb, "cand_hits", "n_truth", n, sd)
+    out["new_customer_map@12"] = cluster_bootstrap(na, nb, "ap", n, sd)
+    return out
+
+
+def report() -> dict:
+    from ensemble.research.evaluate import summarize
+    cfg = load_config()
+    u = ucfg(cfg)
+    dec = u.decision
+    seed = int(u.baseline_seed)
+    folds = [str(f.start) for f in P.reporting_folds(cfg)]
+    # --- diagnostics, pooled (weights = truth pairs)
+    diag = {f: json.loads((out_dir(cfg) / "diagnostics" / f"fold_{f}.json").read_text()) for f in folds}
+    w = np.array([diag[f]["n_truth_pairs"] for f in folds], float)
+    wavg = lambda key, sub=None: float(np.dot([diag[f][key] if sub is None else diag[f][key][sub] for f in folds], w) / w.sum())  # noqa: E731
+    pooled_diag = {
+        "candidate_recall": wavg("candidate_recall"),
+        "redundant_candidate_rate": float(sum(diag[f]["rows_before_dedup"] - diag[f]["candidates_after_dedup"]
+                                              for f in folds) / sum(diag[f]["rows_before_dedup"] for f in folds)),
+        "channel_recall_alone": {c: wavg("channel_recall_alone", c) for c in PHASE2_CHANNELS},
+        "channel_unique_recall": {c: wavg("channel_unique_recall", c) for c in PHASE2_CHANNELS},
+        "channel_beyond_cap_recall": {c: wavg("channel_beyond_cap_recall", c) for c in PHASE2_CHANNELS},
+        "neural_marginal_recall": {k: wavg("neural_marginal_recall", k) for k in diag[folds[0]]["neural_marginal_recall"]},
+        "miss_taxonomy": {k: wavg("miss_taxonomy", k) for k in diag[folds[0]]["miss_taxonomy"]},
+        "pairwise_jaccard_mean_over_folds": {k: float(np.mean([diag[f]["pairwise_jaccard"][k] for f in folds]))
+                                             for k in diag[folds[0]]["pairwise_jaccard"]},
+        "segments_union_recall": {s_: {"recall": float(np.dot([diag[f]["segments_union_recall"][s_]["recall"] *
+                                                                diag[f]["segments_union_recall"][s_]["share"] for f in folds], w)
+                                                       / np.dot([diag[f]["segments_union_recall"][s_]["share"] for f in folds], w))}
+                                  for s_ in diag[folds[0]]["segments_union_recall"]},
+        "reconcile": {"stored_hits": sum(diag[f]["reconcile"]["stored_cand_hits"] for f in folds),
+                      "recomputed_hits": sum(diag[f]["reconcile"]["recomputed_hits"] for f in folds),
+                      "truth_pairs": int(w.sum()),
+                      "customers_with_n_cand_difference": sum(diag[f]["reconcile"]["n_customers_with_different_n_cand"]
+                                                              for f in folds),
+                      "max_abs_n_cand_relative_difference": max(abs(diag[f]["reconcile"]["n_cand_relative_difference"])
+                                                                for f in folds)}}
+    rc = pooled_diag["reconcile"]
+    rc["candidate_recall"] = rc["recomputed_hits"] / rc["truth_pairs"]
+    assert rc["stored_hits"] == rc["recomputed_hits"]
+    # --- evaluated configurations
+    base = _load_system(cfg, "ret_final", seed)
+    assert base is not None, "ret_final missing"
+    b_rows, b_meta = base
+    stored = _load_system(cfg, u.baseline_system, seed)
+    repro = None
+    if stored is not None:
+        m = stored[0].merge(b_rows, on=["customer_idx", "fold"], suffixes=("_s", "_n"))
+        repro = {"customers": int(len(m)), "ap_identical_share": float(np.isclose(m.ap_s, m.ap_n, atol=0, rtol=0).mean()),
+                 "map_stored": float(stored[0].ap.mean()), "map_rerun": float(b_rows.ap.mean()),
+                 "cand_hits_identical": bool((m.cand_hits_s == m.cand_hits_n).all())}
+    base_cost = {"rank_score_seconds": sum(x["rank_score_seconds"] for x in b_meta.values()),
+                 "peak_rss_bytes": max(x["peak_rss_bytes"] for x in b_meta.values())}
+    names = ["final"] + [f"sasrec_A{b}" for b in u.budgets] + [f"F{b}" for b in u.budgets] + \
+        [f"{m}_A{b}" for m in ("lightgcn", "bpr", "neural3") for b in u.budgets]
+    configs = {}
+    for name in names:
+        got = _load_system(cfg, f"ret_{name}", seed)
+        if got is None:
+            continue
+        rows, meta = got
+        summ = summarize(rows)
+        nc = rows.n_cand.to_numpy()
+        per_fold = {f: {"candidate_recall": meta[f]["summary"]["candidate_recall"], "map@12": meta[f]["summary"]["map@12"],
+                        "recall@12": meta[f]["summary"]["recall@12"]} for f in folds}
+        cost = {"rank_score_seconds": sum(x["rank_score_seconds"] for x in meta.values()),
+                "wall_seconds": sum(x["wall_seconds"] for x in meta.values()),
+                "peak_rss_bytes": max(x["peak_rss_bytes"] for x in meta.values()),
+                "seconds_by_stage": {k: sum(x["seconds"][k] for x in meta.values()) for k in ("candidates", "features", "scoring")}}
+        cost["time_ratio_vs_final"] = cost["rank_score_seconds"] / base_cost["rank_score_seconds"]
+        cost["rss_increase_vs_final"] = cost["peak_rss_bytes"] / base_cost["peak_rss_bytes"] - 1
+        c = {"pooled": summ, "candidates_per_customer": {"mean": float(nc.mean()), "p50": float(np.percentile(nc, 50)),
+                                                          "p95": float(np.percentile(nc, 95))},
+             "per_fold": per_fold, "cost": cost, "spec": meta[folds[0]]["spec"],
+             "appended_rows": int(sum(x["n_appended_rows"] for x in meta.values()))}
+        if name != "final":
+            bt = _boot(b_rows, rows, cfg)
+            c["bootstrap_vs_final"] = bt
+            fold_rel = {f: per_fold[f]["candidate_recall"] / configs["final"]["per_fold"][f]["candidate_recall"] - 1
+                        for f in folds}
+            c["fold_candidate_rel_gain"] = fold_rel
+            d_cr = summ["candidate_recall"] - configs["final"]["pooled"]["candidate_recall"]
+            c["marginal_conversion"] = ((summ["recall@12"] - configs["final"]["pooled"]["recall@12"]) / d_cr
+                                        if d_cr else None)
+            gates = {
+                "candidate_recall_target": summ["candidate_recall"] >= float(u.baseline_candidate_recall) *
+                (1 + float(dec.min_candidate_recall_rel_gain)),
+                "map_ci_above_zero": bt["map@12"]["diff_ci95"][0] > 0,
+                "recall12_ci_above_zero": bt["recall@12"]["diff_ci95"][0] > 0,
+                "folds_with_candidate_gain": int(sum(v > 0 for v in fold_rel.values())),
+                "worst_fold_candidate_rel": min(fold_rel.values()),
+                "tail_candidate_lcb": bt["tail_candidate_recall"]["relative_ci95"][0],
+                "new_customer_candidate_lcb": bt["new_customer_candidate_recall"]["relative_ci95"][0],
+                "time_ratio": cost["time_ratio_vs_final"], "rss_increase": cost["rss_increase_vs_final"]}
+            gates["folds_ok"] = gates["folds_with_candidate_gain"] >= int(dec.min_folds_candidate_gain) and \
+                gates["worst_fold_candidate_rel"] >= float(dec.max_fold_candidate_loss_rel)
+            gates["segments_ok"] = gates["tail_candidate_lcb"] >= float(dec.min_segment_candidate_lcb_rel) and \
+                gates["new_customer_candidate_lcb"] >= float(dec.min_segment_candidate_lcb_rel)
+            gates["cost_ok"] = gates["time_ratio"] <= float(dec.max_wall_time_ratio) and \
+                gates["rss_increase"] <= float(dec.max_peak_rss_increase)
+            gates["pass"] = bool(gates["candidate_recall_target"] and gates["map_ci_above_zero"] and
+                                 gates["recall12_ci_above_zero"] and gates["folds_ok"] and gates["segments_ok"] and
+                                 gates["cost_ok"])
+            c["decision_gates"] = gates
+        configs[name] = c
+    # SASRec usefulness gate (Stage 3 -> LightGCN / BPR-MF extensions)
+    su = u.sasrec_useful
+    sas = {n: {"abs_gain": configs[n]["pooled"]["candidate_recall"] - configs["final"]["pooled"]["candidate_recall"],
+               "folds_positive": int(sum(v > 0 for v in configs[n]["fold_candidate_rel_gain"].values()))}
+           for n in configs if n.startswith("sasrec_A")}
+    sasrec_useful = any(v["abs_gain"] >= float(su.min_abs_gain) and v["folds_positive"] >= int(su.min_folds)
+                        for v in sas.values())
+    passing = [n for n in configs if n != "final" and configs[n]["decision_gates"]["pass"]]
+    budget_of = lambda n: configs[n]["candidates_per_customer"]["mean"]  # noqa: E731
+    adopted = min(passing, key=budget_of) if passing else None
+    best_quality = max((n for n in configs if n != "final"), key=lambda n: configs[n]["pooled"]["map@12"], default=None)
+    from ensemble.db import connect
+    out = {"diagnostics": pooled_diag, "diagnostics_per_fold": diag, "reproduction_of_final": repro,
+           "configs": configs, "sasrec_gate": {"rule": dict(su), "per_budget": sas, "useful": sasrec_useful},
+           "decision_rule": dict(dec), "passing": passing, "adopted": adopted, "best_quality_only": best_quality,
+           "manifest": P.manifest(cfg, connect(cfg, read_only=True))}
+    (out_dir(cfg) / "comparison.json").write_text(json.dumps(out, indent=1, default=float))
+    for n, c in configs.items():
+        g = c.get("decision_gates", {})
+        print(f"{n:16s} cand {c['candidates_per_customer']['mean']:7.1f} cand-recall {c['pooled']['candidate_recall']:.4f} "
+              f"MAP {c['pooled']['map@12']:.5f} R@12 {c['pooled']['recall@12']:.4f} time x{c['cost']['time_ratio_vs_final']:.2f} "
+              f"pass {g.get('pass')}")
+    print("sasrec useful:", sasrec_useful, "adopted:", adopted, "best quality:", best_quality)
     return out
 
 
@@ -569,6 +729,8 @@ if __name__ == "__main__":
         diagnostics(a[1])
     elif a[0] == "eval":
         eval_config(a[1], a[2])
+    elif a[0] == "report":
+        report()
     elif a[0] == "queue":
         cfg = load_config()
         log = out_dir(cfg) / "logs"

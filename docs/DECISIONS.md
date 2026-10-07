@@ -1187,3 +1187,44 @@ met. Ranking equivalence re-proven after the change: the build gate re-run on th
 gives 400/400 identical orderings, max |score difference| 2.7e-15 against LightGBM
 (`equivalence_after_optimization.json`), and the evaluator equals the previous per-tree one
 within 1e-9 in `tests/test_serving_gbdt.py`.
+
+---
+
+### D-044 — Track A retrieval: append SASRec candidates up to 300 per customer (fixed ranker)
+**Date:** 2026-10-06 · **Status:** active · **rule fixed before results** (plan `d94d237`, config `6312c96`)
+
+**Decision.** The Track A candidate set becomes the current union (Phase-2 caps, D-027) followed by
+the customer's exact SASRec top list, de-duplicated, up to 300 candidates per customer
+(`sasrec_A300`). No existing candidate is evicted; the ranker is the unchanged per-fold final
+ranker (D-040). Recorded as `research.retrieval_upgrade.adopted`.
+
+**Evidence** (six reporting folds, seed-42 ranker, customer-cluster bootstrap across folds;
+`reports/track_a_retrieval/comparison.json`): candidate recall 0.1757 → **0.2247 (+27.9%
+[+27.6, +28.2])**, gain in 6/6 folds (+22% to +37%); MAP@12 **+0.33% [+0.18, +0.48]**, Recall@12
++0.43% [+0.23, +0.64], NDCG@12 +0.41%; tail-item candidate recall +71%, new customers unchanged
+(SASRec has no vector for them); rank + score time **1.63×**, peak RSS **+17%** on an otherwise
+idle machine. Every gate of the predeclared rule passes.
+
+**Why this one.** The rule selects the smallest passing configuration. Three pass:
+`sasrec_A300` and `neural3_A300` (both 282 candidates on average) and `F300` (308, the
+re-allocated non-neural frontier). The tie at 282 was not anticipated by the plan; it is broken in
+favour of `sasrec_A300`, which is better on every quality metric and needs one neural model in
+production instead of three. `F300` is the best quality-only point (MAP@12 +0.68% [+0.48, +0.87])
+but costs new customers **−1.83% [−3.43, −0.11] MAP@12** and runs at 1.93× (limit 2×).
+
+**What did not pass.** Every 500- and 1,000-candidate configuration fails on cost (2.2×–5.0× time,
+up to +84% RSS) and none beats `F300` on MAP@12; `lightgcn_A300` misses the RSS limit (+26% vs
++25%); `bpr_A300` misses the candidate-recall target (0.1955 < 0.2021). Stage 4 (a learned
+fixed-budget merge) was not run: it is warranted only if a wider union improves quality at excessive
+cost, and no wider union beats the best passing 300-candidate point.
+
+**Reading.** Retrieval is no longer the only limit: the fixed ranker converts only 0.5%
+(`sasrec_A300`) to 0.9% (`F300`) of the added candidate recall into Recall@12. The diagnostics
+also show that 55.7% of purchased pairs are eligible but proposed by no channel, and 40.8% are
+absent even from all three neural top-1000 lists.
+
+**Not changed.** The served Track A recommendations, which still come from the Phase-2 model
+(MODEL_CARD_track_a.md); the observed week 2020-09-16 was neither read nor scored.
+
+**Revisit if:** the ranker is retrained on the wider candidate distribution (expected to raise the
+conversion), or a new content/two-tower channel targets the never-proposed pairs.
