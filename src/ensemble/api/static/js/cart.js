@@ -28,7 +28,7 @@ function storageNote() {
   return cart.error ? `<p class="cart__note" role="alert">Your cart couldn't be saved on this device, so it will clear when you leave.</p>` : "";
 }
 
-function renderDrawer() {
+function renderDrawer(justAdded = null) {
   const body = $("#cart-body");
   if (!cart.lines.length) {
     body.innerHTML = `${storageNote()}<div class="cart__empty"><p class="cart__empty-title">Your cart is empty.</p>
@@ -36,8 +36,8 @@ function renderDrawer() {
     $("#cart-foot").hidden = true;
     return;
   }
-  body.innerHTML = storageNote() + `<ul class="cart__lines" role="list">${cart.lines.map(l => `
-    <li class="cart-line" data-line="${l.article_id}">
+  body.innerHTML = storageNote() + (justAdded != null ? `<p class="cart__added" role="status">Added to your cart</p>` : "") + `<ul class="cart__lines" role="list">${cart.lines.map(l => `
+    <li class="cart-line${l.article_id === justAdded ? " is-new" : ""}" data-line="${l.article_id}">
       <a class="cart-line__img" href="#/product/${l.article_id}" data-close tabindex="-1" aria-hidden="true"><img src="${esc(l.image)}" alt="" width="1166" height="1750"></a>
       <div class="cart-line__info">
         <p class="cart-line__name"><a href="#/product/${l.article_id}" data-close>${esc(l.name)}</a></p>
@@ -82,7 +82,11 @@ export function initCart() {
 export function addToCart(btn, target = null) {
   if (btn.disabled || btn.dataset.pending) return;
   const t = target || cardTarget(btn.closest("[data-card]"));
-  if (t.price == null) return;
+  if (t.price == null) {
+    console.warn("add to cart: no price for article", t.article_id);
+    announce("Sorry, this item can't be added right now.");
+    return;
+  }
   btn.dataset.pending = "1";
   btn.disabled = true;
   logEvent("add_to_cart", t.surface || "product_page", t.article_id, t.anchor);
@@ -91,5 +95,8 @@ export function addToCart(btn, target = null) {
   const label = btn.textContent;
   btn.textContent = "Added";
   announce(saved ? `${t.name}, ${t.colour}, added to your cart.` : `${t.name} added. Your cart couldn't be saved on this device.`);
+  // Show the cart with the new line, so the add is visible; closing it returns focus to this button.
+  renderDrawer(t.article_id);
+  openDialog($("#cart-dialog"), btn);
   setTimeout(() => { btn.textContent = label; btn.disabled = false; delete btn.dataset.pending; }, 1100);
 }

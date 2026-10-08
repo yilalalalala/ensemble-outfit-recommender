@@ -36,6 +36,8 @@ async function newPage(b, vp = [1440, 900], opts = {}) {
   p.on('request', r => { if (r.url().endsWith('/api/events')) p._events.push(JSON.parse(r.postData())); });
   return {ctx, p};
 }
+// Add to cart opens the cart drawer; close it before interacting with the page again.
+const closeCart = async p => { if (await p.$eval('#cart-dialog', d => d.open)) { await p.keyboard.press('Escape'); await p.waitForFunction(() => !document.querySelector('#cart-dialog').open); } };
 const settle = async p => { await p.waitForLoadState('networkidle'); await p.waitForTimeout(400); };
 const want = n => !ONLY.length || ONLY.includes(n);
 const clean = (p, tag) => { ok(`no console errors (${tag})`, !p._errors.length, p._errors.join(' | ')); ok(`no failed requests (${tag})`, !p._failed.length, p._failed.join(' | ')); };
@@ -155,14 +157,16 @@ async function auditCards(p, scope = 'main') {
        && after.pressed === target && after.price === priceBefore && after.add.includes(after.colour) && after.colour.startsWith(tv.colour_group_name.replace(/^Other /, '')), JSON.stringify(after));
     await p.click('#probe [data-add]');
     ok('Add to cart is protected while pending', await p.$eval('#probe [data-add]', bt => bt.disabled), '');
+    ok('Add to cart opens the cart showing the new line', await p.$eval('#cart-dialog', d => d.open && !!d.querySelector(`.cart-line.is-new`)), '');
+    await closeCart(p);
     const ev = p._events.filter(e => e.event === 'add_to_cart').at(-1);
     ok('add_to_cart event carries the selected colourway and surface', ev && String(ev.article_id) === target && ev.surface, JSON.stringify(ev));
     await p.waitForTimeout(1300);
-    await p.click('#probe [data-add]'); await p.waitForTimeout(1300);
+    await p.click('#probe [data-add]'); await closeCart(p); await p.waitForTimeout(1300);
     ok('adding the same colourway twice increments quantity', (await p.$eval('#cart-count', e => e.textContent)) === '2', '');
     // second product, then the drawer
     const other = await p.$eval('main [data-card].card:not(#probe)', c => c.dataset.article);
-    await p.click(`main [data-card][data-article="${other}"] [data-add]`); await p.waitForTimeout(1300);
+    await p.click(`main [data-card][data-article="${other}"] [data-add]`); await closeCart(p); await p.waitForTimeout(1300);
     await p.click('#cart-btn'); await p.waitForSelector('#cart-dialog[open]');
     const cart = await p.$eval('#cart-dialog', d => ({lines: [...d.querySelectorAll('.cart-line')].map(l => ({id: l.dataset.line, qty: +l.querySelector('.qty__n').textContent,
       price: l.querySelector('.cart-line__meta').textContent, total: l.querySelector('.cart-line__total').textContent, img: !!l.querySelector('img'), name: l.querySelector('.cart-line__name').textContent})),
@@ -182,10 +186,21 @@ async function auditCards(p, scope = 'main') {
     ok('cart closes on Escape, focus returns to the cart control', (await p.evaluate(() => document.activeElement.id)) === 'cart-btn', '');
     await p.reload(); await settle(p);
     ok('cart persists across reload', (await p.$eval('#cart-count', e => e.textContent)) === '2', '');
+    // regression: a card's swatches keep working after any number of changes, and every colour can be added
+    await p.evaluate(() => localStorage.removeItem('ensemble.cart.168058')); await p.reload(); await settle(p);
+    const all = await p.$$eval('.hero__lead .swatch', s => s.map(x => x.dataset.swatch));
+    const seq = [...all.slice(1), all[0]];
+    let cycled = true;
+    for (const id of seq) {
+      await p.click(`.hero__lead .swatch[data-swatch="${id}"]`);
+      cycled = cycled && (await p.$eval('.hero__lead [data-card]', c => c.dataset.article)) === id;
+      await p.click('.hero__lead [data-add]'); await closeCart(p); await p.waitForTimeout(1200);
+    }
+    const lines = await p.evaluate(() => JSON.parse(localStorage.getItem('ensemble.cart.168058')).map(l => l.article_id));
+    ok('swatches switch repeatedly (incl. back to the first) and each colour is added', cycled && lines.length === seq.length && seq.every(id => lines.includes(+id)), `${seq.join('→')} | cart ${lines.join(',')}`);
     // storage failure must not break shopping
     await p.evaluate(() => { Storage.prototype._set = Storage.prototype.setItem; Storage.prototype.setItem = () => { throw new Error('quota'); }; });
-    await p.click('main [data-card].card [data-add]'); await p.waitForTimeout(300);
-    await p.click('#cart-btn'); await p.waitForSelector('#cart-dialog[open]');
+    await p.click('main [data-card].card [data-add]'); await p.waitForSelector('#cart-dialog[open]');
     ok('storage failure is reported in the cart, shopping continues', /couldn't be saved/.test(await p.$eval('#cart-body', e => e.innerText)), '');
     await p.keyboard.press('Escape');
     await p.evaluate(() => { Storage.prototype.setItem = Storage.prototype._set; localStorage.removeItem('ensemble.cart.168058'); });
@@ -234,6 +249,7 @@ async function auditCards(p, scope = 'main') {
       label: document.querySelector('.pdp [data-add]').getAttribute('aria-label')}));
     ok('product swatch updates image, colour, address and cart target in place', st.hash === `#/product/${other}` && st.img === `/images/${other}.jpg` && st.label.includes(st.colour), JSON.stringify(st));
     await p.click('.pdp [data-add]'); await p.waitForTimeout(200);
+    await closeCart(p);
     await p.mouse.move(5, 5); await p.waitForTimeout(1300);
     ok('product Add to cart logs add_to_cart for the selected colourway', p._events.some(e => e.event === 'add_to_cart' && String(e.article_id) === other && e.surface === 'product_page'), '');
     const btn = await p.$eval('.pdp [data-add]', b => { const c = getComputedStyle(b); return [c.backgroundColor, c.color, b.innerText.trim()]; });

@@ -61,7 +61,11 @@ export async function loadFamilies(ids) {
   for (let i = 0; i < want.length; i += 400) {
     const chunk = want.slice(i, i + 400);
     const d = await api(`/api/catalog/families?articles=${chunk.join(",")}`);
-    for (const [code, f] of Object.entries(d.families)) families.set(code, f);
+    for (const [code, f] of Object.entries(d.families)) {
+      families.set(code, f);
+      // Every colourway belongs to the family too, so a card stays resolvable after any swatch change.
+      for (const v of f.variants) familyOfArticle.set(+v.article_id, code);
+    }
     for (const [a, code] of Object.entries(d.articles)) familyOfArticle.set(+a, code);
   }
 }
@@ -109,8 +113,8 @@ const MAX_SWATCHES = 6;                 // cards; the product page shows every c
 const altOf = (name, colour) => `${name}, ${colour.toLowerCase()}`;
 
 // The family's colourways with display labels; always includes the card's own article.
-export function variantsFor(it) {
-  const fam = familyData(familyOf(it.article_id));
+export function variantsFor(it, code = null) {
+  const fam = familyData(code || familyOf(it.article_id));
   const vs = fam?.variants?.length ? fam.variants : [{article_id: it.article_id, prod_name: it.prod_name, colour_group_name: it.colour_group_name, image: it.image}];
   const list = vs.some(v => v.article_id === it.article_id) ? vs : [{article_id: it.article_id, prod_name: it.prod_name, colour_group_name: it.colour_group_name, image: it.image}, ...vs];
   const labels = variantLabels(list);
@@ -169,9 +173,9 @@ export function selectSwatch(btn) {
   const el = btn.closest("[data-card]");
   const id = +btn.dataset.swatch;
   if (!el || +el.dataset.article === id) return;
-  const {family, list} = variantsFor({article_id: +el.dataset.article});
+  const {family, list} = variantsFor({article_id: +el.dataset.article}, el.dataset.family || null);
   const v = list.find(x => x.article_id === id);
-  if (!v) return;
+  if (!v) { console.warn("swatch: colourway not found", id); return; }
   el.dataset.article = id;
   const img = $("img", el);
   delete img.dataset.fallback; img.classList.remove("is-missing");
@@ -194,7 +198,7 @@ export function selectSwatch(btn) {
 // What the card's Add to cart currently targets.
 export function cardTarget(el) {
   const id = +el.dataset.article;
-  const {family, list} = variantsFor({article_id: id});
+  const {family, list} = variantsFor({article_id: id}, el.dataset.family || null);
   const v = list.find(x => x.article_id === id);
   return {article_id: id, family: family?.product_code ?? null, name: v.prod_name, colour: v.label, image: v.image,
           price: family?.price_usd, surface: el.dataset.s, anchor: el.dataset.anchor ?? null};

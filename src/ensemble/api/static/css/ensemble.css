@@ -455,6 +455,8 @@ dialog.cart .dialog__body { flex: 1; overflow-y: auto; align-content: start; }
 .cart__empty-title { font: 400 1.3rem/1.2 var(--serif); }
 .cart__empty .btn-cart { width: auto; }
 .cart__note { font-size: var(--fs-meta); color: var(--error); }
+.cart__added { font-size: var(--fs-meta); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.cart-line.is-new .cart-line__name::after { content: " · New"; font: 400 var(--fs-meta) var(--sans); color: var(--muted); }
 
 /* ---------------------------------------------------------------- stylist */
 .stylist-head { padding: clamp(2rem, 1rem + 4vw, 4.5rem) 0 var(--s-6); display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gap); align-items: end; }
