@@ -102,3 +102,15 @@ Readout: [`TRACK_A_RETRIEVAL_UPGRADE_REPORT.md`](TRACK_A_RETRIEVAL_UPGRADE_REPOR
 | **Six-fold result** (vs the 2026-10-05 final system, same ranker) | candidate recall 0.1757 → 0.2247 (+27.9%); MAP@12 0.03524 → 0.03535 (+0.33% [+0.18, +0.48]); Recall@12 +0.43%; 6/6 folds |
 | **Cost** | rank + score time 1.63×, peak RSS +17% (idle machine, one fold at a time) |
 | **Limitation** | The ranker was trained on ~160 candidates and converts only ~0.5% of the added candidate recall into Recall@12; 55.7% of purchased pairs are proposed by no channel. New customers are unchanged. Not yet in the served recommendations. |
+
+## Update 2026-10-08 — ranker retrain on the 300-candidate distribution (D-045, not adopted)
+
+Readout: [`TRACK_A_RANKER_RETRAIN_REPORT.md`](TRACK_A_RANKER_RETRAIN_REPORT.md).
+
+| | |
+| --- | --- |
+| **Tested** | R1: LambdaRank retrained on `sasrec_A300` candidates for every training week (same recipe, same 91 features). R2: R1 + SASRec provenance (`sasrec_rank`, `sasrec_rank_pct`, `src_sasrec_append`). |
+| **Six-fold result** (vs the fixed ranker R0 on the same candidates, MAP@12 0.03535) | R1 +0.25% [−0.07, +0.60]; R2 +0.23% [−0.10, +0.58]; Recall@12 +0.68% / +0.75% (significant). R1 seeds 42/43/44: +0.25% / +0.05% / +0.13%. |
+| **Decision** | Not adopted. Both fail the +1.0% MAP@12 threshold and its interval; R1 also fails the new-customer segment gate (lower bound −2.04%). The fixed per-fold ranker stays. |
+| **Explanations** | TreeSHAP additivity holds (error ≤ 2.2e-14). The evidence-gated reason chips show 0 unsupported chips in every variant; without the gate, about one chip in five would be unsupported. |
+| **Limitation** | Offline only. The served Track A model is unchanged (Phase-2). The ranker is not the bottleneck at this candidate set; the next lever is retrieval signal. |

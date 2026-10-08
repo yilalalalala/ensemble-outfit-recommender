@@ -1,0 +1,96 @@
+{
+ "fold": "2020-09-09",
+ "seed": 42,
+ "n_customers": 2000,
+ "k": 12,
+ "variants": {
+  "R0": {
+   "rows": 24000,
+   "additivity_max_abs_err": 2.220446049250313e-14,
+   "additivity_mean_abs_err": 1.7389412437857192e-15,
+   "prov_abs_shap_share": {},
+   "prov_share_total": 0.0,
+   "rows_with_prov_in_top3_shap": 0,
+   "top_k_rows_appended": 1849,
+   "top_k_share_appended": 0.07704166666666666,
+   "chips": 47044,
+   "rows_without_chip": 58,
+   "unsupported_chips": 0,
+   "unsupported_chips_without_gate": 8168,
+   "prov_features_map_to_no_reason": true,
+   "chip_mix": {
+    "trending": 11376,
+    "section": 6529,
+    "same_style": 6055,
+    "colour": 5978,
+    "age_group": 5126,
+    "co_purchase": 3226,
+    "bought_before": 3105,
+    "new_arrival": 2492,
+    "product_type": 1993,
+    "price": 1164
+   },
+   "shap_seconds": 10.19
+  },
+  "R1": {
+   "rows": 24000,
+   "additivity_max_abs_err": 1.3766765505351941e-14,
+   "additivity_mean_abs_err": 1.4430439163753713e-15,
+   "prov_abs_shap_share": {},
+   "prov_share_total": 0.0,
+   "rows_with_prov_in_top3_shap": 0,
+   "top_k_rows_appended": 935,
+   "top_k_share_appended": 0.03895833333333333,
+   "chips": 47246,
+   "rows_without_chip": 37,
+   "unsupported_chips": 0,
+   "unsupported_chips_without_gate": 10356,
+   "prov_features_map_to_no_reason": true,
+   "chip_mix": {
+    "trending": 12983,
+    "same_style": 6359,
+    "section": 6266,
+    "age_group": 5294,
+    "colour": 5019,
+    "co_purchase": 3375,
+    "bought_before": 2931,
+    "new_arrival": 2683,
+    "product_type": 1538,
+    "price": 798
+   },
+   "shap_seconds": 16.19
+  },
+  "R2": {
+   "rows": 24000,
+   "additivity_max_abs_err": 1.7319479184152442e-14,
+   "additivity_mean_abs_err": 1.83449382439056e-15,
+   "prov_abs_shap_share": {
+    "sasrec_rank": 0.01348944431224831,
+    "sasrec_rank_pct": 0.007396930224218795,
+    "src_sasrec_append": 0.014721670664747303
+   },
+   "prov_share_total": 0.03560804520121441,
+   "rows_with_prov_in_top3_shap": 233,
+   "top_k_rows_appended": 998,
+   "top_k_share_appended": 0.04158333333333333,
+   "chips": 47256,
+   "rows_without_chip": 25,
+   "unsupported_chips": 0,
+   "unsupported_chips_without_gate": 10442,
+   "prov_features_map_to_no_reason": true,
+   "chip_mix": {
+    "trending": 12795,
+    "section": 6571,
+    "same_style": 6227,
+    "age_group": 5493,
+    "colour": 5041,
+    "co_purchase": 3166,
+    "bought_before": 2708,
+    "new_arrival": 2568,
+    "product_type": 1795,
+    "price": 892
+   },
+   "shap_seconds": 27.94
+  }
+ }
+}

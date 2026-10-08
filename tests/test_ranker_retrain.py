@@ -62,3 +62,45 @@ def test_feature_contract():
     assert len(base) == 91 and not set(RR.PROV) & set(base)
     assert RR.variant_features(cfg, "R1") == base
     assert RR.variant_features(cfg, "R2") == base + RR.PROV
+
+
+def synthetic(feats, seed=0):
+    from ensemble.ranking.train import TrainingData, _customer_groups
+    rng = np.random.default_rng(seed)
+    data = TrainingData(feats)
+    for _ in range(3):
+        cust = np.repeat(np.arange(200), 10)
+        X = rng.normal(size=(len(cust), len(feats))).astype(np.float32)
+        y = (X[:, 0] + rng.normal(scale=0.5, size=len(cust)) > 1.2).astype(np.int8)
+        data.X.append(X), data.y.append(y), data.groups.append(_customer_groups(cust))
+    return data
+
+
+def test_identical_seed_fits_reproduce_and_shap_is_additive():
+    # LightGBM runs in a fresh interpreter: torch, loaded by other test modules, ships another OpenMP
+    # runtime and LightGBM segfaults next to it on macOS (same pattern as tests/test_ranker.py).
+    import os
+    import subprocess
+    import sys
+    import textwrap
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    code = "import sys; sys.path[:0] = ['src', 'tests']; from test_ranker_retrain import *\n" + textwrap.dedent("""
+        from ensemble.ranking.train import fit as lgb_fit
+        cfg = RR.load_config("track_a_research")
+        feats = ["f0", "f1", "f2"] + RR.PROV
+        b1, _, _ = lgb_fit(RR.variant_cfg(cfg, "R2", 42), synthetic(feats))
+        b2, _, _ = lgb_fit(RR.variant_cfg(cfg, "R2", 42), synthetic(feats))
+        X = synthetic(feats, seed=1).X[0]
+        np.testing.assert_array_equal(b1.predict(X), b2.predict(X))
+        contrib = b1.predict(X, pred_contrib=True)
+        np.testing.assert_allclose(contrib.sum(axis=1), b1.predict(X, raw_score=True), atol=1e-9)
+    """)
+    r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=600, cwd=root,
+                       env={**os.environ, "PYTHONPATH": str(root / "src")})
+    assert r.returncode == 0, r.stderr[-2000:]
+
+
+def test_provenance_features_never_produce_a_reason_chip():
+    from ensemble.ranking.explain import reason_of
+    assert all(reason_of(f) is None for f in RR.PROV)

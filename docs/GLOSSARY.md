@@ -242,3 +242,11 @@ industry standard and are named as such wherever they appear.
 | **Append-only retrieval** | Adding a new source's candidates *after* the existing set, never evicting an existing candidate, so the old system's candidates are a subset of the new one's | DS |
 | **Miss taxonomy** | Classifying every missed purchase by where it was lost: never proposed, proposed but cut by a cap, lost in de-duplication, or retrieved but ranked out of the top k | DS |
 | **Marginal conversion** *(project-specific name)* | Added Recall@k divided by added candidate recall: how much of the extra coverage the ranker turns into shown hits | DS |
+
+## Ranker retrain (added in the Track A ranker retrain)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Distribution matching (train/serve candidate parity)** | Training the ranker on candidates produced by exactly the retrieval used at inference, so it never ranks a region of feature space it did not see in training; the ranking analogue of avoiding training–serving skew | DS |
+| **Retrieval provenance features** | Ranker features describing *how* a candidate was retrieved (source, rank within the source, source score), e.g. YouTube's and Pinterest's rankers consume retriever ranks/scores | DS |
+| **Ablation ladder** | A predeclared sequence of variants, each adding one change to the previous (here R0 → R1 retrain → R2 + features → R3 tuning), so each step's effect is measured separately | DS |

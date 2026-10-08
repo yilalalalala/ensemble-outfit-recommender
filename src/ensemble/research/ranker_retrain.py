@@ -8,7 +8,8 @@
   fit <variant> <fold> <seed>  fit R1/R2/R3 on the four training weeks before the fold; save the model
   score <variant> <fold> <seed>  score the fold's evaluation matrix in its own process (clean time / RSS)
   queue <variants> <seeds>     fit + score every reporting fold, sequentially
-  report                       pooled comparison against R0, bootstrap, segments, costs, SHAP, decision
+  report                       pooled comparison against R0, bootstrap, segments, costs, decision
+  shap <fold> <seed>           SHAP checks on a fixed sample: additivity, provenance share, reason-chip audit
 
 **Distribution matching.** Training and evaluation candidates come from the same function,
 ``retrieval_upgrade.build_cand`` with the adopted ``sasrec_A300`` spec: the Phase-2 union from
@@ -67,8 +68,13 @@ def base_model_path(cfg, fold: Week) -> Path:
 
 
 def base_features(cfg) -> list[str]:
-    import lightgbm as lgb
-    return lgb.Booster(model_file=str(base_model_path(cfg, P.reporting_folds(cfg)[0]))).feature_name()
+    # Read from the model text header rather than loading LightGBM, so callers that have torch loaded
+    # (a different OpenMP runtime) can use it safely.
+    with open(base_model_path(cfg, P.reporting_folds(cfg)[0])) as fh:
+        for line in fh:
+            if line.startswith("feature_names="):
+                return line.rstrip("\n").split("=", 1)[1].split(" ")
+    raise ValueError("feature_names missing from the model file")
 
 
 def variant_features(cfg, variant: str) -> list[str]:
@@ -381,14 +387,18 @@ def report() -> dict:
                        "prov_gain_share": {p_: importance.get(p_, 0.0) for p_ in PROV}}
     seeds = {}
     for v in variants:
-        vals = {}
+        vals, per_fold_seed, gains = {}, {}, {}
         for sd in rcfg(cfg).seeds:
             got = _rows(cfg, system_name(v), int(sd))
             if got is not None:
                 vals[str(sd)] = float(got[0].ap.mean())
+                per_fold_seed[str(sd)] = {f: got[1][f]["summary"]["map@12"] for f in folds}
+                if str(sd) != "42":
+                    gains[str(sd)] = compare_to_r0(cfg, r0, got[0])["map@12"]["relative"]
         if len(vals) > 1:
             seeds[v] = {"per_seed_map@12": vals, "mean": float(np.mean(list(vals.values()))),
-                        "sd": float(np.std(list(vals.values()), ddof=1))}
+                        "sd": float(np.std(list(vals.values()), ddof=1)), "per_seed_per_fold": per_fold_seed,
+                        "map_rel_gain_vs_r0": {"42": variants[v]["gates"]["map_gain"], **gains}}
     passing = [v for v in ("R1", "R2", "R3") if v in variants and variants[v]["gates"]["pass"]]
     adopted = passing[0] if passing else None
     best = max(variants, key=lambda v: variants[v]["pooled"]["map@12"]) if variants else None
@@ -402,7 +412,14 @@ def report() -> dict:
                                     "segments_ok", "candidate_recall_identical", "cost_ok"))
         r3 = {"better_of_r1_r2": better, "map_gain": g["map_gain"], "other_gates_pass": others,
               "triggered": bool(others and float(trig.min_map_rel_gain) <= g["map_gain"] < float(trig.max_map_rel_gain))}
-    out = {"reproduction_of_r0": repro, "r0": {"pooled": summarize(r0), "cost": base_cost}, "variants": variants,
+    matrices = {}
+    for d_ in sorted(cache(cfg).glob("*_20*")):
+        mt = json.loads((d_ / "meta.json").read_text())
+        matrices[d_.name] = {k: mt[k] for k in ("rows", "candidates_before_filter", "customers", "seconds", "peak_rss_bytes")}
+    r0_fold = {f: r0m[f]["summary"]["map@12"] for f in folds}
+    out = {"reproduction_of_r0": repro, "r0": {"pooled": summarize(r0), "cost": base_cost, "per_fold": r0_fold,
+                                               "scoring_seconds_per_fold": {f: r0m[f]["scoring_seconds"] for f in folds}},
+           "matrices": matrices, "variants": variants,
            "seeds": seeds, "decision_rule": dict(dec), "passing": passing, "adopted": adopted,
            "best_quality_only": best, "r3_trigger": r3}
     (out_dir(cfg) / "comparison.json").write_text(json.dumps(out, indent=1, default=float))
@@ -411,6 +428,60 @@ def report() -> dict:
         print(f"{v}: MAP {x['pooled']['map@12']:.5f} ({g['map_gain'] * 100:+.2f}%) folds {g['folds_won']}/6 "
               f"pass {g['pass']}", flush=True)
     print("adopted", adopted, "best", best, "R3", r3)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# SHAP checks on a fixed sample (plan: additivity, provenance share, D-030 chip audit)
+# ---------------------------------------------------------------------------
+
+def shap_checks(fold_start: str, seed: int, n_customers: int = 2000, k: int = 12) -> dict:
+    """For each variant, explain the top-k list of the first ``n_customers`` customers of the fold's
+    first evaluation part (a fixed, label-blind sample) and check the attributions."""
+    import lightgbm as lgb
+
+    from ensemble.ranking import explain as E
+    cfg = load_config()
+    fold = P.week_of(fold_start)
+    part = sorted((cache(cfg) / f"eval_{fold.start}").glob("part-*.parquet"))[0]
+    out = {"fold": str(fold.start), "seed": int(seed), "n_customers": n_customers, "k": k, "variants": {}}
+    for v in ("R0", "R1", "R2"):
+        if not model_path(cfg, v, fold, seed).exists():
+            continue
+        bst = lgb.Booster(model_file=str(model_path(cfg, v, fold, seed)))
+        feats = bst.feature_name()
+        df = pd.read_parquet(part, columns=["customer_idx", "article_id", *sorted(set(feats) | set(PROV))])
+        df = df[df.customer_idx.isin(np.sort(df.customer_idx.unique())[:n_customers])].reset_index(drop=True)
+        df["score"] = bst.predict(df[feats].to_numpy(dtype=np.float32), num_threads=8)
+        top = (df.sort_values(["customer_idx", "score", "article_id"], ascending=[True, False, True], kind="stable")
+                 .groupby("customer_idx", sort=False).head(k).reset_index(drop=True))
+        t = time.time()
+        contrib = bst.predict(top[feats], pred_contrib=True, num_threads=8)
+        shap_s = time.time() - t
+        err = np.abs(contrib.sum(axis=1) - top.score.to_numpy())
+        phi = np.abs(contrib[:, :-1])
+        share = phi.sum(axis=0) / phi.sum()
+        prov_share = {f: float(share[feats.index(f)]) for f in PROV if f in feats}
+        ex = E.explain(bst, feats, top, top_reasons=2, require_evidence=True)
+        ungated = E.explain(bst, feats, top, top_reasons=2, require_evidence=False)
+        raw = top[feats].to_dict("records")
+        chips = [(c["key"], r) for e, r in zip(ex, raw) for c in e["reasons"]]
+        unsupported = sum(not E.supported(key, r) for key, r in chips)
+        ungated_unsupported = sum(not E.supported(c["key"], r) for e, r in zip(ungated, raw) for c in e["reasons"])
+        prov_in_top = sum(any(s_["feature"] in PROV for s_ in e["shap"][:3]) for e in ex)
+        appended = int((top.src_sasrec_append == 1).sum())
+        out["variants"][v] = {
+            "rows": int(len(top)), "additivity_max_abs_err": float(err.max()), "additivity_mean_abs_err": float(err.mean()),
+            "prov_abs_shap_share": prov_share, "prov_share_total": float(sum(prov_share.values())),
+            "rows_with_prov_in_top3_shap": int(prov_in_top),
+            "top_k_rows_appended": appended, "top_k_share_appended": appended / len(top),
+            "chips": len(chips), "rows_without_chip": int(sum(not e["reasons"] for e in ex)),
+            "unsupported_chips": int(unsupported), "unsupported_chips_without_gate": int(ungated_unsupported),
+            "prov_features_map_to_no_reason": all(E.reason_of(f) is None for f in PROV),
+            "chip_mix": pd.Series([key for key, _ in chips]).value_counts().to_dict() if chips else {},
+            "shap_seconds": round(shap_s, 2)}
+        print(v, {a: b for a, b in out["variants"][v].items() if a != "chip_mix"}, flush=True)
+    (out_dir(cfg) / "shap_checks.json").write_text(json.dumps(out, indent=1, default=float))
     return out
 
 
@@ -454,6 +525,8 @@ if __name__ == "__main__":
         score(a[1], a[2], int(a[3]))
     elif a[0] == "report":
         report()
+    elif a[0] == "shap":
+        shap_checks(a[1], int(a[2]))
     elif a[0] == "queue":
         queue(a[1].split(","), [int(x) for x in a[2].split(",")])
     else:

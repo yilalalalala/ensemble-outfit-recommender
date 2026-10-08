@@ -147,6 +147,7 @@ research:
   # ------------------------------------------------------------------ ranker retrain (D-045)
   # docs/CLAUDECODE_TRACK_A_RANKER_RETRAIN_PLAN.md (f552c22); thresholds mirror the frozen plan.
   ranker_retrain:
+    adopted: null          # D-045: neither R1 nor R2 passes; the fixed ranker (R0) stays
     chunk_customers: 6000
     seeds: [42, 43, 44]
     decision:

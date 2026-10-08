@@ -1228,3 +1228,38 @@ absent even from all three neural top-1000 lists.
 
 **Revisit if:** the ranker is retrained on the wider candidate distribution (expected to raise the
 conversion), or a new content/two-tower channel targets the never-proposed pairs.
+
+### D-045 — Track A ranker: keep the fixed ranker on the SASRec-append-to-300 candidates (retrain not adopted)
+**Date:** 2026-10-08 · **Status:** active · **rule fixed before results** (plan `f552c22`)
+
+**Decision.** The per-fold final ranker (D-040) stays in use over the `sasrec_A300` candidates
+(D-044). Neither retraining it on the 300-candidate distribution (R1) nor adding SASRec provenance
+features (R2) passes the predeclared rule. The R3 grid was not triggered.
+
+**Evidence** (`reports/track_a_retrain/comparison.json`):
+- Setup: six reporting folds, seed 42, customer-cluster bootstrap. Retrieval was identical across
+  variants (candidate recall 0.2247, asserted), and R0 reproduces D-044 exactly (446,056 rows).
+- **R1** (retrained, same 91 features):
+  - MAP@12 0.03535 → 0.03544, **+0.25% [−0.07, +0.60]**, 5/6 folds;
+  - Recall@12 +0.68% [+0.37, +0.97], NDCG@12 +0.39% [+0.14, +0.66];
+  - fails the +1.0% threshold, the MAP interval and the segment gate (new-customer MAP@12 lower
+    bound −2.04%, limit −2%).
+- **R2** (R1 + `sasrec_rank`, `sasrec_rank_pct`, `src_sasrec_append`): MAP@12 **+0.23% [−0.10, +0.58]**,
+  4/6 folds. Provenance carries 2.2% of the gain.
+- Both are within the cost limits: training 0.98× / 1.06×, scoring time +0.7% / +10.7%, RSS
+  +14% / +19%.
+- R1 seed replicates give gains of +0.25% / +0.05% / +0.13% (seeds 42/43/44). The effect is the size
+  of seed noise.
+
+**Reading.**
+- The low conversion of the appended candidates is not mainly a training-distribution mismatch.
+- The retrained ranker trusts appended candidates *less*: they are 3.9% of its top 12, against 7.7%
+  for the fixed ranker, on a fixed SHAP sample of 24,000 rows.
+- The quality ceiling sits in retrieval signal, not ranking.
+
+**Not changed.** The served Track A recommendations (Phase-2 model) and the D-030 evidence-gated
+reason chips. Provenance features would map to no chip; the SHAP audit found 0 unsupported chips.
+The observed week 2020-09-16 was neither read nor scored.
+
+**Revisit if:** a new retrieval channel (content/two-tower) changes the candidate distribution, or
+new features target the never-proposed pairs. Re-run the R1/R2 ladder then with the same rule.
