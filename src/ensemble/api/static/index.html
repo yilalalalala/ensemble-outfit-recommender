@@ -3,319 +3,124 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ensemble</title>
-<style>
-:root {
-  --bg: #faf8f5; --surface: #ffffff; --ink: #1d1b19; --muted: #6f6a63; --line: #e7e2da;
-  --accent: #b4432f; --chip: #f3eee7; --chip-ink: #5b4a3a; --good: #2f7d4f; --bar: #c9b8a6; --neg: #7a8da6;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #151413; --surface: #1e1c1a; --ink: #f1ece6; --muted: #a39c93; --line: #34302c;
-          --accent: #e0765f; --chip: #2a2622; --chip-ink: #d9c9b6; --good: #6cc592; --bar: #8a7866; --neg: #6f86a8; }
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
-header { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line);
-         display: flex; gap: 16px; align-items: center; padding: 12px 24px; flex-wrap: wrap; }
-.brand { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 14px; }
-nav a { color: var(--muted); text-decoration: none; margin-right: 14px; font-size: 14px; }
-nav a.active { color: var(--ink); font-weight: 600; }
-header .spacer { flex: 1; }
-select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); max-width: 360px; }
-main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
-h1 { font-size: 22px; margin: 0 0 4px; } h2 { font-size: 17px; margin: 28px 0 10px; }
-.sub { color: var(--muted); font-size: 13px; }
-.row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(160px, 180px); gap: 14px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; }
-.card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--chip); cursor: pointer; display: block; }
-.card .body { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.card .name { font-size: 13px; font-weight: 600; line-height: 1.25; }
-.card .meta { font-size: 12px; color: var(--muted); }
-.chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
-.chip { background: var(--chip); color: var(--chip-ink); border-radius: 999px; font-size: 11px; padding: 2px 8px; }
-.actions { display: flex; gap: 6px; margin-top: auto; padding-top: 6px; }
-button { font: inherit; font-size: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 6px; padding: 3px 8px; cursor: pointer; }
-button:hover { border-color: var(--muted); }
-.product { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 28px; }
-.product img { width: 100%; border-radius: 12px; background: var(--chip); }
-.look h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 18px 0 8px; }
-table { border-collapse: collapse; width: 100%; font-size: 13px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
-th { color: var(--muted); font-weight: 600; background: var(--bg); }
-td.num { text-align: right; font-variant-numeric: tabular-nums; }
-.pos { color: var(--good); font-weight: 600; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
-dialog { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); max-width: 560px; width: 92vw; }
-dialog::backdrop { background: rgba(0,0,0,.35); }
-.bar { display: grid; grid-template-columns: 190px 1fr 60px; gap: 8px; align-items: center; font-size: 12px; margin: 4px 0; }
-.bar .track { height: 10px; position: relative; background: var(--chip); border-radius: 3px; }
-.bar .fill { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
-.note { background: var(--chip); color: var(--chip-ink); padding: 10px 12px; border-radius: 8px; font-size: 13px; }
-.stylist { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
-.chatlog { height: 56vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px; }
-.msg { max-width: 92%; padding: 9px 12px; border-radius: 12px; font-size: 14px; white-space: pre-wrap; }
-.msg.user { align-self: flex-end; background: var(--accent); color: #fff; }
-.msg.bot { align-self: flex-start; background: var(--chip); color: var(--ink); }
-.msg .row { grid-auto-columns: minmax(120px, 130px); margin-top: 8px; white-space: normal; }
-.msg .card .body { padding: 6px 8px; }
-.trace { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.composer { display: flex; gap: 8px; margin-top: 10px; }
-.composer input[type=text] { flex: 1; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
-.btn { font-size: 13px; padding: 7px 12px; border-radius: 8px; }
-.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.canvaswrap { position: relative; display: inline-block; max-width: 100%; }
-#vsimg { max-width: 100%; max-height: 46vh; display: block; border-radius: 8px; cursor: crosshair; }
-#vsbox { position: absolute; border: 2px solid var(--accent); background: rgba(180,67,47,.12); display: none; pointer-events: none; }
-.vsctl { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; align-items: center; }
-@media (max-width: 900px) { .stylist { grid-template-columns: 1fr; } }
-@media (max-width: 720px) { .product { grid-template-columns: 1fr; } header { padding: 10px 16px; } .grid2 { grid-template-columns: 1fr; } .bar { grid-template-columns: 120px 1fr 50px; } }
-</style>
+<title>ensemble</title>
+<meta name="description" content="ensemble — a personalised fashion shop built on the H&amp;M recommender study (offline demo).">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/ensemble.css">
+<script type="module" src="/static/js/app.js"></script>
 </head>
 <body>
-<header>
-  <span class="brand">Ensemble</span>
-  <nav><a href="#/" id="nav-shop">Shop</a><a href="#/assistant" id="nav-assistant">Style assistant</a><a href="#/ds" id="nav-ds">DS view</a><a href="#/label" id="nav-label">Label</a></nav>
-  <span class="spacer"></span>
-  <label class="sub" for="cust">Demo customer</label>
-  <select id="cust"></select>
+<a class="skip" href="#main" data-skip>Skip to content</a>
+
+<!-- Experience switch: chooses the customer-facing Shop or the data-science Studio. Independent of the profile. -->
+<div class="utility">
+  <div class="utility__inner">
+    <nav class="exp-switch" aria-label="Experience">
+      <span class="exp-switch__label" aria-hidden="true">View</span>
+      <ul>
+        <li><a href="#/" data-exp="shop">Shop</a></li>
+        <li><a href="#/studio" data-exp="studio">DS Studio</a></li>
+      </ul>
+    </nav>
+    <p class="utility__note" id="utility-note">Offline demo on the H&amp;M dataset · no checkout</p>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div class="masthead__left">
+      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-haspopup="dialog" aria-controls="drawer" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+        <span class="sr-only">Menu</span>
+      </button>
+      <nav class="primary-nav" id="primary-nav" aria-label="Main"><ul></ul></nav>
+    </div>
+    <a class="wordmark" href="#/" id="wordmark" aria-label="ensemble, home">ensemble</a>
+    <div class="masthead__right">
+      <!-- Demo profile selector: chooses which customer powers personalisation. Not the experience switch. -->
+      <button class="profile-btn" id="profile-btn" type="button" aria-haspopup="dialog" aria-controls="profile-dialog">
+        <span class="profile-btn__mono" id="profile-mono" aria-hidden="true">·</span>
+        <span class="profile-btn__text">
+          <span class="profile-btn__k" id="profile-k">Shopping as</span>
+          <span class="profile-btn__v" id="profile-v">Loading profiles…</span>
+        </span>
+        <span class="sr-only" id="profile-sr">Change demo profile</span>
+      </button>
+    </div>
+  </div>
 </header>
-<main id="app"><p class="sub">Loading…</p></main>
-<dialog id="why"><div id="why-body"></div><form method="dialog" style="text-align:right;margin-top:12px"><button>Close</button></form></dialog>
-<script>
-const $ = s => document.querySelector(s);
-const api = p => fetch(p).then(r => r.ok ? r.json() : Promise.reject(r.status));
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let customer = null;
 
-function log(event, surface, article_id, anchor = null) {
-  fetch("/api/events", {method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({customer_idx: customer, event, surface, article_id, anchor})}).catch(() => {});
-}
+<main id="main" tabindex="-1">
+  <div class="view"><div class="state state--center" role="status"><p class="state__title">Opening the shop…</p></div></div>
+</main>
 
-function cardHTML(it, surface, opts = {}) {
-  const chips = (it.reasons || []).map(r => `<span class="chip">${esc(r.text)}</span>`).join("");
-  const why = opts.why ? `<button data-why="${it.article_id}">Why?</button>` : "";
-  return `<div class="card" data-a="${it.article_id}" data-s="${surface}">
-    <img loading="lazy" src="${it.image}" alt="${esc(it.prod_name)}" data-open="${it.article_id}" data-s="${surface}">
-    <div class="body"><div class="name">${esc(it.prod_name)}</div>
-    <div class="meta">${esc(it.product_type_name)} · ${esc(it.colour_group_name)}</div>
-    <div class="chips">${chips}</div>
-    <div class="actions">${why}<button data-nfm="${it.article_id}" data-s="${surface}">Not for me</button></div></div></div>`;
-}
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <p class="footer__mark" aria-hidden="true">ensemble</p>
+      <p>A recommender-system study on the H&amp;M Personalized Fashion Recommendations dataset. Product photography and
+        names come from the catalogue; there are no prices and no checkout. Every metric shown is offline unless labelled
+        as live telemetry of this demo server.</p>
+    </div>
+    <p><a href="#/studio">DS Studio</a> · <a href="#/label">Label</a></p>
+  </div>
+</footer>
 
-function rowHTML(title, items, surface, opts) {
-  if (!items.length) return opts?.empty ? `<h2>${title}</h2><p class="sub">${opts.empty}</p>` : "";
-  items.forEach(it => log("impression", surface, it.article_id, opts?.anchor));
-  return `<h2>${title}</h2><div class="row">${items.map(it => cardHTML(it, surface, opts)).join("")}</div>`;
-}
+<dialog id="drawer" class="drawer" aria-labelledby="drawer-title">
+  <div class="dialog__head">
+    <h2 class="eyebrow" id="drawer-title">Menu</h2>
+    <button class="icon-btn dialog__close" type="button" data-close>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span class="sr-only">Close menu</span>
+    </button>
+  </div>
+  <div class="dialog__body">
+    <nav class="drawer-nav" aria-label="Main (menu)"><ul id="drawer-links"></ul></nav>
+    <nav class="exp-switch" aria-label="Experience (menu)">
+      <span class="exp-switch__label">View</span>
+      <ul>
+        <li><a href="#/" data-exp="shop">Shop</a></li>
+        <li><a href="#/studio" data-exp="studio">DS Studio</a></li>
+      </ul>
+    </nav>
+  </div>
+</dialog>
 
-async function home() {
-  const d = await api(`/api/home/${customer}`);
-  const c = d.customer;
-  const seg = c.segment === "new" ? "New customer: no purchase history (user cold start)" : `${c.n_purchases} purchases · last on ${c.last_purchase}`;
-  $("#app").innerHTML = `<h1>Welcome back</h1><p class="sub">Customer #${c.customer_idx} · age ${c.age ?? "unknown"} · ${seg}</p>` +
-    d.modules.map(m => rowHTML(m.title, m.items, m.id, {why: m.id === "for_you" && c.segment !== "new",
-      empty: m.id === "buy_again" ? "Nothing yet: this customer has no purchases." : null})).join("");
-}
+<dialog id="profile-dialog" class="profile-dialog" aria-labelledby="profile-title" aria-describedby="profile-desc">
+  <div class="dialog__head">
+    <div>
+      <h2 class="section-title" id="profile-title">Choose a demo profile</h2>
+      <p class="meta" id="profile-desc">Profiles are real, anonymised customers from the dataset. They stand in for
+        signing in, so any personalised view can be reproduced. Your choice is remembered on this device.</p>
+    </div>
+    <button class="icon-btn dialog__close" type="button" data-close>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span class="sr-only">Close</span>
+    </button>
+  </div>
+  <div class="dialog__body">
+    <div class="profile-search">
+      <label class="field-label" for="profile-filter">Filter by age or customer ID</label>
+      <input class="input" id="profile-filter" type="search" inputmode="numeric" autocomplete="off" aria-describedby="profile-count">
+      <p class="meta" id="profile-count" aria-live="polite"></p>
+    </div>
+    <div id="profile-groups"></div>
+  </div>
+</dialog>
 
-async function product(id) {
-  const d = await api(`/api/product/${id}`);
-  const a = d.article;
-  log("click", "product_page", a.article_id);
-  // v2: request-time Complete the Look (personalized for the demo customer when a profile exists),
-  // with fallback level, provenance and versions shown. Falls back to the v1 table if no bundle is loaded.
-  let look = null, prov = "";
-  try {
-    const r = await fetch(`/api/v2/complete-the-look?anchor=${id}&k=8` + (customer != null ? `&customer=${customer}` : ""));
-    if (r.ok) {
-      const v = await r.json();
-      prov = `<p class="sub">${v.personalized ? "Personalized for this customer" : "Not personalized (no purchase history)"} · model ${esc(v.model_version)} · catalogue ${esc(v.catalog_version)} · request ${esc(v.request_id)}</p>`;
-      look = v.modules.filter(m => m.items.length).map(m => `<h3>${m.title} <span class="chip">${m.personalized ? "personalized" : "compatibility order"}</span> <span class="chip">source: ${m.fallback_level.replace(/_/g, " ")}</span></h3><div class="row">${m.items.map(it => { log("impression", "complete_the_look", it.article_id, a.article_id); return cardHTML({...it.card, reasons: [...it.reasons, {text: `evidence: ${it.provenance.replace(/_/g, " ")}`}]}, "complete_the_look"); }).join("")}</div>`).join("");
-    }
-  } catch (e) { look = null; }
-  if (look === null) look = d.complete_the_look.length
-    ? d.complete_the_look.map(m => `<h3>${m.title}</h3><div class="row">${m.items.map(it => { log("impression", "complete_the_look", it.article_id, a.article_id); return cardHTML(it, "complete_the_look"); }).join("")}</div>`).join("")
-    : `<p class="sub">No outfit suggestions: this item is outside the wearable slots or not in the live catalogue.</p>`;
-  look = prov + look;
-  $("#app").innerHTML = `<div class="product"><img src="${a.image}" alt="${esc(a.prod_name)}">
-    <div><h1>${esc(a.prod_name)}</h1><p class="sub">${esc(a.product_type_name)} · ${esc(a.colour_group_name)} · ${esc(a.department_name)} · ${esc(a.index_group_name)}</p>
-    <p>${esc(a.detail_desc)}</p><button onclick="history.back()">← Back</button>
-    <button onclick="location.hash='#/assistant?anchor=${a.article_id}'">Ask the stylist about this →</button></div></div>
-    <h2>Complete the Look</h2><div class="look">${look}</div>` +
-    rowHTML("Other colours", d.other_colours, "other_colours") + rowHTML("Similar items", d.similar, "similar");
-  window.scrollTo(0, 0);
-}
+<dialog id="why-dialog" aria-labelledby="why-title">
+  <div class="dialog__head">
+    <div>
+      <p class="eyebrow" id="why-eyebrow">Why this</p>
+      <h2 class="section-title" id="why-title">Why this piece</h2>
+    </div>
+    <button class="icon-btn dialog__close" type="button" data-close>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span class="sr-only">Close</span>
+    </button>
+  </div>
+  <div class="dialog__body" id="why-body"></div>
+</dialog>
 
-async function why(articleId) {
-  const d = await api(`/api/explain/${customer}/${articleId}`);
-  const max = Math.max(...d.shap.map(s => Math.abs(s.value)), 1e-6);
-  $("#why-body").innerHTML = `<h2 style="margin-top:0">Why this recommendation?</h2>
-    <div class="chips" style="margin-bottom:10px">${d.reasons.map(r => `<span class="chip">${esc(r.text)}</span>`).join("")}</div>
-    <p class="sub">SHAP contributions to the ranker score (top features). Positive values push the item up.</p>
-    ${d.shap.map(s => `<div class="bar"><span>${esc(s.feature)}</span><span class="track">
-      <span class="fill" style="left:${s.value >= 0 ? 50 : 50 - 50 * Math.abs(s.value) / max}%;width:${50 * Math.abs(s.value) / max}%;background:var(${s.value >= 0 ? "--bar" : "--neg"})"></span></span>
-      <span class="num">${s.value > 0 ? "+" : ""}${s.value.toFixed(3)}</span></div>`).join("")}`;
-  $("#why").showModal();
-}
-
-const pct = x => x == null || isNaN(x) ? "—" : (x * 100).toFixed(2) + "%";
-const f5 = x => x == null || isNaN(x) ? "—" : x.toFixed(5);
-const lift = x => x == null || isNaN(x) ? "—" : `<span class="${x > 0 ? "pos" : ""}">${x > 0 ? "+" : ""}${(x * 100).toFixed(1)}%</span>`;
-
-async function ds() {
-  const m = await api("/api/metrics");
-  const bv = m.m1_baselines_val || {}, bt = m.m1_baselines_test || {}, rv = m.m3_ranker_val?.metrics, rt = m.m3_ranker_test?.metrics;
-  const best = "repeat_purchase+popularity_by_age";
-  const liftA = (r, b) => r && b?.[best] ? lift((r["map@12"] - b[best]["map@12"]) / b[best]["map@12"]) : "—";
-  const taRows = [...Object.entries(bv).map(([k, v]) => [k, "val", v]), rv && ["LightGBM LambdaRank", "val", rv],
-                  ...Object.entries(bt).map(([k, v]) => [k, "test", v]), rt && ["LightGBM LambdaRank", "test", rt]].filter(Boolean)
-    .map(([n, w, v]) => `<tr><td>${n}</td><td>${w}</td><td class="num">${f5(v["map@12"])}</td><td class="num">${f5(v["map@12_returning"])}</td><td class="num">${f5(v["map@12_new_customers"])}</td><td class="num">${pct(v["recall@12_cold_items"])}</td></tr>`).join("");
-  const rec = m.m2_retrieval_val || {};
-  const recRows = Object.entries(rec).filter(([k, v]) => v && v.recall != null)
-    .map(([k, v]) => `<tr><td>${k}</td><td class="num">${pct(v.recall)}</td><td class="num">${v.candidates_per_customer.toFixed(1)}</td><td class="num">${pct(rec.unique_to_channel?.[k])}</td></tr>`).join("");
-  const tb = m.m4_track_b_test || m.m4_track_b_val;
-  const tbRows = tb ? Object.entries(tb.results).map(([k, v]) => `<tr><td>${k}</td><td class="num">${lift(v["relative_lift_recall@12_vs_popularity"])}</td><td class="num">${pct(v["recall@12"])}</td><td class="num">${f5(v["ndcg@12"])}</td><td class="num">${pct(v["recall@12_tail"])}</td><td class="num">${pct(v["recall@12_cold"])}</td><td class="num">${pct(v["recall@12_jewellery"])}</td><td class="num">${pct(v["catalog_coverage@12"])}</td></tr>`).join("") : "";
-  const funnel = tb ? Object.entries(tb.funnel).map(([k, v]) => `<tr><td>${k}</td><td class="num">${Number(v).toLocaleString()}</td></tr>`).join("") : "";
-  $("#app").innerHTML = `<h1>Offline evaluation</h1><p class="sub">All numbers are offline (historical data). A launch decision would need an online A/B test.</p>
-    <h2>Track A: next-purchase ranking (MAP@12)</h2>
-    <table><tr><th>system</th><th>week</th><th>MAP@12</th><th>returning</th><th>new customers</th><th>cold-item recall@12</th></tr>${taRows}</table>
-    <p class="note">Ranker relative lift vs best baseline (repeat purchase + age-band popularity): validation ${liftA(rv, bv)}, test ${liftA(rt, bt)}</p>
-    <div class="grid2"><div><h2>Retrieval recall (validation)</h2><table><tr><th>channel</th><th>recall</th><th>cand./customer</th><th>unique</th></tr>${recRows}</table></div>
-    <div><h2>Track B pair-mining funnel</h2><table><tr><th>stage</th><th>count</th></tr>${funnel}</table></div></div>
-    <h2>Track B: Complete the Look (${m.m4_track_b_test ? "test" : "validation"} week)</h2>
-    <table><tr><th>model</th><th>relative lift vs popularity</th><th>Recall@12</th><th>NDCG@12</th><th>tail-item</th><th>item cold start</th><th>jewellery</th><th>coverage</th></tr>${tbRows}</table>`;
-}
-
-// ---- Style assistant (M7b) + visual search (M7a) ----------------------------------------------------
-let sid = null, pendingPhoto = null, vsFile = null, vsBox = null;
-
-function renderAnswer(r) {
-  let n = 0; const order = {};
-  const text = esc(r.answer).replace(/\[\[(\d+)\]\]/g, (_, id) => `(${order[id] ??= ++n})`);
-  const cards = r.cards.map(c => cardHTML(c, "assistant")).join("");
-  const tools = r.trace.map(t => t.tool).join(" → ") || "no tools";
-  return `<div class="msg bot">${text}${cards ? `<div class="row">${cards}</div>` : ""}
-    <div class="trace">${tools} · ${r.latency_s}s${r.cost_usd ? ` · $${r.cost_usd.toFixed(4)}` : ""}${r.hallucinated.length ? ` · removed ${r.hallucinated.length} ungrounded id(s)` : ""}</div></div>`;
-}
-
-async function send(text) {
-  if (!text.trim() && !pendingPhoto) return;
-  const log = $("#chatlog");
-  log.insertAdjacentHTML("beforeend", `<div class="msg user">${esc(text)}${pendingPhoto ? " 📷" : ""}</div><div class="msg bot" id="typing">…</div>`);
-  log.scrollTop = log.scrollHeight;
-  const fd = new FormData(); fd.append("text", text); if (pendingPhoto) fd.append("photo", pendingPhoto);
-  pendingPhoto = null; $("#attach").textContent = "📷";
-  try {
-    const r = await fetch(`/api/assistant/${sid}/message`, {method: "POST", body: fd}).then(x => x.json());
-    $("#typing").outerHTML = renderAnswer(r);
-  } catch (e) { $("#typing").outerHTML = `<div class="msg bot">Something went wrong (${esc(e)}).</div>`; }
-  log.scrollTop = log.scrollHeight;
-}
-
-async function stylist(anchor) {
-  const cats = ["top", "outerwear", "knitwear", "bottom", "dress", "jumpsuit", "shoes", "bag", "jewellery", "hat", "scarf", "belt", "sunglasses"];
-  $("#app").innerHTML = `<h1>Style assistant</h1><p class="sub">Ask in plain language, attach an outfit photo, or search by photo on the right. Products come only from the recommender's tools.</p>
-  <div class="stylist" style="margin-top:14px">
-    <div class="panel"><div class="chatlog" id="chatlog"></div>
-      <div class="composer"><button class="btn" id="attach" title="Attach a photo">📷</button><input type="file" id="chatfile" accept="image/*" hidden>
-      <input type="text" id="chatin" placeholder="e.g. What shoes go with wide-leg jeans?"><button class="btn primary" id="chatsend">Send</button></div></div>
-    <div class="panel"><strong>Visual search</strong><p class="sub">Upload a photo, drag a box around one item, pick its category.</p>
-      <input type="file" id="vsfile" accept="image/*">
-      <div class="canvaswrap" style="margin-top:8px"><img id="vsimg" alt=""><div id="vsbox"></div></div>
-      <div class="vsctl"><select id="vscat">${cats.map(c => `<option>${c}</option>`).join("")}</select>
-        <button class="btn primary" id="vsgo">Find similar</button><button class="btn" id="vssnap">Analyse whole outfit</button></div>
-      <div id="vsout"></div></div>
-  </div>`;
-  const s = await fetch("/api/assistant/session", {method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({customer_idx: customer})}).then(x => x.json());
-  sid = s.session_id;
-  $("#chatlog").innerHTML = `<div class="msg bot">Hi! I can find pieces, style an item you own, or complete an outfit from a photo. (model: ${esc(s.backend)})</div>`;
-  $("#chatsend").onclick = () => { const v = $("#chatin").value; $("#chatin").value = ""; send(v); };
-  $("#chatin").onkeydown = e => { if (e.key === "Enter") $("#chatsend").click(); };
-  $("#attach").onclick = () => $("#chatfile").click();
-  $("#chatfile").onchange = e => { pendingPhoto = e.target.files[0]; $("#attach").textContent = "📷✓"; };
-  $("#vsfile").onchange = e => { vsFile = e.target.files[0]; vsBox = null; $("#vsbox").style.display = "none";
-    $("#vsimg").src = URL.createObjectURL(vsFile); };
-  let start = null; const img = $("#vsimg"), box = $("#vsbox");
-  img.onmousedown = e => { const r = img.getBoundingClientRect(); start = [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; e.preventDefault(); };
-  window.onmouseup = e => { if (!start) return; const r = img.getBoundingClientRect();
-    const end = [Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1), Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1)];
-    vsBox = [Math.min(start[0], end[0]), Math.min(start[1], end[1]), Math.max(start[0], end[0]), Math.max(start[1], end[1])];
-    Object.assign(box.style, {display: "block", left: vsBox[0] * 100 + "%", top: vsBox[1] * 100 + "%",
-      width: (vsBox[2] - vsBox[0]) * 100 + "%", height: (vsBox[3] - vsBox[1]) * 100 + "%"}); start = null; };
-  $("#vsgo").onclick = async () => {
-    if (!vsFile) return; $("#vsout").innerHTML = `<p class="sub">Searching…</p>`;
-    const fd = new FormData(); fd.append("photo", vsFile); fd.append("category", $("#vscat").value); fd.append("box", vsBox ? vsBox.join(",") : "");
-    const r = await fetch("/api/visual-search", {method: "POST", body: fd}).then(x => x.json());
-    $("#vsout").innerHTML = rowHTML("Closest catalogue items", r.matches, "visual_search", {}) +
-      (r.matches.length ? `<button class="btn" id="askthis">Ask about this look →</button>` : "");
-    if (r.matches.length) $("#askthis").onclick = () => send(`What goes with the ${r.matches[0].prod_name} (article ${r.matches[0].article_id})?`);
-  };
-  $("#vssnap").onclick = async () => {
-    if (!vsFile) return; $("#vsout").innerHTML = `<p class="sub">Analysing the outfit with the vision model… (about a minute on a laptop)</p>`;
-    const fd = new FormData(); fd.append("photo", vsFile);
-    const r = await fetch("/api/snap", {method: "POST", body: fd}).then(x => x.json());
-    $("#vsout").innerHTML = `<p class="sub">Detected: ${r.garments.map(g => esc(g.colour + " " + g.category)).join(", ") || "nothing"} · missing: ${r.missing_slots.join(", ") || "nothing"}</p>` +
-      r.garments.map(g => rowHTML(`${esc(g.description)}`, g.matches.slice(0, 5), "snap", {})).join("") +
-      r.complete_the_look.map(m => rowHTML(`Fill the gap: ${m.title}`, m.items, "complete_the_look", {})).join("");
-  };
-  if (anchor) send(`What goes with article ${anchor}?`);
-}
-
-// ---- Human gold labels for the visual-search judge ---------------------------------------------------
-async function labeller(round = 2) {
-  const tasks = await api(`/api/label/tasks?round=${round}`);
-  const todo = tasks.filter(t => !t.done);
-  if (!todo.length) { $("#app").innerHTML = `<h1>Labelling done</h1><p class="sub">All ${tasks.length} tasks labelled. Thank you!</p>`; return; }
-  const t = todo[0], sel = t.candidates.map(() => 0);
-  $("#app").innerHTML = `<h1>Is it a reasonable substitute? <span class="sub">(round ${round})</span></h1>
-    <p class="sub">Task ${tasks.length - todo.length + 1} of ${tasks.length}. For each product, click it if a shopper looking for the item on the left would accept it
-    (same type of item, similar colour and style). Unclicked = not relevant.</p>
-    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:12px">
-      <div><p class="sub">Street photo · ${esc(t.category)}</p><img src="${t.crop}" style="width:220px;max-height:340px;object-fit:contain;background:var(--chip);border-radius:8px"></div>
-      <div class="row" id="lab">${t.candidates.map((c, i) => `<div class="card" data-i="${i}" style="cursor:pointer;outline:3px solid transparent">
-        <img src="${c.image}" alt=""><div class="body"><div class="name">${esc(c.prod_name)}</div><div class="meta">${esc(c.product_type_name)} · ${esc(c.colour_group_name)}</div></div></div>`).join("")}</div>
-    </div><p style="margin-top:16px"><button class="btn primary" id="labsave">Save and next →</button></p>`;
-  document.querySelectorAll("#lab .card").forEach(el => el.onclick = () => {
-    const i = +el.dataset.i; sel[i] = 1 - sel[i]; el.style.outline = sel[i] ? "3px solid var(--good)" : "3px solid transparent"; });
-  $("#labsave").onclick = async () => {
-    await fetch("/api/label", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({task_id: t.task_id, relevant: sel, round})});
-    labeller(round);
-  };
-}
-
-async function route() {
-  const h = location.hash || "#/";
-  $("#nav-shop").classList.toggle("active", !/^#\/(ds|assistant|label)/.test(h));
-  $("#nav-label").classList.toggle("active", h.startsWith("#/label"));
-  $("#nav-ds").classList.toggle("active", h.startsWith("#/ds"));
-  $("#nav-assistant").classList.toggle("active", h.startsWith("#/assistant"));
-  try {
-    if (h.startsWith("#/product/")) await product(h.split("/")[2]);
-    else if (h.startsWith("#/ds")) await ds();
-    else if (h.startsWith("#/label")) await labeller(+(new URLSearchParams(h.split("?")[1] || "").get("round") || 2));
-    else if (h.startsWith("#/assistant")) await stylist(new URLSearchParams(h.split("?")[1] || "").get("anchor"));
-    else await home();
-  } catch (e) { $("#app").innerHTML = `<p class="sub">Could not load (${esc(e)}).</p>`; }
-}
-
-document.addEventListener("click", e => {
-  const t = e.target;
-  if (t.dataset.open) { log("click", t.dataset.s, +t.dataset.open); location.hash = `#/product/${t.dataset.open}`; }
-  else if (t.dataset.why) why(+t.dataset.why);
-  else if (t.dataset.nfm) { log("not_for_me", t.dataset.s, +t.dataset.nfm); t.closest(".card").style.opacity = .35; t.disabled = true; }
-});
-
-(async () => {
-  const cs = await api("/api/customers");
-  $("#cust").innerHTML = ["returning", "new"].map(seg => `<optgroup label="${seg === "new" ? "New customers (cold start)" : "Returning customers"}">` +
-    cs.filter(c => c.segment === seg).map(c => `<option value="${c.customer_idx}">#${c.customer_idx} · age ${c.age ?? "?"} · ${c.n_purchases} purchases</option>`).join("") + "</optgroup>").join("");
-  customer = +$("#cust").value;
-  $("#cust").onchange = () => { customer = +$("#cust").value; location.hash = "#/"; route(); };
-  window.onhashchange = route;
-  route();
-})();
-</script>
+<div class="sr-only" id="announcer" role="status" aria-live="polite"></div>
+<noscript><p class="notice">ensemble needs JavaScript to load recommendations.</p></noscript>
 </body>
 </html>
