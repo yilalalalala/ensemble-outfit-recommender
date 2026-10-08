@@ -1,6 +1,7 @@
 // Style Assistant (M7b) with the two photo services (M7a visual search, "snap your outfit").
 // Products shown here come only from tool / endpoint responses; the assistant's text never adds products.
-import {$, ApiError, announce, api, esc, grid, impressions, plural, profileName, state, words} from "./core.js";
+// (That grounding is documented for DS readers; shoppers see consumer copy only.)
+import {$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
 
 const CATEGORIES = ["top", "outerwear", "knitwear", "bottom", "dress", "jumpsuit", "shoes", "bag", "jewellery", "hat", "scarf", "belt", "sunglasses"];
 const ACCEPT = "image/jpeg,image/png,image/webp";
@@ -11,11 +12,14 @@ const sessions = new Map();   // customer -> {sid, backend, log: html, sentAncho
 let activeChat = null;        // the conversation on screen; the "Ask about this" hand-off talks to it
 const askStylist = text => { if (activeChat?.current()) activeChat.send(text); };
 
-const isLocal = b => !b || b === "ollama";
-function privacyCopy(backend) {
-  return isLocal(backend)
-    ? "Photos go only to this demo's own server. Visual search and outfit analysis run on this machine; nothing is stored after the request, except a chat photo kept in memory for the conversation."
-    : `Photos go to this demo's server. Outfit analysis and chat photos are sent to the configured model provider (${esc(backend)}); visual search runs locally. Nothing is stored after the request, except a chat photo kept in memory for the conversation.`;
+const PRIVACY = "Your photo is only used to find pieces for you.";
+
+// One result group (an answer, a search, an outfit analysis): load colourways and prices, then group
+// products by family so the group never repeats a product.
+async function grouped(lists) {
+  await loadFamilies(lists.flat().map(it => it.article_id));
+  const page = newPageGroups();
+  return lists.map(l => page.take(l));
 }
 
 export async function view(ctx) {
@@ -25,12 +29,11 @@ export async function view(ctx) {
   const root = ctx.render(`
     <div class="stylist-head">
       <div><p class="eyebrow">Style Assistant</p><h1 class="title" tabindex="-1">Ask the stylist.</h1></div>
-      <p class="lede">Ask in plain language, or bring a photo. Every piece shown comes from the recommender's own tools; the assistant never invents products.</p>
+      <p class="lede">Tell us what you're looking for, or bring a photo. We'll help you find pieces that feel right.</p>
     </div>
     <div class="stylist">
       <section class="panel" aria-labelledby="chat-h">
-        <div class="panel__head"><h2 class="eyebrow" id="chat-h">Conversation · ${esc(profileName(state.profile))}</h2>
-          <span class="meta" id="chat-backend">Connecting…</span></div>
+        <div class="panel__head"><h2 class="eyebrow" id="chat-h">Conversation</h2></div>
         <div class="chatlog" id="chatlog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>
         <div class="attachment" id="chat-attach" hidden></div>
         <form class="composer" id="composer" novalidate>
@@ -52,7 +55,7 @@ export async function view(ctx) {
         <div class="services">
           <div class="service" aria-labelledby="svc1-h">
             <h3 id="svc1-h">Find visually similar products</h3>
-            <p class="meta">Matches one piece in your photo to the catalogue. Choose what it is; optionally drag on the photo to frame it, otherwise the whole photo is used. Takes a few seconds.</p>
+            <p class="meta">Finds pieces in our collection that look like one item in your photo. Choose what it is; optionally drag on the photo to frame it, otherwise the whole photo is used. It may take a few seconds.</p>
             <div class="service__row">
               <label><span class="field-label">The piece is a</span>
                 <select class="input" id="vs-cat">${CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("")}</select></label>
@@ -61,10 +64,10 @@ export async function view(ctx) {
           </div>
           <div class="service" aria-labelledby="svc2-h">
             <h3 id="svc2-h">Complete my outfit</h3>
-            <p class="meta">A vision model identifies each garment you are wearing, matches it to the catalogue and suggests what is missing. Takes about a minute on this laptop.</p>
+            <p class="meta">We'll recognise each piece you're wearing, find it in our collection and suggest what would complete the outfit. It may take about a minute.</p>
             <div class="service__row"><button class="btn" type="button" id="snap-go" disabled>Analyse my outfit</button></div>
           </div>
-          <p class="privacy" id="privacy">${privacyCopy(state.backend)}</p>
+          <p class="privacy" id="privacy">${PRIVACY}</p>
         </div>
         <div class="results" id="photo-results" aria-live="polite"></div>
       </section>
@@ -78,21 +81,18 @@ export async function view(ctx) {
   if (s) {
     log.innerHTML = s.log;
     log.scrollTop = log.scrollHeight;
-    paintBackend(s.backend);
   } else {
     log.innerHTML = emptyChat();
     try {
       s = await newSession(customer);
     } catch (err) {
       if (!ctx.current()) return;
-      $("#chat-backend").textContent = "Unavailable";
-      log.innerHTML = `<div class="state" role="alert"><p class="state__title">The stylist is not available</p>
+      log.innerHTML = `<div class="state" role="alert"><p class="state__title">The stylist isn't available right now</p>
         <p class="meta">${esc(err.message)}</p><button class="btn btn--quiet" type="button" data-retry>Try again</button></div>`;
       $("#composer").querySelectorAll("button, textarea").forEach(el => { el.disabled = true; });
       return;
     }
     if (!ctx.current()) return;
-    paintBackend(s.backend);
   }
   const chat = makeChat(ctx, customer);
   if (anchor && !s.sentAnchors.has(anchor)) { s.sentAnchors.add(anchor); chat.send(`What goes with article ${anchor}?`); }
@@ -107,28 +107,19 @@ async function newSession(customer) {
   return s;
 }
 
-function paintBackend(b) {
-  $("#chat-backend").innerHTML = `<span class="status-dot is-ok" aria-hidden="true"></span>${isLocal(b) ? "Local model" : `Model: ${esc(b)}`}`;
-  $("#privacy").innerHTML = privacyCopy(b);
-}
-
 function emptyChat() {
   return `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
     <p class="msg__text">I can find pieces, style something you own, or complete an outfit from a photo. What are you dressing for?</p>
     <div class="suggestions">${SUGGESTIONS.map(t => `<button class="filter" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div></div>`;
 }
 
-function renderAnswer(r) {
-  let n = 0; const order = {};
-  const text = esc(r.answer).replace(/\[\[(\d+)\]\]/g, (_, id) => `(${order[id] ??= ++n})`);
+function renderAnswer(r, cards) {
+  // Product references in the text ([[article_id]]) are shown as cards below the answer, so the markers are dropped.
+  const text = esc(r.answer).replace(/\s*\[\[(\d+)\]\]/g, "");
   // The model writes light markdown; after escaping, only **bold** is turned into markup.
   const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
-  const tools = r.trace.map(t => words(t.tool)).join(" → ");
   return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
-    ${r.cards.length ? grid(r.cards, "assistant", {cls: "grid--compact", each: c => ({index: order[c.article_id] ?? null})}) : ""}
-    <p class="msg__trace">${tools ? `<span class="tag">Used ${esc(tools)}</span>` : `<span class="tag">No tools used</span>`}
-      <span>${esc(r.latency_s)} s${r.cost_usd ? ` · $${r.cost_usd.toFixed(4)}` : ""}</span>
-      ${r.hallucinated.length ? `<span class="tag tag--warn">Removed ${plural(r.hallucinated.length, "unverified product")}</span>` : ""}</p></div>`;
+    ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}</div>`;
 }
 
 function makeChat(ctx, customer) {
@@ -157,7 +148,7 @@ function makeChat(ctx, customer) {
     log.querySelector("[data-empty]")?.remove();
     const sent = photo;
     log.insertAdjacentHTML("beforeend", `<div class="msg msg--user"><p class="msg__who">You</p><p class="msg__text">${esc(text)}${sent ? " · photo attached" : ""}</p></div>
-      <div class="msg msg--bot" id="pending"><p class="msg__who">Stylist</p><p class="thinking" role="status"><i></i><i></i><i></i> Thinking · may call the recommender tools</p></div>`);
+      <div class="msg msg--bot" id="pending"><p class="msg__who">Stylist</p><p class="thinking" role="status"><i></i><i></i><i></i> Finding pieces for you…</p></div>`);
     log.scrollTop = log.scrollHeight;
     setPhoto(null);
     const fd = new FormData();
@@ -175,14 +166,15 @@ function makeChat(ctx, customer) {
         r = await api(`/api/assistant/${s.sid}/message`, {method: "POST", body: fd});
         log.insertAdjacentHTML("beforeend", `<p class="meta">A new conversation was started because the previous one had expired.</p>`);
       }
+      const [cards] = await grouped([r.cards]);
       $("#pending")?.remove();
-      log.insertAdjacentHTML("beforeend", renderAnswer(r));
-      impressions(r.cards, "assistant");
+      log.insertAdjacentHTML("beforeend", renderAnswer(r, cards));
+      impressions(cards, "assistant");
       announce("The stylist replied.");
     } catch (e) {
       $("#pending")?.remove();
       log.insertAdjacentHTML("beforeend", `<div class="msg msg--bot" role="alert"><p class="msg__who">Stylist</p>
-        <p class="msg__text">I couldn't answer that just now. ${esc(e.message)}</p>
+        <p class="msg__text">Sorry, I couldn't answer that just now.</p>
         <p><button class="link-btn" type="button" data-resend="${esc(text)}">Try again</button></p></div>`);
       if (sent) setPhoto(sent);
     } finally {
@@ -220,7 +212,7 @@ function photoServices(root) {
     slot.innerHTML = `<label class="dropzone" id="dropzone">
       <input type="file" id="photo-in" accept="${ACCEPT}" aria-describedby="photo-help">
       <span class="section-title" style="font-size:1.25rem">Choose a photo</span>
-      <span class="meta" id="photo-help">JPEG, PNG or WebP, up to the server's upload limit. A clear, well-lit outfit photo works best.</span>
+      <span class="meta" id="photo-help">JPEG, PNG or WebP. A clear, well-lit outfit photo works best.</span>
       <span class="btn btn--quiet" aria-hidden="true">Browse files</span></label>`;
     const input = $("#photo-in", slot), zone = $("#dropzone", slot);
     input.addEventListener("change", () => input.files[0] && load(input.files[0]));
@@ -293,23 +285,24 @@ function photoServices(root) {
 
   vsGo.addEventListener("click", async () => {
     if (!file) return;
-    busy(true, "Searching the catalogue…");
+    busy(true, "Searching our collection…");
     const fd = new FormData();
     fd.append("photo", file); fd.append("category", $("#vs-cat", root).value); fd.append("box", box ? box.join(",") : "");
     try {
       const r = await api("/api/visual-search", {method: "POST", body: fd});
-      out.innerHTML = r.matches.length
-        ? `<h3>Closest catalogue pieces</h3>${grid(r.matches, "visual_search", {cls: "grid--compact"})}
-           <p><button class="btn btn--quiet" type="button" id="ask-this">Ask the stylist about the closest match</button></p>`
+      const [matches] = await grouped([r.matches]);
+      out.innerHTML = matches.length
+        ? `<h3>Pieces that look similar</h3>${cardGrid(matches, "visual_search", {cls: "grid--compact"})}
+           <p><button class="btn btn--quiet" type="button" id="ask-this">Ask the stylist what goes with it</button></p>`
         : `<div class="state"><p class="state__title">No close matches</p><p class="meta">Try framing a single piece, or choose a different category.</p></div>`;
-      impressions(r.matches, "visual_search");
-      if (r.matches.length) $("#ask-this", out).addEventListener("click", () => {
-        askStylist(`What goes with the ${r.matches[0].prod_name} (article ${r.matches[0].article_id})?`);
+      impressions(matches, "visual_search");
+      if (matches.length) $("#ask-this", out).addEventListener("click", () => {
+        askStylist(`What goes with the ${matches[0].prod_name} (article ${matches[0].article_id})?`);
         $("#chat-in").focus();
       });
-      announce(`${plural(r.matches.length, "match", "matches")} found.`);
+      announce(matches.length ? "Similar pieces found." : "No similar pieces found.");
     } catch (e) {
-      out.innerHTML = `<div class="state" role="alert"><p class="state__title">Visual search did not complete</p><p class="meta">${esc(e.message)}</p>
+      out.innerHTML = `<div class="state" role="alert"><p class="state__title">We couldn't search with that photo just now</p><p class="meta">Please try again.</p>
         <button class="btn btn--quiet" type="button" id="vs-retry">Try again</button></div>`;
       $("#vs-retry", out).addEventListener("click", () => vsGo.click());
     } finally { busy(false); out.scrollIntoView({block: "nearest"}); }
@@ -317,24 +310,26 @@ function photoServices(root) {
 
   snapGo.addEventListener("click", async () => {
     if (!file) return;
-    busy(true, "Analysing your outfit… 0 s (usually about a minute)");
+    busy(true, "Looking at your outfit… This may take about a minute.");
     const t0 = Date.now();
-    const timer = setInterval(() => { const l = $("#busy-label", out); if (l) l.textContent = `Analysing your outfit… ${Math.round((Date.now() - t0) / 1000)} s (usually about a minute)`; }, 1000);
+    const timer = setInterval(() => { const l = $("#busy-label", out); if (l) l.textContent = `Looking at your outfit… ${Math.round((Date.now() - t0) / 1000)} s`; }, 1000);
     const fd = new FormData();
     fd.append("photo", file);
     try {
       const r = await api("/api/snap", {method: "POST", body: fd});
+      const garments = r.garments.filter(g => g.matches.length), fills = r.complete_the_look.filter(m => m.items.length);
+      const groups = await grouped([...garments.map(g => g.matches.slice(0, 5)), ...fills.map(m => m.items)]);
+      const gm = groups.slice(0, garments.length), fm = groups.slice(garments.length);
       const detected = r.garments.map(g => `${g.colour} ${g.category}`.trim());
-      out.innerHTML = `<div class="notice"><strong>Detected:</strong> ${esc(detected.join(", ") || "no garments")} ·
-          <strong>Missing:</strong> ${esc(r.missing_slots.map(words).join(", ") || "nothing")}</div>
-        ${r.garments.filter(g => g.matches.length).map(g => `<div><h3>${esc(g.description)}</h3>${grid(g.matches.slice(0, 5), "snap", {cls: "grid--compact"})}</div>`).join("")}
-        ${r.complete_the_look.filter(m => m.items.length).map(m => `<div><h3>Fill the gap: ${esc(m.title)}</h3>${grid(m.items, "complete_the_look", {cls: "grid--compact", anchor: r.anchor})}</div>`).join("")}
-        ${!r.garments.length ? `<p class="meta">No garments were recognised. A full-length, well-lit photo works best.</p>` : ""}`;
-      r.garments.forEach(g => impressions(g.matches.slice(0, 5), "snap"));
-      r.complete_the_look.forEach(m => impressions(m.items, "complete_the_look", r.anchor));
-      announce("Outfit analysis finished.");
+      out.innerHTML = `${detected.length ? `<p class="notice"><strong>We spotted:</strong> ${esc(detected.join(", "))}</p>`
+          : `<p class="meta">We couldn't make out the pieces in this photo. A full-length, well-lit photo works best.</p>`}
+        ${garments.map((g, i) => gm[i].length ? `<div><h3>Like your ${esc(g.description)}</h3>${cardGrid(gm[i], "snap", {cls: "grid--compact"})}</div>` : "").join("")}
+        ${fills.map((m, i) => fm[i].length ? `<div><h3>To complete the outfit: ${esc(m.title)}</h3>${cardGrid(fm[i], "complete_the_look", {cls: "grid--compact", anchor: r.anchor})}</div>` : "").join("")}`;
+      gm.forEach(l => impressions(l, "snap"));
+      fm.forEach(l => impressions(l, "complete_the_look", r.anchor));
+      announce("Your outfit ideas are ready.");
     } catch (e) {
-      out.innerHTML = `<div class="state" role="alert"><p class="state__title">Outfit analysis did not complete</p><p class="meta">${esc(e.message)}</p>
+      out.innerHTML = `<div class="state" role="alert"><p class="state__title">We couldn't look at that photo just now</p><p class="meta">Please try again.</p>
         <button class="btn btn--quiet" type="button" id="snap-retry">Try again</button></div>`;
       $("#snap-retry", out).addEventListener("click", () => snapGo.click());
     } finally { clearInterval(timer); busy(false); out.scrollIntoView({block: "nearest"}); }

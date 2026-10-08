@@ -1,6 +1,7 @@
 // Router, masthead navigation, experience switch and demo-profile selector.
-import {$, $$, api, announce, esc, errorState, initDialogs, initImageFallback, initMotion, logEvent, notForMe,
-        openDialog, openWhy, profileDetail, profileName, state} from "./core.js";
+import {$, $$, api, announce, esc, errorState, hideCard, initDialogs, initImageFallback, initMotion, logEvent,
+        openDialog, profileDetail, profileName, selectSwatch, state} from "./core.js";
+import {addToCart, initCart, loadCart} from "./cart.js";
 import * as shop from "./shop.js";
 import * as stylist from "./stylist.js";
 import * as studio from "./studio.js";
@@ -85,8 +86,19 @@ function setNav(res) {
     if (a.dataset.exp === res.exp) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
   $("#profile-k").textContent = res.exp === "studio" ? "Inspecting profile" : "Shopping as";
+  // The cart belongs to the shopper masthead; technical status belongs to DS Studio only.
+  $("#cart-btn").hidden = res.exp === "studio";
+  paintUtility(res.exp);
   $("#wordmark").setAttribute("href", res.exp === "studio" ? "#/studio" : "#/");
-  $("#wordmark").setAttribute("aria-label", res.exp === "studio" ? "ensemble, DS Studio home" : "ensemble, home");
+}
+
+function paintUtility(exp) {
+  const note = $("#utility-note");
+  if (exp !== "studio") { note.innerHTML = ""; return; }
+  const ready = state.ready;
+  note.innerHTML = ready === false
+    ? `<span class="status-dot is-bad" aria-hidden="true"></span>Serving bundle not ready · live Complete the Look falls back to stored suggestions`
+    : `${ready ? `<span class="status-dot is-ok" aria-hidden="true"></span>Serving bundle ready · ` : ""}Offline evaluation unless labelled live telemetry`;
 }
 
 // ---- demo profile --------------------------------------------------------------------------------------
@@ -101,7 +113,7 @@ function paintProfile() {
   const c = state.profile;
   $("#profile-mono").textContent = c?.age ?? "·";
   $("#profile-v").textContent = c ? profileName(c) : "No profile";
-  $("#profile-sr").textContent = c ? `Change demo profile. Current: ${profileName(c)}, ${profileDetail(c)}.` : "Choose a demo profile";
+  $("#profile-sr").textContent = c ? `Change profile. Current: ${profileName(c)}.` : "Choose a profile";
   $("#profile-btn").title = c ? `${profileName(c)} · ${profileDetail(c)} · customer ${c.customer_idx}` : "";
   $$(".profile-option").forEach(b => b.setAttribute("aria-current", String(+b.dataset.id === state.customer)));
 }
@@ -160,6 +172,7 @@ async function loadProfiles() {
 // ---- wiring --------------------------------------------------------------------------------------------
 function wire() {
   initDialogs();
+  initCart();
   initImageFallback();
   initMotion();
 
@@ -178,7 +191,7 @@ function wire() {
     const changed = +b.dataset.id !== state.customer;
     selectProfile(+b.dataset.id);
     $("#profile-dialog").close();
-    if (changed) route({focus: false});
+    if (changed) { loadCart(); route({focus: false}); }
   });
 
   const drawer = $("#drawer"), menuBtn = $("#menu-btn");
@@ -192,10 +205,12 @@ function wire() {
   document.addEventListener("click", e => {
     const open = e.target.closest("[data-open]");
     if (open) { logEvent("click", open.dataset.s, open.dataset.open, open.dataset.anchor ?? null); return; }
-    const why = e.target.closest("[data-why]");
-    if (why) { openWhy(why.dataset.why, why); return; }
-    const nfm = e.target.closest("[data-nfm]");
-    if (nfm) { notForMe(nfm.dataset.nfm, nfm); return; }
+    const sw = e.target.closest("[data-swatch]");
+    if (sw) { selectSwatch(sw); return; }
+    const add = e.target.closest("[data-add]");
+    if (add) { addToCart(add); return; }
+    const hide = e.target.closest("[data-hide]");
+    if (hide) { hideCard(hide); return; }
     if (e.target.closest("[data-retry]")) route({focus: false});
   });
 
@@ -212,7 +227,7 @@ async function health() {
   } catch {
     state.ready = false;
   }
-  if (!state.ready) $("#utility-note").innerHTML = `<span class="status-dot is-bad" aria-hidden="true"></span>Live outfit service unavailable · showing stored suggestions`;
+  if (document.body.classList.contains("studio")) paintUtility("studio");
 }
 
 (async () => {
@@ -220,6 +235,7 @@ async function health() {
   health();
   try {
     await loadProfiles();
+    loadCart();
   } catch (err) {
     $("#main").innerHTML = `<div class="view">${errorState(err, {title: "The shop could not open"})}</div>`;
     $("#main [data-retry]")?.addEventListener("click", () => location.reload(), {once: true});

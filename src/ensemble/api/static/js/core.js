@@ -1,5 +1,6 @@
-// Shared state, API access, event logging, the product tile, dialogs and motion.
+// Shared state, API access, event logging, the shopper product card, dialogs and motion.
 // Everything shown is rendered from API responses; nothing here invents product data.
+import {colourName, createPageGroups, money, swatchStyle, variantLabels} from "./catalog.js";
 
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];
@@ -9,7 +10,7 @@ export const state = {
   customer: null,        // customer_idx powering personalisation (the demo profile)
   customers: [],
   profile: null,
-  backend: null,         // assistant / vision backend reported by the server ("ollama" = local)
+  backend: null,         // assistant / vision backend reported by the server (DS context only)
 };
 
 // ---- API ---------------------------------------------------------------------------------------------
@@ -18,12 +19,12 @@ export class ApiError extends Error {
 }
 
 function friendly(status, body) {
-  // Customer-safe copy: never surface stack traces or raw exceptions.
+  // Shopper-safe copy: no stack traces, services, models or servers.
   const detail = body?.error?.message || (typeof body?.detail === "string" ? body.detail : null);
-  if (status === 400 || status === 413 || status === 415 || status === 422) return detail || "That request could not be processed.";
-  if (status === 404) return detail ? `Not found: ${detail}.` : "We could not find that.";
-  if (status === 503) return "This service is temporarily unavailable on the demo server.";
-  return "Something went wrong on the server.";
+  if (status === 400 || status === 413 || status === 415 || status === 422) return detail || "That request could not be completed.";
+  if (status === 404) return "We couldn't find that.";
+  if (status === 503) return "This isn't available right now. Please try again shortly.";
+  return "Something went wrong. Please try again.";
 }
 
 export async function api(path, opts) {
@@ -31,7 +32,7 @@ export async function api(path, opts) {
   try {
     r = await fetch(path, opts);
   } catch {
-    throw new ApiError(0, "We couldn't reach the ensemble server. Check that it is running, then try again.", "offline");
+    throw new ApiError(0, "We can't connect right now. Please check your connection and try again.", "offline");
   }
   const type = r.headers.get("content-type") || "";
   const body = type.includes("json") ? await r.json().catch(() => null) : null;
@@ -48,9 +49,23 @@ export function getHome(customer) {
   }
   return homeCache.get(customer);
 }
-export async function cachedHome(customer) {
-  return homeCache.has(customer) ? homeCache.get(customer).catch(() => null) : null;
+
+// ---- product families, colourways and prices (/api/catalog/families) ------------------------------------
+const familyOfArticle = new Map();   // article_id -> product_code (the catalogue's own family key)
+const families = new Map();          // product_code -> {product_code, price_usd, variants[]}
+export const familyOf = id => familyOfArticle.get(+id) ?? null;
+export const familyData = code => families.get(code) ?? null;
+
+export async function loadFamilies(ids) {
+  const want = [...new Set(ids.map(Number))].filter(id => !familyOfArticle.has(id));
+  for (let i = 0; i < want.length; i += 400) {
+    const chunk = want.slice(i, i + 400);
+    const d = await api(`/api/catalog/families?articles=${chunk.join(",")}`);
+    for (const [code, f] of Object.entries(d.families)) families.set(code, f);
+    for (const [a, code] of Object.entries(d.articles)) familyOfArticle.set(+a, code);
+  }
 }
+export const newPageGroups = () => createPageGroups(familyOf);
 
 // ---- events (DESIGN §7.6: impression, click, add_to_cart, not_for_me) --------------------------------
 export function logEvent(event, surface, article_id, anchor = null) {
@@ -63,9 +78,9 @@ export function logEvent(event, surface, article_id, anchor = null) {
 export const impressions = (items, surface, anchor = null) => items.forEach(it => logEvent("impression", surface, it.article_id, anchor));
 
 // ---- formatting ----------------------------------------------------------------------------------------
-const dateFmt = new Intl.DateTimeFormat("en-GB", {day: "numeric", month: "short", year: "numeric", timeZone: "UTC"});
+const dateFmt = new Intl.DateTimeFormat("en-US", {day: "numeric", month: "short", year: "numeric", timeZone: "UTC"});
 export const fmtDate = iso => iso ? dateFmt.format(new Date(iso + "T00:00:00Z")) : "";
-export const plural = (n, one, many = one + "s") => `${n.toLocaleString("en-GB")} ${n === 1 ? one : many}`;
+export const plural = (n, one, many = one + "s") => `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
 export const words = s => String(s ?? "").replace(/_/g, " ");
 
 export function profileName(c) {
@@ -87,42 +102,140 @@ export function announce(text) {
   announceTimer = setTimeout(() => { el.textContent = text; }, 60);
 }
 
-// ---- product tile --------------------------------------------------------------------------------------
-// The registry keeps the full item (reasons, provenance) behind each rendered tile for the Why dialog.
-export const registry = new Map();
-let keySeq = 0;
-
+// ---- shopper product card ------------------------------------------------------------------------------
 const PHOTO_W = 1166, PHOTO_H = 1750;   // catalogue photography size: lets the browser reserve space
+const MAX_SWATCHES = 6;                 // cards; the product page shows every colourway
 
-export function tile(it, surface, o = {}) {
-  const key = `k${++keySeq}`;
-  registry.set(key, {item: it, surface, anchor: o.anchor ?? null, why: o.why});
+const altOf = (name, colour) => `${name}, ${colour.toLowerCase()}`;
+
+// The family's colourways with display labels; always includes the card's own article.
+export function variantsFor(it) {
+  const fam = familyData(familyOf(it.article_id));
+  const vs = fam?.variants?.length ? fam.variants : [{article_id: it.article_id, prod_name: it.prod_name, colour_group_name: it.colour_group_name, image: it.image}];
+  const list = vs.some(v => v.article_id === it.article_id) ? vs : [{article_id: it.article_id, prod_name: it.prod_name, colour_group_name: it.colour_group_name, image: it.image}, ...vs];
+  const labels = variantLabels(list);
+  return {family: fam, list: list.map((v, i) => ({...v, label: labels[i]}))};
+}
+
+export function swatchButtons(it, list, max = Infinity) {
+  // Selected colour first, then the rest in catalogue order; the selected one is never cut off.
+  const sel = list.find(v => v.article_id === it.article_id);
+  const rest = list.filter(v => v !== sel);
+  const shown = [sel, ...rest].slice(0, Math.max(1, max));
+  const more = list.length - shown.length;
+  const btns = shown.map(v => {
+    const s = swatchStyle(v.colour_group_name), on = v === sel;
+    return `<button class="swatch${s.pattern ? ` is-${s.pattern}` : ""}" type="button" data-swatch="${v.article_id}"
+      aria-pressed="${on}" aria-label="${esc(v.label)}${on ? ", selected" : ""}" title="${esc(v.label)}"
+      ${s.fill ? `style="--sw:${s.fill}"` : ""}></button>`;
+  }).join("");
+  return {btns, more};
+}
+
+export function card(it, surface, o = {}) {
   const id = it.article_id;
-  const alt = [it.prod_name, [it.colour_group_name, it.product_type_name].filter(Boolean).join(" ").toLowerCase()].filter(Boolean).join(", ");
-  const hasWhy = o.why === "shap" || (o.why !== false && (it.reasons || []).length > 0);
-  // "Unknown" is the catalogue's placeholder value; it says nothing to a shopper, so it is left out.
-  const meta = o.meta ?? [it.product_type_name, it.colour_group_name].filter(v => v && v !== "Unknown").join(" · ");
-  const index = o.index != null ? `<span class="tile__index" aria-hidden="true">${String(o.index).padStart(2, "0")}</span>` : "";
-  return `<article class="tile ${o.cls || ""}" data-key="${key}" style="${o.style || ""}">
-    <a class="tile__media${o.media || ""}" href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${o.anchor != null ? `data-anchor="${o.anchor}"` : ""} tabindex="-1" aria-hidden="true">
-      <img src="${esc(it.image)}" alt="${esc(alt)}" width="${PHOTO_W}" height="${PHOTO_H}" ${o.eager ? `fetchpriority="high"` : `loading="lazy"`} decoding="async">
-      ${index}
-    </a>
-    <div class="tile__body">
-      <h3 class="tile__name"><a href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${o.anchor != null ? `data-anchor="${o.anchor}"` : ""}>${esc(it.prod_name)}</a></h3>
-      ${meta ? `<p class="tile__meta">${esc(meta)}</p>` : ""}
-      ${o.note ? `<p class="tile__note">${o.note}</p>` : ""}
-      ${o.actions === false ? "" : `<div class="tile__actions">
-        ${hasWhy ? `<button class="link-btn" type="button" data-why="${key}" aria-haspopup="dialog">Why this<span class="sr-only">: ${esc(it.prod_name)}</span></button>` : ""}
-        <button class="link-btn" type="button" data-nfm="${key}">Not for me<span class="sr-only">: ${esc(it.prod_name)}</span></button>
-      </div>`}
-      <p class="tile__status" role="status" hidden></p>
+  const {family, list} = variantsFor(it);
+  const v = list.find(x => x.article_id === id);
+  const price = family?.price_usd;
+  const {btns, more} = swatchButtons(it, list, o.maxSwatches ?? MAX_SWATCHES);
+  const anchorAttr = o.anchor != null ? `data-anchor="${o.anchor}"` : "";
+  return `<article class="card" data-card data-article="${id}" data-family="${esc(family?.product_code ?? "")}" data-s="${esc(surface)}" ${anchorAttr}>
+    <div class="card__media">
+      <a class="card__img" href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr} tabindex="-1" aria-hidden="true">
+        <img src="${esc(v.image)}" alt="${esc(altOf(v.prod_name, v.label))}" width="${PHOTO_W}" height="${PHOTO_H}" ${o.eager ? `fetchpriority="high"` : `loading="lazy"`} decoding="async">
+      </a>
+      ${o.hide === false ? "" : `<button class="card__hide" type="button" data-hide aria-label="Hide ${esc(v.prod_name)}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`}
+    </div>
+    <div class="card__info">
+      <h3 class="card__name"><a href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr}>${esc(v.prod_name)}</a></h3>
+      <div class="card__colours">
+        <div class="swatches" role="group" aria-label="Colours">${btns}${more > 0
+          ? `<a class="swatch-more" href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr} aria-label="${more} more colours">+${more}</a>` : ""}</div>
+        <span class="card__colour">${esc(v.label)}</span>
+      </div>
+      <p class="card__price">${esc(money(price))}</p>
+      ${o.note ? `<p class="card__note">${o.note}</p>` : ""}
+      <button class="btn-cart" type="button" data-add aria-label="Add ${esc(v.prod_name)}, ${esc(v.label)}, to cart" ${price == null ? "disabled" : ""}>Add to cart</button>
     </div>
   </article>`;
 }
 
-export const grid = (items, surface, o = {}) =>
-  `<ul class="grid ${o.cls || ""}" role="list">${items.map((it, i) => `<li>${tile(it, surface, {...o, ...(o.each?.(it, i) || {})})}</li>`).join("")}</ul>`;
+export const cardGrid = (items, surface, o = {}) =>
+  `<ul class="grid ${o.cls || ""}" role="list">${items.map((it, i) => `<li>${card(it, surface, {...o, ...(o.each?.(it, i) || {})})}</li>`).join("")}</ul>`;
+
+// Swatch selection: update the card in place (image, name, link target, colour, price, cart target).
+export function selectSwatch(btn) {
+  const el = btn.closest("[data-card]");
+  const id = +btn.dataset.swatch;
+  if (!el || +el.dataset.article === id) return;
+  const {family, list} = variantsFor({article_id: +el.dataset.article});
+  const v = list.find(x => x.article_id === id);
+  if (!v) return;
+  el.dataset.article = id;
+  const img = $("img", el);
+  delete img.dataset.fallback; img.classList.remove("is-missing");
+  img.src = v.image; img.alt = altOf(v.prod_name, v.label);
+  $$("[data-open]", el).forEach(a => { a.dataset.open = id; a.href = `#/product/${id}`; });
+  const nameLink = $(".card__name a", el); if (nameLink) nameLink.textContent = v.prod_name;
+  $(".card__colour", el).textContent = v.label;
+  $(".card__price", el).textContent = money(family?.price_usd);
+  const hide = $("[data-hide]", el); if (hide) hide.setAttribute("aria-label", `Hide ${v.prod_name}`);
+  $("[data-add]", el).setAttribute("aria-label", `Add ${v.prod_name}, ${v.label}, to cart`);
+  $$(".swatch", el).forEach(s => {
+    const o = list.find(x => x.article_id === +s.dataset.swatch);
+    const on = +s.dataset.swatch === id;
+    s.setAttribute("aria-pressed", String(on));
+    s.setAttribute("aria-label", `${o.label}${on ? ", selected" : ""}`);
+  });
+  el.dispatchEvent(new CustomEvent("variant-change", {bubbles: true, detail: {article_id: id, variant: v, family}}));
+}
+
+// What the card's Add to cart currently targets.
+export function cardTarget(el) {
+  const id = +el.dataset.article;
+  const {family, list} = variantsFor({article_id: id});
+  const v = list.find(x => x.article_id === id);
+  return {article_id: id, family: family?.product_code ?? null, name: v.prod_name, colour: v.label, image: v.image,
+          price: family?.price_usd, surface: el.dataset.s, anchor: el.dataset.anchor ?? null};
+}
+
+// "Hide" removes the card from view and keeps the existing not_for_me event contract.
+export function hideCard(btn) {
+  const el = btn.closest("[data-card]");
+  if (!el) return;
+  logEvent("not_for_me", el.dataset.s, el.dataset.article, el.dataset.anchor ?? null);
+  const name = $(".card__name a", el)?.textContent || "Item";
+  const li = el.closest("li") || el;
+  const next = li.nextElementSibling?.querySelector(".card__name a") || li.previousElementSibling?.querySelector(".card__name a");
+  li.hidden = true;
+  announce(`${name} hidden.`);
+  (next || $("#main")).focus({preventScroll: true});
+}
+
+// ---- reasons and SHAP: DS Studio only -------------------------------------------------------------------
+const EVIDENCE = {
+  personal_history: "From the customer's own purchases",
+  similarity: "From shoppers with similar baskets",
+  trending: "From what is selling now",
+  visual_compatibility: "Visual compatibility",
+};
+export function reasonList(reasons) {
+  if (!reasons?.length) return `<p class="meta">No specific reason was recorded for this item.</p>`;
+  return `<ul class="reason-list">${reasons.map(r => {
+    const ev = EVIDENCE[r.evidence || r.evidence_type];
+    return `<li><span>${esc(r.text)}${ev ? `<span class="meta">${esc(ev)}</span>` : ""}</span></li>`;
+  }).join("")}</ul>`;
+}
+export function shapBars(shap) {
+  const max = Math.max(...shap.map(s => Math.abs(s.value)), 1e-9);
+  return `<div class="shap" role="list">${shap.map(s => {
+    const w = 50 * Math.abs(s.value) / max, neg = s.value < 0;
+    return `<div class="shap__row" role="listitem"><span class="shap__feat">${esc(s.feature)}</span>
+      <span class="shap__track" aria-hidden="true"><span class="shap__fill ${neg ? "is-neg" : ""}" style="left:${neg ? 50 - w : 50}%;width:${w}%"></span></span>
+      <span class="shap__val">${s.value > 0 ? "+" : ""}${s.value}</span></div>`;
+  }).join("")}</div>`;
+}
 
 // ---- dialogs -------------------------------------------------------------------------------------------
 export function openDialog(dlg, opener = document.activeElement) {
@@ -138,87 +251,16 @@ export function initDialogs() {
       const o = dlg._opener;
       if (o && document.contains(o)) o.focus({preventScroll: true});
       dlg._opener = null;
-      dlg.dispatchEvent(new CustomEvent("closed"));
     });
   });
-}
-
-// ---- Why this ------------------------------------------------------------------------------------------
-const EVIDENCE = {
-  personal_history: "From your own purchases",
-  similarity: "From shoppers with similar baskets",
-  trending: "From what is selling now",
-  visual_compatibility: "Visual compatibility",
-  co_purchase: "Bought together in past baskets",
-  style_co_purchase: "Bought with this style in past baskets",
-  popular_in_slot: "Popular in this category",
-};
-const evidenceOf = r => EVIDENCE[r.evidence || r.evidence_type] || null;
-
-export function reasonList(reasons) {
-  if (!reasons?.length) return `<p class="meta">No specific reason was recorded for this piece.</p>`;
-  return `<ul class="reason-list">${reasons.map(r => `<li><span>${esc(r.text)}${evidenceOf(r) ? `<span class="meta">${esc(evidenceOf(r))}</span>` : ""}</span></li>`).join("")}</ul>`;
-}
-
-export function shapBars(shap) {
-  const max = Math.max(...shap.map(s => Math.abs(s.value)), 1e-9);
-  return `<div class="shap" role="list">${shap.map(s => {
-    const w = 50 * Math.abs(s.value) / max, neg = s.value < 0;
-    return `<div class="shap__row" role="listitem"><span class="shap__feat">${esc(s.feature)}</span>
-      <span class="shap__track" aria-hidden="true"><span class="shap__fill ${neg ? "is-neg" : ""}" style="left:${neg ? 50 - w : 50}%;width:${w}%"></span></span>
-      <span class="shap__val">${s.value > 0 ? "+" : ""}${s.value}</span></div>`;
-  }).join("")}</div>`;
-}
-
-export async function openWhy(key, opener) {
-  const entry = registry.get(key);
-  if (!entry) return;
-  const {item, surface, why} = entry;
-  const dlg = $("#why-dialog"), body = $("#why-body");
-  $("#why-title").textContent = item.prod_name;
-  $("#why-eyebrow").textContent = surface === "for_you" ? "Why this is in your edit" : "Why this suggestion";
-  const extra = [];
-  if (item.provenance) extra.push(`Main evidence: ${words(item.provenance)}.`);
-  body.innerHTML = reasonList(item.reasons) + (extra.length ? `<p class="meta">${esc(extra.join(" "))}</p>` : "") +
-    (why === "shap" ? `<div class="skeleton-line" aria-hidden="true"></div><p class="meta" role="status">Loading the model's reasoning…</p>` : "");
-  openDialog(dlg, opener);
-  if (why !== "shap") return;
-  try {
-    const d = await api(`/api/explain/${state.customer}/${item.article_id}`);
-    if (!dlg.open || $("#why-title").textContent !== item.prod_name) return;
-    body.innerHTML = reasonList(d.reasons) + `
-      <details class="disclosure"><summary>Model detail: SHAP contributions</summary>
-        <div style="display:grid;gap:.75rem;padding-top:.5rem">
-          <p class="meta">How much each feature moved this piece's ranking score (${esc(d.score)}) for this profile. Positive values push it up.
-            Reasons above are shown only when the customer's own data supports them.</p>
-          ${shapBars(d.shap)}
-        </div></details>`;
-  } catch (e) {
-    body.innerHTML = reasonList(item.reasons) + `<p class="notice notice--error" role="alert">${esc(e.message)}</p>`;
-  }
-}
-
-// ---- Not for me ----------------------------------------------------------------------------------------
-export function notForMe(key, btn) {
-  const entry = registry.get(key);
-  if (!entry || btn.disabled) return;
-  const card = btn.closest(".tile");
-  logEvent("not_for_me", entry.surface, entry.item.article_id, entry.anchor);
-  btn.disabled = true;
-  btn.textContent = "Noted";
-  card.classList.add("is-dismissed");
-  const status = card.querySelector(".tile__status");
-  status.hidden = false;
-  status.textContent = "Feedback noted. Thank you.";
-  announce(`Feedback noted for ${entry.item.prod_name}.`);
 }
 
 // ---- states --------------------------------------------------------------------------------------------
 export const loadingTiles = (n, cls = "grid--4") =>
   `<ul class="grid ${cls}" aria-hidden="true">${Array.from({length: n}, () =>
-    `<li><div class="tile"><div class="tile__media skeleton"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></li>`).join("")}</ul>`;
+    `<li><div class="card"><div class="card__media skeleton"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></li>`).join("")}</ul>`;
 
-export function errorState(err, {title = "This page did not load", retry = true} = {}) {
+export function errorState(err, {title = "This page didn't load", retry = true} = {}) {
   return `<div class="state" role="alert"><p class="state__title">${esc(title)}</p>
     <p class="meta">${esc(err?.message || "Something went wrong.")}</p>
     ${retry ? `<button class="btn btn--quiet" type="button" data-retry>Try again</button>` : ""}</div>`;
@@ -251,3 +293,5 @@ export function initImageFallback() {
     img.classList.add("is-missing");
   }, true);
 }
+
+export {colourName, money};

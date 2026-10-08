@@ -149,7 +149,7 @@ export async function inspect(ctx) {
       if (!ctx.current()) return;
       box.innerHTML = `<h2>${esc(it.prod_name)} <a class="link-btn" href="#/product/${it.article_id}">Open in Shop</a></h2>
         <p class="meta">Article ${it.article_id} · rank ${esc(it.rank)} · ranker score <span class="tabular">${esc(e.score)}</span></p>
-        <h3 class="eyebrow">Reasons shown to the customer</h3>${reasonList(e.reasons)}
+        <h3 class="eyebrow">Evidence-gated reasons (DS only; not shown to shoppers)</h3>${reasonList(e.reasons)}
         <h3 class="eyebrow">SHAP contributions (top features)</h3>
         <p class="caption">Contribution of each feature to the LightGBM ranking score. Positive values push the item up.</p>${shapBars(e.shap)}`;
     } catch (err) {

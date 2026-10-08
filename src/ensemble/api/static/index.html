@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ensemble</title>
-<meta name="description" content="ensemble — a personalised fashion shop built on the H&amp;M recommender study (offline demo).">
-<meta name="color-scheme" content="light dark">
+<meta name="description" content="ensemble — a personal fashion edit.">
+<meta name="color-scheme" content="light">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/ensemble.css">
 <script type="module" src="/static/js/app.js"></script>
@@ -23,7 +23,8 @@
         <li><a href="#/studio" data-exp="studio">DS Studio</a></li>
       </ul>
     </nav>
-    <p class="utility__note" id="utility-note">Offline demo on the H&amp;M dataset · no checkout</p>
+    <!-- Technical context is shown only in DS Studio (filled by app.js). -->
+    <p class="utility__note" id="utility-note"></p>
   </div>
 </div>
 
@@ -36,7 +37,7 @@
       </button>
       <nav class="primary-nav" id="primary-nav" aria-label="Main"><ul></ul></nav>
     </div>
-    <a class="wordmark" href="#/" id="wordmark" aria-label="ensemble, home">ensemble</a>
+    <a class="wordmark" href="#/" id="wordmark" aria-label="ensemble"><span class="wm-e" aria-hidden="true">e</span><span class="wm-ns" aria-hidden="true">ns</span><span class="wm-em" aria-hidden="true">em</span><span class="wm-ble" aria-hidden="true">ble</span></a>
     <div class="masthead__right">
       <!-- Demo profile selector: chooses which customer powers personalisation. Not the experience switch. -->
       <button class="profile-btn" id="profile-btn" type="button" aria-haspopup="dialog" aria-controls="profile-dialog">
@@ -45,7 +46,11 @@
           <span class="profile-btn__k" id="profile-k">Shopping as</span>
           <span class="profile-btn__v" id="profile-v">Loading profiles…</span>
         </span>
-        <span class="sr-only" id="profile-sr">Change demo profile</span>
+        <span class="sr-only" id="profile-sr">Change profile</span>
+      </button>
+      <button class="icon-btn cart-btn" id="cart-btn" type="button" aria-haspopup="dialog" aria-controls="cart-dialog" aria-label="Cart, empty">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="cart-count" id="cart-count" aria-hidden="true" hidden></span>
       </button>
     </div>
   </div>
@@ -59,11 +64,11 @@
   <div class="footer__inner">
     <div>
       <p class="footer__mark" aria-hidden="true">ensemble</p>
-      <p>A recommender-system study on the H&amp;M Personalized Fashion Recommendations dataset. Product photography and
-        names come from the catalogue; there are no prices and no checkout. Every metric shown is offline unless labelled
-        as live telemetry of this demo server.</p>
+      <!-- Shown only in DS Studio: technical provenance belongs there, not on shopper pages. -->
+      <p class="footer__studio">A recommender-system study on the H&amp;M Personalized Fashion Recommendations dataset.
+        Every metric shown is offline unless labelled as live telemetry of this demo server.</p>
     </div>
-    <p><a href="#/studio">DS Studio</a> · <a href="#/label">Label</a></p>
+    <nav class="footer__nav" aria-label="Footer"><a href="#/">Discover</a><a href="#/collections">Collections</a><a href="#/assistant">Style Assistant</a></nav>
   </div>
 </footer>
 
@@ -89,9 +94,9 @@
 <dialog id="profile-dialog" class="profile-dialog" aria-labelledby="profile-title" aria-describedby="profile-desc">
   <div class="dialog__head">
     <div>
-      <h2 class="section-title" id="profile-title">Choose a demo profile</h2>
-      <p class="meta" id="profile-desc">Profiles are real, anonymised customers from the dataset. They stand in for
-        signing in, so any personalised view can be reproduced. Your choice is remembered on this device.</p>
+      <h2 class="section-title" id="profile-title">Choose a profile</h2>
+      <p class="meta" id="profile-desc">Each profile is a real, anonymised shopper and stands in for signing in.
+        Your choice is remembered on this device.</p>
     </div>
     <button class="icon-btn dialog__close" type="button" data-close>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span class="sr-only">Close</span>
@@ -107,17 +112,18 @@
   </div>
 </dialog>
 
-<dialog id="why-dialog" aria-labelledby="why-title">
+<dialog id="cart-dialog" class="cart" aria-labelledby="cart-title">
   <div class="dialog__head">
-    <div>
-      <p class="eyebrow" id="why-eyebrow">Why this</p>
-      <h2 class="section-title" id="why-title">Why this piece</h2>
-    </div>
-    <button class="icon-btn dialog__close" type="button" data-close>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span class="sr-only">Close</span>
+    <h2 class="section-title" id="cart-title">Your cart</h2>
+    <button class="icon-btn dialog__close" id="cart-close" type="button" data-close>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span class="sr-only">Close cart</span>
     </button>
   </div>
-  <div class="dialog__body" id="why-body"></div>
+  <div class="dialog__body" id="cart-body"></div>
+  <div class="cart__foot" id="cart-foot" hidden>
+    <p class="cart__subtotal"><span>Subtotal</span><span id="cart-subtotal"></span></p>
+    <button class="btn-cart" type="button" disabled>Checkout</button>
+  </div>
 </dialog>
 
 <div class="sr-only" id="announcer" role="status" aria-live="polite"></div>
