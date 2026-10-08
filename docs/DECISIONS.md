@@ -1263,3 +1263,59 @@ The observed week 2020-09-16 was neither read nor scored.
 
 **Revisit if:** a new retrieval channel (content/two-tower) changes the candidate distribution, or
 new features target the never-proposed pairs. Re-run the R1/R2 ladder then with the same rule.
+
+---
+
+### D-046 — The public demo is the real frontend in demo mode, not a second frontend
+
+**Date:** 2026-10-08. **Status:** accepted.
+**Plan:** `docs/CLAUDECODE_PUBLIC_DEMO_FULL_UI_PLAN.md`. **Report:** `reports/PUBLIC_DEMO_FULL_UI_REPORT.md`.
+
+**Context.** The GitHub Pages site at
+<https://yilalalalala.github.io/ensemble-outfit-recommender/> was a separate, hand-written static page:
+its own HTML, CSS and JavaScript, four hard-coded products, and headline numbers typed in by hand.
+Two frontends drift. The typed numbers had already drifted from the stored evaluation reports, and a
+visitor following the live link saw something the application does not look like.
+
+**Decision.** `src/ensemble/api/static/` is the single source of truth. `portfolio/` is generated from
+it by `python -m ensemble.api.public_demo` (`make public-demo`) and carries no frontend code of its own.
+
+1. **Demo mode is declared, not guessed.** The generated `index.html` carries
+   `<meta name="ensemble-demo" content="demo/">`; the real `index.html` never does. `static/js/demo.js`
+   reads that tag. No hostname sniffing, and the FastAPI behaviour of the real app is unchanged.
+2. **One adapter, at the API boundary.** `core.js` routes `api()`, `probe()` and the event logger
+   through `demo.js` when demo mode is on. Nothing above that boundary — routing, components,
+   typography, cart, swatches, grouping, DS Studio — knows which mode it is in.
+3. **Everything published is a captured response**, taken over HTTP from the running local application,
+   not re-derived from the store. The serving store is read only to decide *which* articles to publish.
+4. **The published catalogue is a bounded, closed subset.** The published set is the home modules of
+   five demo profiles, every product a saved assistant answer or photo response cites, the most-used
+   Complete-the-Look items, and the colourways of all of those. Each captured Complete-the-Look module
+   is the live response **filtered to published articles, in its own order** — never padded, and dropped
+   below two items. Nothing a visitor can click leads outside the set (`tests/test_public_demo.py`).
+5. **Language-model responses are captured once and reused.** The assistant turns and the outfit
+   analysis are not deterministic across model versions, so a rebuild never silently replaces a
+   published answer; `--force` / `--recapture <id>` re-captures deliberately. Each saved exchange is its
+   own conversation: sharing one long conversation across unrelated questions measurably degraded the
+   answers (all eight turns stopped citing products, so no cards rendered).
+6. **A surface that needs a backend says so.** Photo upload is withdrawn and replaced by one saved,
+   openly licensed example with both services' real responses; the Label workflow explains that it runs
+   locally only; an unsaved assistant question is reported as unsaved. Nothing is generated in the
+   browser and no live result is implied.
+7. **Results are published unchanged.** `demo/metrics.json` is the serving store's `reports` table
+   verbatim, asserted equal in `tests/test_public_demo.py`, together with the four values the DS Studio
+   overview shows: test MAP@12 `0.03918`, test lift over the best baseline `+45.7%`, validation MAP@12
+   `0.03772`, 10 Track B models compared. The browser journeys assert the same four values as rendered.
+
+**Evidence.** 210 Python tests; 19 of them and 13 node assertions cover the build. Browser journeys:
+110/110 against the real FastAPI app at 1440×900 / 1024×768 / 390×844, and 109/109 against the built
+site served under the `/ensemble-outfit-recommender/` subpath, including no request leaving the site,
+no console error, no failed request, no broken photograph and no horizontal overflow.
+
+**Cost.** The published build is ~72 MB (663 articles of downscaled photography, ~33 MB of frozen
+JSON). `configs/public_demo.yaml` holds the knobs (`ctl_pool`, `max_variants_per_family`,
+`image_width`, `image_quality`) if that has to come down.
+
+**Revisit if:** the published subset stops exercising a visible interaction; the build approaches the
+GitHub Pages size limit; or a hosted runtime becomes available, at which point demo mode can be
+dropped rather than extended.

@@ -13,9 +13,12 @@ In machine learning, it also means several models combined. This project is both
 
 ![Ensemble editorial shopping interface](docs/assets/home_desktop.png)
 
-> The public GitHub Pages demo is a lightweight, interactive presentation layer built from the same visual
-> language and a small sample of catalogue images used by the local application. The full application runs
-> locally with FastAPI, the trained recommenders, visual search, outfit analysis and a grounded LLM assistant.
+> **The live demo is this application's own frontend**, published as a static build. It is the same HTML,
+> CSS and JavaScript that `make serve` serves from FastAPI, and it answers every request from frozen
+> responses captured from the local app — the real recommendations, the real Complete-the-Look modules,
+> the real catalogue photography and the real evaluation reports. GitHub Pages cannot run FastAPI, SQLite,
+> model inference or an LLM, so the public build runs no models and records nothing. Run `make serve`
+> locally for the live database, model-backed visual search, outfit analysis and the grounded assistant.
 
 <p align="center">
   <img src="docs/assets/assistant_desktop.png" alt="Ensemble Style Assistant" width="67%">
@@ -23,6 +26,17 @@ In machine learning, it also means several models combined. This project is both
 </p>
 
 ![Ensemble DS Studio offline evaluation](docs/assets/studio_desktop.png)
+
+<p align="center">
+  <img src="docs/assets/style_assistant_interaction.png"
+       alt="Style Assistant: a grounded answer with product cards, and an outfit photo with the framed garment and its catalogue matches"
+       width="78%">
+</p>
+
+<p align="center"><em>Style Assistant — grounded recommendation and outfit-photo analysis in the local
+model-backed app. The assistant may only cite products a tool returned; the cards below the answer are
+those products. On the right, one garment is framed in the photo, matched against the catalogue, and the
+outfit's missing slot is filled.</em></p>
 
 **Ensemble recommends clothing the way a stylist would:**
 - what *you* will likely buy next;
@@ -181,7 +195,7 @@ gains 2%, so the improvement is the ranking, not a larger candidate set.
 - **Confidence intervals** (cluster bootstrap) on every small-sample number.
 - **Human gold labels,** split into a calibration set and a held-out set, the same discipline as
   validation and test.
-- **26 architecture decision records** in [docs/DECISIONS.md](docs/DECISIONS.md) state what was
+- **46 architecture decision records** in [docs/DECISIONS.md](docs/DECISIONS.md) state what was
   decided, why, with which numbers, and when to revisit.
 
 ## Quickstart
@@ -207,24 +221,39 @@ stage.
 
 ## Live demo and deployment
 
-The repository contains two deliberately separate serving modes:
+There is one frontend, served two ways. `src/ensemble/api/static/` is the source of truth; nothing is
+reimplemented for the web.
 
-- **Portfolio demo:** `portfolio/` is a dependency-free static experience deployed automatically to
-  [GitHub Pages](https://yilalalalala.github.io/ensemble-outfit-recommender/) from `main`. It demonstrates
-  the editorial shop, collection filtering, colour selection, persistent cart, Style Assistant interaction,
-  and DS Studio metrics with a small selection of catalogue images from the local demo.
-- **Full application:** `make serve` starts the real FastAPI application against the local serving store.
-  It powers personalized ranking, Complete the Look, explanations in DS Studio, image retrieval, outfit
-  analysis and the tool-calling assistant. Its data and model assets stay local because their source licences
-  do not permit bundling them into this public repository.
+- **Full application** — `make serve` runs the FastAPI app against the local serving store at
+  <http://localhost:8010>. It powers personalized ranking, request-time Complete the Look over a versioned
+  serving bundle, SHAP explanations in DS Studio, model-backed visual search, outfit analysis and the
+  tool-calling assistant. Its data and model assets stay local: their source licences do not permit
+  bundling them into a public repository.
+- **Public build** — `portfolio/` is that same frontend, assembled by `make public-demo` and deployed to
+  [GitHub Pages](https://yilalalalala.github.io/ensemble-outfit-recommender/) from `main`. GitHub Pages
+  serves static files only, so the page runs in **demo mode**: a narrow data adapter
+  (`static/js/demo.js`) answers the application's own request paths from frozen responses captured from
+  the running local app. Shopper actions that belong in the browser — cart, colour, profile, "Not for
+  me" — work exactly as they do locally; event logging is a documented no-op. The public build runs no
+  models, stores nothing, and never requests `/api`.
 
-The Pages workflow is in [`.github/workflows/pages.yml`](.github/workflows/pages.yml). To preview the public
-demo locally:
+Demo mode is declared by the build, not guessed from the hostname: the generated `index.html` carries
+`<meta name="ensemble-demo">`, which the real app never emits. What the public build publishes, and the
+limits of that subset, is written up in
+[`reports/PUBLIC_DEMO_FULL_UI_REPORT.md`](reports/PUBLIC_DEMO_FULL_UI_REPORT.md); its parameters are in
+[`configs/public_demo.yaml`](configs/public_demo.yaml).
+
+Every number in the published DS Studio is the stored evaluation report, published unchanged, and
+**offline**: historical data, not production traffic. A launch decision would need an online A/B test.
 
 ```bash
-python -m http.server 8040 --directory portfolio
-# open http://localhost:8040
+make serve                                   # the real application, http://localhost:8010
+make public-demo                             # rebuild portfolio/ (needs the local app running)
+make public-demo-preview                     # serve portfolio/ at the GitHub project subpath
+# open http://localhost:8041/ensemble-outfit-recommender/
 ```
+
+The Pages workflow is in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
 
 <details>
 <summary>Getting the data</summary>
@@ -261,8 +290,9 @@ src/ensemble/
   llm/         provider-neutral LLM layer with a budget guard
   assistant/   tools, agent loop, grounding, eval harness
   evaluation/  metrics, segment analysis, rolling backtest
-  api/         serving-store builder, FastAPI app, web UI
+  api/         serving-store builder, FastAPI app, web UI, public demo build
 configs/       every tunable; experiment configs extend default.yaml
+portfolio/     the public build of the web UI (generated by `make public-demo`)
 reports/       evaluation readouts, model cards, metric JSONs
 tests/         leakage, integrity, metrics, API, assistant grounding
 ```
@@ -275,10 +305,14 @@ Ollama (Qwen3-VL, Qwen2.5-VL) · Anthropic API
 ## Data and licensing
 
 - **No data is in this repository.** H&M competition data and DeepFashion2 (research use) must be
-  obtained from their sources under their own terms, apart from the small catalogue-image sample shown in
-  the non-commercial portfolio demo and README screenshots.
-- **Published UI screenshots are captured from the real local application.** The Pages demo uses the same
-  four catalogue items so its visual presentation stays representative of the full interface.
-- **Outfit photos** used for evaluation are either openly licensed Wikimedia Commons images
-  (credited in the local manifest) or private test images that are not published.
+  obtained from their sources under their own terms. The exception is the bounded subset of catalogue
+  photography republished, downscaled, in the non-commercial public demo and in the README screenshots;
+  the count and the selection rule are in the demo's manifest and report.
+- **Every published screenshot and every published page is the real application.** No product image is
+  AI-generated and no interface is mocked up.
+- **Outfit photos** used for evaluation are either openly licensed Wikimedia Commons images (credited in
+  `data/raw/outfit_photos/CREDITS.csv`) or private test images. Only one of the openly licensed photos is
+  published — in the demo's saved photo example, with its credit shown on the page. The Style Assistant
+  screenshot above additionally shows one private test photo, published deliberately as a screenshot of
+  the local app.
 - **All results are offline.** A launch decision would need an online A/B test.

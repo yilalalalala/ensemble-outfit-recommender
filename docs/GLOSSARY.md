@@ -250,3 +250,14 @@ industry standard and are named as such wherever they appear.
 | **Distribution matching (train/serve candidate parity)** | Training the ranker on candidates produced by exactly the retrieval used at inference, so it never ranks a region of feature space it did not see in training; the ranking analogue of avoiding training–serving skew | DS |
 | **Retrieval provenance features** | Ranker features describing *how* a candidate was retrieved (source, rank within the source, source score), e.g. YouTube's and Pinterest's rankers consume retriever ranks/scores | DS |
 | **Ablation ladder** | A predeclared sequence of variants, each adding one change to the previous (here R0 → R1 retrain → R2 + features → R3 tuning), so each step's effect is measured separately | DS |
+
+## Public demo build (added in the public demo rebuild, D-046)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Static site hosting** | Serving pre-built files only (GitHub Pages, S3 + CDN): no application process, so no database, no model inference and no server-side rendering | Eng |
+| **Demo mode** *(project-specific name)* | A build-time switch that makes the application's own frontend answer its API calls from checked-in responses instead of a server; declared by a `<meta>` tag the real build never emits, never inferred from the hostname | Eng |
+| **Frozen response** / **fixture** | A real API response captured once and checked in, then replayed verbatim; the demo's product, Complete-the-Look, assistant and photo data are all frozen responses, not regenerated content | Eng |
+| **Golden/provenance assertion on published numbers** | A test that the figures a published page shows equal the stored evaluation artifacts exactly, unrounded and unrecomputed — the deployment analogue of `report-verify` | DS / Eng |
+| **Documented no-op** | A call the public build accepts and deliberately does nothing with (here: event logging), stated as such rather than silently dropped | Eng |
+| **Project subpath (base path)** | A site served below the domain root (`/<repo>/` on GitHub Pages); every asset and data URL must be document-relative or it breaks | Eng |
