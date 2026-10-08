@@ -165,6 +165,44 @@ def product(article_id: int):
     return {"article": a, "complete_the_look": look, "other_colours": colours, "similar": similar}
 
 
+MAX_FAMILY_LOOKUP = 400
+
+
+def _has_image(article_id: int) -> bool:
+    s = f"{article_id:010d}"
+    return (IMAGES / s[:3] / f"{s}.jpg").exists()
+
+
+@app.get("/api/catalog/families")
+def catalog_families(articles: str = ""):
+    """Shop UI: the product family (real ``product_code``), its photographed colourways and the
+    prototype USD price (``merch.py`` — demo merchandising prices, not source prices) for each
+    requested article. Additive endpoint; no existing response changes."""
+    from ensemble.api import merch
+    try:
+        ids = sorted({int(x) for x in articles.split(",") if x.strip()})
+    except ValueError:
+        raise HTTPException(400, "articles must be a comma-separated list of article ids")
+    if len(ids) > MAX_FAMILY_LOOKUP:
+        raise HTTPException(400, f"at most {MAX_FAMILY_LOOKUP} articles per request")
+    if not ids:
+        return {"articles": {}, "families": {}}
+    own = q(f"SELECT article_id, product_code FROM articles WHERE article_id IN ({','.join('?' * len(ids))})", ids)
+    code_of = {r["article_id"]: r["product_code"] for r in own}
+    codes = sorted(set(code_of.values()))
+    rows = q(f"""SELECT article_id, product_code, prod_name, product_type_name, product_group_name, colour_group_name,
+                        department_name, index_group_name FROM articles
+                 WHERE product_code IN ({','.join('?' * len(codes))}) ORDER BY article_id""", codes)
+    families: dict[str, dict] = {}
+    for r in rows:
+        f = families.setdefault(r["product_code"], {"product_code": r["product_code"], "price_usd": merch.price_usd(r),
+                                                    "variants": []})   # first row = canonical (lowest article_id)
+        if r["article_id"] in code_of or _has_image(r["article_id"]):
+            f["variants"].append({"article_id": r["article_id"], "prod_name": r["prod_name"],
+                                  "colour_group_name": r["colour_group_name"], "image": f"/images/{r['article_id']}.jpg"})
+    return {"articles": {str(a): c for a, c in code_of.items()}, "families": families}
+
+
 @app.get("/api/explain/{customer_idx}/{article_id}")
 def explain(customer_idx: int, article_id: int):
     r = q("SELECT score, reasons, shap FROM for_you WHERE customer_idx = ? AND article_id = ?", (customer_idx, article_id))

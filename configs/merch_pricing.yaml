@@ -1,0 +1,98 @@
+# Prototype merchandising prices (USD) for the shop UI.
+#
+# The H&M source data has no trustworthy US retail price (transactions carry a normalised,
+# unit-less `price`), so these are NOT historical or source-dataset prices. They are portfolio/demo
+# merchandising prices that make the prototype behave like a US store. They never feed a model
+# feature, an evaluation, or a report metric.
+#
+# Rule (src/ensemble/api/merch.py):
+#   1. band  = by_product_type[product_type_name] or by_product_group[product_group_name] or default
+#   2. scale = index_group multiplier × premium multiplier (department name contains "Premium")
+#   3. price = one of `price_points` inside [low × scale, high × scale], chosen by
+#              sha256(product_code) — stable across reloads, routes, customers and processes.
+# The band uses the family's canonical article (lowest article_id), so every colourway of one
+# product family has the same price.
+
+price_points: [3.99, 4.99, 5.99, 6.99, 7.99, 8.99, 9.99, 12.99, 14.99, 17.99, 19.99, 24.99, 27.99,
+               29.99, 34.99, 39.99, 44.99, 49.99, 54.99, 59.99, 69.99, 79.99, 89.99, 99.00, 119.00,
+               129.00, 149.00, 179.00, 199.00, 249.00]
+
+default: [9.99, 29.99]
+
+by_product_group:
+  Garment Upper body: [14.99, 39.99]
+  Garment Lower body: [24.99, 49.99]
+  Garment Full body: [29.99, 59.99]
+  Accessories: [7.99, 24.99]
+  Underwear: [7.99, 19.99]
+  Shoes: [29.99, 69.99]
+  Swimwear: [12.99, 29.99]
+  Socks & Tights: [4.99, 12.99]
+  Nightwear: [14.99, 34.99]
+  Underwear/nightwear: [9.99, 24.99]
+  Bags: [24.99, 49.99]
+  Cosmetic: [4.99, 14.99]
+
+by_product_type:
+  T-shirt: [7.99, 17.99]
+  Vest top: [6.99, 14.99]
+  Top: [9.99, 24.99]
+  Bodysuit: [9.99, 19.99]
+  Polo shirt: [17.99, 29.99]
+  Shirt: [19.99, 39.99]
+  Blouse: [19.99, 39.99]
+  Sweater: [24.99, 49.99]
+  Cardigan: [24.99, 49.99]
+  Hoodie: [24.99, 39.99]
+  Blazer: [49.99, 89.99]
+  Jacket: [39.99, 99.00]
+  Coat: [69.99, 149.00]
+  Outdoor Waistcoat: [29.99, 59.99]
+  Trousers: [24.99, 49.99]
+  Shorts: [14.99, 29.99]
+  Skirt: [19.99, 44.99]
+  Leggings/Tights: [12.99, 29.99]
+  Dress: [29.99, 69.99]
+  Jumpsuit/Playsuit: [29.99, 54.99]
+  Dungarees: [29.99, 49.99]
+  Garment Set: [17.99, 39.99]
+  Sneakers: [29.99, 59.99]
+  Boots: [49.99, 99.00]
+  Sandals: [19.99, 39.99]
+  Heeled sandals: [29.99, 54.99]
+  Pumps: [34.99, 59.99]
+  Ballerinas: [24.99, 39.99]
+  Flat shoe: [24.99, 44.99]
+  Slippers: [12.99, 24.99]
+  Bag: [19.99, 49.99]
+  Hat/beanie: [9.99, 19.99]
+  Hat/brim: [14.99, 29.99]
+  Cap/peaked: [12.99, 19.99]
+  Scarf: [12.99, 29.99]
+  Gloves: [9.99, 19.99]
+  Belt: [12.99, 24.99]
+  Sunglasses: [12.99, 24.99]
+  Earring: [6.99, 14.99]
+  Necklace: [7.99, 19.99]
+  Ring: [5.99, 12.99]
+  Bracelet: [6.99, 14.99]
+  Hair/alice band: [3.99, 9.99]
+  Hair clip: [3.99, 8.99]
+  Hair string: [3.99, 7.99]
+  Socks: [4.99, 12.99]
+  Underwear Tights: [6.99, 14.99]
+  Bra: [14.99, 29.99]
+  Underwear bottom: [5.99, 12.99]
+  Bikini top: [12.99, 24.99]
+  Swimwear bottom: [9.99, 19.99]
+  Swimsuit: [19.99, 39.99]
+  Pyjama set: [19.99, 39.99]
+
+by_index_group:
+  Ladieswear: 1.0
+  Menswear: 1.0
+  Divided: 0.8
+  Sport: 1.0
+  Baby/Children: 0.6
+
+premium_multiplier: 1.6
