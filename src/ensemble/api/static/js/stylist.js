@@ -110,7 +110,7 @@ async function newSession(customer) {
 function emptyChat() {
   return `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
     <p class="msg__text">I can find pieces, style something you own, or complete an outfit from a photo. What are you dressing for?</p>
-    <div class="suggestions">${SUGGESTIONS.map(t => `<button class="filter" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div></div>`;
+    <div class="suggestions">${SUGGESTIONS.map(t => `<button class="suggestion" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div></div>`;
 }
 
 function renderAnswer(r, cards) {
