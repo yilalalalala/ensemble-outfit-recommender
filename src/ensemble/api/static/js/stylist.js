@@ -121,9 +121,11 @@ function emptyChat() {
 function renderAnswer(r) {
   let n = 0; const order = {};
   const text = esc(r.answer).replace(/\[\[(\d+)\]\]/g, (_, id) => `(${order[id] ??= ++n})`);
+  // The model writes light markdown; after escaping, only **bold** is turned into markup.
+  const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
   const tools = r.trace.map(t => words(t.tool)).join(" → ");
-  return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${text}</p>
-    ${r.cards.length ? grid(r.cards, "assistant", {cls: "grid--compact"}) : ""}
+  return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
+    ${r.cards.length ? grid(r.cards, "assistant", {cls: "grid--compact", each: c => ({index: order[c.article_id] ?? null})}) : ""}
     <p class="msg__trace">${tools ? `<span class="tag">Used ${esc(tools)}</span>` : `<span class="tag">No tools used</span>`}
       <span>${esc(r.latency_s)} s${r.cost_usd ? ` · $${r.cost_usd.toFixed(4)}` : ""}</span>
       ${r.hallucinated.length ? `<span class="tag tag--warn">Removed ${plural(r.hallucinated.length, "unverified product")}</span>` : ""}</p></div>`;
@@ -310,7 +312,7 @@ function photoServices(root) {
       out.innerHTML = `<div class="state" role="alert"><p class="state__title">Visual search did not complete</p><p class="meta">${esc(e.message)}</p>
         <button class="btn btn--quiet" type="button" id="vs-retry">Try again</button></div>`;
       $("#vs-retry", out).addEventListener("click", () => vsGo.click());
-    } finally { busy(false); }
+    } finally { busy(false); out.scrollIntoView({block: "nearest"}); }
   });
 
   snapGo.addEventListener("click", async () => {
@@ -335,7 +337,7 @@ function photoServices(root) {
       out.innerHTML = `<div class="state" role="alert"><p class="state__title">Outfit analysis did not complete</p><p class="meta">${esc(e.message)}</p>
         <button class="btn btn--quiet" type="button" id="snap-retry">Try again</button></div>`;
       $("#snap-retry", out).addEventListener("click", () => snapGo.click());
-    } finally { clearInterval(timer); busy(false); }
+    } finally { clearInterval(timer); busy(false); out.scrollIntoView({block: "nearest"}); }
   });
 
   empty();

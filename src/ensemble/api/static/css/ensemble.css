@@ -73,7 +73,7 @@ body {
   background: var(--canvas); color: var(--ink);
   font: 400 var(--fs-body)/1.55 var(--sans); -webkit-font-smoothing: antialiased;
 }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .2em; }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
@@ -94,6 +94,7 @@ ul, ol { margin: 0; padding: 0; }
 .skip:focus { top: var(--s-2); }
 
 main { flex: 1; width: 100%; outline: none; }
+main:focus, main:focus-visible { box-shadow: none; }   /* focus target after navigation, not an interactive control */
 .view { width: 100%; max-width: var(--content); margin: 0 auto; padding: 0 var(--gutter) var(--s-9); }
 
 /* type roles */
@@ -406,6 +407,7 @@ details.disclosure[open] > summary::before { content: "–"; }
 .msg--user { justify-items: end; text-align: right; }
 .msg--user .msg__text { background: var(--surface); border: var(--hair); padding: .6rem .9rem; }
 .msg--bot .msg__text { font-family: var(--serif); font-size: 1.12rem; line-height: 1.5; }
+.msg__text strong { font-weight: 600; }
 .msg__trace { font-size: var(--fs-meta); color: var(--muted); display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
 .msg .grid { --cols: 4; gap: var(--s-4) var(--s-3); }
 .thinking { display: inline-flex; gap: .3rem; align-items: center; color: var(--muted); font-size: var(--fs-meta); }
@@ -512,8 +514,8 @@ table.data th[scope="row"] { font-weight: 400; font-family: var(--mono); font-si
 
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1180px) {
-  .hero__copy { grid-column: 1 / span 5; }
-  .hero__lead { grid-column: 6 / span 7; }
+  .hero__copy { grid-column: 1 / span 5; align-self: center; padding-bottom: 0; }
+  .hero__lead { grid-column: 6 / span 7; grid-row: 1; }
   .hero__second { grid-column: 1 / span 4; grid-row: 2; margin-top: var(--s-5); }
   .hero__third { grid-column: 5 / span 4; grid-row: 2; margin-top: var(--s-8); }
   .hero__meta { grid-column: 9 / span 4; grid-row: 2; }
