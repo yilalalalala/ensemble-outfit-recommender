@@ -141,7 +141,7 @@ def test_white_canvas_without_automatic_dark_mode_and_black_cart_buttons():
     css = (STATIC / "css" / "ensemble.css").read_text()
     assert "prefers-color-scheme: dark" not in css
     assert re.search(r"--canvas:\s*#ffffff", css)
-    rule = re.search(r"\.btn-cart\s*\{([^}]*)\}", css).group(1)
+    rule = re.search(r"^\.btn-cart\s*\{([^}]*)\}", css, re.M).group(1)
     assert "background: #000" in rule and "color: #fff" in rule
 
 

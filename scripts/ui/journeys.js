@@ -171,6 +171,7 @@ async function auditCards(p, scope = 'main') {
     const sum = cart.lines.reduce((a, l) => a + num(l.total), 0);
     ok('cart lists image, name, colour, price, quantity, line total and subtotal', cart.lines.length === 2 && cart.lines[0].qty === 2 && cart.lines.every(l => l.img && l.name)
        && Math.abs(num(cart.lines[0].total) - 2 * num(cart.lines[0].price.split('·').pop())) < 0.005 && Math.abs(num(cart.subtotal) - sum) < 0.005 && cart.checkout === true, JSON.stringify(cart));
+    await p.waitForTimeout(500);
     await p.screenshot({path: `${SHOTS}/cart_drawer.png`});
     await p.click(`[data-line="${target}"] [data-qty="1"]`); await p.waitForTimeout(100);
     await p.click(`[data-line="${target}"] [data-qty="-1"]`); await p.waitForTimeout(100);
@@ -323,6 +324,7 @@ async function auditCards(p, scope = 'main') {
     await p.keyboard.press('Enter'); await p.waitForTimeout(200);
     ok('cart drawer opens from keyboard with focus inside', await p.evaluate(() => document.querySelector('#cart-dialog').open && document.querySelector('#cart-dialog').contains(document.activeElement)), '');
     await p.keyboard.press('Escape');
+    await p.waitForFunction(() => !document.querySelector('#cart-dialog').open); await p.waitForTimeout(200);
     await p.evaluate(() => document.querySelector('[data-exp="shop"]').focus());
     await p.keyboard.press('Tab'); await p.keyboard.press('Enter'); await settle(p);
     ok('experience switch by keyboard', /#\/studio$/.test(p.url()), p.url());
