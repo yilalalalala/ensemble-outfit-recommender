@@ -46,6 +46,11 @@ test("claim reserves a family (product page owns its own colourways)", () => {
   assert.deepEqual(page.take([item(102), item(200)]).map(i => i.article_id), [200]);
 });
 
+test("families marked Not for me never render on later pages", () => {
+  const page = createPageGroups(familyOf, new Set(["f:A"]));
+  assert.deepEqual(page.take([item(101), item(200), item(100)]).map(i => i.article_id), [200]);
+});
+
 test("duplicate colour groups inside one family get distinct labels", () => {
   const labels = variantLabels([{colour_group_name: "Black"}, {colour_group_name: "Beige"}, {colour_group_name: "Black"}, {colour_group_name: "Other Pink"}]);
   assert.deepEqual(labels, ["Black, option 1", "Beige", "Black, option 2", "Pink (other shade)"]);

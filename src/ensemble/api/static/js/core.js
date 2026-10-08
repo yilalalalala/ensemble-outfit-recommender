@@ -1,6 +1,6 @@
 // Shared state, API access, event logging, the shopper product card, dialogs and motion.
 // Everything shown is rendered from API responses; nothing here invents product data.
-import {colourName, createPageGroups, money, swatchStyle, variantLabels} from "./catalog.js";
+import {colourName, createPageGroups, familyKey, money, swatchStyle, variantLabels} from "./catalog.js";
 
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];
@@ -69,7 +69,16 @@ export async function loadFamilies(ids) {
     for (const [a, code] of Object.entries(d.articles)) familyOfArticle.set(+a, code);
   }
 }
-export const newPageGroups = () => createPageGroups(familyOf);
+// "Not for me": remembered per profile on this device and applied to every page rendered afterwards.
+const nfmKey = () => `ensemble.notforme.${state.customer}`;
+export function notForMeSet() {
+  try { return new Set(JSON.parse(localStorage.getItem(nfmKey()) || "[]")); } catch { return new Set(); }
+}
+function rememberNotForMe(key) {
+  const s = notForMeSet(); s.add(key);
+  try { localStorage.setItem(nfmKey(), JSON.stringify([...s])); return true; } catch { return false; }
+}
+export const newPageGroups = () => createPageGroups(familyOf, notForMeSet());
 
 // ---- events (DESIGN §7.6: impression, click, add_to_cart, not_for_me) --------------------------------
 export function logEvent(event, surface, article_id, anchor = null) {
@@ -148,8 +157,6 @@ export function card(it, surface, o = {}) {
       <a class="card__img" href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr} tabindex="-1" aria-hidden="true">
         <img src="${esc(v.image)}" alt="${esc(altOf(v.prod_name, v.label))}" width="${PHOTO_W}" height="${PHOTO_H}" ${o.eager ? `fetchpriority="high"` : `loading="lazy"`} decoding="async">
       </a>
-      ${o.hide === false ? "" : `<button class="card__hide" type="button" data-hide aria-label="Hide ${esc(v.prod_name)}">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`}
     </div>
     <div class="card__info">
       <h3 class="card__name"><a href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr}>${esc(v.prod_name)}</a></h3>
@@ -158,7 +165,9 @@ export function card(it, surface, o = {}) {
           ? `<a class="swatch-more" href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr} aria-label="${more} more colours">+${more}</a>` : ""}</div>
         <span class="card__colour">${esc(v.label)}</span>
       </div>
-      <p class="card__price">${esc(money(price))}</p>
+      <div class="card__row"><p class="card__price">${esc(money(price))}</p>
+        ${o.nfm === false ? "" : `<button class="link-btn card__nfm" type="button" data-nfm aria-label="Not for me: ${esc(v.prod_name)}">Not for me</button>`}</div>
+      <p class="card__nfm-note" role="status" hidden></p>
       ${o.note ? `<p class="card__note">${o.note}</p>` : ""}
       <button class="btn-cart" type="button" data-add aria-label="Add ${esc(v.prod_name)}, ${esc(v.label)}, to cart" ${price == null ? "disabled" : ""}>Add to cart</button>
     </div>
@@ -184,7 +193,7 @@ export function selectSwatch(btn) {
   const nameLink = $(".card__name a", el); if (nameLink) nameLink.textContent = v.prod_name;
   $(".card__colour", el).textContent = v.label;
   $(".card__price", el).textContent = money(family?.price_usd);
-  const hide = $("[data-hide]", el); if (hide) hide.setAttribute("aria-label", `Hide ${v.prod_name}`);
+  const nfm = $("[data-nfm]", el); if (nfm && !nfm.disabled) nfm.setAttribute("aria-label", `Not for me: ${v.prod_name}`);
   $("[data-add]", el).setAttribute("aria-label", `Add ${v.prod_name}, ${v.label}, to cart`);
   $$(".swatch", el).forEach(s => {
     const o = list.find(x => x.article_id === +s.dataset.swatch);
@@ -204,17 +213,21 @@ export function cardTarget(el) {
           price: family?.price_usd, surface: el.dataset.s, anchor: el.dataset.anchor ?? null};
 }
 
-// "Hide" removes the card from view and keeps the existing not_for_me event contract.
-export function hideCard(btn) {
+// "Not for me": keeps the existing not_for_me event, dims the card in place (no layout jump), and is
+// remembered for this profile so the product family is left out of every page rendered afterwards.
+export function notForMe(btn) {
   const el = btn.closest("[data-card]");
-  if (!el) return;
+  if (!el || btn.disabled) return;
   logEvent("not_for_me", el.dataset.s, el.dataset.article, el.dataset.anchor ?? null);
+  const saved = rememberNotForMe(el.dataset.family ? `f:${el.dataset.family}` : familyKey(familyOf, el.dataset.article));
   const name = $(".card__name a", el)?.textContent || "Item";
-  const li = el.closest("li") || el;
-  const next = li.nextElementSibling?.querySelector(".card__name a") || li.previousElementSibling?.querySelector(".card__name a");
-  li.hidden = true;
-  announce(`${name} hidden.`);
-  (next || $("#main")).focus({preventScroll: true});
+  el.classList.add("is-dismissed");
+  btn.disabled = true;
+  btn.textContent = "Noted";
+  const note = $(".card__nfm-note", el);
+  note.hidden = false;
+  note.textContent = saved ? "Got it. We'll remember that next time." : "Got it. We'll keep that in mind.";
+  announce(`${name}: got it, we'll remember that next time.`);
 }
 
 // ---- reasons and SHAP: DS Studio only -------------------------------------------------------------------

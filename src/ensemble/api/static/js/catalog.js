@@ -56,15 +56,18 @@ export function variantLabels(variants) {
 // null when unknown — then only the exact article id is used, so unrelated products are never merged
 // (products are never grouped by name). The first occurrence keeps its position and module; later
 // occurrences and colourways enrich that card instead of rendering again.
-export function createPageGroups(familyOf) {
+// `exclude` holds family keys the shopper marked "Not for me"; those never render on later pages.
+export const familyKey = (familyOf, id) => { const f = familyOf(id); return f ? `f:${f}` : `a:${id}`; };
+
+export function createPageGroups(familyOf, exclude = new Set()) {
   const owner = new Map();   // family key -> article_id that owns the card
-  const key = id => { const f = familyOf(id); return f ? `f:${f}` : `a:${id}`; };
+  const key = id => familyKey(familyOf, id);
   return {
     take(items) {
       const out = [];
       for (const it of items || []) {
         const k = key(it.article_id);
-        if (owner.has(k)) continue;
+        if (owner.has(k) || exclude.has(k)) continue;
         owner.set(k, it.article_id);
         out.push(it);
       }

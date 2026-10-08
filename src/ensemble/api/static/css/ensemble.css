@@ -33,7 +33,8 @@
   --fs-product: .9rem;
   --fs-body: 1rem;
   --fs-meta: .8125rem;
-  --fs-label: .6875rem;
+  --fs-label: .76rem;          /* eyebrows and small uppercase labels (round-2 follow-up: larger) */
+  --fs-nav: .98rem;            /* main navigation, collection tabs and category filters */
 
   --s-1: .25rem; --s-2: .5rem; --s-3: .75rem; --s-4: 1rem; --s-5: 1.5rem; --s-6: 2rem;
   --s-7: 3rem; --s-8: clamp(3rem, 2rem + 4vw, 6rem); --s-9: clamp(4rem, 2.5rem + 6vw, 9rem);
@@ -135,16 +136,23 @@ main:focus, main:focus-visible { box-shadow: none; }   /* focus target after nav
 .masthead__right { justify-self: end; display: flex; align-items: center; gap: var(--s-3); min-width: 0; }
 .wordmark {
   grid-column: 2; justify-self: center; text-decoration: none; color: var(--ink);
-  font: 400 var(--fs-masthead)/1 var(--serif); letter-spacing: .01em; text-transform: lowercase;
+  font: italic 400 var(--fs-masthead)/1 var(--serif); text-transform: lowercase;
   padding: 0 var(--s-4); white-space: nowrap; display: inline-flex; align-items: baseline;
 }
-/* Didone rhythm: an oversized italic initial, roman body, a second italic echo — one readable word. */
-.wordmark .wm-e { font-style: italic; font-size: 1.32em; line-height: .8; margin-right: -.02em; transform: translateY(.05em); display: inline-block; }
-.wordmark .wm-em { font-style: italic; }
-.wordmark .wm-ble { letter-spacing: .03em; }
+/* Every letter is a Didone italic like the initial "e", each at its own scale on a shared baseline —
+   a deliberate rhythm, still one readable word (decorative spans; the link's name is "ensemble"). */
+.wordmark span { display: inline-block; font-size: var(--wm, 1em); letter-spacing: -.005em; }
+.wordmark .wm-1 { --wm: 1.30em; margin-right: -.03em; }
+.wordmark .wm-2 { --wm: .94em; }
+.wordmark .wm-3 { --wm: 1.10em; }
+.wordmark .wm-4 { --wm: 1.20em; }
+.wordmark .wm-5 { --wm: .92em; }
+.wordmark .wm-6 { --wm: 1.14em; }
+.wordmark .wm-7 { --wm: 1.02em; }
+.wordmark .wm-8 { --wm: 1.26em; }
 .primary-nav ul { list-style: none; display: flex; gap: clamp(.9rem, .4rem + 1.2vw, 1.9rem); }
 .primary-nav a, .drawer-nav a {
-  text-decoration: none; font-size: var(--fs-meta); letter-spacing: .06em; color: var(--muted);
+  text-decoration: none; font-size: var(--fs-nav); letter-spacing: .04em; color: var(--muted);
   padding: .35rem 0; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   transition: background-size var(--t-med) var(--ease), color var(--t-fast);
 }
@@ -203,13 +211,6 @@ main:focus, main:focus-visible { box-shadow: none; }   /* focus target after nav
 .card__img { display: block; width: 100%; height: 100%; }
 .card__img img { width: 100%; height: 100%; object-fit: contain; transition: transform var(--t-slow) var(--ease), opacity var(--t-med); }
 .card__media img.is-missing { object-fit: none; opacity: .6; }
-.card__hide {
-  position: absolute; top: .35rem; right: .35rem; width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
-  border: 0; border-radius: 50%; background: rgb(255 255 255 / .85); color: var(--ink); opacity: .75;
-  transition: opacity var(--t-fast), background var(--t-fast);
-}
-.card__hide svg { width: .95rem; height: .95rem; stroke: currentColor; stroke-width: 1.4; fill: none; }
-.card__hide:hover, .card__hide:focus-visible { opacity: 1; background: #fff; }
 .card__info { display: flex; flex-direction: column; gap: .45rem; flex: 1; }
 .card__info .btn-cart { margin-top: auto; }
 /* Regular grids: equal-height cards so every row's Add to cart buttons line up. */
@@ -221,6 +222,11 @@ main:focus, main:focus-visible { box-shadow: none; }   /* focus target after nav
 .card__colours { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .6rem; }
 .card__colour { font-size: var(--fs-meta); color: var(--muted); }
 .card__price { font-size: .9rem; font-variant-numeric: tabular-nums; color: var(--ink); }
+.card__row { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; }
+.card__nfm { min-height: 1.75rem; padding: 0; font-size: var(--fs-meta); }
+.card__nfm-note { font-size: var(--fs-meta); color: var(--ink); }
+.card.is-dismissed .card__media img { opacity: .35; filter: grayscale(1); }
+.card.is-dismissed .card__name a { color: var(--muted); }
 .card__note { font-size: var(--fs-meta); color: var(--muted); }
 
 /* swatches: real buttons; selection shown by a black ring and aria-pressed, not by colour alone */
@@ -365,7 +371,7 @@ details.disclosure[open] > summary::before { content: "–"; }
 .footer p { font-size: var(--fs-meta); color: var(--muted); max-width: 42rem; }
 .footer__studio { display: none; margin-top: .5rem; }
 body.studio .footer__studio { display: block; }
-.footer__nav { display: flex; gap: 1.4rem; flex-wrap: wrap; font-size: var(--fs-meta); }
+.footer__nav { display: flex; gap: 1.6rem; flex-wrap: wrap; font-size: .92rem; }
 .footer__nav a { color: var(--muted); text-decoration: none; }
 .footer__nav a:hover { color: var(--ink); text-decoration: underline; }
 
@@ -380,6 +386,7 @@ body.studio .footer__studio { display: block; }
 .hero__lead { grid-column: 5 / span 5; grid-row: 1 / span 2; }
 .hero__lead .card__media { aspect-ratio: 4 / 5; }
 .hero__links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+.hero__links .link-btn, .section__head .link-btn { font-size: .9rem; }
 .hero__second { grid-column: 10 / span 3; grid-row: 1; margin-top: clamp(2rem, 1rem + 4vw, 6rem); }
 .hero__third { grid-column: 2 / span 3; grid-row: 2; margin-top: var(--s-5); }
 .edit { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-7) var(--gap); list-style: none; }
@@ -390,10 +397,10 @@ body.studio .footer__studio { display: block; }
 
 /* collections */
 /* Category navigation (round 2): grey when inactive, black (with an underline) when selected — never a filled pill. */
-.filters { display: flex; gap: .2rem 1.4rem; margin-bottom: var(--s-6); overflow-x: auto; scrollbar-width: none; padding: .2rem .1rem; }
+.filters { display: flex; gap: .2rem 1.75rem; margin-bottom: var(--s-6); overflow-x: auto; scrollbar-width: none; padding: .2rem .1rem; }
 .filter, .tabs a, .tabs button {
   flex: none; min-height: 2.5rem; padding: .3rem 0; border: 0; border-bottom: 1px solid transparent; border-radius: 0; background: none;
-  font-size: var(--fs-meta); letter-spacing: .06em; color: var(--faint); text-decoration: none; white-space: nowrap;
+  font-size: var(--fs-nav); letter-spacing: .03em; color: var(--faint); text-decoration: none; white-space: nowrap;
   transition: color var(--t-fast), border-color var(--t-fast);
 }
 .filter:hover, .tabs a:hover, .tabs button:hover, .filter:focus-visible, .tabs a:focus-visible { color: var(--ink); }

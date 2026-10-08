@@ -1,6 +1,6 @@
 // Router, masthead navigation, experience switch and demo-profile selector.
-import {$, $$, api, announce, esc, errorState, hideCard, initDialogs, initImageFallback, initMotion, logEvent,
-        openDialog, profileDetail, profileName, selectSwatch, state} from "./core.js";
+import {$, $$, api, announce, esc, errorState, initDialogs, initImageFallback, initMotion, logEvent,
+        notForMe, openDialog, profileDetail, profileName, selectSwatch, state} from "./core.js";
 import {addToCart, initCart, loadCart} from "./cart.js";
 import * as shop from "./shop.js";
 import * as stylist from "./stylist.js";
@@ -209,8 +209,8 @@ function wire() {
     if (sw) { selectSwatch(sw); return; }
     const add = e.target.closest("[data-add]");
     if (add) { addToCart(add); return; }
-    const hide = e.target.closest("[data-hide]");
-    if (hide) { hideCard(hide); return; }
+    const nfm = e.target.closest("[data-nfm]");
+    if (nfm) { notForMe(nfm); return; }
     if (e.target.closest("[data-retry]")) route({focus: false});
   });
 

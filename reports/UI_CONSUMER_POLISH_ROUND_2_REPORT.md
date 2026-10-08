@@ -259,3 +259,14 @@ user-owned and were preserved untouched:
 
 Screenshots and journey results live in the gitignored `data/interim/ui_editorial_screenshots/`. The server
 on port 8010 was not touched; the verification server on 8031 was stopped.
+
+## 13. Follow-ups after review (2026-10-08)
+
+| feedback | change | verified by |
+| --- | --- | --- |
+| Swatches only worked once; Add to cart did not add after a colour change | Every colourway of a loaded family is registered, so a card resolves its colours and price after any swatch change. A successful add opens the cart drawer with the new line marked. | `swatch` journey regression: cycle every swatch back to the first and add each (`5fbd72b`) |
+| Navigation-level words too small | Main navigation, collection tabs and category filters use `--fs-nav` (0.98 rem, previously 0.8125). Eyebrow and small uppercase labels use 0.76 rem (previously 0.6875). Footer and section links are slightly larger. | screenshots at 1440 / 1024 / 390 px |
+| Wordmark | Every letter is now a Didone italic like the initial *e*, each at its own scale (0.92–1.30 em) on a shared baseline. It keeps one accessible name, `ensemble`, with decorative spans, and stays exactly centred with no collisions. | `center` journey; `test_landmarks_and_centered_lowercase_wordmark` |
+| Remove the delete (×) button; use "Not for me" | The × is gone. **Not for me** sits beside the price, keeps the `not_for_me` event and dims the card in place with "Got it. We'll remember that next time." The promise is real: the product family is stored per profile in `localStorage` (`ensemble.notforme.<customer>`) and excluded from every page rendered afterwards. | `home` journey (event, message, gone after reload); JS test "families marked Not for me never render on later pages" |
+
+Results after these follow-ups: 191 tests passed; browser journeys 110/110 fast and 10/10 model-backed.

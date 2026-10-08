@@ -20,7 +20,7 @@ const results = [];
 const ok = (name, cond, detail = '') => { results.push({name, ok: !!cond, detail}); console.log(`${cond ? 'PASS' : 'FAIL'} ${name}${detail ? ' — ' + detail : ''}`); };
 
 // Copy that must never appear on shopper routes (round 2 §1, §6, §7, §10).
-const BANNED = [/why this/i, /\bnot for me\b/i, /recommender/i, /\branked?\b/i, /\branking\b/i, /\bmodel\b/i, /telemetry/i,
+const BANNED = [/why this/i, /recommender/i, /\branked?\b/i, /\branking\b/i, /\bmodel\b/i, /telemetry/i,
   /\boffline\b/i, /dataset/i, /no checkout/i, /no prices?/i, /\bdemo\b/i, /laptop/i, /stored suggestions/i,
   /\bservice\b/i, /\bAPI\b/, /SHAP/, /\bevidence\b/i, /\btools?\b/i, /never invents/i, /most recent first/i,
   /\b\d+ (pieces|colourways|items)\b/i, /for Shopper,/i, /Takes a few seconds/, /Takes about a minute/];
@@ -59,7 +59,7 @@ async function auditCards(p, scope = 'main') {
         || !c.querySelector('.swatch[aria-pressed="true"]');
     }).map(c => c.dataset.article);
     return {n: cards.length, dupFamilies: fams.length - new Set(fams).size, dupArticles: arts.length - new Set(arts).size,
-            emptyFamily: cards.filter(c => !c.dataset.family).length, bad, meta: document.querySelectorAll(`${scope} .tile__meta, ${scope} [data-why], ${scope} [data-nfm]`).length};
+            emptyFamily: cards.filter(c => !c.dataset.family).length, bad, meta: document.querySelectorAll(`${scope} .tile__meta, ${scope} [data-why], ${scope} [data-hide]`).length};
   }, scope);
 }
 
@@ -119,13 +119,19 @@ async function auditCards(p, scope = 'main') {
     const a = await auditCards(p);
     ok('home: one card per product family page-wide', a.n > 20 && a.dupFamilies === 0 && a.dupArticles === 0 && a.emptyFamily === 0, JSON.stringify(a));
     ok('home: every card has USD price, swatch and black Add to cart', a.bad.length === 0, a.bad.join(','));
-    ok('home: no Why this / category metadata / Not for me on cards', a.meta === 0 && !(await p.$('main .tile__meta')), '');
+    ok('home: no Why this / category metadata / hide (×) on cards', a.meta === 0 && !(await p.$('main .tile__meta')), '');
     const imps = p._events.filter(e => e.event === 'impression');
     ok('impressions logged once per shown card, for this customer', imps.length === a.n && imps.every(e => e.customer_idx === DEFAULT), `${imps.length} impressions, ${a.n} cards`);
-    // Hide keeps the not_for_me contract
-    const before = (await auditCards(p)).n;
-    await p.click('.hero__second [data-hide]'); await p.waitForTimeout(200);
-    ok('Hide removes the card and logs not_for_me', (await auditCards(p)).n === before - 1 && p._events.some(e => e.event === 'not_for_me'), '');
+    // Not for me: logs not_for_me, confirms in place, and is remembered for this profile
+    await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
+    ok('no hide (×) control on cards', !(await p.$('main [data-hide], main .card__hide')), '');
+    const fam = await p.$eval('.hero__second [data-card]', c => c.dataset.family);
+    await p.click('.hero__second [data-nfm]'); await p.waitForTimeout(200);
+    const st = await p.$eval('.hero__second [data-card]', c => ({dim: c.classList.contains('is-dismissed'), note: c.querySelector('.card__nfm-note').textContent, dis: c.querySelector('[data-nfm]').disabled}));
+    ok('Not for me logs the event and says it will be remembered', st.dim && st.dis && /remember that next time/.test(st.note) && p._events.some(e => e.event === 'not_for_me'), JSON.stringify(st));
+    await p.reload(); await settle(p);
+    ok('Not for me is remembered: that product is gone after reload', !(await p.$$eval('main [data-card]', (cs, f) => cs.some(c => c.dataset.family === f), fam)), fam);
+    await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
     await p.screenshot({path: `${SHOTS}/home.png`});
     clean(p, 'home');
     await ctx.close();
