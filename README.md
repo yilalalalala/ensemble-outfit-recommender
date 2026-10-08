@@ -3,6 +3,27 @@
 *Ensemble* (n.): a complete outfit, pieces chosen to be worn together.
 In machine learning, it also means several models combined. This project is both.
 
+[**Open the live portfolio demo →**](https://yilalalalala.github.io/ensemble-outfit-recommender/)
+&nbsp;&nbsp;·&nbsp;&nbsp;
+[Architecture](#what-it-does)
+&nbsp;&nbsp;·&nbsp;&nbsp;
+[Results](#results)
+&nbsp;&nbsp;·&nbsp;&nbsp;
+[Run locally](#quickstart)
+
+![Ensemble editorial shopping interface](docs/assets/home_desktop.png)
+
+> The public GitHub Pages demo is a lightweight, interactive presentation layer built from the same visual
+> language and a small sample of catalogue images used by the local application. The full application runs
+> locally with FastAPI, the trained recommenders, visual search, outfit analysis and a grounded LLM assistant.
+
+<p align="center">
+  <img src="docs/assets/assistant_desktop.png" alt="Ensemble Style Assistant" width="67%">
+  <img src="docs/assets/home_mobile.png" alt="Ensemble mobile shopping view" width="25%">
+</p>
+
+![Ensemble DS Studio offline evaluation](docs/assets/studio_desktop.png)
+
 **Ensemble recommends clothing the way a stylist would:**
 - what *you* will likely buy next;
 - what *completes the outfit* you are wearing;
@@ -184,6 +205,27 @@ ENSEMBLE_LLM=claude make serve # use Claude instead (ANTHROPIC_API_KEY in .env)
 `make mvp` takes about 1.5 hours on an Apple-silicon laptop with 16 GB RAM. `make help` lists every
 stage.
 
+## Live demo and deployment
+
+The repository contains two deliberately separate serving modes:
+
+- **Portfolio demo:** `portfolio/` is a dependency-free static experience deployed automatically to
+  [GitHub Pages](https://yilalalalala.github.io/ensemble-outfit-recommender/) from `main`. It demonstrates
+  the editorial shop, collection filtering, colour selection, persistent cart, Style Assistant interaction,
+  and DS Studio metrics with a small selection of catalogue images from the local demo.
+- **Full application:** `make serve` starts the real FastAPI application against the local serving store.
+  It powers personalized ranking, Complete the Look, explanations in DS Studio, image retrieval, outfit
+  analysis and the tool-calling assistant. Its data and model assets stay local because their source licences
+  do not permit bundling them into this public repository.
+
+The Pages workflow is in [`.github/workflows/pages.yml`](.github/workflows/pages.yml). To preview the public
+demo locally:
+
+```bash
+python -m http.server 8040 --directory portfolio
+# open http://localhost:8040
+```
+
 <details>
 <summary>Getting the data</summary>
 
@@ -233,8 +275,10 @@ Ollama (Qwen3-VL, Qwen2.5-VL) · Anthropic API
 ## Data and licensing
 
 - **No data is in this repository.** H&M competition data and DeepFashion2 (research use) must be
-  obtained from their sources under their own terms.
-- **No screenshots of the web app,** because they would reproduce dataset product images.
+  obtained from their sources under their own terms, apart from the small catalogue-image sample shown in
+  the non-commercial portfolio demo and README screenshots.
+- **Published UI screenshots are captured from the real local application.** The Pages demo uses the same
+  four catalogue items so its visual presentation stays representative of the full interface.
 - **Outfit photos** used for evaluation are either openly licensed Wikimedia Commons images
   (credited in the local manifest) or private test images that are not published.
 - **All results are offline.** A launch decision would need an online A/B test.

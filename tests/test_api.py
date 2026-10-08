@@ -102,3 +102,45 @@ def test_round2_is_disjoint_and_stratified(client):
     r2 = client.get("/api/label/tasks?round=2").json()
     assert len(r2) == 20 and not r1 & {t["task_id"].rsplit("|", 1)[0] for t in r2}
     assert sum(t["category"] == "jewellery" for t in r2) == 6   # 3 garments x 2 modes
+
+
+# --- Shop UI catalogue: product families, colourways, prototype prices (round-two consumer polish) ----
+
+def test_product_code_convention_holds_for_the_whole_catalogue(cfg):
+    import sqlite3
+    con = sqlite3.connect(cfg.path("serving_db"))
+    bad = con.execute("SELECT count(*) FROM articles WHERE article_id / 1000 <> CAST(product_code AS INTEGER)").fetchone()[0]
+    assert bad == 0
+
+
+def test_families_group_by_real_product_code_with_one_price(client, cfg):
+    import sqlite3
+    con = sqlite3.connect(cfg.path("serving_db"))
+    code = con.execute("SELECT product_code FROM articles GROUP BY product_code HAVING count(*) BETWEEN 3 AND 8 ORDER BY product_code LIMIT 1").fetchone()[0]
+    members = [r[0] for r in con.execute("SELECT article_id FROM articles WHERE product_code = ? ORDER BY article_id", (code,))]
+    d1 = client.get(f"/api/catalog/families?articles={members[0]}").json()
+    d2 = client.get(f"/api/catalog/families?articles={members[-1]}").json()
+    assert d1["articles"][str(members[0])] == code and d2["articles"][str(members[-1])] == code
+    f1, f2 = d1["families"][code], d2["families"][code]
+    assert f1["price_usd"] == f2["price_usd"]                     # one price per family, from any colourway
+    ids = {v["article_id"] for v in f1["variants"]}
+    assert members[0] in ids and ids <= set(members)              # only real articles of this family
+    assert [v["article_id"] for v in f1["variants"]] == sorted(ids)
+
+
+def test_same_name_products_from_different_families_are_not_merged(client, cfg):
+    import sqlite3
+    con = sqlite3.connect(cfg.path("serving_db"))
+    name = con.execute("SELECT prod_name FROM articles GROUP BY prod_name HAVING count(DISTINCT product_code) > 1 ORDER BY prod_name LIMIT 1").fetchone()[0]
+    a, b = (r[0] for r in con.execute("""SELECT min(article_id) FROM articles WHERE prod_name = ? GROUP BY product_code
+                                         ORDER BY product_code LIMIT 2""", (name,)))
+    d = client.get(f"/api/catalog/families?articles={a},{b}").json()
+    assert d["articles"][str(a)] != d["articles"][str(b)]
+    assert len(d["families"]) == 2
+
+
+def test_families_endpoint_validation(client):
+    assert client.get("/api/catalog/families").json() == {"articles": {}, "families": {}}
+    assert client.get("/api/catalog/families?articles=abc").status_code == 400
+    assert client.get("/api/catalog/families?articles=" + ",".join(str(i) for i in range(401))).status_code == 400
+    assert client.get("/api/catalog/families?articles=1").json()["articles"] == {}     # unknown ids are omitted
