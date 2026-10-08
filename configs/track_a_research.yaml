@@ -143,3 +143,18 @@ research:
       min_segment_candidate_lcb_rel: -0.02      # tail items and new customers
       max_wall_time_ratio: 2.0
       max_peak_rss_increase: 0.25
+
+  # ------------------------------------------------------------------ ranker retrain (D-045)
+  # docs/CLAUDECODE_TRACK_A_RANKER_RETRAIN_PLAN.md (f552c22); thresholds mirror the frozen plan.
+  ranker_retrain:
+    chunk_customers: 6000
+    seeds: [42, 43, 44]
+    decision:
+      min_map_rel_gain: 0.010
+      min_folds_won: 4
+      min_segment_lcb_rel: -0.02           # new / returning MAP@12; tail, repeat, non-repeat Recall@12
+      max_scoring_time_increase: 0.20
+      max_scoring_rss_increase: 0.25
+      max_training_time_ratio: 2.0
+      baseline_training_seconds: 843       # mean (load + fit) of the current final ranker per fold
+    r3_trigger: {min_map_rel_gain: 0.005, max_map_rel_gain: 0.010}
