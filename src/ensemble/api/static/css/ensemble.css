@@ -210,7 +210,11 @@ main:focus, main:focus-visible { box-shadow: none; }   /* focus target after nav
 }
 .card__hide svg { width: .95rem; height: .95rem; stroke: currentColor; stroke-width: 1.4; fill: none; }
 .card__hide:hover, .card__hide:focus-visible { opacity: 1; background: #fff; }
-.card__info { display: grid; gap: .45rem; }
+.card__info { display: flex; flex-direction: column; gap: .45rem; flex: 1; }
+.card__info .btn-cart { margin-top: auto; }
+/* Regular grids: equal-height cards so every row's Add to cart buttons line up. */
+.grid > li { display: flex; }
+.grid > li > .card { flex: 1; }
 .card__name { font: 400 clamp(1rem, .93rem + .25vw, 1.15rem)/1.25 var(--serif); letter-spacing: .005em; }
 .card__name a { text-decoration: none; }
 .card__name a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
@@ -378,6 +382,8 @@ body.studio .footer__studio { display: block; }
 .hero__links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
 .hero__second { grid-column: 10 / span 3; grid-row: 1; margin-top: clamp(2rem, 1rem + 4vw, 6rem); }
 .hero__third { grid-column: 2 / span 3; grid-row: 2; margin-top: var(--s-5); }
+.edit { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-7) var(--gap); list-style: none; }
+.edit > li { grid-column: span var(--span, 4); margin-top: var(--drop, 0); align-self: var(--align, start); }
 .look-groups { display: grid; gap: var(--s-7); }
 .look__title { font: 400 1.15rem/1.2 var(--serif); margin-bottom: var(--s-4); }
 .collection-head { padding: clamp(2rem, 1rem + 3vw, 3.5rem) 0 var(--s-4); }
@@ -560,6 +566,8 @@ table.data th[scope="row"] { font-weight: 400; font-family: var(--mono); font-si
   dialog[open] { animation: dialog-in var(--t-med) var(--ease); }
   dialog[open]::backdrop { animation: fade-in var(--t-med) var(--ease); }
   .drawer[open] { animation: drawer-in var(--t-med) var(--ease); }
+  dialog.cart[open] { animation: cart-in var(--t-med) var(--ease); }
+  @keyframes cart-in { from { transform: translateX(100%); } }
   @keyframes dialog-in { from { opacity: 0; transform: translateY(10px); } }
   @keyframes drawer-in { from { transform: translateX(-100%); } }
   @keyframes fade-in { from { opacity: 0; } }
