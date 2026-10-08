@@ -1,0 +1,155 @@
+{
+ "fold": "2020-08-26",
+ "n_truth_pairs": 255172,
+ "n_customers": 80253,
+ "candidate_recall": 0.18749706080604456,
+ "rows_before_dedup": 18032348,
+ "candidates_after_dedup": 12748949,
+ "redundant_candidate_rate": 0.2929956209806953,
+ "channel_recall_alone": {
+  "repeat": 0.022980577806342387,
+  "pop": 0.009397582806891038,
+  "pop_age": 0.08075337419466086,
+  "cf": 0.011650964839402441,
+  "variant": 0.03342451366137351,
+  "dept_pop": 0.056295361560045776,
+  "section_pop": 0.08500540811687803,
+  "covis": 0.03988682143808882,
+  "new_arrival_pers": 0.009875691690310849
+ },
+ "channel_unique_recall": {
+  "repeat": 0.009746367156271064,
+  "pop": 6.66217296568589e-05,
+  "pop_age": 0.03224883607919364,
+  "cf": 0.00018810841314877808,
+  "variant": 0.010451773705578982,
+  "dept_pop": 0.010549746837427303,
+  "section_pop": 0.018019218409543368,
+  "covis": 0.008394337936764222,
+  "new_arrival_pers": 0.006967849137052655
+ },
+ "channel_beyond_cap_recall": {
+  "repeat": 0.005455143981314564,
+  "pop": 0.08925352311382126,
+  "pop_age": 0.12435533679243804,
+  "cf": 0.0375001959462637,
+  "variant": 0.014213941968554543,
+  "dept_pop": 0.0332324863229508,
+  "section_pop": 0.026985719436301788,
+  "covis": 0.049413728779019644,
+  "new_arrival_pers": 0.008837176492718637
+ },
+ "neural_marginal_recall": {
+  "bpr@100": 0.011772451522894361,
+  "bpr@300": 0.030430454752088786,
+  "bpr@1000": 0.07969134544542504,
+  "lightgcn@100": 0.017552866301945354,
+  "lightgcn@300": 0.043641151850516514,
+  "lightgcn@1000": 0.10676328123775336,
+  "sasrec@100": 0.02791450472622388,
+  "sasrec@300": 0.06905538225197122,
+  "sasrec@1000": 0.17176257583120405
+ },
+ "pairwise_jaccard": {
+  "repeat|variant": 0.02147070652902534,
+  "repeat|section_pop": 0.0074729292343573,
+  "pop|repeat": 0.00254126500045467,
+  "pop|pop_age": 0.07093346449037483,
+  "pop|variant": 0.0077637526466687225,
+  "pop|section_pop": 0.05347513557997479,
+  "pop_age|repeat": 0.0029863777213130858,
+  "pop_age|variant": 0.016009162577794195,
+  "pop_age|section_pop": 0.22661969243138527,
+  "cf|repeat": 0.04353844964904244,
+  "cf|pop": 0.0026986506746626685,
+  "cf|pop_age": 0.002557160430328903,
+  "cf|variant": 0.057139645475468306,
+  "cf|dept_pop": 0.016597075126084264,
+  "cf|section_pop": 0.007213084866195496,
+  "cf|covis": 0.15922206469078692,
+  "cf|new_arrival_pers": 0.0011793634520661986,
+  "dept_pop|repeat": 0.015469502396299167,
+  "dept_pop|pop": 0.01300984167322355,
+  "dept_pop|pop_age": 0.07156931348473507,
+  "dept_pop|variant": 0.04638347966746249,
+  "dept_pop|section_pop": 0.2547320205928491,
+  "dept_pop|new_arrival_pers": 0.02446466579924181,
+  "section_pop|variant": 0.029339763589671098,
+  "covis|repeat": 0.04393790837276576,
+  "covis|pop": 0.017359465386342202,
+  "covis|pop_age": 0.02562327382144896,
+  "covis|variant": 0.11386104510222092,
+  "covis|dept_pop": 0.06976463604510019,
+  "covis|section_pop": 0.04839225683554534,
+  "covis|new_arrival_pers": 0.0013010644254034568,
+  "new_arrival_pers|repeat": 0.0009481766798751715,
+  "new_arrival_pers|pop": 0.0,
+  "new_arrival_pers|pop_age": 0.0030366719411141635,
+  "new_arrival_pers|variant": 0.003332374042651121,
+  "new_arrival_pers|section_pop": 0.010921849881383217
+ },
+ "miss_taxonomy": {
+  "hit_top12": 0.062357938958819935,
+  "in_union_not_top12": 0.12513912184722462,
+  "proposed_then_cut_by_cap": 0.22753672032981676,
+  "lost_by_merge_or_dedup": 0.0,
+  "ineligible_not_proposed": 0.03257410687693007,
+  "no_channel_proposed_eligible": 0.5523921119872086,
+  "no_channel_incl_neural_top1000": 0.421938927468531
+ },
+ "segments_union_recall": {
+  "returning": {
+   "recall": 0.1952258086276097,
+   "share": 0.9295377235746869
+  },
+  "new": {
+   "recall": 0.08553948832035595,
+   "share": 0.07046227642531312
+  },
+  "head": {
+   "recall": 0.2696429217903387,
+   "share": 0.6494991613499914
+  },
+  "tail": {
+   "recall": 0.03880538121015574,
+   "share": 0.3178130829401345
+  },
+  "recent": {
+   "recall": 0.22085587801278897,
+   "share": 0.3186870032762215
+  },
+  "repeat": {
+   "recall": 0.7940457676071984,
+   "share": 0.03527816531594376
+  },
+  "nonrepeat": {
+   "recall": 0.1653166510947719,
+   "share": 0.9647218346840563
+  },
+  "activity_low": {
+   "recall": 0.19032791525752,
+   "share": 0.26304218331164864
+  },
+  "activity_medium": {
+   "recall": 0.2004450265466785,
+   "share": 0.27827112692615175
+  },
+  "activity_high": {
+   "recall": 0.19480335944439958,
+   "share": 0.3882244133368865
+  },
+  "eligible": {
+   "recall": 0.1938006166162273,
+   "share": 0.9673122442901259
+  }
+ },
+ "reconcile": {
+  "stored_cand_hits": 47844,
+  "recomputed_hits": 47844,
+  "stored_n_cand": 12748948,
+  "recomputed_n_cand": 12748949,
+  "per_customer_hits_equal": true,
+  "n_customers_with_different_n_cand": 3,
+  "n_cand_relative_difference": 7.84378444401844e-08
+ }
+}

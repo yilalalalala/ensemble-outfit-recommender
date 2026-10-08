@@ -322,7 +322,9 @@ def ch_covis(con, week: Week, r, users_table: str) -> None:
             GROUP BY 1, 2 HAVING count(*) >= {int(r.covis_min_count)})
         SELECT src, dst, co / (ns.n * pow(nd.n, {beta})) AS sim
         FROM co JOIN n ns ON ns.article_id = src JOIN n nd ON nd.article_id = dst
-        QUALIFY row_number() OVER (PARTITION BY src ORDER BY sim DESC, dst) <= {int(r.covis_neighbors)}
+        -- `co` is a multi-threaded float sum whose last bits vary between runs; rounding before
+        -- ordering keeps the neighbour cutoff deterministic (same fix as the merge, D-027).
+        QUALIFY row_number() OVER (PARTITION BY src ORDER BY round(sim, 9) DESC, dst) <= {int(r.covis_neighbors)}
     """)
     con.execute(f"""
         CREATE OR REPLACE TEMP TABLE _ch_covis AS

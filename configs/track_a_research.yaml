@@ -113,3 +113,49 @@ research:
       realloc:
         caps: {repeat: 15, pop_age: 35, cf: 5, variant: 25, dept_pop: 50, section_pop: 25, covis: 70, new_arrival_pers: 10}
         neural_features: []
+
+  # ------------------------------------------------------------------ retrieval-ceiling upgrade
+  # docs/CLAUDECODE_TRACK_A_RETRIEVAL_UPGRADE_PLAN.md; fixed before any new result was read.
+  retrieval_upgrade:
+    baseline_system: ens_phase2_nscores     # the current final system (D-040), seed 42 fold models
+    baseline_seed: 42
+    baseline_candidate_recall: 0.1757
+    # Channel *parameters* are unchanged, so every channel's internal ranking is identical to the
+    # final system; only the caps grow. A larger budget is therefore a strict superset of the
+    # current union and the 160 point must reproduce the final system exactly.
+    pool_caps: {repeat: 100, pop: 300, pop_age: 400, cf: 300, variant: 100, dept_pop: 150,
+                section_pop: 150, covis: 300, new_arrival_pers: 100}
+    neural_depth: 1000                     # exact top-k per customer from the cached per-week vectors
+    budgets: [300, 500, 1000]
+    allocator: {seed_caps_from: phase2, steps: [5, 10, 20, 50]}   # greedy, allocator weeks only
+    eval_chunk_customers: 6000
+    keep_top: 50
+    # Stage 3 gate: SASRec's append-only extension "adds useful marginal coverage" (and LightGCN /
+    # BPR-MF are then tried) if, at any appended budget, pooled candidate recall gains >= 1.0
+    # percentage point over the current union AND the gain is positive in >= 4 of 6 folds.
+    sasrec_useful: {min_abs_gain: 0.010, min_folds: 4}
+    adopted: sasrec_A300                   # D-044: smallest configuration passing the rule below
+    # The plan's adoption rule, unchanged.
+    decision:
+      min_candidate_recall_rel_gain: 0.15
+      min_folds_candidate_gain: 4
+      max_fold_candidate_loss_rel: -0.01
+      min_segment_candidate_lcb_rel: -0.02      # tail items and new customers
+      max_wall_time_ratio: 2.0
+      max_peak_rss_increase: 0.25
+
+  # ------------------------------------------------------------------ ranker retrain (D-045)
+  # docs/CLAUDECODE_TRACK_A_RANKER_RETRAIN_PLAN.md (f552c22); thresholds mirror the frozen plan.
+  ranker_retrain:
+    adopted: null          # D-045: neither R1 nor R2 passes; the fixed ranker (R0) stays
+    chunk_customers: 6000
+    seeds: [42, 43, 44]
+    decision:
+      min_map_rel_gain: 0.010
+      min_folds_won: 4
+      min_segment_lcb_rel: -0.02           # new / returning MAP@12; tail, repeat, non-repeat Recall@12
+      max_scoring_time_increase: 0.20
+      max_scoring_rss_increase: 0.25
+      max_training_time_ratio: 2.0
+      baseline_training_seconds: 843       # mean (load + fit) of the current final ranker per fold
+    r3_trigger: {min_map_rel_gain: 0.005, max_map_rel_gain: 0.010}
