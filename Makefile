@@ -1,7 +1,11 @@
-.PHONY: help setup data ingest test baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
+.PHONY: help setup data ingest test public-demo public-demo-sync public-demo-preview baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
 PYTHON := .venv/bin/python
 PY := PYTHONPATH=src $(PYTHON)
 PORT ?= 8010
+# Port the public demo build captures from (must match configs/public_demo.yaml: capture.base).
+DEMO_PORT ?= 8031
+PREVIEW_PORT ?= 8041
+PREVIEW_DIR ?= data/interim/public_demo_preview
 
 help:
 	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-12s %s\n", $$1, $$2}'
@@ -41,6 +45,17 @@ serve:      ## run the web app at http://localhost:8010 (override with PORT=...)
 	PYTHONPATH=src .venv/bin/uvicorn ensemble.api.app:app --port $(PORT)
 
 mvp: ingest baselines retrieval ranker track-b submission serving test  ## the full MVP pipeline, end to end
+
+public-demo: ## rebuild portfolio/ (the public build of the web UI) — needs `make serve PORT=8031` running
+	$(PY) -m ensemble.api.public_demo build
+
+public-demo-sync: ## copy the frontend into portfolio/ without re-capturing any response (no data needed)
+	$(PY) -m ensemble.api.public_demo sync
+
+public-demo-preview: ## serve portfolio/ at the GitHub project subpath, as Pages does
+	@mkdir -p $(PREVIEW_DIR) && ln -sfn "$(CURDIR)/portfolio" "$(PREVIEW_DIR)/ensemble-outfit-recommender"
+	@echo "open http://localhost:$(PREVIEW_PORT)/ensemble-outfit-recommender/"
+	$(PYTHON) -m http.server $(PREVIEW_PORT) --directory $(PREVIEW_DIR)
 
 test:       ## run the test suite
 	$(PY) -m pytest -q
