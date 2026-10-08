@@ -75,8 +75,11 @@ def test_landmarks_and_centered_lowercase_wordmark(tree):
     assert any(e["tag"] == "header" for e in tree) and any(e["tag"] == "footer" for e in tree)
     assert tree[0]["tag"] == "html" and tree[0]["attrs"].get("lang") == "en"
     wm = next(e for e in tree if e["attrs"].get("id") == "wordmark")
-    assert wm["text"].strip() == "ensemble"
+    assert wm["attrs"].get("aria-label") == "ensemble"
     assert any(p.get("class") == "masthead__inner" for p in wm["parents"])
+    # Decorative letter spans spell the word and are hidden from assistive technology.
+    spans = [e for e in tree if e["tag"] == "span" and any(p.get("id") == "wordmark" for p in e["parents"])]
+    assert "".join(e["text"].strip() for e in spans) == "ensemble" and all(e["attrs"].get("aria-hidden") == "true" for e in spans)
     css = (STATIC / "css" / "ensemble.css").read_text()
     # Three-column masthead: the wordmark sits in the auto column, so it is centred whatever the side widths.
     assert re.search(r"\.masthead__inner\s*\{[^}]*grid-template-columns:\s*1fr auto 1fr", css)
@@ -104,7 +107,7 @@ def test_frontend_keeps_every_api_contract_and_event():
     src = js_source()
     for path in ["/api/customers", "/api/home/", "/api/product/", "/api/explain/", "/api/metrics", "/api/events",
                  "/api/visual-search", "/api/snap", "/api/assistant/session", "/api/assistant/", "/api/label/tasks",
-                 '"/api/label"', "/api/v2/complete-the-look", "/readyz", "/api/v2/meta", "/api/v2/metrics"]:
+                 '"/api/label"', "/api/v2/complete-the-look", "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families"]:
         assert path in src, path
     for event in ['"impression"', '"click"', '"not_for_me"', '"add_to_cart"']:
         assert event in src, event
@@ -118,3 +121,31 @@ def test_motion_respects_reduced_motion():
     # All reveal / transition animation lives behind the no-preference query.
     head, _, rest = css.partition("@media (prefers-reduced-motion: no-preference)")
     assert "@keyframes" not in head and ".reveal" not in head
+
+
+SHOPPER_MODULES = ["shop.js", "stylist.js", "cart.js", "catalog.js", "core.js", "app.js"]
+
+
+def test_shopper_modules_never_explain_or_show_why_this():
+    for name in ["shop.js", "stylist.js", "cart.js", "catalog.js"]:
+        src = (STATIC / "js" / name).read_text()
+        assert "/api/explain" not in src, name
+        assert "Why this" not in src and "data-why" not in src, name
+    html = (STATIC / "index.html").read_text()
+    assert "why-dialog" not in html
+    for banned in ("no prices", "no checkout", "Live outfit service unavailable"):
+        assert banned not in html + js_source(), banned
+
+
+def test_white_canvas_without_automatic_dark_mode_and_black_cart_buttons():
+    css = (STATIC / "css" / "ensemble.css").read_text()
+    assert "prefers-color-scheme: dark" not in css
+    assert re.search(r"--canvas:\s*#ffffff", css)
+    rule = re.search(r"\.btn-cart\s*\{([^}]*)\}", css).group(1)
+    assert "background: #000" in rule and "color: #fff" in rule
+
+
+def test_cart_drawer_and_masthead_control(tree):
+    btn = next(e for e in tree if e["attrs"].get("id") == "cart-btn")
+    assert btn["tag"] == "button" and btn["attrs"].get("aria-controls") == "cart-dialog"
+    assert any(e["tag"] == "dialog" and e["attrs"].get("id") == "cart-dialog" for e in tree)
