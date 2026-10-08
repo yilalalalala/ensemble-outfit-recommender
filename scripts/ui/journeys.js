@@ -105,7 +105,7 @@ async function auditCards(p, scope = 'main') {
     ok('shopper header has no service status', (await p.$eval('#utility-note', e => e.innerText)) === '', '');
     await p.goto(BASE + '#/assistant'); await settle(p);
     const a = await p.$eval('main', m => m.innerText);
-    ok('assistant intro copy', a.includes("Tell us what you're looking for, or bring a photo. We'll help you find pieces that feel right."), '');
+    ok('assistant intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for, or bring a photo. We'll help you find pieces that feel right."), '');
     ok('assistant time estimates', a.includes('It may take a few seconds.') && a.includes('It may take about a minute.') && !/laptop|Takes a few|Takes about/.test(a), '');
     clean(p, 'copy');
     await ctx.close();

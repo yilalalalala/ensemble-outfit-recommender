@@ -29,7 +29,7 @@ export async function view(ctx) {
   const root = ctx.render(`
     <div class="stylist-head">
       <div><p class="eyebrow">Style Assistant</p><h1 class="title" tabindex="-1">Ask the stylist.</h1></div>
-      <p class="lede">Tell us what you're looking for, or bring a photo. We'll help you find pieces that feel right.</p>
+      <p class="lede">Tell us what you’re looking for, or bring a photo. We’ll help you find pieces that <em>feel right</em>.</p>
     </div>
     <div class="stylist">
       <section class="panel" aria-labelledby="chat-h">
