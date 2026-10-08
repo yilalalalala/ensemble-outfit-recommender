@@ -145,4 +145,3 @@ check console errors, failed requests, image failures, overflow, and the exact d
 - Only intended files are committed; all user-owned untracked duplicates/logs remain untouched.
 - Write `reports/PUBLIC_DEMO_FULL_UI_REPORT.md` containing architecture, files changed, fixture provenance,
   exact metrics checked, tests/browser evidence, limitations, git status, commit hash, and deployment steps.
-
