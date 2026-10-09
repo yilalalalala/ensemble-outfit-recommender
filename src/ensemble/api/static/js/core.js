@@ -5,6 +5,11 @@ import {DEMO, request as demoRequest, requestRaw as demoRequestRaw} from "./demo
 
 export {DEMO};
 
+// The local app is same-origin.  A hosted static build declares its Modal endpoint
+// in a meta tag, keeping every UI module on the same small API wrapper.
+const API_ROOT = (document.querySelector('meta[name="ensemble-api-base"]')?.content || "").replace(/\/$/, "");
+const apiUrl = path => `${API_ROOT}${path}`;
+
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 export const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
@@ -42,7 +47,7 @@ export async function api(path, opts) {
   }
   let r;
   try {
-    r = await fetch(path, opts);
+    r = await fetch(apiUrl(path), opts);
   } catch {
     throw new ApiError(0, "We can't connect right now. Please check your connection and try again.", "offline");
   }
@@ -56,7 +61,7 @@ export async function api(path, opts) {
 export async function probe(path) {
   if (DEMO) return demoRequestRaw(path);
   try {
-    const r = await fetch(path);
+    const r = await fetch(apiUrl(path));
     return {status: r.status, ok: r.ok, body: await r.json().catch(() => null)};
   } catch {
     return {status: 0, ok: false, body: null};
@@ -106,7 +111,7 @@ export const newPageGroups = () => createPageGroups(familyOf, notForMeSet());
 // ---- events (DESIGN §7.6: impression, click, add_to_cart, not_for_me) --------------------------------
 export function logEvent(event, surface, article_id, anchor = null) {
   if (DEMO) return;   // documented no-op: the public demo stores no shopper events
-  fetch("/api/events", {
+  fetch(apiUrl("/api/events"), {
     method: "POST", headers: {"Content-Type": "application/json"},
     body: JSON.stringify({customer_idx: state.customer, event, surface, article_id: +article_id, anchor: anchor == null ? null : +anchor}),
   }).then(r => { if (!r.ok) console.warn(`event ${event} not recorded (${r.status})`); })

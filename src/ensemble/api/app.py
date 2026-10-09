@@ -10,9 +10,11 @@ from pathlib import Path
 
 import io
 import os
+from functools import lru_cache
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -26,6 +28,24 @@ SLOT_TITLES = {"upper": "Tops", "lower": "Bottoms", "full": "Dresses & jumpsuits
                "accessories": "Accessories", "socks": "Socks & tights", "swimwear": "Swimwear"}
 
 app = FastAPI(title="Ensemble recommender")
+
+# The local app remains same-origin.  The hosted shop is a static GitHub Pages site
+# calling this API on Modal, so production origins are explicit rather than using a
+# wildcard (which would also make browser credential rules ambiguous).
+_origins = [x.strip() for x in os.environ.get("ENSEMBLE_ALLOWED_ORIGINS", "").split(",") if x.strip()]
+if _origins:
+    app.add_middleware(CORSMiddleware, allow_origins=_origins, allow_methods=["GET", "POST", "OPTIONS"],
+                       allow_headers=["Content-Type", "X-Request-ID"], expose_headers=["X-Request-ID"])
+
+IMAGE_BASE_URL = os.environ.get("ENSEMBLE_IMAGE_BASE_URL", "").rstrip("/")
+MAX_UPLOAD_BYTES = int(os.environ.get("ENSEMBLE_MAX_UPLOAD_BYTES", str(12 * 1024 * 1024)))
+MAX_UPLOAD_PIXELS = int(os.environ.get("ENSEMBLE_MAX_UPLOAD_PIXELS", str(25_000_000)))
+
+
+def image_url(article_id: int) -> str:
+    """Local image route in development; direct R2 object URL in the hosted app."""
+    s = f"{int(article_id):010d}"
+    return f"{IMAGE_BASE_URL}/{s[:3]}/{s}.jpg" if IMAGE_BASE_URL else f"/images/{int(article_id)}.jpg"
 
 
 def q(sql: str, args=()) -> list[dict]:
@@ -41,7 +61,7 @@ ART_COLS = "a.article_id, a.prod_name, a.product_type_name, a.colour_group_name,
 
 
 def card(row: dict) -> dict:
-    row["image"] = f"/images/{row['article_id']}.jpg"
+    row["image"] = image_url(row["article_id"])
     for key in ("reasons", "shap"):
         if isinstance(row.get(key), str):
             row[key] = json.loads(row[key])
@@ -168,7 +188,23 @@ def product(article_id: int):
 MAX_FAMILY_LOOKUP = 400
 
 
+@lru_cache(maxsize=1)
+def _hosted_image_ids() -> set[int]:
+    """IDs embedded offline and therefore uploaded to R2 with the catalogue."""
+    if not IMAGE_BASE_URL:
+        return set()
+    try:
+        import numpy as np
+        d = cfg.path("processed") / "clip"
+        ids, has = np.load(d / "article_ids.npy"), np.load(d / "has_image.npy")
+        return {int(a) for a, ok in zip(ids, has) if ok}
+    except (OSError, ValueError):
+        return set()
+
+
 def _has_image(article_id: int) -> bool:
+    if IMAGE_BASE_URL:
+        return int(article_id) in _hosted_image_ids()
     s = f"{article_id:010d}"
     return (IMAGES / s[:3] / f"{s}.jpg").exists()
 
@@ -199,7 +235,7 @@ def catalog_families(articles: str = ""):
                                                     "variants": []})   # first row = canonical (lowest article_id)
         if r["article_id"] in code_of or _has_image(r["article_id"]):
             f["variants"].append({"article_id": r["article_id"], "prod_name": r["prod_name"],
-                                  "colour_group_name": r["colour_group_name"], "image": f"/images/{r['article_id']}.jpg"})
+                                  "colour_group_name": r["colour_group_name"], "image": image_url(r["article_id"])})
     return {"articles": {str(a): c for a, c in code_of.items()}, "families": families}
 
 
@@ -248,8 +284,22 @@ def _cards(ids: list[int]) -> list[dict]:
 
 
 def _image(upload: UploadFile):
-    from PIL import Image, ImageOps
-    return ImageOps.exif_transpose(Image.open(io.BytesIO(upload.file.read()))).convert("RGB")
+    """Decode a bounded user image and reject malformed or decompression-bomb uploads."""
+    from PIL import Image, ImageOps, UnidentifiedImageError
+
+    if upload.content_type and not upload.content_type.startswith("image/"):
+        raise HTTPException(415, "photo must be an image")
+    raw = upload.file.read(MAX_UPLOAD_BYTES + 1)
+    if len(raw) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "photo is too large")
+    try:
+        image = ImageOps.exif_transpose(Image.open(io.BytesIO(raw)))
+        image.load()
+    except (UnidentifiedImageError, OSError, ValueError):
+        raise HTTPException(400, "photo could not be decoded")
+    if image.width * image.height > MAX_UPLOAD_PIXELS:
+        raise HTTPException(413, "photo dimensions are too large")
+    return image.convert("RGB")
 
 
 @app.post("/api/visual-search")
@@ -546,7 +596,7 @@ def _rec(request: Request):
 def _card(rec, a: int) -> dict:
     c = rec.bundle.catalog
     return {"article_id": a, "prod_name": c.at[a, "prod_name"], "product_type_name": c.at[a, "product_type_name"],
-            "colour_group_name": c.at[a, "colour_group_name"], "image": f"/images/{a}.jpg"}
+            "colour_group_name": c.at[a, "colour_group_name"], "image": image_url(a)}
 
 
 @app.get("/healthz")
@@ -741,6 +791,9 @@ def admin_availability(request: Request, body: AvailabilityIn):
 
 @app.get("/images/{article_id}.jpg")
 def image(article_id: int):
+    if IMAGE_BASE_URL:
+        return RedirectResponse(image_url(article_id), status_code=307,
+                                headers={"Cache-Control": "public, max-age=86400"})
     s = f"{article_id:010d}"
     path = IMAGES / s[:3] / f"{s}.jpg"
     if not path.exists():
