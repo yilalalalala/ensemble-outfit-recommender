@@ -31,14 +31,16 @@ async function newPage(b, vp = [1440, 900], opts = {}) {
   p._errors = []; p._failed = []; p._events = [];
   p.on('pageerror', e => p._errors.push('pageerror: ' + e.message));
   p.on('console', m => { if (m.type() === 'error') p._errors.push('console: ' + m.text()); });
-  p.on('requestfailed', r => p._failed.push(`${r.method()} ${r.url()} ${r.failure()?.errorText}`));
+  // ERR_ABORTED = the page navigated away before a request finished (seen with a remote API); not a failure.
+  p.on('requestfailed', r => { if (r.failure()?.errorText !== 'net::ERR_ABORTED') p._failed.push(`${r.method()} ${r.url()} ${r.failure()?.errorText}`); });
   p.on('response', r => { if (r.status() >= 400) p._failed.push(`${r.status()} ${r.request().method()} ${r.url()}`); });
   p.on('request', r => { if (r.url().endsWith('/api/events')) p._events.push(JSON.parse(r.postData())); });
   return {ctx, p};
 }
 // Add to cart opens the cart drawer; close it before interacting with the page again.
 const closeCart = async p => { if (await p.$eval('#cart-dialog', d => d.open)) { await p.keyboard.press('Escape'); await p.waitForFunction(() => !document.querySelector('#cart-dialog').open); } };
-const settle = async p => { await p.waitForLoadState('networkidle'); await p.waitForTimeout(400); };
+// With a remote API, event POSTs can keep the network busy; idle is a best-effort wait, checks wait for elements.
+const settle = async p => { await p.waitForLoadState('networkidle', {timeout: 15000}).catch(() => {}); await p.waitForTimeout(400); };
 const want = n => !ONLY.length || ONLY.includes(n);
 const clean = (p, tag) => { ok(`no console errors (${tag})`, !p._errors.length, p._errors.join(' | ')); ok(`no failed requests (${tag})`, !p._failed.length, p._failed.join(' | ')); };
 
@@ -146,7 +148,7 @@ async function auditCards(p, scope = 'main') {
       const c = [...document.querySelectorAll('main [data-card].card')].find(c => c.querySelectorAll('.swatch').length > 1);
       c.id = 'probe'; return c.dataset.article;
     });
-    const fam = await p.evaluate(async id => (await (await fetch(`/api/catalog/families?articles=${id}`)).json()), cardSel);
+    const fam = await p.evaluate(async id => (await (await fetch(`${document.querySelector('meta[name="ensemble-api-base"]')?.content || ''}/api/catalog/families?articles=${id}`)).json()), cardSel);
     const code = fam.articles[cardSel], variants = fam.families[code].variants;
     const shown = await p.$$eval('#probe .swatch', s => s.length), more = await p.$eval('#probe', c => c.querySelector('.swatch-more')?.textContent || '');
     ok('card exposes every real colourway (≤6 swatches + "+N" link)', shown + (+more.replace('+', '') || 0) === variants.length, `${shown} swatches ${more}; ${variants.length} variants`);
@@ -159,7 +161,9 @@ async function auditCards(p, scope = 'main') {
       colour: c.querySelector('.card__colour').textContent, price: c.querySelector('.card__price').textContent, add: c.querySelector('[data-add]').getAttribute('aria-label'),
       pressed: c.querySelector(`.swatch[aria-pressed="true"]`).dataset.swatch}));
     const tv = variants.find(v => String(v.article_id) === target);
-    ok('swatch updates image, link, colour, price and cart target in place', after.article === target && after.img === `/images/${target}.jpg` && after.href === `#/product/${target}`
+    // Locally images are /images/<id>.jpg; hosted they are R2 URLs ending in /<prefix>/<zero-padded id>.jpg.
+    const imgOk = after.img === `/images/${target}.jpg` || after.img.endsWith(`/${target.padStart(10, '0')}.jpg`);
+    ok('swatch updates image, link, colour, price and cart target in place', after.article === target && imgOk && after.href === `#/product/${target}`
        && after.pressed === target && after.price === priceBefore && after.add.includes(after.colour) && after.colour.startsWith(tv.colour_group_name.replace(/^Other /, '')), JSON.stringify(after));
     await p.click('#probe [data-add]');
     ok('Add to cart is protected while pending', await p.$eval('#probe [data-add]', bt => bt.disabled), '');
@@ -239,11 +243,12 @@ async function auditCards(p, scope = 'main') {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE); await settle(p);
     await p.click('.hero__lead .card__name a'); await settle(p);
+    await p.waitForSelector('.pdp [data-add]'); await p.waitForSelector('#s-sim', {timeout: 60000}); await p.waitForTimeout(800);
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
     ok('click events logged (card + product page)', p._events.some(e => e.event === 'click' && e.surface === 'for_you') && p._events.some(e => e.event === 'click' && e.surface === 'product_page'), '');
     const secs = await p.$$eval('main h2.section-title', hs => hs.map(h => h.textContent.trim()));
     ok('product page: Complete the look and Similar items; no Other colours gallery', secs.includes('Complete the look') && secs.includes('Similar items') && !secs.includes('Other colours'), secs.join(' / '));
-    const fam = await p.evaluate(async () => (await (await fetch('/api/catalog/families?articles=922037001')).json()).families['0922037']);
+    const fam = await p.evaluate(async () => (await (await fetch(`${document.querySelector('meta[name="ensemble-api-base"]')?.content || ''}/api/catalog/families?articles=922037001`)).json()).families['0922037']);
     const sw = await p.$$eval('.pdp .swatch', s => s.map(x => x.dataset.swatch));
     ok('product page shows every real colourway as a swatch', sw.length === fam.variants.length && fam.variants.every(v => sw.includes(String(v.article_id))), `${sw.length} / ${fam.variants.length}`);
     const a = await auditCards(p);
@@ -253,7 +258,7 @@ async function auditCards(p, scope = 'main') {
     await p.click(`.pdp .swatch[data-swatch="${other}"]`);
     const st = await p.evaluate(() => ({hash: location.hash, img: document.querySelector('.pdp__media img').getAttribute('src'), colour: document.querySelector('.fact-colour').textContent,
       label: document.querySelector('.pdp [data-add]').getAttribute('aria-label')}));
-    ok('product swatch updates image, colour, address and cart target in place', st.hash === `#/product/${other}` && st.img === `/images/${other}.jpg` && st.label.includes(st.colour), JSON.stringify(st));
+    ok('product swatch updates image, colour, address and cart target in place', st.hash === `#/product/${other}` && (st.img === `/images/${other}.jpg` || st.img.endsWith(`/${other.padStart(10, '0')}.jpg`)) && st.label.includes(st.colour), JSON.stringify(st));
     await p.click('.pdp [data-add]'); await p.waitForTimeout(200);
     await closeCart(p);
     await p.mouse.move(5, 5); await p.waitForTimeout(1300);
@@ -303,6 +308,7 @@ async function auditCards(p, scope = 'main') {
     const {ctx, p} = await newPage(b);
     for (const [r, h] of [['#/studio', 'Offline evaluation'], ['#/studio/serving', 'Serving status'], ['#/studio/inspect', 'Inspect a recommendation']]) {
       await p.goto(BASE + r); await settle(p);
+      if (!r.endsWith('inspect')) await p.waitForSelector('table.data tbody tr', {timeout: 60000});
       const d = await p.evaluate(() => ({h: document.querySelector('main h1')?.textContent, rows: document.querySelectorAll('table.data tbody tr').length,
         cur: document.querySelector('[data-exp="studio"]').getAttribute('aria-current'), cart: document.querySelector('#cart-btn').hidden,
         note: document.querySelector('#utility-note').innerText, foot: getComputedStyle(document.querySelector('.footer__studio')).display}));

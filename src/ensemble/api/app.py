@@ -38,6 +38,14 @@ if _origins:
                        allow_headers=["Content-Type", "X-Request-ID"], expose_headers=["X-Request-ID"])
 
 IMAGE_BASE_URL = os.environ.get("ENSEMBLE_IMAGE_BASE_URL", "").rstrip("/")
+# Public hosting (Modal). Label is a local research tool: it writes the human gold labels and serves
+# crops of private evaluation photos, so a hosted deployment never exposes it.
+HOSTED = os.environ.get("ENSEMBLE_HOSTED") == "1"
+
+
+def _local_tool() -> None:
+    if HOSTED:
+        raise HTTPException(404, "not available")
 MAX_UPLOAD_BYTES = int(os.environ.get("ENSEMBLE_MAX_UPLOAD_BYTES", str(12 * 1024 * 1024)))
 MAX_UPLOAD_PIXELS = int(os.environ.get("ENSEMBLE_MAX_UPLOAD_PIXELS", str(25_000_000)))
 
@@ -402,6 +410,7 @@ def _label_tasks(round_: int = 2) -> list[dict]:
 
 @app.get("/api/label/tasks")
 def label_tasks(round: int = 2):
+    _local_tool()
     import json as _json
     f = labels_file(round)
     done = _json.loads(f.read_text()) if f.exists() else {}
@@ -412,6 +421,7 @@ def label_tasks(round: int = 2):
 
 @app.get("/api/label/crop/{i}.jpg")
 def label_crop(i: int, round: int = 2):
+    _local_tool()
     import json as _json
     from fastapi.responses import Response
     from PIL import Image as _Image
@@ -433,6 +443,7 @@ class LabelIn(BaseModel):
 
 @app.post("/api/label")
 def save_label(body: LabelIn):
+    _local_tool()
     import json as _json
     f = labels_file(body.round)
     done = _json.loads(f.read_text()) if f.exists() else {}

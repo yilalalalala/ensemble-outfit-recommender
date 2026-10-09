@@ -51,6 +51,7 @@ image = (
         "ENSEMBLE_LLM_SPEND_FILE": "/root/data/runtime/llm_spend.json",
         "ENSEMBLE_ALLOWED_ORIGINS": "https://yilalalalala.github.io,http://localhost:8010,http://localhost:8040",
         "ENSEMBLE_IMAGE_BASE_URL": IMAGE_BASE_URL,
+        "ENSEMBLE_HOSTED": "1",   # disables the local-only Label tool (gold labels, private photo crops)
     })
     # Bake FashionCLIP into the image so the first public photo request does
     # not depend on a large Hugging Face download during cold start.

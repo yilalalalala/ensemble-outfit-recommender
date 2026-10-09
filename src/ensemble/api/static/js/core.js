@@ -1,14 +1,14 @@
 // Shared state, API access, event logging, the shopper product card, dialogs and motion.
 // Everything shown is rendered from API responses; nothing here invents product data.
 import {colourName, createPageGroups, familyKey, money, swatchStyle, variantLabels} from "./catalog.js";
-import {DEMO, request as demoRequest, requestRaw as demoRequestRaw} from "./demo.js";
 
-export {DEMO};
 
 // The local app is same-origin.  A hosted static build declares its Modal endpoint
 // in a meta tag, keeping every UI module on the same small API wrapper.
 const API_ROOT = (document.querySelector('meta[name="ensemble-api-base"]')?.content || "").replace(/\/$/, "");
 const apiUrl = path => `${API_ROOT}${path}`;
+// The hosted shop (GitHub Pages + Modal) hides local-only research tools such as Label.
+export const HOSTED = API_ROOT !== "";
 
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];
@@ -36,15 +36,6 @@ function friendly(status, body) {
 }
 
 export async function api(path, opts) {
-  // Public demo build: the same paths are answered from frozen responses checked into the build.
-  // No request leaves the page for /api in demo mode (see demo.js).
-  if (DEMO) {
-    try {
-      return await demoRequest(path, opts);
-    } catch (e) {
-      throw new ApiError(e.status ?? 503, friendly(e.status ?? 503, null), e.code ?? null);
-    }
-  }
   let r;
   try {
     r = await fetch(apiUrl(path), opts);
@@ -59,7 +50,6 @@ export async function api(path, opts) {
 
 // Status-aware probe for the endpoints whose HTTP status is part of the answer (/readyz).
 export async function probe(path) {
-  if (DEMO) return demoRequestRaw(path);
   try {
     const r = await fetch(apiUrl(path));
     return {status: r.status, ok: r.ok, body: await r.json().catch(() => null)};
@@ -110,7 +100,6 @@ export const newPageGroups = () => createPageGroups(familyOf, notForMeSet());
 
 // ---- events (DESIGN §7.6: impression, click, add_to_cart, not_for_me) --------------------------------
 export function logEvent(event, surface, article_id, anchor = null) {
-  if (DEMO) return;   // documented no-op: the public demo stores no shopper events
   fetch(apiUrl("/api/events"), {
     method: "POST", headers: {"Content-Type": "application/json"},
     body: JSON.stringify({customer_idx: state.customer, event, surface, article_id: +article_id, anchor: anchor == null ? null : +anchor}),

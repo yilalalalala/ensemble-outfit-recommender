@@ -13,12 +13,11 @@ In machine learning, it also means several models combined. This project is both
 
 ![Ensemble editorial shopping interface](docs/assets/home_desktop.png)
 
-> **The live demo is this application's own frontend**, published as a static build. It is the same HTML,
-> CSS and JavaScript that `make serve` serves from FastAPI, and it answers every request from frozen
-> responses captured from the local app — the real recommendations, the real Complete-the-Look modules,
-> the real catalogue photography and the real evaluation reports. GitHub Pages cannot run FastAPI, SQLite,
-> model inference or an LLM, so the public build runs no models and records nothing. Run `make serve`
-> locally for the live database, model-backed visual search, outfit analysis and the grounded assistant.
+> **The live demo is the real application.** GitHub Pages serves the same HTML, CSS and JavaScript that
+> `make serve` serves locally, and every request goes to the FastAPI backend running on Modal: live
+> recommendations and Complete the Look, photo upload with FashionCLIP visual search, outfit analysis and
+> the grounded Style Assistant (Claude). Catalogue photos come from Cloudflare R2. Nothing is pre-recorded.
+> The backend scales to zero when idle, so the first visit after a quiet period takes about 20–30 seconds.
 
 <p align="center">
   <img src="docs/assets/assistant_desktop.png" alt="Ensemble Style Assistant" width="67%">
@@ -229,28 +228,24 @@ reimplemented for the web.
   serving bundle, SHAP explanations in DS Studio, model-backed visual search, outfit analysis and the
   tool-calling assistant. Its data and model assets stay local: their source licences do not permit
   bundling them into a public repository.
-- **Public build** — `portfolio/` is that same frontend, assembled by `make public-demo` and deployed to
-  [GitHub Pages](https://yilalalalala.github.io/ensemble-outfit-recommender/) from `main`. GitHub Pages
-  serves static files only, so the page runs in **demo mode**: a narrow data adapter
-  (`static/js/demo.js`) answers the application's own request paths from frozen responses captured from
-  the running local app. Shopper actions that belong in the browser — cart, colour, profile, "Not for
-  me" — work exactly as they do locally; event logging is a documented no-op. The public build runs no
-  models, stores nothing, and never requests `/api`.
+- **Hosted shop** — `portfolio/` is that same frontend, built by `make pages` with one extra tag,
+  `<meta name="ensemble-api-base">`, pointing it at the live API on [Modal](https://modal.com)
+  (`deploy/modal_app.py`, `make modal-deploy`). GitHub Pages serves the static files from `main`; Modal runs
+  the FastAPI app (CPU, scales to zero, one container) with the serving store, the versioned serving bundle
+  and the FashionCLIP index on a Modal Volume; catalogue photos are served from a Cloudflare R2 bucket.
+  Outfit analysis and the assistant call the Claude API (Haiku) under a monthly budget cap. The local-only
+  research tool **Label** is not offered by the hosted shop, and the hosted API refuses it.
 
-Demo mode is declared by the build, not guessed from the hostname: the generated `index.html` carries
-`<meta name="ensemble-demo">`, which the real app never emits. What the public build publishes, and the
-limits of that subset, is written up in
-[`reports/PUBLIC_DEMO_FULL_UI_REPORT.md`](reports/PUBLIC_DEMO_FULL_UI_REPORT.md); its parameters are in
-[`configs/public_demo.yaml`](configs/public_demo.yaml).
-
-Every number in the published DS Studio is the stored evaluation report, published unchanged, and
-**offline**: historical data, not production traffic. A launch decision would need an online A/B test.
+Every number in DS Studio is the stored evaluation report and **offline**: historical data, not production
+traffic. A launch decision would need an online A/B test. See D-047 in
+[`docs/DECISIONS.md`](docs/DECISIONS.md) for why the earlier frozen demo was replaced.
 
 ```bash
 make serve                                   # the real application, http://localhost:8010
-make public-demo                             # rebuild portfolio/ (needs the local app running)
-make public-demo-preview                     # serve portfolio/ at the GitHub project subpath
-# open http://localhost:8041/ensemble-outfit-recommender/
+make modal-deploy                            # deploy the API to Modal (deploy venv with the modal CLI)
+make pages                                   # rebuild portfolio/ pointed at the Modal API; push to publish
+make pages-preview                           # serve portfolio/ at the GitHub project subpath
+# open http://localhost:8040/ensemble-outfit-recommender/
 ```
 
 The Pages workflow is in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
@@ -290,9 +285,10 @@ src/ensemble/
   llm/         provider-neutral LLM layer with a budget guard
   assistant/   tools, agent loop, grounding, eval harness
   evaluation/  metrics, segment analysis, rolling backtest
-  api/         serving-store builder, FastAPI app, web UI, public demo build
+  api/         serving-store builder, FastAPI app, web UI
 configs/       every tunable; experiment configs extend default.yaml
-portfolio/     the public build of the web UI (generated by `make public-demo`)
+portfolio/     the hosted build of the web UI (generated by `make pages`)
+deploy/        Modal deployment of the API
 reports/       evaluation readouts, model cards, metric JSONs
 tests/         leakage, integrity, metrics, API, assistant grounding
 ```
@@ -305,14 +301,13 @@ Ollama (Qwen3-VL, Qwen2.5-VL) · Anthropic API
 ## Data and licensing
 
 - **No data is in this repository.** H&M competition data and DeepFashion2 (research use) must be
-  obtained from their sources under their own terms. The exception is the bounded subset of catalogue
-  photography republished, downscaled, in the non-commercial public demo and in the README screenshots;
-  the count and the selection rule are in the demo's manifest and report.
+  obtained from their sources under their own terms. For the non-commercial hosted demo, the H&M catalogue
+  photographs are served from a Cloudflare R2 bucket and the serving store and bundle sit on a private Modal
+  Volume; neither is part of this repository.
 - **Every published screenshot and every published page is the real application.** No product image is
   AI-generated and no interface is mocked up.
 - **Outfit photos** used for evaluation are either openly licensed Wikimedia Commons images (credited in
-  `data/raw/outfit_photos/CREDITS.csv`) or private test images. Only one of the openly licensed photos is
-  published — in the demo's saved photo example, with its credit shown on the page. The Style Assistant
-  screenshot above additionally shows one private test photo, published deliberately as a screenshot of
-  the local app.
+  `data/raw/outfit_photos/CREDITS.csv`) or private test images. None is served by the hosted shop; visitors
+  upload their own photo, which is processed for the request and not stored. The Style Assistant screenshot
+  above shows one private test photo, published deliberately as a screenshot of the local app.
 - **All results are offline.** A launch decision would need an online A/B test.

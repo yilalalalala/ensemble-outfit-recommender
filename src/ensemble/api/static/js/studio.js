@@ -1,7 +1,7 @@
 // DS Studio: offline evaluation (/api/metrics), serving status (/readyz, /api/v2/meta, /api/v2/metrics),
 // recommendation inspection (/api/home + /api/explain) and the Label workflow (/api/label/*).
 // Values and labels are shown as the API returns them; formatting matches the pre-redesign DS view.
-import {$, $$, DEMO, api, esc, getHome, probe, profileDetail, profileName, reasonList, shapBars, state} from "./core.js";
+import {$, $$, HOSTED, api, esc, getHome, probe, profileDetail, profileName, reasonList, shapBars, state} from "./core.js";
 
 const pct = x => x == null || isNaN(x) ? "—" : (x * 100).toFixed(2) + "%";
 const f5 = x => x == null || isNaN(x) ? "—" : x.toFixed(5);
@@ -41,10 +41,8 @@ export async function evaluation(ctx) {
   const empty = !taRows && !recRows && !tbRows;
 
   const root = ctx.render(head("Offline evaluation",
-      "All numbers are offline (historical data). A launch decision would need an online A/B test."
-      + (DEMO ? " This public build reads the same stored evaluation reports as the local application, published unchanged." : ""),
-      `<span class="tag">Offline</span> <span class="tag">Stored reports: ${Object.keys(m).length}</span>`
-      + (DEMO ? ` <span class="tag">Published build</span>` : "")) + (empty
+      "All numbers are offline (historical data). A launch decision would need an online A/B test.",
+      `<span class="tag">Offline</span> <span class="tag">Stored reports: ${Object.keys(m).length}</span>`) + (empty
     ? `<div class="state"><p class="state__title">No evaluation reports in the serving store</p><p class="meta">Run <code>make serving</code> after the milestones to load them.</p></div>`
     : `
     ${rt ? `<div class="kpis" style="margin-top:var(--s-4)">
@@ -87,9 +85,7 @@ export async function serving(ctx) {
   const kv = obj => Object.entries(obj).map(([k, v]) => `<tr><th scope="row">${esc(k)}</th><td class="num">${esc(typeof v === "object" ? JSON.stringify(v) : String(v))}</td></tr>`).join("");
   const unavailable = what => `<div class="notice notice--error" role="alert"><strong>${what} unavailable.</strong> The serving bundle may not be loaded on this server.</div>`;
   ctx.render(head("Serving status",
-      DEMO
-        ? "The bundle behind Complete the Look, visual search and outfit analysis in the local application. This page is a snapshot of that bundle's own status endpoints, captured when the published build was made; the counters below are the traffic that server process had seen at that moment, not an evaluation and not public traffic."
-        : "The bundle behind live Complete the Look, visual search and outfit analysis. Telemetry below is live demo traffic on this server process since it started, not an evaluation.",
+      "The bundle behind live Complete the Look, visual search and outfit analysis. Telemetry below is live traffic on this server process since it started, not an evaluation.",
       isReady ? `<span class="tag tag--ok"><span class="status-dot is-ok" aria-hidden="true"></span>Ready</span>` : `<span class="tag tag--warn"><span class="status-dot is-bad" aria-hidden="true"></span>Not ready</span>`) + `
     <div class="kpis" style="margin-top:var(--s-4)">
       <div class="kpi"><span class="kpi__v">${isReady ? "Ready" : "Not ready"}</span><span class="kpi__k">/readyz${rd ? ` · HTTP ${rd.status}` : " · unreachable"}</span></div>
@@ -110,7 +106,7 @@ export async function serving(ctx) {
           "Equivalence check: " + esc(JSON.stringify(mt.equivalence?.tolerance ?? {}))) : unavailable("Ranker metadata")}
       </section>
     </div>
-    <section class="studio-section" aria-labelledby="sv-t"><h2 id="sv-t">Demo telemetry <span class="tag">${DEMO ? "captured snapshot" : "live · this process"}</span></h2>
+    <section class="studio-section" aria-labelledby="sv-t"><h2 id="sv-t">Demo telemetry <span class="tag">live · this process</span></h2>
       ${t ? `<p class="caption">Cache: ${esc(t.cache?.hits)} hits, ${esc(t.cache?.misses)} misses, ${esc(t.cache?.size)} / ${esc(t.cache?.capacity)} entries.
           Last bundle load: ${esc(t.load_history?.at(-1)?.bundle_version ?? "—")} at ${when(t.load_history?.at(-1)?.at)}.</p>
         <div class="studio-grid">
@@ -168,8 +164,8 @@ export async function inspect(ctx) {
 export async function label(ctx) {
   const round = +(ctx.route.params.get("round") || 2);
   ctx.setTitle("Label");
-  if (DEMO) {
-    ctx.render(head("Label", "Not available in the published build.") + `
+  if (HOSTED) {
+    ctx.render(head("Label", "Not available in the hosted shop.") + `
       <div class="state"><p class="state__title">This workflow runs locally only</p>
         <p class="meta">Labelling writes the human gold labels for the visual-search judge and shows crops of the
           evaluation outfit photos, which are not published. Run the application locally to use it.</p>

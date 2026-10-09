@@ -522,12 +522,7 @@ dialog.cart .dialog__body { flex: 1; overflow-y: auto; align-content: start; }
 
 /* Published build only: states that an answer or a photo is a saved response from the local
    application. Same type scale as .caption; never used by the live application. */
-.saved-note {
-  margin: 0; font-size: var(--fs-meta); line-height: 1.5; color: var(--muted);
-  border-left: 2px solid var(--line-strong); padding-left: var(--s-3);
-}
-.msg .saved-note { margin: var(--s-1) 0 var(--s-2); }
-.footer__note { font-size: var(--fs-meta); color: var(--muted); }
+.msg .footer__note { font-size: var(--fs-meta); color: var(--muted); }
 .footer__note a { color: inherit; }
 
 /* ---------------------------------------------------------------- studio */

@@ -1,11 +1,10 @@
-.PHONY: help setup data ingest test public-demo public-demo-sync public-demo-preview baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
+.PHONY: help setup data ingest test pages pages-preview modal-deploy baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
 PYTHON := .venv/bin/python
 PY := PYTHONPATH=src $(PYTHON)
 PORT ?= 8010
-# Port the public demo build captures from (must match configs/public_demo.yaml: capture.base).
 DEMO_PORT ?= 8031
-PREVIEW_PORT ?= 8041
-PREVIEW_DIR ?= data/interim/public_demo_preview
+PREVIEW_PORT ?= 8040
+PREVIEW_DIR ?= data/interim/pages_preview
 
 help:
 	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-12s %s\n", $$1, $$2}'
@@ -46,16 +45,20 @@ serve:      ## run the web app at http://localhost:8010 (override with PORT=...)
 
 mvp: ingest baselines retrieval ranker track-b submission serving test  ## the full MVP pipeline, end to end
 
-public-demo: ## rebuild portfolio/ (the public build of the web UI) — needs `make serve PORT=8031` running
-	$(PY) -m ensemble.api.public_demo build
+# Hosted shop: GitHub Pages (portfolio/) calls the live Modal backend; catalogue photos are in R2.
+API_BASE ?= https://yilalalalala--ensemble-recommender-web.modal.run
+R2_IMAGE_BASE ?= https://pub-54154da7017a4288b7a700f717fc45a0.r2.dev/catalog
 
-public-demo-sync: ## copy the frontend into portfolio/ without re-capturing any response (no data needed)
-	$(PY) -m ensemble.api.public_demo sync
+pages: ## rebuild portfolio/ (the real frontend pointed at the live Modal API); push to main to publish
+	$(PYTHON) scripts/deploy/build_cloud_frontend.py --api-base $(API_BASE) --out portfolio
 
-public-demo-preview: ## serve portfolio/ at the GitHub project subpath, as Pages does
+pages-preview: ## serve portfolio/ at the GitHub project subpath, as Pages does
 	@mkdir -p $(PREVIEW_DIR) && ln -sfn "$(CURDIR)/portfolio" "$(PREVIEW_DIR)/ensemble-outfit-recommender"
 	@echo "open http://localhost:$(PREVIEW_PORT)/ensemble-outfit-recommender/"
 	$(PYTHON) -m http.server $(PREVIEW_PORT) --directory $(PREVIEW_DIR)
+
+modal-deploy: ## deploy the API to Modal (needs the deploy venv with the modal CLI, logged in)
+	ENSEMBLE_IMAGE_BASE_URL=$(R2_IMAGE_BASE) modal deploy deploy/modal_app.py
 
 test:       ## run the test suite
 	$(PY) -m pytest -q
