@@ -93,14 +93,19 @@ def detect(image: Image.Image, llm, purpose: str = "detect") -> tuple[list[dict]
 def catalogue() -> tuple[pd.DataFrame, np.ndarray]:
     """Live assortment with FashionCLIP embeddings (L2-normalised)."""
     cfg = load_config()
-    import duckdb
-    con = duckdb.connect(str(cfg.path("database")), read_only=True)
-    live = con.execute("""
-        SELECT a.article_id, a.prod_name, a.product_type_name, a.colour_group_name, a.slot, a.index_group_name,
-               count(*) AS pop
-        FROM transactions t JOIN articles a USING (article_id)
-        WHERE t.t_dat > (SELECT max(t_dat) FROM transactions) - INTERVAL 8 WEEK AND a.slot IS NOT NULL
-        GROUP BY ALL""").df()
+    # The serving store already contains the point-in-time live catalogue and its
+    # popularity snapshot.  Reading it avoids shipping the 836 MB research DuckDB
+    # into the production container solely to reconstruct this small table.
+    import sqlite3
+    con = sqlite3.connect(f"file:{cfg.path('serving_db')}?mode=ro", uri=True)
+    live = pd.read_sql_query("""
+        SELECT a.article_id, a.product_code, a.prod_name, a.product_type_name,
+               a.product_group_name, a.colour_group_name, a.department_name,
+               a.slot, a.index_group_name, p.pop_window AS pop
+        FROM articles a JOIN popularity p USING (article_id)
+        WHERE a.slot IS NOT NULL AND p.pop_window > 0
+        ORDER BY a.article_id""", con)
+    con.close()
     d = cfg.path("processed") / "clip"
     ids, emb, has = np.load(d / "article_ids.npy"), np.load(d / "article_emb.npy"), np.load(d / "has_image.npy")
     row = pd.Series(np.arange(len(ids)), index=ids)

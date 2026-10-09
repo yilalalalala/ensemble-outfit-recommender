@@ -20,7 +20,12 @@ class Config(dict):
         return Config(value) if isinstance(value, dict) else value
 
     def path(self, key: str) -> Path:
-        return ROOT / self["paths"][key]
+        # Cloud deployments mount data independently from the application image.  A
+        # per-path override keeps the checked-in configuration useful locally while
+        # letting Modal point the same code at its persistent Volume.
+        import os
+        override = os.environ.get(f"ENSEMBLE_PATH_{key.upper()}")
+        return Path(override) if override else ROOT / self["paths"][key]
 
 
 def _merge(base: dict, over: dict) -> dict:

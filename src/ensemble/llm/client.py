@@ -21,13 +21,14 @@ import re
 import time
 import urllib.request
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from ensemble.config import ROOT
 
 # USD per million tokens (Anthropic first-party list prices).
 PRICES = {"claude-opus-5": (5.0, 25.0), "claude-sonnet-5": (2.0, 10.0), "claude-haiku-4-5": (1.0, 5.0)}
 BUDGET_USD = float(os.environ.get("ENSEMBLE_LLM_BUDGET_USD", "8.0"))
-SPEND_FILE = ROOT / "reports" / "llm_spend.json"
+SPEND_FILE = Path(os.environ.get("ENSEMBLE_LLM_SPEND_FILE", ROOT / "reports" / "llm_spend.json"))
 
 
 class BudgetExceeded(RuntimeError):
@@ -180,5 +181,8 @@ def get_client(role: str = "assistant", backend: str | None = None, model: str |
     """``role`` is "assistant" (tool calling) or "vision" (garment detection)."""
     backend = backend or os.environ.get("ENSEMBLE_LLM", "ollama")
     if backend == "claude":
-        return ClaudeClient(model or "claude-opus-5")
+        # Production defaults to Haiku for a responsive, inexpensive portfolio demo;
+        # either role can still be upgraded independently without changing code.
+        default = os.environ.get(f"ENSEMBLE_{role.upper()}_MODEL", "claude-haiku-4-5")
+        return ClaudeClient(model or default)
     return OllamaClient(model or LOCAL_MODELS[role])

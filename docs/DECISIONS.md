@@ -1319,3 +1319,30 @@ JSON). `configs/public_demo.yaml` holds the knobs (`ctl_pool`, `max_variants_per
 **Revisit if:** the published subset stops exercising a visible interaction; the build approaches the
 GitHub Pages size limit; or a hosted runtime becomes available, at which point demo mode can be
 dropped rather than extended.
+
+### D-047 — The hosted shop runs on a live backend; the frozen demo is retired
+
+**Date:** 2026-10-09. **Status:** accepted; supersedes the publishing approach of D-046.
+
+**Context.** D-046 published the real frontend in a static "demo mode" that answered every request from
+frozen, pre-captured responses, because GitHub Pages cannot run FastAPI, models or an LLM. A visitor could
+not upload their own photo or ask the assistant anything new — the demo did not show what the system does.
+
+**Decision.** GitHub Pages keeps serving the real frontend (`make pages`), and every request goes to the
+real FastAPI app on **Modal** (`deploy/modal_app.py`): CPU only, scales to zero, one container (assistant
+sessions are process-local), serving store + bundle + FashionCLIP index on a Modal Volume. Catalogue photos
+are served from a **Cloudflare R2** bucket (`ENSEMBLE_IMAGE_BASE_URL`). Outfit analysis and the assistant use
+the Claude API (Haiku by default) under `ENSEMBLE_LLM_BUDGET_USD`. The demo-mode adapter, capture script,
+fixtures and their tests are removed; the frontend has one mode, with the API base declared by a meta tag.
+
+- **Local-only tools stay local.** `ENSEMBLE_HOSTED=1` makes the API refuse Label (it writes gold labels and
+  serves crops of private evaluation photos); the hosted UI hides it.
+- **Cross-origin calls** are allowed only from the Pages origin and the local preview ports.
+
+**Cost (2026-10-09 estimate).** R2 ≈ $0.29/month for ~29 GB; Modal compute only while requests run
+(cold start ≈ 16–30 s, then sub-second API responses); Claude ≈ $0.01 per assistant turn or outfit analysis.
+
+**Revisit if:** traffic makes cold starts or the single container a bottleneck (raise `min_containers` /
+`max_containers` and move assistant sessions to shared state); costs exceed the budget; or the dataset terms
+for public image hosting need a narrower published subset (e.g. only the ~26k live serving catalogue).
+

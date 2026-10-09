@@ -1,5 +1,5 @@
 // Router, masthead navigation, experience switch and demo-profile selector.
-import {$, $$, DEMO, api, announce, esc, errorState, initDialogs, initImageFallback, initMotion, logEvent,
+import {$, $$, HOSTED, api, announce, esc, errorState, initDialogs, initImageFallback, initMotion, logEvent,
         notForMe, openDialog, probe, profileDetail, profileName, selectSwatch, state} from "./core.js";
 import {addToCart, initCart, loadCart} from "./cart.js";
 import * as shop from "./shop.js";
@@ -9,10 +9,10 @@ import * as studio from "./studio.js";
 const STORE_KEY = "ensemble.profile";
 const NAV = {
   shop: [["Discover", "#/"], ["Collections", "#/collections"], ["Style Assistant", "#/assistant"]],
-  // Label writes the human gold labels to disk and reads private outfit photos, so the published
-  // demo does not offer it; its route still resolves and explains itself (studio.js).
+  // Label writes the human gold labels to disk and reads private outfit photos, so the hosted shop
+  // does not offer it (the API refuses it too); its route still resolves and explains itself (studio.js).
   studio: [["Evaluation", "#/studio"], ["Serving", "#/studio/serving"], ["Inspect", "#/studio/inspect"],
-           ...(DEMO ? [] : [["Label", "#/label"]])],
+           ...(HOSTED ? [] : [["Label", "#/label"]])],
 };
 
 // ---- routing -------------------------------------------------------------------------------------------
@@ -98,10 +98,6 @@ function setNav(res) {
 function paintUtility(exp) {
   const note = $("#utility-note");
   if (exp !== "studio") { note.innerHTML = ""; return; }
-  if (DEMO) {
-    note.innerHTML = `<span class="status-dot is-ok" aria-hidden="true"></span>Stored responses from the local application · offline evaluation`;
-    return;
-  }
   const ready = state.ready;
   note.innerHTML = ready === false
     ? `<span class="status-dot is-bad" aria-hidden="true"></span>Serving bundle not ready · live Complete the Look falls back to stored suggestions`

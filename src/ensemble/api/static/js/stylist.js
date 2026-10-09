@@ -1,15 +1,11 @@
 // Style Assistant (M7b) with the two photo services (M7a visual search, "snap your outfit").
 // Products shown here come only from tool / endpoint responses; the assistant's text never adds products.
 // (That grounding is documented for DS readers; shoppers see consumer copy only.)
-import {$, ApiError, DEMO, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
-import {assistantExamples, assistantMatch, storedPhoto} from "./demo.js";
+import {$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
 
 const CATEGORIES = ["top", "outerwear", "knitwear", "bottom", "dress", "jumpsuit", "shoes", "bag", "jewellery", "hat", "scarf", "belt", "sunglasses"];
 const ACCEPT = "image/jpeg,image/png,image/webp";
 const SUGGESTIONS = ["What shoes go with wide-leg trousers?", "Find me a warm knit for autumn", "What should I wear to a summer wedding?"];
-// Published build: the chips are the saved questions, so every chip has a real saved answer behind it.
-let suggestions = SUGGESTIONS, saved = [];
-const savedLabel = "Saved answers from the local application. Pick a question below, or type one of them.";
 
 // One conversation per profile while the page is open; a profile change starts a new one.
 const sessions = new Map();   // customer -> {sid, backend, log: html, sentAnchors: Set}
@@ -30,12 +26,6 @@ export async function view(ctx) {
   ctx.setTitle("Style Assistant");
   const customer = state.customer;
   const anchor = ctx.route.params.get("anchor");
-  if (DEMO && !saved.length) {
-    saved = await assistantExamples().catch(() => []);
-    const picked = saved.filter(e => e.suggested).map(e => e.text);
-    if (picked.length) suggestions = picked;
-  }
-  if (!ctx.current()) return;
   const root = ctx.render(`
     <div class="stylist-head">
       <div><p class="eyebrow">Style Assistant</p><h1 class="title" tabindex="-1">Ask the stylist.</h1></div>
@@ -83,7 +73,6 @@ export async function view(ctx) {
       </section>
     </div>`);
   if (!root) return;
-  if (DEMO) $("#attach-btn", root).hidden = true;   // uploads need the local application
   photoServices(root);
 
   // Conversation: reuse this profile's session if one exists.
@@ -124,15 +113,7 @@ const chips = list => `<div class="suggestions">${list.map(t =>
 function emptyChat() {
   return `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
     <p class="msg__text">I can find pieces, style something you own, or complete an outfit from a photo. What are you dressing for?</p>
-    ${DEMO ? `<p class="saved-note">${esc(savedLabel)}</p>` : ""}
-    ${chips(suggestions)}</div>`;
-}
-
-// Published build: a question with no saved answer is said to have none. Nothing is generated here.
-function noSavedAnswer(all) {
-  return `<div class="msg msg--bot" data-note><p class="msg__who">Stylist</p>
-    <p class="msg__text">That one isn't among the saved questions. Here is what has been saved:</p>
-    ${chips(all)}</div>`;
+    ${chips(SUGGESTIONS)}</div>`;
 }
 
 function renderAnswer(r, cards) {
@@ -140,10 +121,8 @@ function renderAnswer(r, cards) {
   const text = esc(r.answer).replace(/\s*\[\[(\d+)\]\]/g, "");
   // The model writes light markdown; after escaping, only **bold** is turned into markup.
   const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
-  const next = DEMO ? saved.filter(e => e.followup_of && e.followup_of === r.example_id).map(e => e.text) : [];
   return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
-    ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}
-    ${next.length ? chips(next) : ""}</div>`;
+    ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}</div>`;
 }
 
 function makeChat(ctx, customer) {
@@ -178,12 +157,6 @@ function makeChat(ctx, customer) {
     const fd = new FormData();
     fd.append("text", text);
     if (sent) fd.append("photo", sent);
-    if (DEMO && !(await assistantMatch(text))) {
-      $("#pending")?.remove();
-      log.insertAdjacentHTML("beforeend", noSavedAnswer(saved.map(e => e.text)));
-      busy = false; sendBtn.disabled = false; log.scrollTop = log.scrollHeight; save();
-      return;
-    }
     try {
       let s = sessions.get(customer);
       let r;
@@ -236,21 +209,7 @@ function makeChat(ctx, customer) {
 function photoServices(root) {
   const slot = $("#photo-slot", root), out = $("#photo-results", root);
   const vsGo = $("#vs-go", root), snapGo = $("#snap-go", root);
-  let file = null, box = null, url = null, stored = null;
-
-  // Published build: one saved, openly licensed photo stands in for an upload, and both services
-  // return exactly what the local application returned for it. Uploading needs the local application.
-  async function savedPhoto() {
-    stored = stored || await storedPhoto();
-    slot.innerHTML = `<div class="preview">
-      <div class="preview__frame" id="frame"><img src="${esc(stored.photo.src)}" alt="${esc(stored.photo.alt)}">
-        <div class="preview__box" id="box" style="left:${stored.photo.box[0] * 100}%;top:${stored.photo.box[1] * 100}%;width:${(stored.photo.box[2] - stored.photo.box[0]) * 100}%;height:${(stored.photo.box[3] - stored.photo.box[1]) * 100}%"></div></div>
-      <div class="preview__bar"><span class="meta" id="box-state">Framed area will be searched</span></div>
-      <p class="saved-note">Saved example photo. Choosing your own photo needs the application running locally.</p>
-      <p class="caption">${esc(stored.photo.credit)}</p></div>`;
-    $("#vs-cat", root).value = stored.visual_search_category;
-    vsGo.disabled = snapGo.disabled = false;
-  }
+  let file = null, box = null, url = null;
 
   function empty() {
     slot.innerHTML = `<label class="dropzone" id="dropzone">
@@ -319,21 +278,21 @@ function photoServices(root) {
     frame.addEventListener("pointercancel", end);
   }
 
-  const sync = () => { vsGo.disabled = snapGo.disabled = DEMO ? false : !file; };
+  const sync = () => { vsGo.disabled = snapGo.disabled = !file; };
 
   function busy(on, label) {
-    vsGo.disabled = snapGo.disabled = on || (DEMO ? false : !file);
+    vsGo.disabled = snapGo.disabled = on || !file;
     out.setAttribute("aria-busy", String(on));
     if (on) out.innerHTML = `<p class="thinking" role="status"><i></i><i></i><i></i> <span id="busy-label">${esc(label)}</span></p>`;
   }
 
   vsGo.addEventListener("click", async () => {
-    if (!file && !DEMO) return;
+    if (!file) return;
     busy(true, "Searching our collection…");
     const fd = new FormData();
     fd.append("photo", file); fd.append("category", $("#vs-cat", root).value); fd.append("box", box ? box.join(",") : "");
     try {
-      const r = DEMO ? (await storedPhoto()).visual_search : await api("/api/visual-search", {method: "POST", body: fd});
+      const r = await api("/api/visual-search", {method: "POST", body: fd});
       const [matches] = await grouped([r.matches]);
       out.innerHTML = matches.length
         ? `<h3>Pieces that look similar</h3>${cardGrid(matches, "visual_search", {cls: "grid--compact"})}
@@ -353,14 +312,14 @@ function photoServices(root) {
   });
 
   snapGo.addEventListener("click", async () => {
-    if (!file && !DEMO) return;
+    if (!file) return;
     busy(true, "Looking at your outfit… This may take about a minute.");
     const t0 = Date.now();
     const timer = setInterval(() => { const l = $("#busy-label", out); if (l) l.textContent = `Looking at your outfit… ${Math.round((Date.now() - t0) / 1000)} s`; }, 1000);
     const fd = new FormData();
     fd.append("photo", file);
     try {
-      const r = DEMO ? (await storedPhoto()).snap : await api("/api/snap", {method: "POST", body: fd});
+      const r = await api("/api/snap", {method: "POST", body: fd});
       const garments = r.garments.filter(g => g.matches.length), fills = r.complete_the_look.filter(m => m.items.length);
       const groups = await grouped([...garments.map(g => g.matches.slice(0, 5)), ...fills.map(m => m.items)]);
       const gm = groups.slice(0, garments.length), fm = groups.slice(garments.length);
@@ -379,6 +338,6 @@ function photoServices(root) {
     } finally { clearInterval(timer); busy(false); out.scrollIntoView({block: "nearest"}); }
   });
 
-  if (DEMO) savedPhoto(); else empty();
+  empty();
   sync();
 }

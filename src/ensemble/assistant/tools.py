@@ -110,13 +110,14 @@ class Toolbox:
 
     def _price_tier(self, live: pd.DataFrame) -> pd.Series:
         if "price_tier" not in self.session:
-            cfg = load_config()
-            import duckdb
-            con = duckdb.connect(str(cfg.path("database")), read_only=True)
-            p = con.execute("""SELECT article_id, avg(price) AS p FROM transactions
-                               WHERE t_dat > (SELECT max(t_dat) FROM transactions) - INTERVAL 12 WEEK GROUP BY 1""").df()
-            m = live[["article_id", "slot"]].merge(p, on="article_id", how="left")
-            m["tier"] = m.groupby("slot").p.transform(lambda x: pd.qcut(x.rank(method="first"), 3, labels=False))
+            # The public source catalogue has no retail price.  Use the exact same
+            # deterministic prototype merchandising policy as the shopper cards,
+            # then derive relative tiers within each wearable slot.
+            from ensemble.api.merch import price_usd
+            m = live.copy()
+            m["p"] = [price_usd(r) for r in m.to_dict("records")]
+            m["tier"] = m.groupby("slot").p.transform(
+                lambda x: pd.qcut(x.rank(method="first"), 3, labels=False))
             self.session["price_tier"] = m.set_index("article_id").tier.reindex(live.article_id).fillna(1).values
         return pd.Series(self.session["price_tier"])
 
