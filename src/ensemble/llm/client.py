@@ -9,8 +9,10 @@ Messages use one neutral format:
   {"role": "tool", "tool_call_id": str, "name": str, "content": str}
 Tools are JSON-schema dicts: {"name", "description", "parameters"}.
 
-Every paid call is metered into reports/llm_spend.json; a call that would start
-after cumulative spend reaches the budget raises BudgetExceeded.
+Every paid call is metered; a call that would start after the budget is reached raises BudgetExceeded.
+The budget is cumulative (ENSEMBLE_LLM_BUDGET_USD), or per calendar month (UTC) when
+ENSEMBLE_LLM_MONTHLY_BUDGET_USD is set. Spend is kept in reports/llm_spend.json locally, or in a Modal Dict
+(ENSEMBLE_LLM_SPEND_DICT) when hosted, so the counter survives cold starts and redeploys.
 """
 from __future__ import annotations
 
@@ -28,7 +30,9 @@ from ensemble.config import ROOT
 # USD per million tokens (Anthropic first-party list prices).
 PRICES = {"claude-opus-5": (5.0, 25.0), "claude-sonnet-5": (2.0, 10.0), "claude-haiku-4-5": (1.0, 5.0)}
 BUDGET_USD = float(os.environ.get("ENSEMBLE_LLM_BUDGET_USD", "8.0"))
+MONTHLY_BUDGET_USD = float(os.environ["ENSEMBLE_LLM_MONTHLY_BUDGET_USD"]) if os.environ.get("ENSEMBLE_LLM_MONTHLY_BUDGET_USD") else None
 SPEND_FILE = Path(os.environ.get("ENSEMBLE_LLM_SPEND_FILE", ROOT / "reports" / "llm_spend.json"))
+SPEND_DICT = os.environ.get("ENSEMBLE_LLM_SPEND_DICT")   # Modal Dict name (hosted)
 
 
 class BudgetExceeded(RuntimeError):
@@ -46,15 +50,40 @@ class LLMResponse:
     raw_content: object = None       # provider-native assistant content, for faithful replay
 
 
+def _month() -> str:
+    return time.strftime("%Y-%m", time.gmtime())
+
+
+def _dict():
+    import modal
+    return modal.Dict.from_name(SPEND_DICT, create_if_missing=True)
+
+
 def spend() -> dict:
-    return json.loads(SPEND_FILE.read_text()) if SPEND_FILE.exists() else {"total_usd": 0.0, "by_purpose": {}}
+    if SPEND_DICT:
+        s = _dict().get("spend") or {}
+    else:
+        s = json.loads(SPEND_FILE.read_text()) if SPEND_FILE.exists() else {}
+    return {"total_usd": 0.0, "by_purpose": {}, "by_month": {}, **s}
+
+
+def budget_left() -> tuple[float, float]:
+    """(spent, budget) for the active budget: this month's spend if a monthly cap is set, else the total."""
+    s = spend()
+    if MONTHLY_BUDGET_USD is not None:
+        return s["by_month"].get(_month(), 0.0), MONTHLY_BUDGET_USD
+    return s["total_usd"], BUDGET_USD
 
 
 def _record(cost: float, purpose: str) -> None:
     s = spend()
     s["total_usd"] = round(s["total_usd"] + cost, 6)
     s["by_purpose"][purpose] = round(s["by_purpose"].get(purpose, 0.0) + cost, 6)
-    SPEND_FILE.parent.mkdir(exist_ok=True)
+    s["by_month"][_month()] = round(s["by_month"].get(_month(), 0.0) + cost, 6)
+    if SPEND_DICT:
+        _dict()["spend"] = s
+        return
+    SPEND_FILE.parent.mkdir(parents=True, exist_ok=True)
     SPEND_FILE.write_text(json.dumps(s, indent=2))
 
 
@@ -146,8 +175,9 @@ class ClaudeClient:
 
     def chat(self, system: str, messages: list[dict], tools: list[dict] | None = None,
              max_tokens: int = 4096, json_mode: bool = False, purpose: str = "eval") -> LLMResponse:
-        if spend()["total_usd"] >= BUDGET_USD:
-            raise BudgetExceeded(f"LLM budget of ${BUDGET_USD} reached")
+        spent, budget = budget_left()
+        if spent >= budget:
+            raise BudgetExceeded(f"LLM budget of ${budget} reached (spent ${spent:.2f})")
         kwargs = dict(model=self.model, max_tokens=max_tokens, messages=self._convert(messages),
                       system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}])
         if tools:

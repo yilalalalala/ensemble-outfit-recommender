@@ -546,6 +546,19 @@ def _error(request: Request, status: int, code: str, message: str) -> JSONRespon
                         headers={"X-Request-ID": _rid(request)})
 
 
+def _budget_exceeded(request: Request, exc: Exception):
+    # The AI budget cap is reached: the assistant and outfit analysis pause until it resets.
+    return JSONResponse(status_code=503, content={"error": {"code": "ai_budget_reached",
+                        "message": "This feature is resting for now. Please try again later."}})
+
+
+try:
+    from ensemble.llm.client import BudgetExceeded as _BudgetExceeded
+    app.add_exception_handler(_BudgetExceeded, _budget_exceeded)
+except Exception:  # noqa: BLE001 - optional LLM extras are absent in the minimal serving image
+    pass
+
+
 @app.exception_handler(RequestError)
 async def _request_error(request: Request, exc: RequestError):
     return _error(request, exc.status, exc.code, str(exc))

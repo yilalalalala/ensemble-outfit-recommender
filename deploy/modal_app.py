@@ -48,6 +48,10 @@ image = (
         "ENSEMBLE_ASSISTANT_MODEL": "claude-haiku-4-5",
         "ENSEMBLE_VISION_MODEL": "claude-haiku-4-5",
         "ENSEMBLE_LLM_BUDGET_USD": "10",
+        # Hard monthly cap on Claude spend (resets on the 1st, UTC); the counter lives in a Modal Dict so it
+        # survives cold starts and redeploys. The Anthropic Console limit is a second, provider-side cap.
+        "ENSEMBLE_LLM_MONTHLY_BUDGET_USD": "10",
+        "ENSEMBLE_LLM_SPEND_DICT": "ensemble-llm-spend",
         "ENSEMBLE_LLM_SPEND_FILE": "/root/data/runtime/llm_spend.json",
         "ENSEMBLE_ALLOWED_ORIGINS": "https://yilalalalala.github.io,http://localhost:8010,http://localhost:8040",
         "ENSEMBLE_IMAGE_BASE_URL": IMAGE_BASE_URL,
