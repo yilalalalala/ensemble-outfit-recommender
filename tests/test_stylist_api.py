@@ -116,3 +116,16 @@ def test_edit_validation(client, data, msg):
 def test_legacy_snap_and_v2_outfit_routes_still_exist(client):
     paths = {r.path for r in client.app.routes}
     assert {"/api/snap", "/api/v2/outfit", "/api/visual-search", "/api/stylist/detect", "/api/stylist/edit"} <= paths
+
+
+@pytest.mark.parametrize("goal", ["complete", "occasion", "similar"])
+def test_edit_picks_one_product_per_family(client, goal):
+    """Two colourways of one product never take two pick slots (article_id // 1000 is the product_code)."""
+    d = client.post("/api/stylist/edit", files={"photo": ("o.jpg", _photo(), "image/jpeg")},
+                    data={"garments": json.dumps(GARMENTS), "goal": goal, "occasion": "a wedding"}).json()
+    fams = [p["card"]["article_id"] // 1000 for p in d["picks"]]
+    assert len(fams) == len(set(fams))
+    alt_fams = [it["article_id"] // 1000 for a in d["alternatives"] for it in a["items"]]
+    assert not set(alt_fams) & set(fams)
+    if goal != "similar":
+        assert len(d["picks"]) >= 4

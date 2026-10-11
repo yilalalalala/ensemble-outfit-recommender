@@ -846,7 +846,10 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
                            int(g["box"][2] * small.width), int(g["box"][3] * small.height)] if g["box"] else None}
         m = match(gp, small, "text_rerank_image", 6)
         matched.append({**g, "ids": m.article_id.astype(int).tolist()})
-    name = lambda g: (f"{g['colour']} {g['description'] or g['category']}").strip()   # noqa: E731
+    def name(g: dict) -> str:   # "black strappy sandals", never "black black strappy sandals"
+        what = g["description"] or g["category"]
+        c = g["colour"].strip()
+        return what if not c or what.lower().startswith(c.lower()) else f"{c} {what}"
 
     def listing(gs: list[dict]) -> str:
         names = [name(g) for g in gs]
@@ -854,23 +857,34 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
             names = names[:3] + [f"{len(gs) - 3} more"]
         return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
     seen_ids: set[int] = set()
+    seen_families: set[int] = set()   # one product per family: article_id // 1000 is the product_code
     picks: list[dict] = []
     alternatives: list[dict] = []
 
     def take(aid: int, reason: str, group: str) -> bool:
-        if aid in seen_ids:
+        if aid in seen_ids or aid // 1000 in seen_families:
             return False
         seen_ids.add(aid)
+        seen_families.add(aid // 1000)
         picks.append({"article_id": aid, "reason": reason, "group": group})
         return True
+
+    def fresh(ids: list[int]) -> list[int]:
+        out, fams = [], set(seen_families)
+        for a in ids:
+            if a not in seen_ids and a // 1000 not in fams:
+                fams.add(a // 1000)
+                out.append(a)
+        return out
 
     anchor = None
     if goal == "similar":
         for g in matched:
-            if g["ids"]:
-                take(g["ids"][0], f"Closest to your {name(g)}", g["category"])
+            for a in g["ids"]:
+                if take(a, f"Closest to your {name(g)}", g["category"]):
+                    break
         for g in matched:
-            rest = [a for a in g["ids"] if a not in seen_ids]
+            rest = fresh(g["ids"])
             if rest:
                 alternatives.append({"title": f"More like your {name(g)}", "ids": rest})
         summary = f"Here are the closest pieces we found for your {listing(matched)}."
@@ -891,19 +905,24 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
             q = clip.embed_texts([f"{occasion} outfit"])[0]
             for m in modules:   # reorder each slot's pool by fit to the occasion (stable for unknown ids)
                 m["ids"] = sorted(m["ids"], key=lambda a: -float(emb[row[a]] @ q) if a in row else 0.0)
-        rnd = 0
-        while len(picks) < 6 and any(len(m["ids"]) > rnd for m in modules):
-            for m in modules:
-                if len(m["ids"]) > rnd and len(picks) < 6:
+        # Round-robin across the slots, one product per family, until 4-6 picks (fewer only if the pools run out).
+        cursors = [0] * len(modules)
+        rounds = 0
+        while len(picks) < 6 and any(c < len(m["ids"]) for c, m in zip(cursors, modules)):
+            for i, m in enumerate(modules):
+                while cursors[i] < len(m["ids"]) and len(picks) < 6:
+                    a = m["ids"][cursors[i]]
+                    cursors[i] += 1
                     word = SLOT_WORDS.get(m["slot"], m["slot"])
-                    take(m["ids"][rnd], f"Works for {occasion}" if goal == "occasion" else
-                         f"Pairs with your {name(main)}" if complete_outfit else
-                         f"Finishes the look with {word}", m["slot"])
-            rnd += 1
-            if rnd >= 2 and len(picks) >= 4:
+                    if take(a, f"Works for {occasion}" if goal == "occasion" else
+                            f"Pairs with your {name(main)}" if complete_outfit else
+                            f"Finishes the look with {word}", m["slot"]):
+                        break
+            rounds += 1
+            if rounds >= 2 and len(picks) >= 4:
                 break
         for m in modules:
-            rest = [a for a in m["ids"] if a not in seen_ids]
+            rest = fresh(m["ids"])
             if rest:
                 alternatives.append({"title": m["title"], "ids": rest})
         seen = listing(matched)

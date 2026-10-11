@@ -43,6 +43,8 @@ async function newPage(b, vp = DEFAULT_VP, opts = {}) {
 // Add to cart opens the cart drawer; close it before interacting with the page again.
 const closeCart = async p => { if (await p.$eval('#cart-dialog', d => d.open)) { await p.keyboard.press('Escape'); await p.waitForFunction(() => !document.querySelector('#cart-dialog').open); } };
 // With a remote API, event POSTs can keep the network busy; idle is a best-effort wait, checks wait for elements.
+// Screenshots wait for every image in the viewport to finish loading (R2 images can lag the layout).
+const imagesReady = p => p.waitForFunction(() => [...document.images].filter(i => { const r = i.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.width > 0; }).every(i => i.complete && i.naturalWidth > 0), null, {timeout: 30000}).catch(() => {});
 const settle = async p => { await p.waitForLoadState('networkidle', {timeout: 15000}).catch(() => {}); await p.waitForTimeout(400); };
 const want = n => !ONLY.length || ONLY.includes(n);
 const clean = (p, tag) => { ok(`no console errors (${tag})`, !p._errors.length, p._errors.join(' | ')); ok(`no failed requests (${tag})`, !p._failed.length, p._failed.join(' | ')); };
@@ -296,7 +298,7 @@ async function auditCards(p, scope = 'main') {
     const sel = tabs.find(t => t.cur === 'page'), un = tabs.filter(t => t.cur !== 'page');
     ok('collection tabs: grey inactive, black selected with underline, no pill, no counts', sel.color === 'rgb(17, 17, 17)' && sel.border === 'rgb(17, 17, 17)' && un.every(t => t.color === 'rgb(117, 111, 105)')
        && tabs.every(t => t.bg === 'rgba(0, 0, 0, 0)' && !/\d/.test(t.text)), JSON.stringify(tabs));
-    await p.focus('.filter[data-type]:not([data-type=""])'); await p.keyboard.press('Enter'); await p.waitForTimeout(200);
+    await p.focus('.filter[data-type]:not([data-type=""])'); await p.keyboard.press('Enter'); await p.mouse.move(1, 1); await p.waitForTimeout(450);
     const f = await p.$$eval('.filter', fs => fs.map(x => ({p: x.getAttribute('aria-pressed'), color: getComputedStyle(x).color, bg: getComputedStyle(x).backgroundColor, t: x.textContent})));
     const on = f.find(x => x.p === 'true');
     ok('category filter by keyboard: selected black, others grey, never a black pill, no counts', on && on.t !== 'All' && on.color === 'rgb(17, 17, 17)' && f.every(x => x.bg === 'rgba(0, 0, 0, 0)' && !/\d/.test(x.t))
@@ -419,7 +421,8 @@ async function auditCards(p, scope = 'main') {
     ok('gateway question and two choices', (await heading(p)) === 'How would you like to shop today?' && (await p.$$('.gw-choice')).length === 2, '');
     ok('gateway imagery is real catalogue photography', await p.$$eval('.gw-img', im => im.length >= 4 && im.every(i => /\/(images|catalog)\//.test(i.getAttribute('src')))), '');
     await p.click('.gw-choice--shop'); await settle(p);
-    ok('Shop your edit reaches the ranked edit in one click', /#\/shop$/.test(p.url()) && !!(await p.$('.hero .card')), p.url());
+    const hero = await p.waitForSelector('.hero .card', {timeout: 60000}).catch(() => null);
+    ok('Shop your edit reaches the ranked edit in one click', /#\/shop$/.test(p.url()) && !!hero, p.url());
     await p.goto(BASE + '#/'); await settle(p);
     await p.click('.gw-choice--ai'); await settle(p);
     ok('Style with AI opens the hub with three tasks', /#\/stylist$/.test(p.url()) && (await p.$$('.task-card')).length === 3, p.url());
@@ -456,7 +459,7 @@ async function auditCards(p, scope = 'main') {
     const n0 = await p.$$eval('.garment', g => g.length);
     ok('detection lands on Review (never straight to results)', (await heading(p)) === 'Is this right?' && n0 > 0 && await focusedHeading(p), `${n0} pieces`);
     ok('review shows numbered overlays on the photo', (await p.$$('.review__box')).length > 0, '');
-    await p.screenshot({path: `${SHOTS}/look_review.png`});
+    await imagesReady(p); await p.screenshot({path: `${SHOTS}/look_review.png`});
     await p.goto(BASE + '#/stylist/look?step=edit'); await settle(p);
     ok('deep link past an unfinished step falls back to the furthest valid step', /step=review/.test(p.url()), p.url());
     // correct the detection: recolour the first piece, remove the last, add a missed belt
@@ -484,18 +487,23 @@ async function auditCards(p, scope = 'main') {
     ok('alternatives sit behind a quiet control', !(await p.$eval('.look-edit__more', d => d.open).catch(() => false)), '');
     ok('pick reasons are consumer phrases', await p.$$eval('.look-edit__picks .card__note', n => n.length > 0 && n.every(x => x.textContent.length > 5)), '');
     ok('step 4 has exactly one dominant action (Refine this edit)', (await oneCta(p)) === 1 && /Refine this edit/.test(await p.$eval('.task__actions .btn--solid', e => e.textContent)), '');
-    await p.screenshot({path: `${SHOTS}/look_edit.png`});
+    await imagesReady(p); await p.screenshot({path: `${SHOTS}/look_edit.png`});
     const t = await shopperText(p);
     ok('no technical copy anywhere in the flow', !bannedIn(t).length, bannedIn(t).join(','));
     await p.click('.task__actions .btn--solid'); await settle(p);
     ok('Refine opens a dedicated conversation preloaded with the look', /context=look/.test(p.url()) && !!(await p.$('.context-card img')) && (await heading(p)) === 'Refine your edit', p.url());
     let askText = null;
-    p.on('request', r => { if (/\/api\/assistant\/[^/]+\/message/.test(r.url())) askText = r.postData(); });
+    // Record the outgoing message text in the page (network capture of FormData bodies is unreliable).
+    await p.evaluate(() => {
+      const orig = window.fetch; window.__sent = [];
+      window.fetch = (u, o) => { if (/\/api\/assistant\/[^/]+\/message$/.test(String(u)) && o?.body instanceof FormData) window.__sent.push(o.body.get('text')); return orig(u, o); };
+    });
     await p.fill('#chat-in', 'Make it more formal'); await p.keyboard.press('Enter');
     await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
-    ok('the refinement sends the look context with the first message', /I'm refining an outfit/.test(askText || '') && /Make it more formal/.test(askText || ''), '');
+    askText = (await p.evaluate(() => window.__sent))[0] || null;
+    ok('the refinement sends the look context with the first message', /I'm refining an outfit/.test(askText || '') && /Make it more formal/.test(askText || ''), (askText || 'no body captured').slice(0, 160).replace(/\s+/g, ' '));
     ok('refinement answer arrives', !/couldn't answer/.test(await p.$$eval('.msg--bot', m => m.at(-1).innerText)), '');
-    await p.screenshot({path: `${SHOTS}/look_refine.png`});
+    await imagesReady(p); await p.screenshot({path: `${SHOTS}/look_refine.png`});
     await p.goto(BASE + '#/stylist/look?step=edit'); await settle(p);
     await p.click('[data-start-over]'); await settle(p);
     ok('Start over clears the staged state', /step=photo/.test(p.url()) && !!(await p.$('.dropzone')) && !(await p.evaluate(() => sessionStorage.getItem('ensemble.look.v1'))), p.url());
@@ -524,7 +532,7 @@ async function auditCards(p, scope = 'main') {
     const a = await auditCards(p, '.task__body');
     ok('real visually similar results with prices and cart', a.n > 0 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
     ok('stylist refinement offered as the one next action', (await oneCta(p)) === 1 && /\/stylist\/ask\?anchor=\d+/.test(await p.$eval('.task__actions .btn--solid', e => e.getAttribute('href'))), '');
-    await p.screenshot({path: `${SHOTS}/find_results.png`});
+    await imagesReady(p); await p.screenshot({path: `${SHOTS}/find_results.png`});
     clean(p, 'find');
     await ctx.close();
   }
@@ -548,7 +556,7 @@ async function auditCards(p, scope = 'main') {
     const last = await p.$$eval('.msg--bot', m => m.at(-1).innerText);
     ok('lost session recovers: new session, earlier turns replayed, no raw error', forced && /Earlier in our chat/.test(resent || '') && /And a bag/.test(resent || '')
        && !/couldn't answer|404/.test(last) && /reconnected/.test(await p.$eval('#chatlog', e => e.innerText)), (resent || '').slice(0, 120));
-    await p.screenshot({path: `${SHOTS}/ask.png`});
+    await imagesReady(p); await p.screenshot({path: `${SHOTS}/ask.png`});
     // The one injected 404 is the controlled lost-session check, not a failure.
     p._failed = p._failed.filter(f => !(f.startsWith('404 POST') && /\/api\/assistant\/[^/]+\/message$/.test(f)));
     p._errors = p._errors.filter(e => !/status of 404/.test(e) || p._failed.length);

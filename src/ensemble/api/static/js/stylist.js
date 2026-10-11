@@ -98,7 +98,7 @@ async function createSession(customer, prev = null) {
 function lookContext() {
   const look = stage("ensemble.look.v1").get();
   if (!look?.result) return null;
-  const worn = look.garments.map(g => `${g.colour} ${g.description || g.category} (${g.category})`.trim()).join("; ");
+  const worn = look.garments.map(g => `${g.description?.toLowerCase().startsWith((g.colour || "").toLowerCase()) ? "" : g.colour + " "}${g.description || g.category} (${g.category})`.trim()).join("; ");
   const goal = look.goal === "occasion" ? `dress it for ${look.occasion}` : look.goal === "similar" ? "find similar pieces" : "complete the look";
   const picks = look.result.picks.map(p => `${p.card.prod_name} [[${p.card.article_id}]]`).join(", ");
   return {look, text: `I'm refining an outfit from my photo. I'm wearing: ${worn}. My goal: ${goal}. ` +
@@ -123,7 +123,7 @@ export async function ask(ctx) {
   const contextCard = refine ? `<aside class="context-card" aria-label="What the stylist knows">
       <img src="${refine.look.photo.dataUrl}" alt="Your outfit photo" width="${refine.look.photo.w}" height="${refine.look.photo.h}">
       <div><p class="eyebrow">Refining your edit</p>
-        <p class="context-card__text">${esc(refine.look.garments.map(g => `${g.colour} ${g.description || g.category}`.trim()).join(" · "))}</p>
+        <p class="context-card__text">${esc(refine.look.garments.map(g => `${g.description?.toLowerCase().startsWith((g.colour || "").toLowerCase()) ? "" : g.colour + " "}${g.description || g.category}`.trim()).join(" · "))}</p>
         <p class="meta">${refine.look.result.picks.length} pieces in your edit · <a href="#/stylist/look?step=edit">Back to your edit</a></p></div>
     </aside>` : "";
   const root = ctx.render(shell({

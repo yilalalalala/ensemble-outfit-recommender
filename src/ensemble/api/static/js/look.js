@@ -100,7 +100,12 @@ async function photoStep(ctx, s) {
 }
 
 // ---- 2 · Review ---------------------------------------------------------------------------------------------
-const label = g => `${g.colour ? g.colour + " " : ""}${g.description || CATEGORY_LABELS[g.category] || g.category}`.trim();
+// "black strappy sandals", never "black black strappy sandals" when the description already names the colour.
+const label = g => {
+  const c = (g.colour || "").trim();
+  const what = g.description || (c ? (CATEGORY_LABELS[g.category] || g.category).toLowerCase() : CATEGORY_LABELS[g.category] || g.category);
+  return !c || what.toLowerCase().startsWith(c.toLowerCase()) ? what : `${c} ${what}`;
+};
 
 function garmentRow(g, i) {
   const id = esc(g.id);
