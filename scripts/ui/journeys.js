@@ -3,8 +3,8 @@
 // at any local Playwright install, and run against a server started on another port, e.g.
 //   PYTHONPATH=src .venv/bin/uvicorn ensemble.api.app:app --port 8031
 //   PLAYWRIGHT=/path/to/node_modules/playwright node scripts/ui/journeys.js [journey,journey] [base-url]
-// Journeys: center copy home swatch cart switch product collections tabs studio label keyboard motion
-//           offline assistant visual   (assistant/visual call the local models and take minutes).
+// Journeys: center copy home swatch cart switch product collections tabs studio label keyboard motion offline
+//           gateway widths · look find ask recovery (these call the models and can take minutes).
 // Mocked only: the Label save (never writes the user's gold labels) and controlled error states.
 // Impressions/clicks/add_to_cart are logged to the demo events table, as in normal use.
 const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
@@ -23,9 +23,12 @@ const ok = (name, cond, detail = '') => { results.push({name, ok: !!cond, detail
 const BANNED = [/why this/i, /recommender/i, /\branked?\b/i, /\branking\b/i, /\bmodel\b/i, /telemetry/i,
   /\boffline\b/i, /dataset/i, /no checkout/i, /no prices?/i, /\bdemo\b/i, /laptop/i, /stored suggestions/i,
   /\bservice\b/i, /\bAPI\b/, /SHAP/, /\bevidence\b/i, /\btools?\b/i, /never invents/i, /most recent first/i,
-  /\b\d+ (pieces|colourways|items)\b/i, /for Shopper,/i, /Takes a few seconds/, /Takes about a minute/];
+  /\b\d+ (pieces|colourways|items)\b/i, /for Shopper,/i, /Takes a few seconds/, /Takes about a minute/,
+  /FashionCLIP/i, /DeepFashion/i, /\branker\b/i, /tool calling/i];
 
-async function newPage(b, vp = [1440, 900], opts = {}) {
+// JOURNEY_WIDTH=390 runs the journeys at a phone width (default 1440 × 900).
+const DEFAULT_VP = process.env.JOURNEY_WIDTH ? [+process.env.JOURNEY_WIDTH, 844] : [1440, 900];
+async function newPage(b, vp = DEFAULT_VP, opts = {}) {
   const ctx = await b.newContext({viewport: {width: vp[0], height: vp[1]}, ...opts});
   const p = await ctx.newPage();
   p._errors = []; p._failed = []; p._events = [];
@@ -92,12 +95,13 @@ async function auditCards(p, scope = 'main') {
 
   if (want('copy') || want('home')) {
     const {ctx, p} = await newPage(b);
-    for (const r of ['#/', '#/collections', '#/collections/trending', '#/collections/buy_again', '#/product/922037001', '#/assistant']) {
+    for (const r of ['#/', '#/shop', '#/collections', '#/collections/trending', '#/collections/buy_again', '#/product/922037001',
+                     '#/stylist', '#/stylist/ask', '#/stylist/find', '#/stylist/look']) {
       await p.goto(BASE + r); await settle(p);
       const t = await shopperText(p);
       ok(`no prohibited technical/demo copy on ${r}`, !bannedIn(t).length, bannedIn(t).join(', '));
     }
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     const t = await p.$eval('main', m => m.innerText);
     ok('home intro copy replaced exactly', t.includes('A personal edit, made with you in mind.') && !t.includes('ranked from your own purchases'), '');
     ok('purchased-items copy replaced', t.includes('Pieces you have bought.') && !/most recent first/i.test(t), '');
@@ -105,17 +109,18 @@ async function auditCards(p, scope = 'main') {
     const foot = await p.$eval('footer', f => f.innerText);
     ok('shopper footer has no metric/dataset/checkout disclaimer', !/no prices|no checkout|offline|telemetry|dataset/i.test(foot), foot.replace(/\n/g, ' '));
     ok('shopper header has no service status', (await p.$eval('#utility-note', e => e.innerText)) === '', '');
-    await p.goto(BASE + '#/assistant'); await settle(p);
+    await p.goto(BASE + '#/stylist/ask'); await settle(p);
     const a = await p.$eval('main', m => m.innerText);
-    ok('assistant intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for, or bring a photo. We'll help you find pieces that feel right."), '');
-    ok('assistant time estimates', a.includes('It may take a few seconds.') && a.includes('It may take about a minute.') && !/laptop|Takes a few|Takes about/.test(a), '');
+    ok('ask intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for. We'll help you find pieces that feel right."), '');
+    await p.goto(BASE + '#/stylist'); await settle(p);
+    ok('hub copy and three tasks', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3, '');
     clean(p, 'copy');
     await ctx.close();
   }
 
   if (want('home')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     const titles = await p.$$eval('main h2.section-title', hs => hs.map(h => h.textContent.trim()));
     ok('home modules rendered', ['Selected for you', 'Buy it again', 'Trending this week'].every(t => titles.includes(t)) && titles.some(t => t.startsWith('Styled with')), titles.join(' / '));
     const a = await auditCards(p);
@@ -141,7 +146,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('swatch') || want('cart')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     await p.evaluate(() => localStorage.removeItem('ensemble.cart.168058'));
     // a card whose family has more than one real colourway
     const cardSel = await p.evaluate(() => {
@@ -220,7 +225,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('switch')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     const first = await p.$$eval('main [data-card]', c => c.map(x => x.dataset.article));
     await p.click('#profile-btn'); await p.fill('#profile-filter', String(NEW));
     await p.click(`.profile-option[data-id="${NEW}"]`); await settle(p);
@@ -241,7 +246,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('product')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     await p.click('.hero__lead .card__name a'); await settle(p);
     await p.waitForSelector('.pdp [data-add]'); await p.waitForSelector('#s-sim', {timeout: 60000}); await p.waitForTimeout(800);
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
@@ -289,13 +294,13 @@ async function auditCards(p, scope = 'main') {
     ok('collection: unique families, priced cards', a.dupFamilies === 0 && a.bad.length === 0 && a.n > 0, JSON.stringify(a));
     const tabs = await p.$$eval('.tabs a', ts => ts.map(t => ({cur: t.getAttribute('aria-current'), color: getComputedStyle(t).color, bg: getComputedStyle(t).backgroundColor, border: getComputedStyle(t).borderBottomColor, text: t.textContent})));
     const sel = tabs.find(t => t.cur === 'page'), un = tabs.filter(t => t.cur !== 'page');
-    ok('collection tabs: grey inactive, black selected with underline, no pill, no counts', sel.color === 'rgb(17, 17, 17)' && sel.border === 'rgb(17, 17, 17)' && un.every(t => t.color === 'rgb(118, 118, 118)')
+    ok('collection tabs: grey inactive, black selected with underline, no pill, no counts', sel.color === 'rgb(17, 17, 17)' && sel.border === 'rgb(17, 17, 17)' && un.every(t => t.color === 'rgb(117, 111, 105)')
        && tabs.every(t => t.bg === 'rgba(0, 0, 0, 0)' && !/\d/.test(t.text)), JSON.stringify(tabs));
     await p.focus('.filter[data-type]:not([data-type=""])'); await p.keyboard.press('Enter'); await p.waitForTimeout(200);
     const f = await p.$$eval('.filter', fs => fs.map(x => ({p: x.getAttribute('aria-pressed'), color: getComputedStyle(x).color, bg: getComputedStyle(x).backgroundColor, t: x.textContent})));
     const on = f.find(x => x.p === 'true');
     ok('category filter by keyboard: selected black, others grey, never a black pill, no counts', on && on.t !== 'All' && on.color === 'rgb(17, 17, 17)' && f.every(x => x.bg === 'rgba(0, 0, 0, 0)' && !/\d/.test(x.t))
-       && f.filter(x => x.p !== 'true').every(x => x.color === 'rgb(118, 118, 118)'), JSON.stringify(on));
+       && f.filter(x => x.p !== 'true').every(x => x.color === 'rgb(117, 111, 105)'), JSON.stringify(on));
     const shown = await p.$$eval('main .grid > li:not([hidden])', l => l.length);
     ok('filter narrows the grid', shown > 0 && shown < a.n, `${a.n} -> ${shown}`);
     await p.screenshot({path: `${SHOTS}/collections_tabs.png`});
@@ -338,7 +343,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('keyboard')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     await p.keyboard.press('Tab');
     ok('first Tab reaches the skip link', (await p.evaluate(() => document.activeElement.textContent)) === 'Skip to content', '');
     await p.keyboard.press('Enter');
@@ -363,7 +368,7 @@ async function auditCards(p, scope = 'main') {
     ok('Escape closes profile dialog and returns focus', (await p.evaluate(() => document.activeElement.id)) === 'profile-btn', '');
     await ctx.close();
     const m = await newPage(b, [390, 844]);
-    await m.p.goto(BASE); await settle(m.p);
+    await m.p.goto(BASE + '#/shop'); await settle(m.p);
     await m.p.evaluate(() => document.querySelector('#menu-btn').focus());
     await m.p.keyboard.press('Enter'); await m.p.waitForTimeout(250);
     ok('mobile drawer opens from keyboard', await m.p.evaluate(() => document.querySelector('#drawer').open), '');
@@ -376,7 +381,7 @@ async function auditCards(p, scope = 'main') {
   if (want('motion')) {
     for (const rm of ['reduce', 'no-preference']) {
       const {ctx, p} = await newPage(b, [1440, 900], {reducedMotion: rm});
-      await p.goto(BASE); await settle(p);
+      await p.goto(BASE + '#/shop'); await settle(p);
       const d = await p.evaluate(() => ({motion: document.documentElement.classList.contains('motion'),
         hidden: [...document.querySelectorAll('.reveal')].filter(e => getComputedStyle(e).opacity === '0').length,
         anim: getComputedStyle(document.querySelector('.view')).animationName}));
@@ -388,7 +393,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('offline')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE); await settle(p);
+    await p.goto(BASE + '#/shop'); await settle(p);
     await p.route('**/api/product/**', r => r.abort('failed'));
     await p.click('.hero__lead .card__name a'); await p.waitForTimeout(800);
     const txt = await p.$eval('main', m => m.innerText);
@@ -403,43 +408,168 @@ async function auditCards(p, scope = 'main') {
     await ctx.close();
   }
 
-  if (want('assistant')) {
+  // ---- AI Stylist product flow (docs/AI_STYLIST_PRODUCT_FLOW.md) --------------------------------------------
+  const oneCta = p => p.$$eval('.task__actions .btn--solid', b => b.length);
+  const heading = p => p.$eval('.task__title, h1', h => h.textContent.trim());
+  const focusedHeading = p => p.evaluate(() => document.activeElement?.matches('h1'));
+
+  if (want('gateway')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/assistant'); await settle(p);
-    await p.fill('#chat-in', 'What shoes go with wide-leg trousers?');
-    await p.keyboard.press('Enter');
-    ok('thinking state shown', !!(await p.waitForSelector('#pending .thinking', {timeout: 5000})), '');
-    const t0 = Date.now();
-    await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
-    const ans = await p.$$eval('.msg--bot', m => m.at(-1).innerText);
-    ok('assistant replies', !/couldn't answer/.test(ans) && ans.length > 20, `${Math.round((Date.now() - t0) / 1000)} s; ${ans.slice(0, 140).replace(/\n/g, ' ')}`);
-    const a = await auditCards(p, '.msg--bot:last-child');
-    ok('assistant cards: price, swatches, black Add to cart, no repeated family', a.n > 0 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
-    const t = await shopperText(p);
-    ok('assistant shows no tool trace / technical copy', !(await p.$('.msg__trace')) && !bannedIn(t).length, bannedIn(t).join(','));
-    await p.screenshot({path: `${SHOTS}/assistant_answer.png`});
-    clean(p, 'assistant');
+    await p.goto(BASE + '#/'); await settle(p);
+    ok('gateway question and two choices', (await heading(p)) === 'How would you like to shop today?' && (await p.$$('.gw-choice')).length === 2, '');
+    ok('gateway imagery is real catalogue photography', await p.$$eval('.gw-img', im => im.length >= 4 && im.every(i => /\/(images|catalog)\//.test(i.getAttribute('src')))), '');
+    await p.click('.gw-choice--shop'); await settle(p);
+    ok('Shop your edit reaches the ranked edit in one click', /#\/shop$/.test(p.url()) && !!(await p.$('.hero .card')), p.url());
+    await p.goto(BASE + '#/'); await settle(p);
+    await p.click('.gw-choice--ai'); await settle(p);
+    ok('Style with AI opens the hub with three tasks', /#\/stylist$/.test(p.url()) && (await p.$$('.task-card')).length === 3, p.url());
+    await p.goto(BASE + '#/'); await settle(p);
+    await p.click('.gateway__system'); await settle(p);
+    await p.waitForSelector('main h1');
+    ok('Explore the system reaches DS Studio', /#\/studio$/.test(p.url()) && (await heading(p)) === 'Offline evaluation', p.url());
+    await p.goto(BASE + '#/assistant?anchor=922037001'); await settle(p);
+    ok('legacy #/assistant deep link redirects to Ask (anchor kept)', /#\/stylist\/ask\?anchor=922037001$/.test(p.url()), p.url());
+    await p.goto(BASE + '#/stylist/look'); await settle(p);
+    await p.goto(BASE + '#/'); await settle(p);
+    ok('gateway offers to continue where you left off (no auto-redirect)', /Complete my look/.test(await p.$eval('.gateway__foot', e => e.innerText)) && /#\/$/.test(p.url()), '');
+    ok('wordmark returns to the gateway', (await p.$eval('#wordmark', a => a.getAttribute('href'))) === '#/', '');
+    clean(p, 'gateway');
     await ctx.close();
   }
 
-  if (want('visual')) {
+  if (want('look')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/assistant'); await settle(p);
-    await p.setInputFiles('#photo-in', PHOTO); await p.waitForTimeout(400);
-    await p.selectOption('#vs-cat', 'top');
-    await p.click('#vs-go');
-    await p.waitForSelector('#photo-results .grid, #photo-results .state', {timeout: 300000});
-    let a = await auditCards(p, '#photo-results');
-    ok('visual search cards: price, swatches, black Add to cart, unique families', a.n > 0 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
-    await p.screenshot({path: `${SHOTS}/visual_search.png`});
-    await p.click('#snap-go');
-    await p.waitForSelector('#photo-results .notice, #photo-results .state, #photo-results .meta', {timeout: 600000});
-    a = await auditCards(p, '#photo-results');
-    const t = await p.$eval('#photo-results', e => e.innerText);
-    ok('outfit results: consistent cards, unique families, consumer copy', a.n > 0 && a.bad.length === 0 && a.dupFamilies === 0 && !bannedIn(t).length, JSON.stringify(a) + ' ' + t.slice(0, 100).replace(/\n/g, ' '));
-    await p.screenshot({path: `${SHOTS}/outfit.png`, fullPage: true});
-    clean(p, 'visual');
+    let editPayload = null;
+    // Read the multipart body through interception (request events expose no body for Blob uploads), then continue.
+    await p.route('**/api/stylist/edit', route => { editPayload = route.request().postDataBuffer()?.toString('latin1') || ''; return route.continue(); });
+    await p.goto(BASE + '#/stylist/look'); await settle(p);
+    await p.evaluate(() => sessionStorage.clear()); await p.reload(); await settle(p);
+    ok('step 1: progress header, primary disabled until a photo', (await p.$eval('.steps__step[aria-current="step"]', e => e.innerText)).includes('Photo')
+       && await p.$eval('#look-detect', bt => bt.disabled) && (await oneCta(p)) === 1, '');
+    await p.setInputFiles('.dropzone input', {name: 'notes.txt', mimeType: 'text/plain', buffer: Buffer.from('not a photo')});
+    ok('a non-photo file is rejected with clear copy', /not a photo we can read/.test(await p.$eval('#look-photo [role=alert]', e => e.textContent)), '');
+    await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
+    ok('photo preview with replace and remove', !!(await p.$('.photo-preview__replace')) && !!(await p.$('[data-remove-photo]')), '');
+    await p.click('#look-detect');
+    ok('staged detection copy', /Looking at your outfit/.test(await p.$eval('#look-status', e => e.innerText)), '');
+    await p.waitForFunction(() => location.hash.includes('step=review'), null, {timeout: 600000}); await settle(p);
+    const n0 = await p.$$eval('.garment', g => g.length);
+    ok('detection lands on Review (never straight to results)', (await heading(p)) === 'Is this right?' && n0 > 0 && await focusedHeading(p), `${n0} pieces`);
+    ok('review shows numbered overlays on the photo', (await p.$$('.review__box')).length > 0, '');
+    await p.screenshot({path: `${SHOTS}/look_review.png`});
+    await p.goto(BASE + '#/stylist/look?step=edit'); await settle(p);
+    ok('deep link past an unfinished step falls back to the furthest valid step', /step=review/.test(p.url()), p.url());
+    // correct the detection: recolour the first piece, remove the last, add a missed belt
+    await p.fill('.garment:first-child [data-field="colour"]', 'navy'); await p.press('.garment:first-child [data-field="colour"]', 'Tab');
+    await p.click('.garment:last-child [data-remove]');
+    await p.click('#garment-add');
+    await p.selectOption('.garment:last-child [data-field="category"]', 'belt');
+    const edited = await p.$$eval('.garment', g => g.map(x => [x.querySelector('[data-field=category]').value, x.querySelector('[data-field=colour]').value]));
+    await p.reload(); await settle(p);
+    const restored = await p.$$eval('.garment', g => g.map(x => [x.querySelector('[data-field=category]').value, x.querySelector('[data-field=colour]').value]));
+    ok('refresh restores the step and the corrections', JSON.stringify(edited) === JSON.stringify(restored) && edited[0][1] === 'navy' && edited.at(-1)[0] === 'belt', JSON.stringify(restored));
+    await p.click('#review-next'); await settle(p);
+    ok('step 3: direction choices, one dominant action', (await heading(p)) === 'What would you like?' && (await p.$$('.choice')).length === 3 && (await oneCta(p)) === 1, '');
+    await p.check('input[name=goal][value=occasion]');
+    await p.click('#dir-next');
+    ok('occasion requires minimal context', /occasion/i.test(await p.$eval('#dir-err', e => e.textContent)), '');
+    await p.click('[data-occ="a wedding"]');
+    await p.click('#dir-next');
+    await p.waitForFunction(() => location.hash.includes('step=edit'), null, {timeout: 600000}); await settle(p);
+    await p.waitForSelector('.look-edit__picks .card', {timeout: 60000}).catch(() => {});
+    const sent = JSON.parse((editPayload || '').match(/name="garments"\r\n\r\n([^\r]*)/)?.[1] || '[]');
+    ok('edit request carries exactly the confirmed pieces', sent.length === edited.length && sent[0].colour === 'navy' && sent.at(-1).category === 'belt' && /name="goal"\r\n\r\noccasion/.test(editPayload), JSON.stringify(sent));
+    const a = await auditCards(p, '.look-edit__picks');
+    ok('step 4: 4–6 priority picks with price, swatches and black Add to cart, one family each', a.n >= 4 && a.n <= 6 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
+    ok('alternatives sit behind a quiet control', !(await p.$eval('.look-edit__more', d => d.open).catch(() => false)), '');
+    ok('pick reasons are consumer phrases', await p.$$eval('.look-edit__picks .card__note', n => n.length > 0 && n.every(x => x.textContent.length > 5)), '');
+    ok('step 4 has exactly one dominant action (Refine this edit)', (await oneCta(p)) === 1 && /Refine this edit/.test(await p.$eval('.task__actions .btn--solid', e => e.textContent)), '');
+    await p.screenshot({path: `${SHOTS}/look_edit.png`});
+    const t = await shopperText(p);
+    ok('no technical copy anywhere in the flow', !bannedIn(t).length, bannedIn(t).join(','));
+    await p.click('.task__actions .btn--solid'); await settle(p);
+    ok('Refine opens a dedicated conversation preloaded with the look', /context=look/.test(p.url()) && !!(await p.$('.context-card img')) && (await heading(p)) === 'Refine your edit', p.url());
+    let askText = null;
+    p.on('request', r => { if (/\/api\/assistant\/[^/]+\/message/.test(r.url())) askText = r.postData(); });
+    await p.fill('#chat-in', 'Make it more formal'); await p.keyboard.press('Enter');
+    await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
+    ok('the refinement sends the look context with the first message', /I'm refining an outfit/.test(askText || '') && /Make it more formal/.test(askText || ''), '');
+    ok('refinement answer arrives', !/couldn't answer/.test(await p.$$eval('.msg--bot', m => m.at(-1).innerText)), '');
+    await p.screenshot({path: `${SHOTS}/look_refine.png`});
+    await p.goto(BASE + '#/stylist/look?step=edit'); await settle(p);
+    await p.click('[data-start-over]'); await settle(p);
+    ok('Start over clears the staged state', /step=photo/.test(p.url()) && !!(await p.$('.dropzone')) && !(await p.evaluate(() => sessionStorage.getItem('ensemble.look.v1'))), p.url());
+    clean(p, 'look');
     await ctx.close();
+  }
+
+  if (want('find')) {
+    const {ctx, p} = await newPage(b);
+    await p.goto(BASE + '#/stylist/find'); await settle(p);
+    await p.evaluate(() => sessionStorage.clear()); await p.reload(); await settle(p);
+    await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
+    await p.click('#find-next'); await settle(p);
+    ok('frame step: whole photo is the keyboard-friendly default', (await heading(p)) === 'Frame the piece' && await p.$eval('input[name=area][value=whole]', r => r.checked), '');
+    const fr = await (await p.$('#framer img')).boundingBox();
+    await p.mouse.move(fr.x + fr.width * .2, fr.y + fr.height * .15); await p.mouse.down();
+    await p.mouse.move(fr.x + fr.width * .8, fr.y + fr.height * .5, {steps: 6}); await p.mouse.up();
+    ok('dragging frames the piece', await p.$eval('input[name=area][value=box]', r => r.checked) && !(await p.$eval('#framer-box', e => e.hidden)), '');
+    await p.focus('input[name=area][value=whole]'); await p.keyboard.press('Space');
+    ok('keyboard can switch back to the whole photo', await p.$eval('#framer-box', e => e.hidden), '');
+    await p.mouse.move(fr.x + fr.width * .2, fr.y + fr.height * .15); await p.mouse.down();
+    await p.mouse.move(fr.x + fr.width * .8, fr.y + fr.height * .5, {steps: 6}); await p.mouse.up();
+    await p.selectOption('#find-cat', 'top');
+    await p.click('#find-go');
+    await p.waitForFunction(() => location.hash.includes('step=results'), null, {timeout: 300000}); await settle(p);
+    const a = await auditCards(p, '.task__body');
+    ok('real visually similar results with prices and cart', a.n > 0 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
+    ok('stylist refinement offered as the one next action', (await oneCta(p)) === 1 && /\/stylist\/ask\?anchor=\d+/.test(await p.$eval('.task__actions .btn--solid', e => e.getAttribute('href'))), '');
+    await p.screenshot({path: `${SHOTS}/find_results.png`});
+    clean(p, 'find');
+    await ctx.close();
+  }
+
+  if (want('ask') || want('recovery')) {
+    const {ctx, p} = await newPage(b);
+    await p.goto(BASE + '#/stylist/ask'); await settle(p);
+    ok('ask: starter prompts and one dominant action', (await p.$$('.suggestion')).length === 3 && (await p.$$('#composer .btn--solid')).length === 1, '');
+    await p.click('.suggestion');
+    await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
+    const a1 = await auditCards(p, '.msg--bot:last-child');
+    ok('grounded answer with consistent product cards', a1.bad.length === 0 && a1.dupFamilies === 0, JSON.stringify(a1));
+    // Recovery: the server forgets the session once (as after a Modal restart).
+    let forced = false, resent = null;
+    await p.route(/\/api\/assistant\/[^/]+\/message$/, async route => {
+      if (!forced) { forced = true; return route.fulfill({status: 404, contentType: 'application/json', body: '{"detail":"unknown session"}'}); }
+      resent = route.request().postData(); return route.continue();
+    });
+    await p.fill('#chat-in', 'And a bag to go with it?'); await p.keyboard.press('Enter');
+    await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
+    const last = await p.$$eval('.msg--bot', m => m.at(-1).innerText);
+    ok('lost session recovers: new session, earlier turns replayed, no raw error', forced && /Earlier in our chat/.test(resent || '') && /And a bag/.test(resent || '')
+       && !/couldn't answer|404/.test(last) && /reconnected/.test(await p.$eval('#chatlog', e => e.innerText)), (resent || '').slice(0, 120));
+    await p.screenshot({path: `${SHOTS}/ask.png`});
+    // The one injected 404 is the controlled lost-session check, not a failure.
+    p._failed = p._failed.filter(f => !(f.startsWith('404 POST') && /\/api\/assistant\/[^/]+\/message$/.test(f)));
+    p._errors = p._errors.filter(e => !/status of 404/.test(e) || p._failed.length);
+    clean(p, 'ask');
+    await ctx.close();
+  }
+
+  if (want('widths')) {
+    const routes = ['#/', '#/shop', '#/stylist', '#/stylist/look', '#/stylist/find', '#/stylist/ask', '#/collections', '#/product/922037001', '#/studio'];
+    for (const w of [320, 375, 768, 1024, 1280, 1440]) {
+      const {ctx, p} = await newPage(b, [w, 900]);
+      const bad = [];
+      for (const r of routes) {
+        await p.goto(BASE + r); await settle(p);
+        const o = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        if (o > 0) bad.push(`${r}:${o}`);
+      }
+      ok(`no horizontal overflow at ${w}px on ${routes.length} routes`, !bad.length, bad.join(' '));
+      clean(p, `widths ${w}`);
+      await ctx.close();
+    }
   }
 
   await b.close();

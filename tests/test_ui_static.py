@@ -104,14 +104,18 @@ def test_no_remote_dependencies_or_build_artifacts():
 
 
 def test_frontend_keeps_every_api_contract_and_event():
+    # /api/snap stays on the server for existing consumers (tests/test_stylist_api.py); the UI now uses the staged
+    # /api/stylist/detect + /api/stylist/edit flow so the shopper reviews what was detected.
     src = js_source()
     for path in ["/api/customers", "/api/home/", "/api/product/", "/api/explain/", "/api/metrics", "/api/events",
-                 "/api/visual-search", "/api/snap", "/api/assistant/session", "/api/assistant/", "/api/label/tasks",
-                 '"/api/label"', "/api/v2/complete-the-look", "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families"]:
+                 "/api/visual-search", "/api/assistant/session", "/api/assistant/", "/api/label/tasks",
+                 '"/api/label"', "/api/v2/complete-the-look", "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families",
+                 "/api/stylist/detect", "/api/stylist/edit"]:
         assert path in src, path
     for event in ['"impression"', '"click"', '"not_for_me"', '"add_to_cart"']:
         assert event in src, event
-    for route in ['"product"', '"assistant"', '"ds"', '"label"', '"studio"', '"collections"']:
+    for route in ['"product"', '"assistant"', '"ds"', '"label"', '"studio"', '"collections"', '"shop"', '"stylist"',
+                  '"ask"', '"find"', '"look"']:
         assert route in src, f"route {route}"
 
 

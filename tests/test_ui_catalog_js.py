@@ -13,3 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_catalog_js():
     r = subprocess.run(["node", str(ROOT / "tests" / "js" / "catalog.test.mjs")], capture_output=True, text=True, cwd=ROOT, timeout=120)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node is not installed")
+def test_editorial_layout_js():
+    r = subprocess.run(["node", str(ROOT / "tests" / "js" / "layout.test.mjs")], capture_output=True, text=True, cwd=ROOT, timeout=120)
+    assert r.returncode == 0, r.stdout + r.stderr
