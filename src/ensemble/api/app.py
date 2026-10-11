@@ -758,6 +758,172 @@ async def outfit_v2(request: Request, photo: UploadFile = File(...), garments: s
             "catalog_version": rec.bundle.catalog_version}
 
 
+# --- AI Stylist: staged "Complete my look" (docs/AI_STYLIST_PRODUCT_FLOW.md §5) -------------------------
+# /api/snap detects and completes in one call; the stylist flow needs the shopper to review what was detected
+# first. These two additive endpoints split it. /api/snap and /api/v2/outfit are unchanged.
+STYLIST_GOALS = ("complete", "occasion", "similar")
+SLOT_WORDS = {"upper": "top", "lower": "bottoms", "full": "dress", "shoes": "shoes", "accessories": "accessories",
+              "socks": "socks", "swimwear": "swimwear"}
+
+
+@app.post("/api/stylist/detect")
+def stylist_detect(photo: UploadFile = File(...)):
+    """Step 1 → 2: the garments in the photo, for the shopper to review. Boxes are fractions of the image."""
+    from ensemble.llm.client import BudgetExceeded, get_client
+    from ensemble.vision.outfit import CATEGORIES, detect
+    img = _image(photo)
+    try:
+        garments, small = detect(img, get_client("vision"), purpose="stylist_detect")
+    except BudgetExceeded:
+        raise
+    except Exception as e:  # noqa: BLE001 - the detector is a remote/optional model: degrade explicitly
+        raise HTTPException(503, f"detector_unavailable ({type(e).__name__})") from None
+    out = []
+    for i, g in enumerate(garments, 1):
+        b = g.get("box")
+        out.append({"id": f"g{i}", "category": g["category"], "colour": g.get("colour", ""),
+                    "description": g.get("description", ""),
+                    "box": [round(b[0] / small.width, 4), round(b[1] / small.height, 4),
+                            round(b[2] / small.width, 4), round(b[3] / small.height, 4)] if b else None})
+    return {"garments": out, "categories": list(CATEGORIES)}
+
+
+def _stylist_garments(raw: str) -> list[dict]:
+    from ensemble.vision.outfit import CATEGORIES
+    try:
+        items = json.loads(raw)
+    except json.JSONDecodeError:
+        raise HTTPException(400, "garments must be a JSON list") from None
+    if not isinstance(items, list) or not 1 <= len(items) <= 8:
+        raise HTTPException(400, "add between one and eight pieces")
+    out = []
+    for it in items:
+        if not isinstance(it, dict) or it.get("category") not in CATEGORIES:
+            raise HTTPException(400, f"each piece needs a category in {sorted(CATEGORIES)}")
+        box = it.get("box")
+        if box is not None:
+            ok = (isinstance(box, list) and len(box) == 4 and all(isinstance(v, (int, float)) for v in box)
+                  and 0 <= box[0] < box[2] <= 1.001 and 0 <= box[1] < box[3] <= 1.001)
+            box = [float(v) for v in box] if ok else None
+        out.append({"category": it["category"], "colour": str(it.get("colour") or "")[:40],
+                    "description": str(it.get("description") or "")[:80], "box": box})
+    return out
+
+
+def _stylist_ctl(anchor: int, slots: list[str], customer: int | None, k: int = 8) -> list[dict]:
+    """Complete the Look for the missing slots: the live serving bundle, else the stored table."""
+    rec = STATE.rec
+    if rec is not None and anchor in rec.bundle.catalog.index:
+        try:
+            a_slot = rec.bundle.catalog.at[anchor, "slot"]
+            res = rec.complete_the_look(anchor, [s for s in slots if s != a_slot] or None, customer, k)
+            return [{"slot": m["slot"], "title": m["title"], "ids": [it["article_id"] for it in m["items"]]}
+                    for m in res["modules"] if m["items"]]
+        except Exception as e:  # noqa: BLE001 - fall back to the stored table, as the shop does
+            LOG.warning("stylist ctl fell back to the stored table: %s", type(e).__name__)
+    import pandas as pd
+    table = pd.read_parquet(cfg.path("processed") / "models" / "complete_the_look.parquet")
+    rows = table[(table.anchor == anchor) & table.slot.isin(slots)]
+    return [{"slot": sl, "title": SLOT_TITLES.get(sl, sl.title()), "ids": g.sort_values("rank").article_id.tolist()[:k]}
+            for sl, g in rows.groupby("slot")]
+
+
+@app.post("/api/stylist/edit")
+def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal: str = Form("complete"),
+                 occasion: str = Form(""), customer: int | None = Form(None)):
+    """Step 3 → 4: confirmed garments + a goal → 4–6 priority picks with consumer reasons, plus alternatives."""
+    from ensemble.vision.outfit import MAIN_ORDER, _resize_bytes, gaps, match
+    if goal not in STYLIST_GOALS:
+        raise HTTPException(400, f"goal must be one of {STYLIST_GOALS}")
+    occasion = occasion.strip()[:60]
+    if goal == "occasion" and not occasion:
+        raise HTTPException(400, "tell us the occasion")
+    pieces = _stylist_garments(garments)
+    _, small = _resize_bytes(_image(photo))
+    matched = []
+    for g in pieces:
+        gp = {**g, "box": [int(g["box"][0] * small.width), int(g["box"][1] * small.height),
+                           int(g["box"][2] * small.width), int(g["box"][3] * small.height)] if g["box"] else None}
+        m = match(gp, small, "text_rerank_image", 6)
+        matched.append({**g, "ids": m.article_id.astype(int).tolist()})
+    name = lambda g: (f"{g['colour']} {g['description'] or g['category']}").strip()   # noqa: E731
+
+    def listing(gs: list[dict]) -> str:
+        names = [name(g) for g in gs]
+        if len(names) > 3:
+            names = names[:3] + [f"{len(gs) - 3} more"]
+        return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+    seen_ids: set[int] = set()
+    picks: list[dict] = []
+    alternatives: list[dict] = []
+
+    def take(aid: int, reason: str, group: str) -> bool:
+        if aid in seen_ids:
+            return False
+        seen_ids.add(aid)
+        picks.append({"article_id": aid, "reason": reason, "group": group})
+        return True
+
+    anchor = None
+    if goal == "similar":
+        for g in matched:
+            if g["ids"]:
+                take(g["ids"][0], f"Closest to your {name(g)}", g["category"])
+        for g in matched:
+            rest = [a for a in g["ids"] if a not in seen_ids]
+            if rest:
+                alternatives.append({"title": f"More like your {name(g)}", "ids": rest})
+        summary = f"Here are the closest pieces we found for your {listing(matched)}."
+    else:
+        main = next((g for c in MAIN_ORDER for g in matched if g["category"] == c and g["ids"]), None)
+        main = main or next((g for g in matched if g["ids"]), None)
+        missing = gaps(pieces)
+        complete_outfit = not missing   # nothing is missing: offer pairings rather than invent a gap
+        modules = []
+        if main is not None:
+            anchor = main["ids"][0]
+            modules = _stylist_ctl(anchor, missing or ["shoes", "accessories"], customer)
+        if goal == "occasion" and modules:
+            from ensemble.vision import clip
+            from ensemble.vision.outfit import catalogue
+            live, emb = catalogue()
+            row = {int(a): i for i, a in enumerate(live.article_id.values)}
+            q = clip.embed_texts([f"{occasion} outfit"])[0]
+            for m in modules:   # reorder each slot's pool by fit to the occasion (stable for unknown ids)
+                m["ids"] = sorted(m["ids"], key=lambda a: -float(emb[row[a]] @ q) if a in row else 0.0)
+        rnd = 0
+        while len(picks) < 6 and any(len(m["ids"]) > rnd for m in modules):
+            for m in modules:
+                if len(m["ids"]) > rnd and len(picks) < 6:
+                    word = SLOT_WORDS.get(m["slot"], m["slot"])
+                    take(m["ids"][rnd], f"Works for {occasion}" if goal == "occasion" else
+                         f"Pairs with your {name(main)}" if complete_outfit else
+                         f"Finishes the look with {word}", m["slot"])
+            rnd += 1
+            if rnd >= 2 and len(picks) >= 4:
+                break
+        for m in modules:
+            rest = [a for a in m["ids"] if a not in seen_ids]
+            if rest:
+                alternatives.append({"title": m["title"], "ids": rest})
+        seen = listing(matched)
+        if not modules:
+            summary = f"We see your {seen}. We couldn't find pieces to add to this one yet — try “Find similar pieces”."
+        elif goal == "occasion":
+            summary = f"We see your {seen}. Here is how to style it for {occasion}."
+        elif complete_outfit:
+            summary = f"We see your {seen} — the outfit is already complete. Here are pieces that pair with it."
+        else:
+            summary = f"We see your {seen}. Here is what finishes it."
+    cards = {c["article_id"]: c for c in _cards(list(seen_ids | {a for alt in alternatives for a in alt["ids"]}))}
+    return {"goal": goal, "occasion": occasion or None, "summary": summary, "anchor": anchor,
+            "matched": [{"category": g["category"], "article_id": g["ids"][0] if g["ids"] else None} for g in matched],
+            "picks": [{"card": cards[p["article_id"]], "reason": p["reason"], "group": p["group"]}
+                      for p in picks if p["article_id"] in cards],
+            "alternatives": [{"title": a["title"], "items": [cards[i] for i in a["ids"] if i in cards]}
+                             for a in alternatives]}
+
+
 @app.get("/api/v2/metrics")
 def metrics_v2():
     rec = STATE.rec
