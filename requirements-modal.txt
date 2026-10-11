@@ -1,0 +1,2 @@
+-r requirements-serve-visual.txt
+anthropic==0.76.0
