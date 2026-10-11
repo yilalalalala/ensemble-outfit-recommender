@@ -1,144 +1,218 @@
-// Style Assistant (M7b) with the two photo services (M7a visual search, "snap your outfit").
+// AI Stylist: the hub, the shared task shell, and "Ask the stylist" (docs/AI_STYLIST_PRODUCT_FLOW.md).
 // Products shown here come only from tool / endpoint responses; the assistant's text never adds products.
-// (That grounding is documented for DS readers; shoppers see consumer copy only.)
-import {$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
+import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
+import {downscale, stage, toBlob, validate} from "./photo.js";
 
-const CATEGORIES = ["top", "outerwear", "knitwear", "bottom", "dress", "jumpsuit", "shoes", "bag", "jewellery", "hat", "scarf", "belt", "sunglasses"];
-const ACCEPT = "image/jpeg,image/png,image/webp";
-const SUGGESTIONS = ["What shoes go with wide-leg trousers?", "Find me a warm knit for autumn", "What should I wear to a summer wedding?"];
+export const TASKS = [
+  {id: "ask", href: "#/stylist/ask", title: "Ask the stylist", line: "Tell us what you need in your own words.",
+   detail: "Advice for an occasion, a piece you own, or a style you want to try."},
+  {id: "find", href: "#/stylist/find", title: "Find this piece", line: "Seen something you like? Show us a photo.",
+   detail: "Frame one piece and we will find the closest pieces in our collection."},
+  {id: "look", href: "#/stylist/look", title: "Complete my look", line: "Share an outfit and we will finish it.",
+   detail: "Check what we spotted, choose a direction, and get a short, considered edit."},
+];
 
-// One conversation per profile while the page is open; a profile change starts a new one.
-const sessions = new Map();   // customer -> {sid, backend, log: html, sentAnchors: Set}
-let activeChat = null;        // the conversation on screen; the "Ask about this" hand-off talks to it
-const askStylist = text => { if (activeChat?.current()) activeChat.send(text); };
-
-const PRIVACY = "Your photo is only used to find pieces for you.";
-
-// One result group (an answer, a search, an outfit analysis): load colourways and prices, then group
-// products by family so the group never repeats a product.
-async function grouped(lists) {
+// One result group: load colourways and prices, then group products by family (no repeats within a group).
+export async function grouped(lists) {
   await loadFamilies(lists.flat().map(it => it.article_id));
   const page = newPageGroups();
   return lists.map(l => page.take(l));
 }
 
-export async function view(ctx) {
-  ctx.setTitle("Style Assistant");
+// ---- shared task shell -------------------------------------------------------------------------------------
+// Back · progress · Change task, a short explanation, the step body, and exactly one dominant action.
+export function shell({task, title, lede, steps = null, step = 0, back = null, body = "", primary = "", secondary = ""}) {
+  const t = TASKS.find(x => x.id === task);
+  const progress = steps ? `<ol class="steps" aria-label="Progress">${steps.map((s, i) =>
+    `<li class="steps__step${i < step ? " is-done" : ""}" ${i === step ? `aria-current="step"` : ""}>
+       <span class="steps__n" aria-hidden="true">${i + 1}</span><span class="steps__label">${esc(s)}</span>
+       ${i < step ? `<span class="sr-only">, completed</span>` : ""}</li>`).join("")}</ol>
+     <p class="steps__compact" aria-hidden="true">Step ${step + 1} of ${steps.length} · ${esc(steps[step])}</p>` : "";
+  return `<div class="task" data-task="${task}">
+    <nav class="task__bar" aria-label="AI Stylist">
+      <a class="link-btn task__back" href="${back || "#/stylist"}">← Back</a>
+      <span class="task__crumb"><a href="#/stylist">AI Stylist</a><span aria-hidden="true"> / </span><span>${esc(t.title)}</span></span>
+      <a class="link-btn task__change" href="#/stylist">Change task</a>
+    </nav>
+    ${progress}
+    <header class="task__head">
+      <h1 class="task__title" tabindex="-1">${esc(title)}</h1>
+      ${lede ? `<p class="task__lede">${lede}</p>` : ""}
+    </header>
+    <div class="task__body">${body}</div>
+    ${primary || secondary ? `<div class="task__actions">${secondary ? `<div class="task__secondary">${secondary}</div>` : ""}${primary}</div>` : ""}
+  </div>`;
+}
+
+// Move focus to the step heading after a step/route change (the router focuses <main> on navigation).
+export function focusHeading(root) {
+  requestAnimationFrame(() => $(".task__title", root)?.focus({preventScroll: false}));
+}
+
+// Staged loading copy: the label advances while a long request runs; returns a stop function.
+export function stagedStatus(el, labels, every = 4500) {
+  let i = 0;
+  el.innerHTML = `<p class="thinking" role="status"><i></i><i></i><i></i> <span>${esc(labels[0])}</span></p>`;
+  const span = $("span", el);
+  const timer = setInterval(() => { if (i < labels.length - 1) span.textContent = labels[++i]; }, every);
+  return () => clearInterval(timer);
+}
+
+// ---- hub ----------------------------------------------------------------------------------------------------
+export async function hub(ctx) {
+  ctx.setTitle("AI Stylist");
+  const look = stage("ensemble.look.v1").get();
+  const root = ctx.render(`<div class="hub">
+    <header class="hub__head">
+      <p class="eyebrow">AI Stylist</p>
+      <h1 class="display hub__title" tabindex="-1">What can we help with?</h1>
+      <p class="lede">Pick one task. Each takes a minute or two, and you can switch at any point.</p>
+    </header>
+    <ul class="hub__tasks" role="list">${TASKS.map((t, i) => `<li>
+      <a class="task-card" href="${t.href}">
+        <span class="task-card__n" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+        <span class="task-card__title">${esc(t.title)}</span>
+        <span class="task-card__line">${esc(t.line)}</span>
+        <span class="task-card__detail">${esc(t.detail)}</span>
+        <span class="task-card__go" aria-hidden="true">Start →</span>
+      </a></li>`).join("")}</ul>
+    ${look?.result ? `<p class="hub__resume"><a class="link-btn" href="#/stylist/look?step=edit">Return to your last edit</a></p>` : ""}
+  </div>`);
+  if (root) requestAnimationFrame(() => $(".hub__title", root)?.focus());
+}
+
+// ---- Ask the stylist -----------------------------------------------------------------------------------------
+const SUGGESTIONS = ["What shoes go with wide-leg trousers?", "Find me a warm knit for autumn", "What should I wear to a summer wedding?"];
+// One conversation per profile while the page is open; a profile change starts a new one.
+const sessions = new Map();   // customer -> {sid, log, history, context, contextSent, sentAnchors}
+
+async function createSession(customer, prev = null) {
+  const r = await api("/api/assistant/session", {method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({customer_idx: customer})});
+  const s = {sid: r.session_id, log: prev?.log || "", history: prev?.history || [], context: prev?.context || null,
+             contextSent: false, sentAnchors: prev?.sentAnchors || new Set()};
+  return s;
+}
+
+// The look being refined (from Complete my look), as text the stylist can ground on.
+function lookContext() {
+  const look = stage("ensemble.look.v1").get();
+  if (!look?.result) return null;
+  const worn = look.garments.map(g => `${g.colour} ${g.description || g.category} (${g.category})`.trim()).join("; ");
+  const goal = look.goal === "occasion" ? `dress it for ${look.occasion}` : look.goal === "similar" ? "find similar pieces" : "complete the look";
+  const picks = look.result.picks.map(p => `${p.card.prod_name} [[${p.card.article_id}]]`).join(", ");
+  return {look, text: `I'm refining an outfit from my photo. I'm wearing: ${worn}. My goal: ${goal}. ` +
+    `You suggested: ${picks}. Use these article ids with your tools if helpful.`};
+}
+
+function renderAnswer(r, cards) {
+  const text = esc(r.answer).replace(/\s*\[\[(\d+)\]\]/g, "");
+  const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+  return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
+    ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}</div>`;
+}
+
+const chips = list => `<div class="suggestions">${list.map(t =>
+  `<button class="suggestion" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div>`;
+
+export async function ask(ctx) {
+  ctx.setTitle("Ask the stylist");
   const customer = state.customer;
   const anchor = ctx.route.params.get("anchor");
-  const root = ctx.render(`
-    <div class="stylist-head">
-      <div><p class="eyebrow">Style Assistant</p><h1 class="title" tabindex="-1">Ask the stylist.</h1></div>
-      <p class="lede">Tell us what you’re looking for, or bring a photo. We’ll help you find pieces that <em>feel right</em>.</p>
-    </div>
-    <div class="stylist">
-      <section class="panel" aria-labelledby="chat-h">
-        <div class="panel__head"><h2 class="eyebrow" id="chat-h">Conversation</h2></div>
+  const refine = ctx.route.params.get("context") === "look" ? lookContext() : null;
+  const contextCard = refine ? `<aside class="context-card" aria-label="What the stylist knows">
+      <img src="${refine.look.photo.dataUrl}" alt="Your outfit photo" width="${refine.look.photo.w}" height="${refine.look.photo.h}">
+      <div><p class="eyebrow">Refining your edit</p>
+        <p class="context-card__text">${esc(refine.look.garments.map(g => `${g.colour} ${g.description || g.category}`.trim()).join(" · "))}</p>
+        <p class="meta">${refine.look.result.picks.length} pieces in your edit · <a href="#/stylist/look?step=edit">Back to your edit</a></p></div>
+    </aside>` : "";
+  const root = ctx.render(shell({
+    task: "ask", title: refine ? "Refine your edit" : "Ask the stylist", back: refine ? "#/stylist/look?step=edit" : "#/stylist",
+    lede: refine ? "Tell the stylist what to change: more formal, a different colour, a lower price…"
+                 : "Tell us what you’re looking for. We’ll help you find pieces that <em>feel right</em>.",
+    body: `${contextCard}<section class="chat" aria-label="Conversation">
         <div class="chatlog" id="chatlog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>
         <div class="attachment" id="chat-attach" hidden></div>
         <form class="composer" id="composer" novalidate>
           <button class="icon-btn" type="button" id="attach-btn" aria-describedby="attach-help">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>
             <span class="sr-only">Attach a photo</span></button>
-          <span class="sr-only" id="attach-help">Adds an outfit photo to your next message (JPEG, PNG or WebP).</span>
-          <input type="file" id="chat-file" accept="${ACCEPT}" hidden>
+          <span class="sr-only" id="attach-help">Adds a photo to your next message (JPEG, PNG or WebP).</span>
+          <input type="file" id="chat-file" accept="image/jpeg,image/png,image/webp" hidden>
           <label class="sr-only" for="chat-in">Message the stylist</label>
           <textarea id="chat-in" rows="1" placeholder="e.g. What goes with a beige trench?" aria-describedby="chat-err"></textarea>
           <button class="btn btn--solid" type="submit" id="chat-send">Send</button>
         </form>
         <p class="inline-status is-error" id="chat-err" role="alert"></p>
-      </section>
-
-      <section class="panel" aria-labelledby="photo-h">
-        <div class="panel__head"><h2 class="eyebrow" id="photo-h">Bring a photo</h2></div>
-        <div id="photo-slot"></div>
-        <div class="services">
-          <div class="service" aria-labelledby="svc1-h">
-            <h3 id="svc1-h">Find visually similar products</h3>
-            <p class="meta">Finds pieces in our collection that look like one item in your photo. Choose what it is; optionally drag on the photo to frame it, otherwise the whole photo is used. It may take a few seconds.</p>
-            <div class="service__row">
-              <label><span class="field-label">The piece is a</span>
-                <select class="input" id="vs-cat">${CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("")}</select></label>
-              <button class="btn btn--solid" type="button" id="vs-go" disabled>Find similar</button>
-            </div>
-          </div>
-          <div class="service" aria-labelledby="svc2-h">
-            <h3 id="svc2-h">Complete my outfit</h3>
-            <p class="meta">We'll recognise each piece you're wearing, find it in our collection and suggest what would complete the outfit. It may take about a minute.</p>
-            <div class="service__row"><button class="btn" type="button" id="snap-go" disabled>Analyse my outfit</button></div>
-          </div>
-          <p class="privacy" id="privacy">${PRIVACY}</p>
-        </div>
-        <div class="results" id="photo-results" aria-live="polite"></div>
-      </section>
-    </div>`);
+      </section>`,
+  }));
   if (!root) return;
-  photoServices(root);
-
-  // Conversation: reuse this profile's session if one exists.
-  let s = sessions.get(customer);
-  const log = $("#chatlog");
+  focusHeading(root);
+  const log = $("#chatlog", root);
+  const key = refine ? `${customer}:look` : customer;   // a refinement is its own conversation
+  let s = sessions.get(key);
   if (s) {
     log.innerHTML = s.log;
     log.scrollTop = log.scrollHeight;
   } else {
-    log.innerHTML = emptyChat();
+    log.innerHTML = refine
+      ? `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p><p class="msg__text">I have your outfit and your edit. What would you like to change?</p>
+         ${chips(["Make it more formal", "Show me other colours", "Something less expensive"])}</div>`
+      : `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
+         <p class="msg__text">I can find pieces, style something you own, or help you dress for a moment. What are you dressing for?</p>
+         ${chips(SUGGESTIONS)}</div>`;
     try {
-      s = await newSession(customer);
-    } catch (err) {
+      s = await createSession(customer);
+      sessions.set(key, s);
+      s.context = refine?.text || null;
+    } catch {
       if (!ctx.current()) return;
       log.innerHTML = `<div class="state" role="alert"><p class="state__title">The stylist isn't available right now</p>
-        <p class="meta">${esc(err.message)}</p><button class="btn btn--quiet" type="button" data-retry>Try again</button></div>`;
-      $("#composer").querySelectorAll("button, textarea").forEach(el => { el.disabled = true; });
+        <p class="meta">Please try again in a moment.</p><button class="btn btn--quiet" type="button" data-retry>Try again</button></div>`;
+      $$("#composer button, #composer textarea", root).forEach(el => { el.disabled = true; });
       return;
     }
     if (!ctx.current()) return;
   }
-  const chat = makeChat(ctx, customer);
+  const chat = conversation(root, customer, key);
   if (anchor && !s.sentAnchors.has(anchor)) { s.sentAnchors.add(anchor); chat.send(`What goes with article ${anchor}?`); }
 }
 
-async function newSession(customer) {
-  const r = await api("/api/assistant/session", {method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({customer_idx: customer})});
-  const s = {sid: r.session_id, backend: r.backend, log: "", sentAnchors: new Set()};
-  state.backend = r.backend;
-  sessions.set(customer, s);
-  return s;
-}
-
-const chips = list => `<div class="suggestions">${list.map(t =>
-  `<button class="suggestion" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div>`;
-
-function emptyChat() {
-  return `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
-    <p class="msg__text">I can find pieces, style something you own, or complete an outfit from a photo. What are you dressing for?</p>
-    ${chips(SUGGESTIONS)}</div>`;
-}
-
-function renderAnswer(r, cards) {
-  // Product references in the text ([[article_id]]) are shown as cards below the answer, so the markers are dropped.
-  const text = esc(r.answer).replace(/\s*\[\[(\d+)\]\]/g, "");
-  // The model writes light markdown; after escaping, only **bold** is turned into markup.
-  const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
-  return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
-    ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}</div>`;
-}
-
-function makeChat(ctx, customer) {
-  const log = $("#chatlog"), form = $("#composer"), input = $("#chat-in"), sendBtn = $("#chat-send"), err = $("#chat-err");
-  const attachBox = $("#chat-attach"), file = $("#chat-file");
+function conversation(root, customer, key) {
+  const log = $("#chatlog", root), form = $("#composer", root), input = $("#chat-in", root);
+  const sendBtn = $("#chat-send", root), err = $("#chat-err", root), attachBox = $("#chat-attach", root), file = $("#chat-file", root);
   let photo = null, busy = false;
-  const save = () => { const s = sessions.get(customer); if (s) s.log = log.innerHTML; };
+  const save = () => { const s = sessions.get(key); if (s) s.log = log.innerHTML; };
 
-  function setPhoto(f) {
-    photo = f;
-    if (!f) { attachBox.hidden = true; attachBox.innerHTML = ""; return; }
-    const url = URL.createObjectURL(f);
+  function setPhoto(p) {
+    photo = p;
+    if (!p) { attachBox.hidden = true; attachBox.innerHTML = ""; return; }
     attachBox.hidden = false;
-    attachBox.innerHTML = `<img src="${url}" alt="Attached photo preview"><span>${esc(f.name)} will be sent with your next message</span>
+    attachBox.innerHTML = `<img src="${p.dataUrl}" alt="Attached photo preview"><span>${esc(p.name)} will be sent with your next message</span>
       <button class="link-btn" type="button" id="attach-remove">Remove</button>`;
-    $("#attach-remove").onclick = () => { setPhoto(null); $("#attach-btn").focus(); };
+    $("#attach-remove", root).onclick = () => { setPhoto(null); $("#attach-btn", root).focus(); };
+  }
+
+  // The text actually sent: replays the context (the look being refined, or the last turns after a lost
+  // session) once per server session, then the shopper's message.
+  function outgoing(s, text) {
+    const parts = [];
+    if (!s.contextSent) {
+      if (s.context) parts.push(s.context);
+      if (s.replay) parts.push(`Earlier in our chat: ${s.replay}`);
+    }
+    parts.push(text);
+    return parts.join("\n\n");
+  }
+
+  async function post(s, text, sent) {
+    const fd = new FormData();
+    fd.append("text", outgoing(s, text));
+    if (sent) fd.append("photo", toBlob(sent.dataUrl), sent.name || "photo.jpg");
+    const r = await api(`/api/assistant/${s.sid}/message`, {method: "POST", body: fd});
+    s.contextSent = true;
+    s.replay = null;
+    return r;
   }
 
   async function send(text) {
@@ -151,36 +225,41 @@ function makeChat(ctx, customer) {
     log.querySelector("[data-empty]")?.remove();
     const sent = photo;
     log.insertAdjacentHTML("beforeend", `<div class="msg msg--user"><p class="msg__who">You</p><p class="msg__text">${esc(text)}${sent ? " · photo attached" : ""}</p></div>
-      <div class="msg msg--bot" id="pending"><p class="msg__who">Stylist</p><p class="thinking" role="status"><i></i><i></i><i></i> Finding pieces for you…</p></div>`);
+      <div class="msg msg--bot" id="pending"><p class="msg__who">Stylist</p><p class="thinking" role="status"><i></i><i></i><i></i> <span>Thinking about your request…</span></p></div>`);
+    const slow = setTimeout(() => { const l = $("#pending span", log); if (l) l.textContent = "Finding pieces for you…"; }, 3500);
     log.scrollTop = log.scrollHeight;
     setPhoto(null);
-    const fd = new FormData();
-    fd.append("text", text);
-    if (sent) fd.append("photo", sent);
+    let s = sessions.get(key);
     try {
-      let s = sessions.get(customer);
       let r;
       try {
-        r = await api(`/api/assistant/${s.sid}/message`, {method: "POST", body: fd});
+        r = await post(s, text, sent);
       } catch (e) {
         if (!(e instanceof ApiError && e.status === 404)) throw e;
-        // The server forgot the session (e.g. it restarted): start a new one and retry once.
-        s = await newSession(customer);
-        r = await api(`/api/assistant/${s.sid}/message`, {method: "POST", body: fd});
-        log.insertAdjacentHTML("beforeend", `<p class="meta">A new conversation was started because the previous one had expired.</p>`);
+        // The server forgot the session (e.g. it restarted): start a new one, replay what it needs, resend.
+        const replay = s.history.slice(-4).map(h => `${h.role === "user" ? "I asked" : "you answered"}: ${h.text}`).join(" | ");
+        s = await createSession(customer, s);
+        sessions.set(key, s);
+        s.replay = replay || null;
+        r = await post(s, text, sent);
+        log.insertAdjacentHTML("beforeend", `<p class="meta chat__note">We reconnected you to the stylist and kept your conversation.</p>`);
       }
+      // Keep the product ids ([[id]]) in the replayable history so a recovered session can still refer to them.
+      s.history.push({role: "user", text}, {role: "assistant", text: String(r.answer).slice(0, 500)});
       const [cards] = await grouped([r.cards]);
-      $("#pending")?.remove();
+      $("#pending", log)?.remove();
       log.insertAdjacentHTML("beforeend", renderAnswer(r, cards));
       impressions(cards, "assistant");
       announce("The stylist replied.");
     } catch (e) {
-      $("#pending")?.remove();
+      $("#pending", log)?.remove();
+      const resting = e instanceof ApiError && e.code === "ai_budget_reached";
       log.insertAdjacentHTML("beforeend", `<div class="msg msg--bot" role="alert"><p class="msg__who">Stylist</p>
-        <p class="msg__text">Sorry, I couldn't answer that just now.</p>
-        <p><button class="link-btn" type="button" data-resend="${esc(text)}">Try again</button></p></div>`);
+        <p class="msg__text">${resting ? "The stylist is resting for now. Please try again later." : "Sorry, I couldn't answer that just now."}</p>
+        ${resting ? "" : `<p><button class="link-btn" type="button" data-resend="${esc(text)}">Try again</button></p>`}</div>`);
       if (sent) setPhoto(sent);
     } finally {
+      clearTimeout(slow);
       busy = false;
       sendBtn.disabled = false;
       log.scrollTop = log.scrollHeight;
@@ -192,152 +271,22 @@ function makeChat(ctx, customer) {
   input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
   const autosize = () => { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 128) + "px"; };
   input.addEventListener("input", autosize);
-  $("#attach-btn").addEventListener("click", () => file.click());
-  file.addEventListener("change", () => { if (file.files[0]) setPhoto(file.files[0]); file.value = ""; input.focus(); });
+  $("#attach-btn", root).addEventListener("click", () => file.click());
+  file.addEventListener("change", async () => {
+    const f = file.files[0];
+    file.value = "";
+    if (!f) return;
+    const bad = validate(f);
+    if (bad) { err.textContent = bad; return; }
+    setPhoto({...(await downscale(f)), name: f.name});
+    input.focus();
+  });
   log.addEventListener("click", e => {
     const sug = e.target.closest("[data-suggest]");
     if (sug) { send(sug.dataset.suggest); return; }
     const re = e.target.closest("[data-resend]");
     if (re) { re.closest(".msg").remove(); send(re.dataset.resend); }
   });
-  const chat = {send, current: ctx.current};
-  activeChat = chat;
-  return chat;
+  return {send};
 }
 
-// ---- photo services -----------------------------------------------------------------------------------
-function photoServices(root) {
-  const slot = $("#photo-slot", root), out = $("#photo-results", root);
-  const vsGo = $("#vs-go", root), snapGo = $("#snap-go", root);
-  let file = null, box = null, url = null;
-
-  function empty() {
-    slot.innerHTML = `<label class="dropzone" id="dropzone">
-      <input type="file" id="photo-in" accept="${ACCEPT}" aria-describedby="photo-help">
-      <span class="section-title" style="font-size:1.25rem">Choose a photo</span>
-      <span class="meta" id="photo-help">JPEG, PNG or WebP. A clear, well-lit outfit photo works best.</span>
-      <span class="btn btn--quiet" aria-hidden="true">Browse files</span></label>`;
-    const input = $("#photo-in", slot), zone = $("#dropzone", slot);
-    input.addEventListener("change", () => input.files[0] && load(input.files[0]));
-    zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("is-over"); });
-    zone.addEventListener("dragleave", () => zone.classList.remove("is-over"));
-    zone.addEventListener("drop", e => { e.preventDefault(); zone.classList.remove("is-over"); const f = e.dataTransfer.files[0]; if (f) load(f); });
-  }
-
-  function load(f) {
-    if (!ACCEPT.split(",").includes(f.type)) {
-      empty();
-      slot.insertAdjacentHTML("beforeend", `<p class="inline-status is-error" role="alert">That file is ${esc(f.type || "an unknown type")}. Please choose a JPEG, PNG or WebP image.</p>`);
-      return;
-    }
-    if (url) URL.revokeObjectURL(url);
-    file = f; box = null; url = URL.createObjectURL(f);
-    slot.innerHTML = `<div class="preview">
-      <div class="preview__frame" id="frame"><img src="${url}" alt="Your photo: drag to frame one piece"><div class="preview__box" id="box" hidden></div></div>
-      <div class="preview__bar">
-        <span class="meta" id="box-state">Whole photo will be searched</span>
-        <button class="link-btn" type="button" id="box-clear" hidden>Clear frame</button>
-        <label class="link-btn" style="cursor:pointer">Replace photo<input type="file" accept="${ACCEPT}" class="sr-only" id="photo-replace"></label>
-        <button class="link-btn" type="button" id="photo-remove">Remove photo</button>
-      </div></div>`;
-    $("#photo-replace", slot).addEventListener("change", e => e.target.files[0] && load(e.target.files[0]));
-    $("#photo-remove", slot).addEventListener("click", () => { if (url) URL.revokeObjectURL(url); file = null; url = null; box = null; empty(); sync(); $("#photo-in", slot).focus(); announce("Photo removed."); });
-    $("#box-clear", slot).addEventListener("click", () => { box = null; paintBox(); });
-    framing();
-    sync();
-    announce("Photo ready. Choose a service below.");
-  }
-
-  function paintBox() {
-    const el = $("#box", slot);
-    if (!el) return;
-    el.hidden = !box;
-    $("#box-clear", slot).hidden = !box;
-    $("#box-state", slot).textContent = box ? "Framed area will be searched" : "Whole photo will be searched";
-    if (box) Object.assign(el.style, {left: box[0] * 100 + "%", top: box[1] * 100 + "%", width: (box[2] - box[0]) * 100 + "%", height: (box[3] - box[1]) * 100 + "%"});
-  }
-
-  function framing() {
-    const frame = $("#frame", slot), img = $("img", frame);
-    let start = null;
-    const at = e => { const r = img.getBoundingClientRect(); return [Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1), Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1)]; };
-    frame.addEventListener("pointerdown", e => { start = at(e); frame.setPointerCapture(e.pointerId); e.preventDefault(); });
-    frame.addEventListener("pointermove", e => {
-      if (!start) return;
-      const p = at(e);
-      box = [Math.min(start[0], p[0]), Math.min(start[1], p[1]), Math.max(start[0], p[0]), Math.max(start[1], p[1])];
-      paintBox();
-    });
-    const end = () => {
-      if (!start) return;
-      start = null;
-      if (box && (box[2] - box[0] < 0.03 || box[3] - box[1] < 0.03)) box = null;   // a click, not a drag
-      paintBox();
-    };
-    frame.addEventListener("pointerup", end);
-    frame.addEventListener("pointercancel", end);
-  }
-
-  const sync = () => { vsGo.disabled = snapGo.disabled = !file; };
-
-  function busy(on, label) {
-    vsGo.disabled = snapGo.disabled = on || !file;
-    out.setAttribute("aria-busy", String(on));
-    if (on) out.innerHTML = `<p class="thinking" role="status"><i></i><i></i><i></i> <span id="busy-label">${esc(label)}</span></p>`;
-  }
-
-  vsGo.addEventListener("click", async () => {
-    if (!file) return;
-    busy(true, "Searching our collection…");
-    const fd = new FormData();
-    fd.append("photo", file); fd.append("category", $("#vs-cat", root).value); fd.append("box", box ? box.join(",") : "");
-    try {
-      const r = await api("/api/visual-search", {method: "POST", body: fd});
-      const [matches] = await grouped([r.matches]);
-      out.innerHTML = matches.length
-        ? `<h3>Pieces that look similar</h3>${cardGrid(matches, "visual_search", {cls: "grid--compact"})}
-           <p><button class="btn btn--quiet" type="button" id="ask-this">Ask the stylist what goes with it</button></p>`
-        : `<div class="state"><p class="state__title">No close matches</p><p class="meta">Try framing a single piece, or choose a different category.</p></div>`;
-      impressions(matches, "visual_search");
-      if (matches.length) $("#ask-this", out).addEventListener("click", () => {
-        askStylist(`What goes with the ${matches[0].prod_name} (article ${matches[0].article_id})?`);
-        $("#chat-in").focus();
-      });
-      announce(matches.length ? "Similar pieces found." : "No similar pieces found.");
-    } catch (e) {
-      out.innerHTML = `<div class="state" role="alert"><p class="state__title">We couldn't search with that photo just now</p><p class="meta">Please try again.</p>
-        <button class="btn btn--quiet" type="button" id="vs-retry">Try again</button></div>`;
-      $("#vs-retry", out).addEventListener("click", () => vsGo.click());
-    } finally { busy(false); out.scrollIntoView({block: "nearest"}); }
-  });
-
-  snapGo.addEventListener("click", async () => {
-    if (!file) return;
-    busy(true, "Looking at your outfit… This may take about a minute.");
-    const t0 = Date.now();
-    const timer = setInterval(() => { const l = $("#busy-label", out); if (l) l.textContent = `Looking at your outfit… ${Math.round((Date.now() - t0) / 1000)} s`; }, 1000);
-    const fd = new FormData();
-    fd.append("photo", file);
-    try {
-      const r = await api("/api/snap", {method: "POST", body: fd});
-      const garments = r.garments.filter(g => g.matches.length), fills = r.complete_the_look.filter(m => m.items.length);
-      const groups = await grouped([...garments.map(g => g.matches.slice(0, 5)), ...fills.map(m => m.items)]);
-      const gm = groups.slice(0, garments.length), fm = groups.slice(garments.length);
-      const detected = r.garments.map(g => `${g.colour} ${g.category}`.trim());
-      out.innerHTML = `${detected.length ? `<p class="notice"><strong>We spotted:</strong> ${esc(detected.join(", "))}</p>`
-          : `<p class="meta">We couldn't make out the pieces in this photo. A full-length, well-lit photo works best.</p>`}
-        ${garments.map((g, i) => gm[i].length ? `<div><h3>Like your ${esc(g.description)}</h3>${cardGrid(gm[i], "snap", {cls: "grid--compact"})}</div>` : "").join("")}
-        ${fills.map((m, i) => fm[i].length ? `<div><h3>To complete the outfit: ${esc(m.title)}</h3>${cardGrid(fm[i], "complete_the_look", {cls: "grid--compact", anchor: r.anchor})}</div>` : "").join("")}`;
-      gm.forEach(l => impressions(l, "snap"));
-      fm.forEach(l => impressions(l, "complete_the_look", r.anchor));
-      announce("Your outfit ideas are ready.");
-    } catch (e) {
-      out.innerHTML = `<div class="state" role="alert"><p class="state__title">We couldn't look at that photo just now</p><p class="meta">Please try again.</p>
-        <button class="btn btn--quiet" type="button" id="snap-retry">Try again</button></div>`;
-      $("#snap-retry", out).addEventListener("click", () => snapGo.click());
-    } finally { clearInterval(timer); busy(false); out.scrollIntoView({block: "nearest"}); }
-  });
-
-  empty();
-  sync();
-}

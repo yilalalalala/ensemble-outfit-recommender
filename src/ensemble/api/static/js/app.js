@@ -2,13 +2,16 @@
 import {$, $$, HOSTED, api, announce, esc, errorState, initDialogs, initImageFallback, initMotion, logEvent,
         notForMe, openDialog, probe, profileDetail, profileName, selectSwatch, state} from "./core.js";
 import {addToCart, initCart, loadCart} from "./cart.js";
+import * as find from "./find.js";
+import * as gateway from "./gateway.js";
+import * as look from "./look.js";
 import * as shop from "./shop.js";
 import * as stylist from "./stylist.js";
 import * as studio from "./studio.js";
 
 const STORE_KEY = "ensemble.profile";
 const NAV = {
-  shop: [["Discover", "#/"], ["Collections", "#/collections"], ["Style Assistant", "#/assistant"]],
+  shop: [["Your edit", "#/shop"], ["Collections", "#/collections"], ["AI Stylist", "#/stylist"]],
   // Label writes the human gold labels to disk and reads private outfit photos, so the hosted shop
   // does not offer it (the API refuses it too); its route still resolves and explains itself (studio.js).
   studio: [["Evaluation", "#/studio"], ["Serving", "#/studio/serving"], ["Inspect", "#/studio/inspect"],
@@ -23,12 +26,25 @@ function parse(hash) {
   return {path: "/" + parts.join("/"), parts, params: new URLSearchParams(query)};
 }
 
+// Legacy deep links (docs/AI_STYLIST_PRODUCT_FLOW.md §2): replaced in history, so Back never bounces.
+function redirect(r) {
+  if (r.parts[0] === "assistant") {
+    const a = r.params.get("anchor");
+    return `#/stylist/ask${a ? `?anchor=${encodeURIComponent(a)}` : ""}`;
+  }
+  return null;
+}
+
 function resolve(r) {
   const [a, b] = r.parts;
-  if (!a) return {exp: "shop", nav: "#/", view: shop.home};
+  if (!a) return {exp: "shop", nav: null, view: gateway.view};
+  if (a === "shop") return {exp: "shop", nav: "#/shop", view: shop.home};
   if (a === "collections") return {exp: "shop", nav: "#/collections", view: shop.collections};
   if (a === "product" && /^\d+$/.test(b || "")) return {exp: "shop", nav: null, view: shop.product};
-  if (a === "assistant") return {exp: "shop", nav: "#/assistant", view: stylist.view};
+  if (a === "stylist" && !b) return {exp: "shop", nav: "#/stylist", view: stylist.hub};
+  if (a === "stylist" && b === "ask") return {exp: "shop", nav: "#/stylist", view: stylist.ask};
+  if (a === "stylist" && b === "find") return {exp: "shop", nav: "#/stylist", view: find.view};
+  if (a === "stylist" && b === "look") return {exp: "shop", nav: "#/stylist", view: look.view};
   if (a === "ds") return {exp: "studio", nav: "#/studio", view: studio.evaluation};          // legacy deep link
   if (a === "studio" && !b) return {exp: "studio", nav: "#/studio", view: studio.evaluation};
   if (a === "studio" && b === "serving") return {exp: "studio", nav: "#/studio/serving", view: studio.serving};
@@ -40,12 +56,14 @@ function resolve(r) {
 async function notFound(ctx) {
   ctx.setTitle("Not found");
   ctx.render(`<div class="state state--center"><h1 class="state__title" tabindex="-1">This page does not exist</h1>
-    <p class="meta">The link may be out of date.</p><a class="btn" href="#/">Back to Discover</a></div>`);
+    <p class="meta">The link may be out of date.</p><a class="btn" href="#/">Back to the start</a></div>`);
 }
 
 let token = 0, current = null, navCount = 0;
 
 async function route({focus = true} = {}) {
+  const to = redirect(parse(location.hash));
+  if (to) history.replaceState(null, "", to);
   const r = parse(location.hash);
   const res = resolve(r);
   const my = ++token;
@@ -53,6 +71,7 @@ async function route({focus = true} = {}) {
   state.navCount = navCount;
   current = res;
   setNav(res);
+  if (res.exp === "shop") gateway.remember(location.hash);
   const main = $("#main");
   const ctx = {
     route: r, exp: res.exp,
