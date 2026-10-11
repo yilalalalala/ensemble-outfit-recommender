@@ -11,7 +11,7 @@ In machine learning, it also means several models combined. This project is both
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Run locally](#quickstart)
 
-![Ensemble editorial shopping interface](docs/assets/home_desktop.png)
+![Ensemble: "How would you like to shop today?" with two choices, Shop your edit and Style with AI](docs/assets/home_desktop.png)
 
 > **The live demo is the real application.** GitHub Pages serves the same HTML, CSS and JavaScript that
 > `make serve` serves locally, and every request goes to the FastAPI backend running on Modal: live
@@ -20,22 +20,39 @@ In machine learning, it also means several models combined. This project is both
 > The backend scales to zero when idle, so the first visit after a quiet period takes about 20–30 seconds.
 
 <p align="center">
-  <img src="docs/assets/assistant_desktop.png" alt="Ensemble Style Assistant" width="67%">
-  <img src="docs/assets/home_mobile.png" alt="Ensemble mobile shopping view" width="25%">
+  <img src="docs/assets/assistant_desktop.png" alt="Complete my look, step 4: an edit of four pieces that pair with the outfit, each with colours, price and Add to cart" width="67%">
+  <img src="docs/assets/home_mobile.png" alt="The gateway on a phone" width="25%">
 </p>
+
+**How it is organised for shoppers** — pages follow the decision you are making, not the model behind it
+([product-flow spec](docs/AI_STYLIST_PRODUCT_FLOW.md)):
+
+| route | page |
+| --- | --- |
+| `#/` | gateway: *Shop your edit* or *Style with AI* (and a quiet link to DS Studio) |
+| `#/shop`, `#/collections`, `#/product/:id` | the personalised, ranked edit; collections; product pages with Complete the Look |
+| `#/stylist` | AI Stylist hub with three tasks |
+| `#/stylist/ask` | Ask the stylist — conversation with optional photo; products only from tool results |
+| `#/stylist/find` | Find this piece — photo → frame (or whole photo) → visually similar pieces |
+| `#/stylist/look` | Complete my look — Photo → **Review what we spotted** → Direction → Your edit → Refine with the stylist |
+| `#/studio…` | DS Studio: offline evaluation, serving status, recommendation inspection |
+
+Old `#/assistant` links redirect to `#/stylist/ask`.
 
 ![Ensemble DS Studio offline evaluation](docs/assets/studio_desktop.png)
 
 <p align="center">
   <img src="docs/assets/style_assistant_interaction.png"
-       alt="Style Assistant: a grounded answer with product cards, and an outfit photo with the framed garment and its catalogue matches"
+       alt="Complete my look on a phone: reviewing the detected pieces, the edit, and refining it with the stylist"
        width="78%">
 </p>
 
-<p align="center"><em>Style Assistant — grounded recommendation and outfit-photo analysis in the local
-model-backed app. The assistant may only cite products a tool returned; the cards below the answer are
-those products. On the right, one garment is framed in the photo, matched against the catalogue, and the
-outfit's missing slot is filled.</em></p>
+<p align="center"><em>Complete my look on the live site (phone). <b>Review:</b> the vision model's detections are
+shown on the photo and the shopper corrects them before anything is recommended (here a shirt dress the model
+called a "top" is changed to a dress). <b>Your edit:</b> pieces from Complete the Look for the confirmed outfit.
+<b>Refine:</b> a conversation preloaded with the look; the stylist may only cite products a tool returned. Photo:
+<a href="https://commons.wikimedia.org/wiki/File:New_York_Street_Fashion_(Unsplash).jpg">New York Street Fashion</a>,
+Yegide Matthews, CC0.</em></p>
 
 **Ensemble recommends clothing the way a stylist would:**
 - what *you* will likely buy next;
@@ -308,6 +325,6 @@ Ollama (Qwen3-VL, Qwen2.5-VL) · Anthropic API
   AI-generated and no interface is mocked up.
 - **Outfit photos** used for evaluation are either openly licensed Wikimedia Commons images (credited in
   `data/raw/outfit_photos/CREDITS.csv`) or private test images. None is served by the hosted shop; visitors
-  upload their own photo, which is processed for the request and not stored. The Style Assistant screenshot
-  above shows one private test photo, published deliberately as a screenshot of the local app.
+  upload their own photo, which is processed for the request and not stored. The stylist screenshots use the CC0
+  photo credited above; no private photo is shown.
 - **All results are offline.** A launch decision would need an online A/B test.
