@@ -18,21 +18,46 @@ function greeting() {
   return h < 5 ? "Good evening." : h < 12 ? "Good morning." : h < 18 ? "Good afternoon." : "Good evening.";
 }
 
-// Deterministic asymmetric rhythm: feature rows give the row's first (highest-placed) piece the large tile,
-// alternating with a staggered row of three; mobile simplifies to two columns.
-const ROW_A = [{span: 6, sm: 2}, {span: 3, drop: "var(--s-8)"}, {span: 3, align: "end", dropSm: "var(--s-6)"}];
-const ROW_B = [{span: 4, drop: "var(--s-7)"}, {span: 4, dropSm: "var(--s-6)"}, {span: 4, drop: "var(--s-8)"}];
-function editLayout(n) {
+// Controlled editorial asymmetry (docs/AI_STYLIST_PRODUCT_FLOW.md §11): a small set of preset compositions on
+// a 12-column grid, chosen deterministically. Only 3:4, 1:1 and 4:3 images; rows align on their bottom edge.
+// Feature: 1:1 across 6 + two 3:4 across 3. Trio: three 3:4 across 4. Pair: a wide tile across 7 (4:3 for compact
+// pieces such as shoes and bags, 1:1 for garments, so nothing is cropped to a sliver) + 3:4 across 5.
+const COMPACT = new Set(["shoes", "accessories"]);
+const PRESETS = {
+  feature: [{span: 6, ratio: "11", big: true}, {span: 3, ratio: "34"}, {span: 3, ratio: "34"}],
+  trio: [{span: 4, ratio: "34"}, {span: 4, ratio: "34"}, {span: 4, ratio: "34"}],
+  pair: [{span: 7, ratio: "wide", big: true}, {span: 5, ratio: "34"}],
+};
+const CYCLE = ["feature", "trio", "pair"];
+
+// Presets that sum exactly to n (no holes, nothing dropped): cycle feature → trio → pair, but never leave a
+// single item — with 4 left use two pairs, with 3 left where a pair is due use a trio. n = 1 is one centred tile.
+export function editPlan(n) {
+  if (n <= 0) return [];
+  if (n === 1) return [{span: 6, ratio: "34", start: 4}];
   const out = [];
-  for (let row = 0; out.length < n; row++) out.push(...(row % 2 ? ROW_B : ROW_A));
-  return out.slice(0, n);
+  let rem = n;
+  for (let i = 0; rem > 0; i++) {
+    let name = CYCLE[i % CYCLE.length];
+    if (rem === 2) name = "pair";
+    else if (rem === 3) name = name === "pair" ? "trio" : name;
+    else if (rem === 4) name = "pair";
+    out.push(...PRESETS[name]);
+    rem -= PRESETS[name].length;
+  }
+  return out;
 }
+
 function editGrid(items, surface) {
-  const layout = editLayout(items.length);
+  const layout = editPlan(items.length);
+  let col = 0;   // column position in the two-column tablet/mobile grid: big tiles span 2 only at a row start
   return `<ul class="edit" role="list">${items.map((it, i) => {
     const l = layout[i];
-    const style = `--span:${l.span};--span-sm:${l.sm || 1};${l.drop ? `--drop:${l.drop};` : ""}${l.dropSm ? `--drop-sm:${l.dropSm};` : ""}${l.align ? `--align:${l.align};` : ""}`;
-    return `<li style="${style}"><div class="reveal" style="--i:${i % 3}">${card(it, surface)}</div></li>`;
+    const ratio = l.ratio === "wide" ? (COMPACT.has(it.slot) ? "43" : "11") : l.ratio;
+    const spanSm = l.big && col % 2 === 0 ? 2 : 1;
+    col += spanSm;
+    const style = `--span:${l.span};--span-sm:${spanSm};${l.start ? `--start:${l.start};` : ""}`;
+    return `<li class="r-${ratio}" style="${style}"><div class="reveal" style="--i:${i % 3}">${card(it, surface)}</div></li>`;
   }).join("")}</ul>`;
 }
 
@@ -82,7 +107,7 @@ export async function home(ctx) {
         <p class="eyebrow">Selected for you</p>
         <h1 class="display" id="hero-title" tabindex="-1">${greeting()}</h1>
         <p class="lede">${lede}</p>
-        <p class="hero__links"><a class="link-btn" href="#/collections">Shop the edit</a><a class="link-btn" href="#/assistant">Ask the stylist</a></p>
+        <p class="hero__links"><a class="link-btn" href="#/collections">Shop the edit</a><a class="link-btn" href="#/stylist">Style with AI</a></p>
       </div>
       ${hero[0] ? fig(hero[0], "hero__lead", 0, true) : ""}
       ${hero[1] ? fig(hero[1], "hero__second", 1, true) : ""}
@@ -199,7 +224,7 @@ export async function product(ctx) {
   const root = ctx.render(`
     <nav class="crumbs" aria-label="Breadcrumb">
       <button class="link-btn" type="button" data-back>← Back</button><span aria-hidden="true">/</span>
-      <a href="#/">Discover</a><span aria-hidden="true">/</span><span>${esc(a.index_group_name)}</span><span aria-hidden="true">/</span><span aria-current="page">${esc(a.product_type_name)}</span>
+      <a href="#/shop">Your edit</a><span aria-hidden="true">/</span><span>${esc(a.index_group_name)}</span><span aria-hidden="true">/</span><span aria-current="page">${esc(a.product_type_name)}</span>
     </nav>
     <div class="pdp" data-card data-article="${a.article_id}" data-family="${esc(family?.product_code ?? "")}" data-s="product_page">
       <figure class="pdp__media"><img src="${esc(cur.image)}" alt="${esc(`${cur.prod_name}, ${cur.label.toLowerCase()}`)}" width="1166" height="1750" fetchpriority="high"></figure>
@@ -213,7 +238,7 @@ export async function product(ctx) {
         </div>
         <div class="pdp__actions">
           <button class="btn-cart btn-cart--lg" type="button" data-add aria-label="Add ${esc(cur.prod_name)}, ${esc(cur.label)}, to cart" ${family?.price_usd == null ? "disabled" : ""}>Add to cart</button>
-          <a class="btn btn--quiet" href="#/assistant?anchor=${a.article_id}">Ask the stylist about this piece</a>
+          <a class="btn btn--quiet" href="#/stylist/ask?anchor=${a.article_id}">Ask the stylist about this piece</a>
         </div>
         ${a.detail_desc ? `<p class="pdp__desc">${esc(a.detail_desc)}</p>` : ""}
         <dl class="facts">${facts.map(([k, val, cls]) => `<dt>${esc(k)}</dt><dd ${cls ? `class="${cls}"` : ""}>${esc(val)}</dd>`).join("")}</dl>
@@ -232,7 +257,7 @@ export async function product(ctx) {
   impressions(similar, "similar");
 
   $("[data-back]", root).addEventListener("click", () => {
-    if ((state.navCount || 0) > 1) history.back(); else location.hash = "#/";
+    if ((state.navCount || 0) > 1) history.back(); else location.hash = "#/shop";
   });
   // Selecting a colour on the product page updates it in place and keeps the address shareable.
   $(".pdp", root).addEventListener("variant-change", e => {
