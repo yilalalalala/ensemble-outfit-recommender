@@ -418,9 +418,9 @@ async function auditCards(p, scope = 'main') {
   if (want('gateway')) {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/'); await settle(p);
-    ok('gateway question and two choices', (await heading(p)) === 'How would you like to shop today?' && (await p.$$('.gw-choice')).length === 2, '');
+    ok('gateway heading (screen readers) and two choices', (await heading(p)) === 'How would you like to shop today?' && (await p.$eval('#gw-title', h => h.classList.contains('sr-only'))) && (await p.$$('.gw-choice')).length === 2, '');
     const gw = await p.evaluate(() => {
-      const s = document.querySelector('.gateway'), t = document.querySelector('#gw-title').getBoundingClientRect();
+      const s = document.querySelector('.gateway'), t = document.querySelector('.gateway__choices').getBoundingClientRect();
       const r = s.getBoundingClientRect(), mid = r.left + r.width / 2;
       return {imgs: s.querySelectorAll('img').length, solid: s.querySelectorAll('.gw-choice__btn.btn--solid').length,
         centred: Math.abs(t.left + t.width / 2 - mid) < 4, overflow: document.documentElement.scrollWidth > innerWidth};

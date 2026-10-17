@@ -582,12 +582,11 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
 .label-actions { display: flex; gap: var(--s-3); align-items: center; flex-wrap: wrap; margin-top: var(--s-5); }
 
 /* ---------------------------------------------------------------- gateway (docs/AI_STYLIST_PRODUCT_FLOW.md) */
-/* Deliberately plain: one question, two solid choices, centred in the space under the masthead. */
+/* Deliberately plain: a welcome and two solid choices (the question is a screen-reader heading), centred in the space under the masthead. */
 .gateway { position: relative; overflow: clip; min-height: max(28rem, calc(100svh - 16rem)); display: grid;
   grid-template-columns: minmax(0, 52rem); place-content: center; justify-items: center; text-align: center; gap: var(--s-3); padding: var(--s-7) 0;
   -webkit-tap-highlight-color: transparent; }
-.gateway__title { font-size: clamp(1.9rem, 1.3rem + 2.2vw, 2.75rem); text-wrap: balance; }
-.gateway__choices { list-style: none; margin: var(--s-6) 0 0; padding: 0; width: min(100%, 47.5rem);
+.gateway__choices { list-style: none; margin: var(--s-5) 0 0; padding: 0; width: min(100%, 47.5rem);
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gateway__choices > li + li { border-left: var(--hair); }
 .gw-choice { display: grid; justify-items: center; gap: var(--s-3); padding: var(--s-4) var(--s-6); }
