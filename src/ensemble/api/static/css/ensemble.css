@@ -582,32 +582,20 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
 .label-actions { display: flex; gap: var(--s-3); align-items: center; flex-wrap: wrap; margin-top: var(--s-5); }
 
 /* ---------------------------------------------------------------- gateway (docs/AI_STYLIST_PRODUCT_FLOW.md) */
-.gateway { padding: clamp(2rem, 1rem + 4vw, 4.5rem) 0 var(--s-8); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
-.gateway__head { display: grid; gap: var(--s-3); max-width: 46rem; }
-.gateway__title { font-size: clamp(2.2rem, 1.4rem + 3vw, 4rem); }
-.gateway__choices { list-style: none; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: end; }
-.gateway__choices > li:first-child { grid-column: 1 / span 7; }
-.gateway__choices > li:last-child { grid-column: 8 / span 5; }
-.gw-choice { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); text-decoration: none; color: var(--ink); }
-.gw-choice__media { display: grid; gap: var(--s-3); background: var(--ivory); overflow: hidden; }
-.gw-choice__media--trio { grid-template-columns: repeat(3, minmax(0, 1fr)); background: none; }
-.gw-choice__media--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); background: none; }
-.gw-img { width: 100%; height: 100%; object-fit: cover; object-position: 50% var(--focus-y); background: var(--photo);
-  transition: transform var(--t-slow) var(--ease); }
-.gw-img--34 { aspect-ratio: var(--ratio-product); }   /* the shop choice previews the edit: three 3:4 images */
-.gw-img--11 { aspect-ratio: var(--ratio-square); }
-.gw-choice__text { display: grid; gap: .35rem; }
-.gw-choice__title { font: 400 clamp(1.7rem, 1.3rem + 1.4vw, 2.5rem)/1.05 var(--serif); }
-.gw-choice__line { color: var(--muted); max-width: 32rem; }
-.gw-choice__go { font-size: var(--fs-meta); letter-spacing: .12em; text-transform: uppercase; margin-top: .3rem;
-  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; justify-self: start;
-  transition: background-size var(--t-med) var(--ease); padding-bottom: .15rem; }
-.gw-choice:hover .gw-choice__go, .gw-choice:focus-visible .gw-choice__go { background-size: 100% 1px; }
-.gateway__foot { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-4); flex-wrap: wrap;
-  border-top: var(--hair); padding-top: var(--s-4); }
-.gateway__resume { font-size: var(--fs-meta); color: var(--muted); }
-.gateway__system { font-size: var(--fs-meta); color: var(--faint); text-decoration: none; letter-spacing: .04em; }
-.gateway__system:hover, .gateway__system:focus-visible { color: var(--ink); text-decoration: underline; }
+/* Deliberately plain: one question, two solid choices, centred in the space under the masthead. */
+.gateway { position: relative; overflow: clip; min-height: max(28rem, calc(100svh - 16rem)); display: grid;
+  grid-template-columns: minmax(0, 52rem); place-content: center; justify-items: center; text-align: center; gap: var(--s-3); padding: var(--s-7) 0;
+  -webkit-tap-highlight-color: transparent; }
+.gateway__title { font-size: clamp(1.9rem, 1.3rem + 2.2vw, 2.75rem); text-wrap: balance; }
+.gateway__choices { list-style: none; margin: var(--s-6) 0 0; padding: 0; width: min(100%, 47.5rem);
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gateway__choices > li + li { border-left: var(--hair); }
+.gw-choice { display: grid; justify-items: center; gap: var(--s-3); padding: var(--s-4) var(--s-6); }
+.gw-choice__btn { position: relative; overflow: hidden; min-height: 3rem; padding-inline: 2.5rem; letter-spacing: .18em; white-space: nowrap; }
+.gw-choice__line { margin: 0; color: var(--muted); max-width: 17.5rem; text-wrap: balance; }
+.ripple { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0; }
+.gateway > .ripple { background: radial-gradient(circle, rgb(27 25 22 / .07) 0 30%, transparent 31% 52%, rgb(27 25 22 / .10) 54%, transparent 62%); }
+.gw-choice__btn > .ripple { background: radial-gradient(circle, rgb(255 255 255 / .28) 0 45%, transparent 70%); }
 
 /* ---------------------------------------------------------------- AI Stylist hub */
 .hub { padding: clamp(2rem, 1rem + 4vw, 4.5rem) 0 var(--s-8); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
@@ -728,13 +716,15 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
   .hub__tasks { grid-template-columns: 1fr; }
   .task-card { grid-template-rows: none; }
   .choices { grid-template-columns: 1fr; }
-  .gateway__choices > li:first-child, .gateway__choices > li:last-child { grid-column: 1 / -1; }
-  .gateway__choices { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
 }
 @media (max-width: 760px) {
   .review, .framer { grid-template-columns: 1fr; }
   .review__photo { position: static; }
   .review__frame img, .framer__frame img { max-height: 46vh; }
+}
+@media (max-width: 600px) {
+  .gateway__choices { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .gateway__choices > li + li { border-left: 0; border-top: var(--hair); padding-top: var(--s-5); }
 }
 @media (max-width: 480px) {
   .steps { display: none; }
@@ -766,6 +756,15 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
   @keyframes dialog-in { from { opacity: 0; transform: translateY(10px); } }
   @keyframes drawer-in { from { transform: translateX(-100%); } }
   @keyframes fade-in { from { opacity: 0; } }
+  /* Gateway: a touch ripples outward; choosing a path fades the page away, the chosen button last. */
+  .ripple { animation: ripple 900ms cubic-bezier(.2, .6, .3, 1) forwards; }
+  .gw-choice__btn > .ripple { animation-duration: 600ms; }
+  @keyframes ripple { from { transform: scale(0); opacity: 1; } 60% { opacity: .8; } to { transform: scale(1); opacity: 0; } }
+  .gateway > :not(.ripple) { transition: opacity 360ms var(--ease), transform 360ms var(--ease), filter 360ms var(--ease); }
+  .gateway.is-leaving > :not(.ripple) { opacity: 0; transform: translateY(-10px); filter: blur(4px); }
+  .gateway.is-leaving > .gateway__choices { transition-delay: 120ms; transform: none; filter: none; }
+  .gateway.is-leaving .gw-choice { transition: opacity 300ms var(--ease); }
+  .gateway.is-leaving .gw-choice:not(:has(.is-chosen)) { opacity: 0; }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .card__media:hover img { transform: scale(1.025); }

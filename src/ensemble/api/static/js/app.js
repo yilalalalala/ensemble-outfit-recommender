@@ -71,7 +71,6 @@ async function route({focus = true} = {}) {
   state.navCount = navCount;
   current = res;
   setNav(res);
-  if (res.exp === "shop") gateway.remember(location.hash);
   const main = $("#main");
   const ctx = {
     route: r, exp: res.exp,
