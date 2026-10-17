@@ -13,6 +13,7 @@ centre-cropped so shoes and collars are not cut off.
 """
 from __future__ import annotations
 
+import threading
 import time
 
 import numpy as np
@@ -23,6 +24,9 @@ from ensemble.config import load_config
 
 MODEL = "patrickjohncyh/fashion-clip"
 _model = _proc = None
+# The API serves requests on a thread pool. Loading the model and running it (MPS especially) are not thread-safe:
+# two concurrent first requests crashed the server (segfault), so loading and inference take this lock.
+_lock = threading.RLock()
 
 
 def device() -> str:
@@ -31,10 +35,11 @@ def device() -> str:
 
 def load():
     global _model, _proc
-    if _model is None:
-        from transformers import CLIPModel, CLIPProcessor
-        _model = CLIPModel.from_pretrained(MODEL).to(device()).eval()
-        _proc = CLIPProcessor.from_pretrained(MODEL)
+    with _lock:
+        if _model is None:
+            from transformers import CLIPModel, CLIPProcessor
+            _model = CLIPModel.from_pretrained(MODEL).to(device()).eval()
+            _proc = CLIPProcessor.from_pretrained(MODEL)
     return _model, _proc
 
 
@@ -55,15 +60,17 @@ def _normalise(x) -> np.ndarray:
 @torch.no_grad()
 def embed_images(images: list[Image.Image]) -> np.ndarray:
     model, proc = load()
-    inputs = proc(images=[pad_square(im) for im in images], return_tensors="pt").to(device())
-    return _normalise(model.get_image_features(**inputs))
+    with _lock:
+        inputs = proc(images=[pad_square(im) for im in images], return_tensors="pt").to(device())
+        return _normalise(model.get_image_features(**inputs))
 
 
 @torch.no_grad()
 def embed_texts(texts: list[str]) -> np.ndarray:
     model, proc = load()
-    inputs = proc(text=texts, return_tensors="pt", padding=True, truncation=True).to(device())
-    return _normalise(model.get_text_features(**inputs))
+    with _lock:
+        inputs = proc(text=texts, return_tensors="pt", padding=True, truncation=True).to(device())
+        return _normalise(model.get_text_features(**inputs))
 
 
 def image_path(cfg, article_id: int):
