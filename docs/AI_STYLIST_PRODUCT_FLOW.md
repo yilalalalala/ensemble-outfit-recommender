@@ -25,7 +25,7 @@ endpoint answers.
 
 | route | page | notes |
 | --- | --- | --- |
-| `#/` | **Gateway** — two choices + quiet "Explore the system" | new; wordmark target in Shop |
+| `#/` | **Gateway** — "Welcome back" and two solid choices (DS Studio via the masthead switch) | new; wordmark target in Shop |
 | `#/shop` | **Your edit** (ranked, personalised home) | was `#/`; content unchanged |
 | `#/collections[/:edit]`, `#/product/:id` | unchanged | |
 | `#/stylist` | **AI Stylist hub** — three tasks | new |
@@ -111,14 +111,18 @@ last user message. The shopper sees a quiet note, never a raw error.
 - Every stylist step shows **Back**, the **progress header**, **Change task** (→ hub), and exactly **one dominant
   next action** (black button). Secondary actions are quiet links.
 - The masthead's experience switch, profile and cart stay; Shop navigation: *Your edit · Collections · AI Stylist*.
-- The wordmark returns to the gateway. Returning shoppers see "Continue where you left off" on the gateway;
-  nothing auto-redirects, so the gateway and task switch are always one click away.
+- The wordmark returns to the gateway; nothing auto-redirects, so the gateway and task switch are always one
+  click away. The gateway is deliberately plain ("Welcome back", two black buttons, one line each, centred; the question
+  below is the page heading for screen readers only). A touch
+  sends a soft ripple from the point of contact, and choosing a path fades the page away (≈ 0.5 s, the chosen
+  button last) before the next view enters. Both are off under `prefers-reduced-motion`, and modified clicks
+  (open in new tab) are left to the browser.
 
 ## 7. Consumer microcopy
 
 | place | copy |
 | --- | --- |
-| Gateway | "How would you like to shop today?" · **Shop your edit** — "Pieces chosen for you, from what you love." · **Style with AI** — "Ask a stylist, find a piece from a photo, or finish an outfit." · quiet link "Explore the system" |
+| Gateway | "Welcome back" (heading, screen readers only: "How would you like to shop today?") · **Shop your edit** — "Pieces chosen for you, from what you love." · **Style with AI** — "Ask a stylist, find a piece from a photo, or finish an outfit." |
 | Hub | "What can we help with?" · Ask the stylist · Find this piece · Complete my look |
 | Look step 1 | "Show us your outfit" · "A full-length, well-lit photo works best. Your photo is only used to find pieces for you." |
 | Detecting | "Looking at your outfit…" → "Picking out each piece…" |
@@ -162,8 +166,8 @@ leave holes: an incomplete last row falls back to the Trio preset. Product-famil
 
 ## 12. Acceptance criteria (measurable)
 
-1. `#/` shows the gateway; **Shop your edit** reaches the ranked edit in one click; the "Explore the system" link
-   reaches DS Studio; `#/assistant?anchor=X` lands on `#/stylist/ask?anchor=X`.
+1. `#/` shows the gateway; **Shop your edit** reaches the ranked edit in one click (after the fade); the masthead's
+   DS Studio switch reaches DS Studio; `#/assistant?anchor=X` lands on `#/stylist/ask?anchor=X`.
 2. The hub offers exactly three tasks, each on its own route.
 3. Complete my look cannot reach step 4 without passing Review; a deleted/edited/added garment changes the request
    payload; refresh on any step restores it; **Start over** clears it.
