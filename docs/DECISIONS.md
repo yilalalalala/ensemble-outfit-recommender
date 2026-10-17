@@ -1347,7 +1347,7 @@ fixtures and their tests are removed; the frontend has one mode, with the API ba
 for public image hosting need a narrower published subset (e.g. only the ~26k live serving catalogue).
 
 
-### D-048 — The storefront follows the Magic Patterns canvas: one "Your edit", canvas typefaces, fabric swatches, tap-to-choose Find
+### D-048 — The storefront follows the Magic Patterns canvas: Collections only, canvas typefaces, fabric swatches, tap-to-choose Find
 
 **Date:** 2026-10-16. **Status:** accepted; adjusts the shop surfaces of DESIGN §7.2 and docs/AI_STYLIST_PRODUCT_FLOW.md.
 
@@ -1362,10 +1362,11 @@ black colourway and a black print looked identical (two "Black" chips); Find thi
   Poppins (labels, navigation), and the canvas wordmark stack `"Segoe UI", sans-serif` (a Windows font: on macOS it
   renders the system sans, exactly as the canvas does). Font files ship under `static/fonts/` with their OFL
   licences; nothing is loaded from a CDN.
-- **One "Your edit" (`#/shop`)** with the home modules as tabs (Selected for you · Buy it again · Trending); the
-  ranked editorial home and its Complete-the-Look strip are removed; `#/collections[/<tab>]` redirects to
-  `#/shop[/<tab>]`. The ranker's output is still the first tab. Shop navigation is *Your edit · AI Stylist*;
-  shoppers get no footer (DS Studio keeps its offline-metrics note).
+- **Collections only (`#/collections`)**, with the home modules as tabs (Selected for you · Buy it again ·
+  Trending); the "Your edit" page (the ranked editorial home and its Complete-the-Look strip) is removed and
+  `#/shop[/<tab>]` redirects to `#/collections[/<tab>]`. The ranker's output is still the first tab. Shop
+  navigation is *Collections · AI Stylist*; the gateway's first button is renamed "View your collections" and opens Collections; shoppers get no
+  footer (DS Studio keeps its offline-metrics note).
 - **Fabric swatches:** `ensemble.serving.swatches` cuts a 32 px crop from each colourway's photo (backdrop
   estimated from the border, garment mask eroded so the crop sits inside the garment) into
   `data/processed/swatches.sqlite` (105,100 swatches, 56 MB, 68 s); `/api/catalog/families` returns it inline
@@ -1382,6 +1383,6 @@ black colourway and a black print looked identical (two "Black" chips); Find thi
 there (the API omits the field until then). The assistant prompt change (at most four, even when asked for more)
 is not reflected in the frozen M7b evaluation numbers; re-run `assistant-eval` before quoting them as current.
 
-**Revisit if:** usability testing shows shoppers miss the editorial home; swatch crops land on backdrop for a
+**Revisit if:** usability testing shows shoppers miss the editorial "Your edit" home; swatch crops land on backdrop for a
 measurable share of a category (spot-check accessories and white garments first); or detection latency on the
 hosted Claude path makes the Choose step feel slow (show the photo immediately and stream the pieces in).

@@ -27,7 +27,7 @@ endpoint answers.
 | --- | --- | --- |
 | `#/` | **Gateway** — "Welcome back" and two solid choices (DS Studio via the masthead switch) | new; wordmark target in Shop |
 | `#/shop` | **Your edit** (ranked, personalised home) | was `#/`; content unchanged |
-| `#/shop[/:edit]`, `#/product/:id` | **Your edit** (tabs: Selected for you · Buy it again · Trending); `#/collections[/:edit]` redirects here (D-048) | |
+| `#/collections[/:edit]`, `#/product/:id` | **Collections** (tabs: Selected for you · Buy it again · Trending); the "Your edit" page is removed and `#/shop[/:edit]` redirects here (D-048) | |
 | `#/stylist` | **AI Stylist hub** — three tasks | new |
 | `#/stylist/ask[?anchor=:id][&context=look]` | **Ask the stylist** — conversation | replaces the chat column |
 | `#/stylist/find[?step=photo\|frame\|results]` | **Find this piece** | replaces the visual-search panel |
@@ -41,7 +41,7 @@ Unknown routes keep the not-found state. Redirects use `history.replaceState`, s
 
 | page | user goal | one primary action |
 | --- | --- | --- |
-| Gateway | decide how to shop today | **Shop your edit** or **Style with AI** (two equal editorial choices) |
+| Gateway | decide how to shop today | **View your collections** or **Style with AI** (two equal editorial choices) |
 | Your edit | browse what was picked for me | product card → Add to cart / open product |
 | Stylist hub | pick the kind of help I need | one card per task |
 | Ask the stylist | get advice in my words | Send |
@@ -110,7 +110,7 @@ last user message. The shopper sees a quiet note, never a raw error.
 
 - Every stylist step shows **Back**, the **progress header**, **Change task** (→ hub), and exactly **one dominant
   next action** (black button). Secondary actions are quiet links.
-- The masthead's experience switch, profile and cart stay; Shop navigation: *Your edit · AI Stylist*; shoppers see no footer (D-048).
+- The masthead's experience switch, profile and cart stay; Shop navigation: *Collections · AI Stylist*; shoppers see no footer (D-048).
 - The wordmark returns to the gateway; nothing auto-redirects, so the gateway and task switch are always one
   click away. The gateway is deliberately plain ("Welcome back", two black buttons, one line each, centred; the question
   below is the page heading for screen readers only). A touch
@@ -122,7 +122,7 @@ last user message. The shopper sees a quiet note, never a raw error.
 
 | place | copy |
 | --- | --- |
-| Gateway | "Welcome back" (heading, screen readers only: "How would you like to shop today?") · **Shop your edit** — "Pieces chosen for you, from what you love." · **Style with AI** — "Ask a stylist, find a piece from a photo, or finish an outfit." |
+| Gateway | "Welcome back" (heading, screen readers only: "How would you like to shop today?") · **View your collections** — "Pieces chosen for you, from what you love." · **Style with AI** — "Ask a stylist, find a piece from a photo, or finish an outfit." |
 | Hub | "What can we help with?" · Ask the stylist · Find this piece · Complete my look |
 | Look step 1 | "Show us your outfit" · "A full-length, well-lit photo works best. Your photo is only used to find pieces for you." |
 | Detecting | "Looking at your outfit…" → "Picking out each piece…" |
@@ -166,7 +166,7 @@ leave holes: an incomplete last row falls back to the Trio preset. Product-famil
 
 ## 12. Acceptance criteria (measurable)
 
-1. `#/` shows the gateway; **Shop your edit** reaches the ranked edit in one click (after the fade); the masthead's
+1. `#/` shows the gateway; **View your collections** reaches Collections in one click (after the fade); the masthead's
    DS Studio switch reaches DS Studio; `#/assistant?anchor=X` lands on `#/stylist/ask?anchor=X`.
 2. The hub offers exactly three tasks, each on its own route.
 3. Complete my look cannot reach step 4 without passing Review; a deleted/edited/added garment changes the request

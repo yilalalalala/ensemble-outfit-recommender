@@ -98,18 +98,18 @@ async function auditCards(p, scope = 'main') {
 
   if (want('copy') || want('home')) {
     const {ctx, p} = await newPage(b);
-    for (const r of ['#/', '#/shop', '#/shop/trending', '#/shop/buy_again', '#/product/922037001',
+    for (const r of ['#/', '#/collections', '#/collections/trending', '#/collections/buy_again', '#/product/922037001',
                      '#/stylist', '#/stylist/ask', '#/stylist/find', '#/stylist/look']) {
       await p.goto(BASE + r); await settle(p);
       const t = await shopperText(p);
       ok(`no prohibited technical/demo copy on ${r}`, !bannedIn(t).length, bannedIn(t).join(', '));
     }
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     const t = await p.$eval('main', m => m.innerText);
-    ok('Your edit: one title, the three edits as tabs', t.startsWith('Your edit') && ['Selected for you', 'Buy it again', 'Trending this week'].every(x => t.includes(x)), t.slice(0, 120));
-    ok('Your edit has no item counts or profile suffix', !/Selected for you · \d+|\d+ pieces|for Shopper/.test(t), '');
+    ok('Collections: the three edits as tabs, no Your edit page', /^collections/i.test(t) && !/Your edit/.test(t) && ['Selected for you', 'Buy it again', 'Trending this week'].every(x => t.includes(x)), t.slice(0, 120));
+    ok('Collections has no item counts or profile suffix', !/Selected for you · \d+|\d+ pieces|for Shopper/.test(t), '');
     ok('shoppers see no footer (no bottom links or words)', await p.$eval('footer', f => getComputedStyle(f).display === 'none'), '');
-    ok('shop navigation is Your edit · AI Stylist only', JSON.stringify(await p.$$eval('#primary-nav a', as => as.map(a => a.textContent))) === '["Your edit","AI Stylist"]', '');
+    ok('shop navigation is Collections · AI Stylist only', JSON.stringify(await p.$$eval('#primary-nav a', as => as.map(a => a.textContent))) === '["Collections","AI Stylist"]', '');
     ok('shopper header has no service status', (await p.$eval('#utility-note', e => e.innerText)) === '', '');
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
     const a = await p.$eval('main', m => m.innerText);
@@ -128,9 +128,9 @@ async function auditCards(p, scope = 'main') {
 
   if (want('home')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     const titles = await p.$$eval('main .tabs a', hs => hs.map(h => h.textContent.trim()));
-    ok('Your edit tabs rendered', ['Selected for you', 'Buy it again', 'Trending this week'].every(t => titles.includes(t)), titles.join(' / '));
+    ok('Collections tabs rendered', ['Selected for you', 'Buy it again', 'Trending this week'].every(t => titles.includes(t)), titles.join(' / '));
     const a = await auditCards(p);
     ok('home: one card per product family page-wide', a.n >= 8 && a.dupFamilies === 0 && a.dupArticles === 0 && a.emptyFamily === 0, JSON.stringify(a));
     ok('home: every card has USD price, swatch and black Add to cart', a.bad.length === 0, a.bad.join(','));
@@ -154,7 +154,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('swatch') || want('cart')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     await p.evaluate(() => localStorage.removeItem('ensemble.cart.168058'));
     // a card whose family has more than one real colourway
     const cardSel = await p.evaluate(() => {
@@ -233,7 +233,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('switch')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     const first = await p.$$eval('main [data-card]', c => c.map(x => x.dataset.article));
     await p.click('#profile-btn'); await p.fill('#profile-filter', String(NEW));
     await p.click(`.profile-option[data-id="${NEW}"]`); await settle(p);
@@ -241,7 +241,7 @@ async function auditCards(p, scope = 'main') {
     const now = await p.$$eval('main [data-card]', c => c.map(x => x.dataset.article));
     const t = await p.$eval('main', m => m.innerText);
     ok('profile switch replaces cards with no duplicate families', a.dupFamilies === 0 && now.join() !== first.join() && !(await p.$('#s-again')), JSON.stringify(a));
-    ok('new profile: Your edit, no item counts', t.startsWith('Your edit') && !/\d+ pieces/.test(t), '');
+    ok('new profile: Collections, no item counts', /^collections/i.test(t) && !/\d+ pieces/.test(t), '');
     const imps = p._events.filter(e => e.event === 'impression').slice(-a.n);
     ok('no stale cross-customer impressions', imps.every(e => e.customer_idx === NEW), '');
     ok('cart is per profile', (await p.$eval('#cart-count', e => e.hidden)) === true, '');
@@ -254,7 +254,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('product')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     await p.click('main .grid > li:nth-child(1) .card__name a'); await settle(p);
     await p.waitForSelector('.pdp [data-add]'); await p.waitForSelector('#s-sim', {timeout: 60000}); await p.waitForTimeout(800);
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
@@ -297,8 +297,8 @@ async function auditCards(p, scope = 'main') {
   if (want('collections') || want('tabs')) {
     const {ctx, p} = await newPage(b);
     const explain = []; p.on('request', r => { if (r.url().includes('/api/explain')) explain.push(r.url()); });
-    await p.goto(BASE + '#/collections/trending'); await settle(p);
-    ok('old Collections links land on Your edit', /#\/shop\/trending$/.test(p.url()), p.url());
+    await p.goto(BASE + '#/shop/trending'); await settle(p);
+    ok('old Your edit links land on Collections', /#\/collections\/trending$/.test(p.url()), p.url());
     const a = await auditCards(p);
     ok('collection: unique families, priced cards', a.dupFamilies === 0 && a.bad.length === 0 && a.n > 0, JSON.stringify(a));
     const tabs = await p.$$eval('.tabs a', ts => ts.map(t => ({cur: t.getAttribute('aria-current'), color: getComputedStyle(t).color, bg: getComputedStyle(t).backgroundColor, border: getComputedStyle(t).borderBottomColor, text: t.textContent})));
@@ -352,7 +352,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('keyboard')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     await p.keyboard.press('Tab');
     ok('first Tab reaches the skip link', (await p.evaluate(() => document.activeElement.textContent)) === 'Skip to content', '');
     await p.keyboard.press('Enter');
@@ -377,7 +377,7 @@ async function auditCards(p, scope = 'main') {
     ok('Escape closes profile dialog and returns focus', (await p.evaluate(() => document.activeElement.id)) === 'profile-btn', '');
     await ctx.close();
     const m = await newPage(b, [390, 844]);
-    await m.p.goto(BASE + '#/shop'); await settle(m.p);
+    await m.p.goto(BASE + '#/collections'); await settle(m.p);
     await m.p.evaluate(() => document.querySelector('#menu-btn').focus());
     await m.p.keyboard.press('Enter'); await m.p.waitForTimeout(250);
     ok('mobile drawer opens from keyboard', await m.p.evaluate(() => document.querySelector('#drawer').open), '');
@@ -390,7 +390,7 @@ async function auditCards(p, scope = 'main') {
   if (want('motion')) {
     for (const rm of ['reduce', 'no-preference']) {
       const {ctx, p} = await newPage(b, [1440, 900], {reducedMotion: rm});
-      await p.goto(BASE + '#/shop'); await settle(p);
+      await p.goto(BASE + '#/collections'); await settle(p);
       const d = await p.evaluate(() => ({motion: document.documentElement.classList.contains('motion'),
         hidden: [...document.querySelectorAll('.reveal')].filter(e => getComputedStyle(e).opacity === '0').length,
         anim: getComputedStyle(document.querySelector('.view')).animationName}));
@@ -402,7 +402,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('offline')) {
     const {ctx, p} = await newPage(b);
-    await p.goto(BASE + '#/shop'); await settle(p);
+    await p.goto(BASE + '#/collections'); await settle(p);
     await p.route('**/api/product/**', r => r.abort('failed'));
     await p.click('main .grid > li:nth-child(1) .card__name a'); await p.waitForTimeout(800);
     const txt = await p.$eval('main', m => m.innerText);
@@ -446,9 +446,9 @@ async function auditCards(p, scope = 'main') {
     await p.click('.gw-choice--shop');
     const leaving = await p.evaluate(() => ({cls: document.querySelector('.gateway')?.classList.contains('is-leaving'), url: location.hash}));
     ok('choosing a path fades the gateway before navigating', leaving.cls && leaving.url === '#/', JSON.stringify(leaving));
-    await p.waitForURL(/#\/shop$/, {timeout: 3000}); await settle(p);
+    await p.waitForURL(/#\/collections$/, {timeout: 3000}); await settle(p);
     const hero = await p.waitForSelector('main .grid .card', {timeout: 60000}).catch(() => null);
-    ok('Shop your edit reaches Your edit in one click', /#\/shop$/.test(p.url()) && !!hero, p.url());
+    ok('View your collections reaches Collections in one click', /#\/collections$/.test(p.url()) && !!hero, p.url());
     await p.goto(BASE + '#/'); await settle(p);
     await p.click('.gw-choice--ai'); await p.waitForURL(/#\/stylist$/, {timeout: 3000}); await settle(p);
     ok('Style with AI opens the hub with three tasks', /#\/stylist$/.test(p.url()) && (await p.$$('.task-card')).length === 3, p.url());
@@ -613,7 +613,7 @@ async function auditCards(p, scope = 'main') {
   }
 
   if (want('widths')) {
-    const routes = ['#/', '#/shop', '#/stylist', '#/stylist/look', '#/stylist/find', '#/stylist/ask', '#/shop/trending', '#/product/922037001', '#/studio'];
+    const routes = ['#/', '#/collections', '#/stylist', '#/stylist/look', '#/stylist/find', '#/stylist/ask', '#/collections/trending', '#/product/922037001', '#/studio'];
     for (const w of [320, 375, 768, 1024, 1280, 1440]) {
       const {ctx, p} = await newPage(b, [w, 900]);
       const bad = [];

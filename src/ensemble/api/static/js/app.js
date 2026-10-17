@@ -11,7 +11,7 @@ import * as studio from "./studio.js";
 
 const STORE_KEY = "ensemble.profile";
 const NAV = {
-  shop: [["Your edit", "#/shop"], ["AI Stylist", "#/stylist"]],
+  shop: [["Collections", "#/collections"], ["AI Stylist", "#/stylist"]],
   // Label writes the human gold labels to disk and reads private outfit photos, so the hosted shop
   // does not offer it (the API refuses it too); its route still resolves and explains itself (studio.js).
   studio: [["Evaluation", "#/studio"], ["Serving", "#/studio/serving"], ["Inspect", "#/studio/inspect"],
@@ -32,15 +32,15 @@ function redirect(r) {
     const a = r.params.get("anchor");
     return `#/stylist/ask${a ? `?anchor=${encodeURIComponent(a)}` : ""}`;
   }
-  // Collections became Your edit: #/collections[/<tab>] → #/shop[/<tab>].
-  if (r.parts[0] === "collections") return `#/shop${r.parts[1] ? `/${encodeURIComponent(r.parts[1])}` : ""}`;
+  // The "Your edit" page was removed; old #/shop[/<tab>] links land on Collections.
+  if (r.parts[0] === "shop") return `#/collections${r.parts[1] ? `/${encodeURIComponent(r.parts[1])}` : ""}`;
   return null;
 }
 
 function resolve(r) {
   const [a, b] = r.parts;
   if (!a) return {exp: "shop", nav: null, view: gateway.view};
-  if (a === "shop") return {exp: "shop", nav: "#/shop", view: shop.edit};
+  if (a === "collections") return {exp: "shop", nav: "#/collections", view: shop.collections};
   if (a === "product" && /^\d+$/.test(b || "")) return {exp: "shop", nav: null, view: shop.product};
   if (a === "stylist" && !b) return {exp: "shop", nav: "#/stylist", view: stylist.hub};
   if (a === "stylist" && b === "ask") return {exp: "shop", nav: "#/stylist", view: stylist.ask};

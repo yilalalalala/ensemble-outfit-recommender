@@ -1,4 +1,4 @@
-// Gateway: the first page. A welcome and two choices — Shop your edit / Style with AI — kept deliberately
+// Gateway: the first page. A welcome and two choices — View your collections / Style with AI — kept deliberately
 // plain. A touch sends a soft ripple from the point of contact; choosing a path fades the page away before the
 // next view arrives. Both effects are skipped under prefers-reduced-motion. (docs/AI_STYLIST_PRODUCT_FLOW.md §2–3)
 import {$, state} from "./core.js";
@@ -29,7 +29,7 @@ export async function view(ctx) {
     <p class="eyebrow">${isNew ? "Welcome" : "Welcome back"}</p>
     <h1 class="sr-only" id="gw-title" tabindex="-1">How would you like to shop today?</h1>
     <ul class="gateway__choices" role="list">
-      <li class="gw-choice"><a class="btn btn--solid gw-choice__btn gw-choice--shop" href="#/shop">Shop your edit</a>
+      <li class="gw-choice"><a class="btn btn--solid gw-choice__btn gw-choice--shop" href="#/collections">View your collections</a>
         <p class="gw-choice__line">Pieces chosen for you, from what you love.</p></li>
       <li class="gw-choice"><a class="btn btn--solid gw-choice__btn gw-choice--ai" href="#/stylist">Style with AI</a>
         <p class="gw-choice__line">Ask a stylist, find a piece from a photo, or finish an outfit.</p></li>

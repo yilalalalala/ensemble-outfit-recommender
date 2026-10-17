@@ -1,4 +1,4 @@
-// Shop: Your edit (the shopper's personal collections, one tab per home module) and the product page.
+// Shop: Collections (one tab per home module: Selected for you · Buy it again · Trending) and the product page.
 // Module inventory comes from /api/home/{customer}; unavailable modules are omitted, never faked.
 // Every page groups products by family page-wide: the first occurrence keeps its position, colourways
 // become swatches on that card, and later repeats are dropped (never cloned to fill space).
@@ -16,11 +16,10 @@ const editTitle = m => EDITS[m.id]?.title || m.title;
 const ctlCard = it => ({...it.card});
 const ids = list => list.map(it => it.article_id);
 
-// ---- Your edit ---------------------------------------------------------------------------------------
-// One page, one tab per module (Selected for you · Buy it again · Trending), at #/shop/<module id>.
-export async function edit(ctx) {
-  ctx.setTitle("Your edit");
-  ctx.render(`<div class="collection-head"><h1 class="title">Your edit</h1></div>${loadingTiles(8)}`);
+// ---- Collections ---------------------------------------------------------------------------------------
+export async function collections(ctx) {
+  ctx.setTitle("Collections");
+  ctx.render(`<div class="crumbs"><span>Collections</span></div>${loadingTiles(8)}`);
   const customer = state.customer;
   const d = await getHome(customer);
   if (!ctx.current() || customer !== state.customer) return;
@@ -37,9 +36,9 @@ export async function edit(ctx) {
   const items = newPageGroups().take(m.items);
   const types = [...new Set(items.map(it => it.product_type_name).filter(t => t && t !== "Unknown"))].sort();
   const root = ctx.render(`
-    <div class="collection-head"><h1 class="title" tabindex="-1">Your edit</h1></div>
-    <nav class="tabs" aria-label="Your edit">${mods.map(x =>
-      `<a href="#/shop/${esc(x.id)}" ${x.id === m.id ? `aria-current="page"` : ""}>${esc(editTitle(x))}</a>`).join("")}</nav>
+    <div class="collection-head"><p class="eyebrow">Collections</p><h1 class="title" tabindex="-1">${esc(editTitle(m))}</h1></div>
+    <nav class="tabs" aria-label="Collections">${mods.map(x =>
+      `<a href="#/collections/${esc(x.id)}" ${x.id === m.id ? `aria-current="page"` : ""}>${esc(editTitle(x))}</a>`).join("")}</nav>
     ${types.length > 1 ? `<div class="filters" role="group" aria-label="Filter by category">
       <button class="filter" type="button" aria-pressed="true" data-type="">All</button>
       ${types.map(t => `<button class="filter" type="button" aria-pressed="false" data-type="${esc(t)}">${esc(t)}</button>`).join("")}
@@ -94,7 +93,7 @@ export async function product(ctx) {
   const root = ctx.render(`
     <nav class="crumbs" aria-label="Breadcrumb">
       <button class="link-btn" type="button" data-back>← Back</button><span aria-hidden="true">/</span>
-      <a href="#/shop">Your edit</a><span aria-hidden="true">/</span><span>${esc(a.index_group_name)}</span><span aria-hidden="true">/</span><span aria-current="page">${esc(a.product_type_name)}</span>
+      <a href="#/collections">Collections</a><span aria-hidden="true">/</span><span>${esc(a.index_group_name)}</span><span aria-hidden="true">/</span><span aria-current="page">${esc(a.product_type_name)}</span>
     </nav>
     <div class="pdp" data-card data-article="${a.article_id}" data-family="${esc(family?.product_code ?? "")}" data-s="product_page">
       <figure class="pdp__media"><img src="${esc(cur.image)}" alt="${esc(`${cur.prod_name}, ${cur.label.toLowerCase()}`)}" width="1166" height="1750" fetchpriority="high"></figure>
@@ -127,7 +126,7 @@ export async function product(ctx) {
   impressions(similar, "similar");
 
   $("[data-back]", root).addEventListener("click", () => {
-    if ((state.navCount || 0) > 1) history.back(); else location.hash = "#/shop";
+    if ((state.navCount || 0) > 1) history.back(); else location.hash = "#/collections";
   });
   // Selecting a colour on the product page updates it in place and keeps the address shareable.
   $(".pdp", root).addEventListener("variant-change", e => {
