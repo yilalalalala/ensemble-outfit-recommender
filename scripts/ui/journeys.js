@@ -49,8 +49,9 @@ const settle = async p => { await p.waitForLoadState('networkidle', {timeout: 15
 const want = n => !ONLY.length || ONLY.includes(n);
 const clean = (p, tag) => { ok(`no console errors (${tag})`, !p._errors.length, p._errors.join(' | ')); ok(`no failed requests (${tag})`, !p._failed.length, p._failed.join(' | ')); };
 
-// Visible text of the shopper page (header, main, footer; closed dialogs are excluded by innerText).
-const shopperText = p => p.evaluate(() => ['.utility', '.masthead', 'main', 'footer'].map(s => document.querySelector(s)?.innerText || '').join('\n'));
+// Visible text of the shopper page (header, main and, where shown, the footer; closed dialogs are excluded by innerText).
+const shopperText = p => p.evaluate(() => ['.utility', '.masthead', 'main', 'footer'].map(s => document.querySelector(s))
+  .filter(e => e && getComputedStyle(e).display !== 'none').map(e => e.innerText).join('\n'));
 const bannedIn = text => BANNED.filter(r => r.test(text)).map(String);
 
 // Every visible product card on the page: unique family and article, a USD price, a black Add to cart.
@@ -97,7 +98,7 @@ async function auditCards(p, scope = 'main') {
 
   if (want('copy') || want('home')) {
     const {ctx, p} = await newPage(b);
-    for (const r of ['#/', '#/shop', '#/collections', '#/collections/trending', '#/collections/buy_again', '#/product/922037001',
+    for (const r of ['#/', '#/shop', '#/shop/trending', '#/shop/buy_again', '#/product/922037001',
                      '#/stylist', '#/stylist/ask', '#/stylist/find', '#/stylist/look']) {
       await p.goto(BASE + r); await settle(p);
       const t = await shopperText(p);
@@ -105,17 +106,22 @@ async function auditCards(p, scope = 'main') {
     }
     await p.goto(BASE + '#/shop'); await settle(p);
     const t = await p.$eval('main', m => m.innerText);
-    ok('home intro copy replaced exactly', t.includes('A personal edit, made with you in mind.') && !t.includes('ranked from your own purchases'), '');
-    ok('purchased-items copy replaced', t.includes('Pieces you have bought.') && !/most recent first/i.test(t), '');
-    ok('home has no item counts or profile suffix', !/Selected for you · \d+|\d+ pieces|for Shopper/.test(t), '');
-    const foot = await p.$eval('footer', f => f.innerText);
-    ok('shopper footer has no metric/dataset/checkout disclaimer', !/no prices|no checkout|offline|telemetry|dataset/i.test(foot), foot.replace(/\n/g, ' '));
+    ok('Your edit: one title, the three edits as tabs', t.startsWith('Your edit') && ['Selected for you', 'Buy it again', 'Trending this week'].every(x => t.includes(x)), t.slice(0, 120));
+    ok('Your edit has no item counts or profile suffix', !/Selected for you · \d+|\d+ pieces|for Shopper/.test(t), '');
+    ok('shoppers see no footer (no bottom links or words)', await p.$eval('footer', f => getComputedStyle(f).display === 'none'), '');
+    ok('shop navigation is Your edit · AI Stylist only', JSON.stringify(await p.$$eval('#primary-nav a', as => as.map(a => a.textContent))) === '["Your edit","AI Stylist"]', '');
     ok('shopper header has no service status', (await p.$eval('#utility-note', e => e.innerText)) === '', '');
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
     const a = await p.$eval('main', m => m.innerText);
     ok('ask intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for. We'll help you find pieces that feel right."), '');
     await p.goto(BASE + '#/stylist'); await settle(p);
-    ok('hub copy and three tasks', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3, '');
+    ok('hub copy and three tasks, no eyebrow above the question', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3 && !(await p.$('.hub__head .eyebrow')), '');
+    const fonts = await p.evaluate(() => ({h: getComputedStyle(document.querySelector('.hub__title')).fontFamily, body: getComputedStyle(document.querySelector('.lede')).fontFamily,
+      nav: getComputedStyle(document.querySelector('#primary-nav a')).fontFamily, wm: getComputedStyle(document.querySelector('#wordmark')).fontFamily,
+      loaded: [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family)}));
+    ok('canvas typefaces: Tiro Gurmukhi headings, Inter text, Poppins navigation, Segoe UI wordmark (self-hosted)',
+       /^"Tiro Gurmukhi"/.test(fonts.h) && /^Inter/.test(fonts.body) && /^Poppins/.test(fonts.nav) && /^"Segoe UI"/.test(fonts.wm)
+       && ['Tiro Gurmukhi', 'Inter', 'Poppins'].every(f => fonts.loaded.includes(f)), JSON.stringify(fonts));
     clean(p, 'copy');
     await ctx.close();
   }
@@ -123,10 +129,10 @@ async function auditCards(p, scope = 'main') {
   if (want('home')) {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/shop'); await settle(p);
-    const titles = await p.$$eval('main h2.section-title', hs => hs.map(h => h.textContent.trim()));
-    ok('home modules rendered', ['Selected for you', 'Buy it again', 'Trending this week'].every(t => titles.includes(t)) && titles.some(t => t.startsWith('Styled with')), titles.join(' / '));
+    const titles = await p.$$eval('main .tabs a', hs => hs.map(h => h.textContent.trim()));
+    ok('Your edit tabs rendered', ['Selected for you', 'Buy it again', 'Trending this week'].every(t => titles.includes(t)), titles.join(' / '));
     const a = await auditCards(p);
-    ok('home: one card per product family page-wide', a.n > 20 && a.dupFamilies === 0 && a.dupArticles === 0 && a.emptyFamily === 0, JSON.stringify(a));
+    ok('home: one card per product family page-wide', a.n >= 8 && a.dupFamilies === 0 && a.dupArticles === 0 && a.emptyFamily === 0, JSON.stringify(a));
     ok('home: every card has USD price, swatch and black Add to cart', a.bad.length === 0, a.bad.join(','));
     ok('home: no Why this / category metadata / hide (×) on cards', a.meta === 0 && !(await p.$('main .tile__meta')), '');
     const imps = p._events.filter(e => e.event === 'impression');
@@ -134,9 +140,9 @@ async function auditCards(p, scope = 'main') {
     // Not for me: logs not_for_me, confirms in place, and is remembered for this profile
     await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
     ok('no hide (×) control on cards', !(await p.$('main [data-hide], main .card__hide')), '');
-    const fam = await p.$eval('.hero__second [data-card]', c => c.dataset.family);
-    await p.click('.hero__second [data-nfm]'); await p.waitForTimeout(200);
-    const st = await p.$eval('.hero__second [data-card]', c => ({dim: c.classList.contains('is-dismissed'), note: c.querySelector('.card__nfm-note').textContent, dis: c.querySelector('[data-nfm]').disabled}));
+    const fam = await p.$eval('main .grid > li:nth-child(2) [data-card]', c => c.dataset.family);
+    await p.click('main .grid > li:nth-child(2) [data-nfm]'); await p.waitForTimeout(200);
+    const st = await p.$eval('main .grid > li:nth-child(2) [data-card]', c => ({dim: c.classList.contains('is-dismissed'), note: c.querySelector('.card__nfm-note').textContent, dis: c.querySelector('[data-nfm]').disabled}));
     ok('Not for me logs the event and says it will be remembered', st.dim && st.dis && /remember that next time/.test(st.note) && p._events.some(e => e.event === 'not_for_me'), JSON.stringify(st));
     await p.reload(); await settle(p);
     ok('Not for me is remembered: that product is gone after reload', !(await p.$$eval('main [data-card]', (cs, f) => cs.some(c => c.dataset.family === f), fam)), fam);
@@ -205,13 +211,13 @@ async function auditCards(p, scope = 'main') {
     ok('cart persists across reload', (await p.$eval('#cart-count', e => e.textContent)) === '2', '');
     // regression: a card's swatches keep working after any number of changes, and every colour can be added
     await p.evaluate(() => localStorage.removeItem('ensemble.cart.168058')); await p.reload(); await settle(p);
-    const all = await p.$$eval('.hero__lead .swatch', s => s.map(x => x.dataset.swatch));
+    const all = await p.$$eval('main .grid > li:nth-child(1) .swatch', s => s.map(x => x.dataset.swatch));
     const seq = [...all.slice(1), all[0]];
     let cycled = true;
     for (const id of seq) {
-      await p.click(`.hero__lead .swatch[data-swatch="${id}"]`);
-      cycled = cycled && (await p.$eval('.hero__lead [data-card]', c => c.dataset.article)) === id;
-      await p.click('.hero__lead [data-add]'); await closeCart(p); await p.waitForTimeout(1200);
+      await p.click(`main .grid > li:nth-child(1) .swatch[data-swatch="${id}"]`);
+      cycled = cycled && (await p.$eval('main .grid > li:nth-child(1) [data-card]', c => c.dataset.article)) === id;
+      await p.click('main .grid > li:nth-child(1) [data-add]'); await closeCart(p); await p.waitForTimeout(1200);
     }
     const lines = await p.evaluate(() => JSON.parse(localStorage.getItem('ensemble.cart.168058')).map(l => l.article_id));
     ok('swatches switch repeatedly (incl. back to the first) and each colour is added', cycled && lines.length === seq.length && seq.every(id => lines.includes(+id)), `${seq.join('→')} | cart ${lines.join(',')}`);
@@ -235,7 +241,7 @@ async function auditCards(p, scope = 'main') {
     const now = await p.$$eval('main [data-card]', c => c.map(x => x.dataset.article));
     const t = await p.$eval('main', m => m.innerText);
     ok('profile switch replaces cards with no duplicate families', a.dupFamilies === 0 && now.join() !== first.join() && !(await p.$('#s-again')), JSON.stringify(a));
-    ok('new-profile copy, no item counts', /A first edit/.test(t) && !/\d+ pieces/.test(t), '');
+    ok('new profile: Your edit, no item counts', t.startsWith('Your edit') && !/\d+ pieces/.test(t), '');
     const imps = p._events.filter(e => e.event === 'impression').slice(-a.n);
     ok('no stale cross-customer impressions', imps.every(e => e.customer_idx === NEW), '');
     ok('cart is per profile', (await p.$eval('#cart-count', e => e.hidden)) === true, '');
@@ -249,7 +255,7 @@ async function auditCards(p, scope = 'main') {
   if (want('product')) {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/shop'); await settle(p);
-    await p.click('.hero__lead .card__name a'); await settle(p);
+    await p.click('main .grid > li:nth-child(1) .card__name a'); await settle(p);
     await p.waitForSelector('.pdp [data-add]'); await p.waitForSelector('#s-sim', {timeout: 60000}); await p.waitForTimeout(800);
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
     ok('click events logged (card + product page)', p._events.some(e => e.event === 'click' && e.surface === 'for_you') && p._events.some(e => e.event === 'click' && e.surface === 'product_page'), '');
@@ -292,6 +298,7 @@ async function auditCards(p, scope = 'main') {
     const {ctx, p} = await newPage(b);
     const explain = []; p.on('request', r => { if (r.url().includes('/api/explain')) explain.push(r.url()); });
     await p.goto(BASE + '#/collections/trending'); await settle(p);
+    ok('old Collections links land on Your edit', /#\/shop\/trending$/.test(p.url()), p.url());
     const a = await auditCards(p);
     ok('collection: unique families, priced cards', a.dupFamilies === 0 && a.bad.length === 0 && a.n > 0, JSON.stringify(a));
     const tabs = await p.$$eval('.tabs a', ts => ts.map(t => ({cur: t.getAttribute('aria-current'), color: getComputedStyle(t).color, bg: getComputedStyle(t).backgroundColor, border: getComputedStyle(t).borderBottomColor, text: t.textContent})));
@@ -397,7 +404,7 @@ async function auditCards(p, scope = 'main') {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/shop'); await settle(p);
     await p.route('**/api/product/**', r => r.abort('failed'));
-    await p.click('.hero__lead .card__name a'); await p.waitForTimeout(800);
+    await p.click('main .grid > li:nth-child(1) .card__name a'); await p.waitForTimeout(800);
     const txt = await p.$eval('main', m => m.innerText);
     ok('connection failure: friendly message with retry, nav intact', /can't connect/.test(txt) && !!(await p.$('[data-retry]')) && !!(await p.$('#primary-nav a')) && !bannedIn(txt).length, txt.slice(0, 120).replace(/\n/g, ' '));
     await p.unroute('**/api/product/**');
@@ -440,8 +447,8 @@ async function auditCards(p, scope = 'main') {
     const leaving = await p.evaluate(() => ({cls: document.querySelector('.gateway')?.classList.contains('is-leaving'), url: location.hash}));
     ok('choosing a path fades the gateway before navigating', leaving.cls && leaving.url === '#/', JSON.stringify(leaving));
     await p.waitForURL(/#\/shop$/, {timeout: 3000}); await settle(p);
-    const hero = await p.waitForSelector('.hero .card', {timeout: 60000}).catch(() => null);
-    ok('Shop your edit reaches the ranked edit in one click', /#\/shop$/.test(p.url()) && !!hero, p.url());
+    const hero = await p.waitForSelector('main .grid .card', {timeout: 60000}).catch(() => null);
+    ok('Shop your edit reaches Your edit in one click', /#\/shop$/.test(p.url()) && !!hero, p.url());
     await p.goto(BASE + '#/'); await settle(p);
     await p.click('.gw-choice--ai'); await p.waitForURL(/#\/stylist$/, {timeout: 3000}); await settle(p);
     ok('Style with AI opens the hub with three tasks', /#\/stylist$/.test(p.url()) && (await p.$$('.task-card')).length === 3, p.url());
@@ -536,24 +543,42 @@ async function auditCards(p, scope = 'main') {
 
   if (want('find')) {
     const {ctx, p} = await newPage(b);
+    // Detection is stubbed so the check is deterministic; the matching below is the real visual search.
+    await p.route('**/api/stylist/detect', r => r.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({categories: [],
+      garments: [{id: 'g1', category: 'top', colour: 'beige', description: 'oversized sweatshirt', box: [0.1, 0.2, 0.9, 0.55]},
+                 {id: 'g2', category: 'bottom', colour: 'blue', description: 'wide-leg jeans', box: [0.25, 0.5, 0.75, 0.98]},
+                 {id: 'g3', category: 'shoes', colour: 'black', description: 'flats', box: null}]})}));
+    const searches = []; p.on('request', r => { if (r.url().endsWith('/api/visual-search')) searches.push(r.postData() || ''); });
     await p.goto(BASE + '#/stylist/find'); await settle(p);
     await p.evaluate(() => sessionStorage.clear()); await p.reload(); await settle(p);
     await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
-    await p.click('#find-next'); await settle(p);
-    ok('frame step: whole photo is the keyboard-friendly default', (await heading(p)) === 'Frame the piece' && await p.$eval('input[name=area][value=whole]', r => r.checked), '');
-    const fr = await (await p.$('#framer img')).boundingBox();
-    await p.mouse.move(fr.x + fr.width * .2, fr.y + fr.height * .15); await p.mouse.down();
-    await p.mouse.move(fr.x + fr.width * .8, fr.y + fr.height * .5, {steps: 6}); await p.mouse.up();
-    ok('dragging frames the piece', await p.$eval('input[name=area][value=box]', r => r.checked) && !(await p.$eval('#framer-box', e => e.hidden)), '');
-    await p.focus('input[name=area][value=whole]'); await p.keyboard.press('Space');
-    ok('keyboard can switch back to the whole photo', await p.$eval('#framer-box', e => e.hidden), '');
-    await p.mouse.move(fr.x + fr.width * .2, fr.y + fr.height * .15); await p.mouse.down();
-    await p.mouse.move(fr.x + fr.width * .8, fr.y + fr.height * .5, {steps: 6}); await p.mouse.up();
-    await p.selectOption('#find-cat', 'top');
+    await p.click('#find-next'); await p.waitForSelector('.piece'); await settle(p);
+    ok('choose step lists the spotted pieces, none chosen yet, no radio buttons or category dropdown up front',
+       (await heading(p)) === 'Which piece?' && (await p.$$('.piece')).length === 3 && !(await p.$('.piece.is-on')) && !(await p.$('input[type=radio]')) && !(await p.$('[data-kind]'))
+       && await p.$eval('#find-go', b => b.disabled), '');
+    await p.click('.picker__box[data-pid=g1]');
+    await p.locator('.piece[data-pid=g2] .piece__pick').click();
+    const on = await p.$$eval('.piece.is-on', rs => rs.map(r => ({id: r.dataset.pid, kind: r.querySelector('[data-kind]')?.value})));
+    ok('tapping a piece on the photo or in the list chooses it and shows what it is', JSON.stringify(on) === '[{"id":"g1","kind":"top"},{"id":"g2","kind":"bottom"}]', JSON.stringify(on));
+    ok('focus stays on the tapped row', await p.evaluate(() => document.activeElement?.closest('.piece')?.dataset.pid === 'g2'), '');
+    await p.selectOption('.piece[data-pid=g1] [data-kind]', 'knitwear');
+    ok('the shopper can correct what a piece is', (await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)) === 'beige Knitwear' || /knitwear/i.test(await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)), '');
+    await p.locator('.piece[data-pid=g2] .piece__pick').click();
+    ok('tapping again un-chooses it', !(await p.$('.piece[data-pid=g2].is-on')), '');
+    const fr = await (await p.$('#picker img')).boundingBox();
+    await p.mouse.move(fr.x + fr.width * .3, fr.y + fr.height * .6); await p.mouse.down();
+    await p.mouse.move(fr.x + fr.width * .7, fr.y + fr.height * .9, {steps: 6}); await p.mouse.up();
+    const added = await p.$$eval('.piece.is-on', rs => rs.map(r => r.querySelector('[data-kind]')?.value));
+    ok('dragging frames a new piece and its category follows the spotted piece it covers', added.length === 2 && added[1] === 'bottom', JSON.stringify(added));
+    await p.click('.piece:last-child [data-remove]');
+    ok('a framed piece can be removed', (await p.$$('.piece')).length === 3, '');
     await p.click('#find-go');
     await p.waitForFunction(() => location.hash.includes('step=results'), null, {timeout: 300000}); await settle(p);
+    const counts = await p.$$eval('.find-group', g => g.map(x => x.querySelectorAll('.card').length));
+    ok('one search per chosen piece with the corrected category', searches.length === 1 && /knitwear/.test(searches[0]), String(searches.length));
+    ok('the four closest per chosen piece', counts.length === 1 && counts[0] === 4, JSON.stringify(counts));
     const a = await auditCards(p, '.task__body');
-    ok('real visually similar results with prices and cart', a.n > 0 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
+    ok('real visually similar results with prices and cart', a.n === 4 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
     ok('stylist refinement offered as the one next action', (await oneCta(p)) === 1 && /\/stylist\/ask\?anchor=\d+/.test(await p.$eval('.task__actions .btn--solid', e => e.getAttribute('href'))), '');
     await imagesReady(p); await p.screenshot({path: `${SHOTS}/find_results.png`});
     clean(p, 'find');
@@ -588,7 +613,7 @@ async function auditCards(p, scope = 'main') {
   }
 
   if (want('widths')) {
-    const routes = ['#/', '#/shop', '#/stylist', '#/stylist/look', '#/stylist/find', '#/stylist/ask', '#/collections', '#/product/922037001', '#/studio'];
+    const routes = ['#/', '#/shop', '#/stylist', '#/stylist/look', '#/stylist/find', '#/stylist/ask', '#/shop/trending', '#/product/922037001', '#/studio'];
     for (const w of [320, 375, 768, 1024, 1280, 1440]) {
       const {ctx, p} = await newPage(b, [w, 900]);
       const bad = [];

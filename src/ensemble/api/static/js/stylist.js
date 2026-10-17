@@ -7,7 +7,7 @@ export const TASKS = [
   {id: "ask", href: "#/stylist/ask", title: "Ask the stylist", line: "Tell us what you need in your own words.",
    detail: "Advice for an occasion, a piece you own, or a style you want to try."},
   {id: "find", href: "#/stylist/find", title: "Find this piece", line: "Seen something you like? Show us a photo.",
-   detail: "Frame one piece and we will find the closest pieces in our collection."},
+   detail: "Tap the piece you like and we will find the four closest in our collection."},
   {id: "look", href: "#/stylist/look", title: "Complete my look", line: "Share an outfit and we will finish it.",
    detail: "Check what we spotted, choose a direction, and get a short, considered edit."},
 ];
@@ -64,7 +64,6 @@ export async function hub(ctx) {
   const look = stage("ensemble.look.v1").get();
   const root = ctx.render(`<div class="hub">
     <header class="hub__head">
-      <p class="eyebrow">AI Stylist</p>
       <h1 class="display hub__title" tabindex="-1">What can we help with?</h1>
       <p class="lede">Pick one task. Each takes a minute or two, and you can switch at any point.</p>
     </header>
