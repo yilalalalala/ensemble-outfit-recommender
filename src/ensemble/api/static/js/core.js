@@ -156,9 +156,12 @@ export function swatchButtons(it, list, max = Infinity) {
   const more = list.length - shown.length;
   const btns = shown.map(v => {
     const s = swatchStyle(v.colour_group_name), on = v === sel;
-    return `<button class="swatch${s.pattern ? ` is-${s.pattern}` : ""}" type="button" data-swatch="${v.article_id}"
+    // Prefer the fabric swatch cut from this colourway's photo; the colour-group fill shows while it decodes.
+    const fabric = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(v.swatch || "");
+    const style = [s.fill && `--sw:${s.fill}`, fabric && `--swi:url(${v.swatch})`].filter(Boolean).join(";");
+    return `<button class="swatch${fabric ? " is-fabric" : s.pattern ? ` is-${s.pattern}` : ""}" type="button" data-swatch="${v.article_id}"
       aria-pressed="${on}" aria-label="${esc(v.label)}${on ? ", selected" : ""}" title="${esc(v.label)}"
-      ${s.fill ? `style="--sw:${s.fill}"` : ""}></button>`;
+      ${style ? `style="${style}"` : ""}></button>`;
   }).join("");
   return {btns, more};
 }

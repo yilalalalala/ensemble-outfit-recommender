@@ -32,7 +32,7 @@ function renderDrawer(justAdded = null) {
   const body = $("#cart-body");
   if (!cart.lines.length) {
     body.innerHTML = `${storageNote()}<div class="cart__empty"><p class="cart__empty-title">Your cart is empty.</p>
-      <a class="btn-cart" href="#/collections" data-close>Continue shopping</a></div>`;
+      <a class="btn-cart" href="#/shop" data-close>Continue shopping</a></div>`;
     $("#cart-foot").hidden = true;
     return;
   }

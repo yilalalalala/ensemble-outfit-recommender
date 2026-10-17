@@ -27,7 +27,7 @@ endpoint answers.
 | --- | --- | --- |
 | `#/` | **Gateway** — "Welcome back" and two solid choices (DS Studio via the masthead switch) | new; wordmark target in Shop |
 | `#/shop` | **Your edit** (ranked, personalised home) | was `#/`; content unchanged |
-| `#/collections[/:edit]`, `#/product/:id` | unchanged | |
+| `#/shop[/:edit]`, `#/product/:id` | **Your edit** (tabs: Selected for you · Buy it again · Trending); `#/collections[/:edit]` redirects here (D-048) | |
 | `#/stylist` | **AI Stylist hub** — three tasks | new |
 | `#/stylist/ask[?anchor=:id][&context=look]` | **Ask the stylist** — conversation | replaces the chat column |
 | `#/stylist/find[?step=photo\|frame\|results]` | **Find this piece** | replaces the visual-search panel |
@@ -45,7 +45,7 @@ Unknown routes keep the not-found state. Redirects use `history.replaceState`, s
 | Your edit | browse what was picked for me | product card → Add to cart / open product |
 | Stylist hub | pick the kind of help I need | one card per task |
 | Ask the stylist | get advice in my words | Send |
-| Find this piece | find a product like one in my photo | Photo → **Frame it** → **Find similar** |
+| Find this piece | find a product like one in my photo | Photo → **tap the pieces** (spotted for you; or drag around one) → the four closest per piece |
 | Complete my look | finish an outfit I am wearing | Photo → **Review** → **Direction** → **Your edit** |
 
 ## 4. Complete my look — state machine
@@ -66,7 +66,7 @@ Unknown routes keep the not-found state. Redirects use `history.replaceState`, s
 - **Step URL:** `?step=` mirrors the state; a step that is not yet reachable (e.g. `edit` without a result) falls back
   to the furthest valid step.
 
-Find this piece follows the same pattern with `ensemble.find.v1` and steps `photo → frame → results`.
+Find this piece follows the same pattern with `ensemble.find.v2` and steps `photo → frame (Choose) → results`.
 
 ## 5. Data and API contracts
 
@@ -110,7 +110,7 @@ last user message. The shopper sees a quiet note, never a raw error.
 
 - Every stylist step shows **Back**, the **progress header**, **Change task** (→ hub), and exactly **one dominant
   next action** (black button). Secondary actions are quiet links.
-- The masthead's experience switch, profile and cart stay; Shop navigation: *Your edit · Collections · AI Stylist*.
+- The masthead's experience switch, profile and cart stay; Shop navigation: *Your edit · AI Stylist*; shoppers see no footer (D-048).
 - The wordmark returns to the gateway; nothing auto-redirects, so the gateway and task switch are always one
   click away. The gateway is deliberately plain ("Welcome back", two black buttons, one line each, centred; the question
   below is the page heading for screen readers only). A touch
@@ -173,7 +173,7 @@ leave holes: an incomplete last row falls back to the Trio preset. Product-famil
    payload; refresh on any step restores it; **Start over** clears it.
 4. Step 4 shows 4–6 picks with price, swatches and Add to cart; alternatives are behind one control.
 5. **Refine this edit** opens Ask with the look's context; a forced session loss recovers without a visible error.
-6. Find this piece: whole-photo option is keyboard operable; results are real visual matches.
+6. Find this piece: spotted pieces are chosen by tapping (photo or list, keyboard operable), each chosen piece shows an editable category, a framed area takes the category it covers, and results are the four closest real visual matches per piece.
 7. No banned term on any consumer route (automated check); one family per page (automated check).
 8. At 320–1440 px: no horizontal overflow; one dominant CTA per stylist step; focus lands on the step heading.
 9. Reduced motion removes transitions; all journeys pass keyboard-only.

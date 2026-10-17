@@ -1346,3 +1346,42 @@ fixtures and their tests are removed; the frontend has one mode, with the API ba
 `max_containers` and move assistant sessions to shared state); costs exceed the budget; or the dataset terms
 for public image hosting need a narrower published subset (e.g. only the ~26k live serving catalogue).
 
+
+### D-048 — The storefront follows the Magic Patterns canvas: one "Your edit", canvas typefaces, fabric swatches, tap-to-choose Find
+
+**Date:** 2026-10-16. **Status:** accepted; adjusts the shop surfaces of DESIGN §7.2 and docs/AI_STYLIST_PRODUCT_FLOW.md.
+
+**Context.** The product owner designs the storefront on a Magic Patterns canvas and asked the live site to match it
+and stay simple. Four gaps: the site used Didot/Helvetica, not the canvas typefaces; a ranked home page and a
+Collections page showed the same three modules twice; colour swatches came from `colour_group_name`, so a plain
+black colourway and a black print looked identical (two "Black" chips); Find this piece asked shoppers to pick
+"whole photo / framed area" radio buttons and a category from a dropdown before searching.
+
+**Decision.**
+- **Typefaces from the canvas, self-hosted:** Tiro Gurmukhi (headings, product names), Inter (reading text),
+  Poppins (labels, navigation), and the canvas wordmark stack `"Segoe UI", sans-serif` (a Windows font: on macOS it
+  renders the system sans, exactly as the canvas does). Font files ship under `static/fonts/` with their OFL
+  licences; nothing is loaded from a CDN.
+- **One "Your edit" (`#/shop`)** with the home modules as tabs (Selected for you · Buy it again · Trending); the
+  ranked editorial home and its Complete-the-Look strip are removed; `#/collections[/<tab>]` redirects to
+  `#/shop[/<tab>]`. The ranker's output is still the first tab. Shop navigation is *Your edit · AI Stylist*;
+  shoppers get no footer (DS Studio keeps its offline-metrics note).
+- **Fabric swatches:** `ensemble.serving.swatches` cuts a 32 px crop from each colourway's photo (backdrop
+  estimated from the border, garment mask eroded so the crop sits inside the garment) into
+  `data/processed/swatches.sqlite` (105,100 swatches, 56 MB, 68 s); `/api/catalog/families` returns it inline
+  per variant (additive field). The colour-group fill remains as the fallback.
+- **Find this piece:** the photo's pieces are spotted with `/api/stylist/detect`; the shopper taps the pieces to
+  find (or drags around one), each chosen piece shows its category for correction, and a framed area takes the
+  category of the spotted piece it mostly covers. Results show the **four** closest per chosen piece; the stylist
+  chat shows at most **four** products per answer (prompt rule + server cap).
+- **Robustness found on the way:** two concurrent visual searches crashed the local server (segfault) because
+  FashionCLIP loading and MPS inference are not thread-safe; `vision/clip.py` now serialises them with a lock, and
+  the frontend searches pieces one at a time.
+
+**Consequences.** The hosted Modal volume needs `processed/swatches.sqlite` uploaded before the swatches appear
+there (the API omits the field until then). The assistant prompt change (at most four, even when asked for more)
+is not reflected in the frozen M7b evaluation numbers; re-run `assistant-eval` before quoting them as current.
+
+**Revisit if:** usability testing shows shoppers miss the editorial home; swatch crops land on backdrop for a
+measurable share of a category (spot-check accessories and white garments first); or detection latency on the
+hosted Claude path makes the Choose step feel slow (show the photo immediately and stream the pieces in).

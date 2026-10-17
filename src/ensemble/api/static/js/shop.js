@@ -1,4 +1,4 @@
-// Shop: Discover (editorial home), Collections and the product page.
+// Shop: Your edit (the shopper's personal collections, one tab per home module) and the product page.
 // Module inventory comes from /api/home/{customer}; unavailable modules are omitted, never faked.
 // Every page groups products by family page-wide: the first occurrence keeps its position, colourways
 // become swatches on that card, and later repeats are dropped (never cloned to fill space).
@@ -13,144 +13,14 @@ const EDITS = {
 };
 const editTitle = m => EDITS[m.id]?.title || m.title;
 
-function greeting() {
-  const h = new Date().getHours();
-  return h < 5 ? "Good evening." : h < 12 ? "Good morning." : h < 18 ? "Good afternoon." : "Good evening.";
-}
-
-// Controlled editorial asymmetry (docs/AI_STYLIST_PRODUCT_FLOW.md §11): a small set of preset compositions on
-// a 12-column grid, chosen deterministically. Only 3:4, 1:1 and 4:3 images; rows align on their bottom edge.
-// Feature: 1:1 across 6 + two 3:4 across 3. Trio: three 3:4 across 4. Pair: a wide tile across 7 (4:3 for compact
-// pieces such as shoes and bags, 1:1 for garments, so nothing is cropped to a sliver) + 3:4 across 5.
-const COMPACT = new Set(["shoes", "accessories"]);
-const PRESETS = {
-  feature: [{span: 6, ratio: "11", big: true}, {span: 3, ratio: "34"}, {span: 3, ratio: "34"}],
-  trio: [{span: 4, ratio: "34"}, {span: 4, ratio: "34"}, {span: 4, ratio: "34"}],
-  pair: [{span: 7, ratio: "wide", big: true}, {span: 5, ratio: "34"}],
-};
-const CYCLE = ["feature", "trio", "pair"];
-
-// Presets that sum exactly to n (no holes, nothing dropped): cycle feature → trio → pair, but never leave a
-// single item — with 4 left use two pairs, with 3 left where a pair is due use a trio. n = 1 is one centred tile.
-export function editPlan(n) {
-  if (n <= 0) return [];
-  if (n === 1) return [{span: 6, ratio: "34", start: 4}];
-  const out = [];
-  let rem = n;
-  for (let i = 0; rem > 0; i++) {
-    let name = CYCLE[i % CYCLE.length];
-    if (rem === 2) name = "pair";
-    else if (rem === 3) name = name === "pair" ? "trio" : name;
-    else if (rem === 4) name = "pair";
-    out.push(...PRESETS[name]);
-    rem -= PRESETS[name].length;
-  }
-  return out;
-}
-
-function editGrid(items, surface) {
-  const layout = editPlan(items.length);
-  let col = 0;   // column position in the two-column tablet/mobile grid: big tiles span 2 only at a row start
-  return `<ul class="edit" role="list">${items.map((it, i) => {
-    const l = layout[i];
-    const ratio = l.ratio === "wide" ? (COMPACT.has(it.slot) ? "43" : "11") : l.ratio;
-    const spanSm = l.big && col % 2 === 0 ? 2 : 1;
-    col += spanSm;
-    const style = `--span:${l.span};--span-sm:${spanSm};${l.start ? `--start:${l.start};` : ""}`;
-    return `<li class="r-${ratio}" style="${style}"><div class="reveal" style="--i:${i % 3}">${card(it, surface)}</div></li>`;
-  }).join("")}</ul>`;
-}
-
-function homeSkeleton() {
-  return `<section class="hero" aria-busy="true" aria-label="Loading">
-    <div class="hero__copy"><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="height:3rem"></div><div class="skeleton-line short"></div></div>
-    <div class="hero__lead"><div class="card__media skeleton"></div></div>
-    <div class="hero__second"><div class="card__media skeleton"></div></div>
-  </section>`;
-}
-
 const ctlCard = it => ({...it.card});
 const ids = list => list.map(it => it.article_id);
 
-// ---- Discover ------------------------------------------------------------------------------------------
-export async function home(ctx) {
-  ctx.setTitle(null);
-  ctx.render(homeSkeleton());
-  const customer = state.customer;
-  const d = await getHome(customer);
-  if (!ctx.current() || customer !== state.customer) return;
-  const c = d.customer;
-  const isNew = c.segment === "new";
-  const mods = d.modules.filter(m => m.items?.length);
-  const by = Object.fromEntries(mods.map(m => [m.id, m]));
-  const fyAll = by.for_you?.items || [];
-  // Complete the Look around the first pick is part of the page, so it is grouped in display order too.
-  const look = fyAll.length && !isNew
-    ? await api(`/api/v2/complete-the-look?anchor=${fyAll[0].article_id}&k=4&customer=${customer}`).catch(err => { console.warn("Complete the Look unavailable:", err.message); return null; })
-    : null;
-  const lookMods = (look?.modules || []).filter(m => m.items.length).slice(0, 3);
-  await loadFamilies([...mods.flatMap(m => ids(m.items)), ...lookMods.flatMap(m => m.items.map(i => i.article_id))]);
-  if (!ctx.current() || customer !== state.customer) return;
-
-  const page = newPageGroups();
-  const fy = page.take(fyAll);
-  const hero = fy.slice(0, 3), rest = fy.slice(3);
-  const lookGroups = lookMods.map(m => ({...m, items: page.take(m.items.map(ctlCard)).slice(0, 4)})).filter(m => m.items.length);
-  const again = by.buy_again ? page.take(by.buy_again.items) : [];
-  const trending = by.trending ? page.take(by.trending.items) : [];
-  const others = mods.filter(m => !EDITS[m.id]).map(m => ({...m, items: page.take(m.items)})).filter(m => m.items.length);
-
-  const lede = isNew ? "A first edit, chosen from what shoppers your age love this week." : "A personal edit, made with you in mind.";
-  const fig = (it, cls, i, eager) => `<figure class="hero__figure ${cls} reveal" style="--i:${i}">${card(it, "for_you", {eager})}</figure>`;
-  const sections = [`<section class="hero" aria-labelledby="hero-title">
-      <div class="hero__copy">
-        <p class="eyebrow">Selected for you</p>
-        <h1 class="display" id="hero-title" tabindex="-1">${greeting()}</h1>
-        <p class="lede">${lede}</p>
-        <p class="hero__links"><a class="link-btn" href="#/collections">Shop the edit</a><a class="link-btn" href="#/stylist">Style with AI</a></p>
-      </div>
-      ${hero[0] ? fig(hero[0], "hero__lead", 0, true) : ""}
-      ${hero[1] ? fig(hero[1], "hero__second", 1, true) : ""}
-      ${hero[2] ? fig(hero[2], "hero__third", 2, false) : ""}
-    </section>`];
-  if (rest.length) sections.push(`<section class="section" aria-labelledby="s-for-you">
-      <div class="section__head"><div><p class="eyebrow">Continued</p><h2 class="section-title" id="s-for-you">${esc(editTitle(by.for_you))}</h2></div></div>
-      ${editGrid(rest, "for_you")}</section>`);
-  if (lookGroups.length) sections.push(`<section class="section" aria-labelledby="s-look">
-      <div class="section__head"><div><p class="eyebrow">Complete the look</p>
-        <h2 class="section-title" id="s-look">Styled with the ${esc(fyAll[0].prod_name)}</h2></div>
-        <a class="link-btn" href="#/product/${fyAll[0].article_id}">See the piece</a></div>
-      <div class="look-groups">${lookGroups.map(m => `<div class="look__slot reveal"><h3 class="look__title">${esc(m.title)}</h3>
-        ${cardGrid(m.items, "complete_the_look", {cls: "grid--4", anchor: fyAll[0].article_id})}</div>`).join("")}</div></section>`);
-  if (again.length) sections.push(`<section class="section" aria-labelledby="s-again">
-      <div class="section__head"><div><p class="eyebrow">From your orders</p><h2 class="section-title" id="s-again">${esc(editTitle(by.buy_again))}</h2>
-        <p class="lede">${EDITS.buy_again.lede}</p></div></div>
-      ${cardGrid(again, "buy_again", {cls: "grid--4", each: it => ({note: it.last_bought ? `Last bought ${esc(fmtDate(it.last_bought))}` : ""})})}</section>`);
-  if (trending.length) sections.push(`<section class="section" aria-labelledby="s-trend">
-      <div class="section__head"><div><p class="eyebrow">This week</p><h2 class="section-title" id="s-trend">${esc(editTitle(by.trending))}</h2>
-        <p class="lede">${EDITS.trending.lede}</p></div>
-        <a class="link-btn" href="#/collections/trending">Shop by category</a></div>
-      ${cardGrid(trending, "trending", {cls: "grid--4"})}</section>`);
-  for (const m of others) sections.push(`<section class="section" aria-labelledby="s-${esc(m.id)}">
-      <div class="section__head"><h2 class="section-title" id="s-${esc(m.id)}">${esc(m.title)}</h2></div>${cardGrid(m.items, m.id)}</section>`);
-  if (!fy.length && !again.length && !trending.length) sections.push(`<div class="state"><p class="state__title">Nothing here yet</p>
-      <p class="meta">Try another profile from the top right.</p></div>`);
-
-  const root = ctx.render(sections.join(""));
-  if (!root) return;
-  // Impressions are logged for every product card actually shown.
-  impressions(fy, "for_you");
-  lookGroups.forEach(m => impressions(m.items, "complete_the_look", fyAll[0].article_id));
-  impressions(again, "buy_again");
-  impressions(trending, "trending");
-  others.forEach(m => impressions(m.items, m.id));
-  reveal(root);
-}
-
-// ---- Collections ---------------------------------------------------------------------------------------
-export async function collections(ctx) {
-  ctx.setTitle("Collections");
-  ctx.render(`<div class="crumbs"><span>Collections</span></div>${loadingTiles(8)}`);
+// ---- Your edit ---------------------------------------------------------------------------------------
+// One page, one tab per module (Selected for you · Buy it again · Trending), at #/shop/<module id>.
+export async function edit(ctx) {
+  ctx.setTitle("Your edit");
+  ctx.render(`<div class="collection-head"><h1 class="title">Your edit</h1></div>${loadingTiles(8)}`);
   const customer = state.customer;
   const d = await getHome(customer);
   if (!ctx.current() || customer !== state.customer) return;
@@ -167,9 +37,9 @@ export async function collections(ctx) {
   const items = newPageGroups().take(m.items);
   const types = [...new Set(items.map(it => it.product_type_name).filter(t => t && t !== "Unknown"))].sort();
   const root = ctx.render(`
-    <div class="collection-head"><p class="eyebrow">Collections</p><h1 class="title" tabindex="-1">${esc(editTitle(m))}</h1></div>
-    <nav class="tabs" aria-label="Collections">${mods.map(x =>
-      `<a href="#/collections/${esc(x.id)}" ${x.id === m.id ? `aria-current="page"` : ""}>${esc(editTitle(x))}</a>`).join("")}</nav>
+    <div class="collection-head"><h1 class="title" tabindex="-1">Your edit</h1></div>
+    <nav class="tabs" aria-label="Your edit">${mods.map(x =>
+      `<a href="#/shop/${esc(x.id)}" ${x.id === m.id ? `aria-current="page"` : ""}>${esc(editTitle(x))}</a>`).join("")}</nav>
     ${types.length > 1 ? `<div class="filters" role="group" aria-label="Filter by category">
       <button class="filter" type="button" aria-pressed="true" data-type="">All</button>
       ${types.map(t => `<button class="filter" type="button" aria-pressed="false" data-type="${esc(t)}">${esc(t)}</button>`).join("")}

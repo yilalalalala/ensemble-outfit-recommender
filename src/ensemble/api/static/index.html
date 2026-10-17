@@ -7,6 +7,8 @@
 <meta name="description" content="ensemble — a personal fashion edit.">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="static/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="static/fonts/tiro-gurmukhi-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="static/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="static/css/ensemble.css">
 <script type="module" src="static/js/app.js"></script>
 </head>
@@ -60,15 +62,11 @@
   <div class="view"><div class="state state--center" role="status"><p class="state__title">Opening the shop…</p></div></div>
 </main>
 
+<!-- DS Studio only: technical provenance belongs there, not on shopper pages (shoppers see no footer). -->
 <footer class="footer">
   <div class="footer__inner">
-    <div>
-      <p class="footer__mark" aria-hidden="true">ensemble</p>
-      <!-- Shown only in DS Studio: technical provenance belongs there, not on shopper pages. -->
-      <p class="footer__studio">A recommender-system study on the H&amp;M Personalized Fashion Recommendations dataset.
-        Every metric shown is offline unless labelled as live telemetry of this demo server.</p>
-    </div>
-    <nav class="footer__nav" aria-label="Footer"><a href="#/shop">Your edit</a><a href="#/collections">Collections</a><a href="#/stylist">AI Stylist</a></nav>
+    <p class="footer__studio">A recommender-system study on the H&amp;M Personalized Fashion Recommendations dataset.
+      Every metric shown is offline unless labelled as live telemetry of this demo server.</p>
   </div>
 </footer>
 

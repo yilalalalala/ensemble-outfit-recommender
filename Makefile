@@ -1,4 +1,4 @@
-.PHONY: help setup data ingest test pages pages-preview modal-deploy baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
+.PHONY: help setup data ingest test swatches pages pages-preview modal-deploy baselines retrieval ranker track-b submission serving serve mvp mlflow backtest clip df2 visual-eval assistant-eval research-a tb-serving-regression serving-bundle serve-v2 serve-smoke bench-serving report-verify
 PYTHON := .venv/bin/python
 PY := PYTHONPATH=src $(PYTHON)
 PORT ?= 8010
@@ -39,6 +39,9 @@ submission: ## Track A for all customers + reports/submission.csv (Kaggle format
 
 serving:    ## M6: build the SQLite serving store
 	$(PY) -m ensemble.api.build
+
+swatches:   ## fabric swatches cut from each colourway's photo (data/processed/swatches.sqlite, ~1 min)
+	$(PY) -m ensemble.serving.swatches
 
 serve:      ## run the web app at http://localhost:8010 (override with PORT=...)
 	PYTHONPATH=src .venv/bin/uvicorn ensemble.api.app:app --port $(PORT)

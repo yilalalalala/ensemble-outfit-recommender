@@ -139,6 +139,23 @@ def test_same_name_products_from_different_families_are_not_merged(client, cfg):
     assert len(d["families"]) == 2
 
 
+def test_families_return_a_fabric_swatch_per_colourway(client, cfg):
+    """Each colourway carries a fabric swatch cut from its own photo (ensemble.serving.swatches), so two
+    colourways in one colour group (e.g. plain black and a black print) no longer look identical."""
+    if not cfg.path("swatch_db").exists():
+        pytest.skip("swatch store not built; run `make swatches`")
+    import base64
+    import io
+
+    from PIL import Image
+    d = client.get("/api/catalog/families?articles=751866001").json()
+    vs = d["families"]["0751866"]["variants"]
+    assert len(vs) >= 2 and all(v["swatch"].startswith("data:image/jpeg;base64,") for v in vs)
+    imgs = [Image.open(io.BytesIO(base64.b64decode(v["swatch"].split(",", 1)[1]))) for v in vs]
+    assert all(im.size == (32, 32) for im in imgs)
+    assert len({im.tobytes() for im in imgs}) == len(imgs)        # same colour group, different swatches
+
+
 def test_families_endpoint_validation(client):
     assert client.get("/api/catalog/families").json() == {"articles": {}, "families": {}}
     assert client.get("/api/catalog/families?articles=abc").status_code == 400

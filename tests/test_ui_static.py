@@ -149,6 +149,27 @@ def test_white_canvas_without_automatic_dark_mode_and_black_cart_buttons():
     assert "background: #000" in rule and "color: #fff" in rule
 
 
+def test_canvas_typefaces_are_self_hosted():
+    """The Magic Patterns canvas typefaces (Tiro Gurmukhi, Inter, Poppins) ship with the app (OFL), not from a CDN."""
+    css = (STATIC / "css" / "ensemble.css").read_text()
+    for fam, files in {"Tiro Gurmukhi": ["tiro-gurmukhi-400.woff2", "tiro-gurmukhi-400-italic.woff2"],
+                       "Inter": ["inter-var.woff2"], "Poppins": ["poppins-400.woff2", "poppins-500.woff2"]}.items():
+        assert f'font-family: "{fam}"' in css, fam
+        for f in files:
+            assert f"../fonts/{f}" in css and (STATIC / "fonts" / f).stat().st_size > 1000, f
+    assert re.search(r'--serif:\s*"Tiro Gurmukhi"', css) and re.search(r'--sans:\s*"Inter"', css) and re.search(r'--label:\s*"Poppins"', css)
+    assert re.search(r'--wordmark:\s*"Segoe UI", sans-serif', css)
+    for lic in ["OFL-inter.txt", "OFL-poppins.txt", "OFL-tirogurmukhi.txt"]:
+        assert "SIL Open Font License" in (STATIC / "fonts" / lic).read_text()
+
+
+def test_shoppers_get_no_footer_links_or_wordmark(tree):
+    foot = [e for e in tree if any(p.get("tag") == "footer" for p in e["parents"])]
+    assert not [e for e in foot if e["tag"] == "a"] and not any("footer__mark" in (e["attrs"].get("class") or "") for e in foot)
+    css = (STATIC / "css" / "ensemble.css").read_text()
+    assert re.search(r"^\.footer \{ display: none;", css, re.M) and "body.studio .footer { display: block; }" in css
+
+
 def test_cart_drawer_and_masthead_control(tree):
     btn = next(e for e in tree if e["attrs"].get("id") == "cart-btn")
     assert btn["tag"] == "button" and btn["attrs"].get("aria-controls") == "cart-dialog"

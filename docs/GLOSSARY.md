@@ -261,3 +261,13 @@ industry standard and are named as such wherever they appear.
 | **Golden/provenance assertion on published numbers** | A test that the figures a published page shows equal the stored evaluation artifacts exactly, unrounded and unrecomputed — the deployment analogue of `report-verify` | DS / Eng |
 | **Documented no-op** | A call the public build accepts and deliberately does nothing with (here: event logging), stated as such rather than silently dropped | Eng |
 | **Project subpath (base path)** | A site served below the domain root (`/<repo>/` on GitHub Pages); every asset and data URL must be document-relative or it breaks | Eng |
+
+## Storefront polish (added with the canvas-aligned UI, D-048)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Fabric swatch** (pattern swatch) | A colour chip that shows a small crop of the colourway's own fabric instead of a flat colour, so prints, stripes and checks are recognisable; how most fashion retailers render colour choices | PM |
+| **Self-hosted web fonts** | Font files shipped with the site rather than loaded from a font CDN: no third-party request, works offline, same rendering everywhere; open-licence (SIL OFL) fonts allow it | Eng |
+| **Ripple effect** (ink ripple) | A short expanding ring drawn from the point a user touches, confirming the touch (popularised by Material Design) | PM |
+| **Exit transition** | An animation that plays as a view leaves (here: the gateway fades and blurs before the next view enters) | PM |
+| **Reduced-motion preference** | The OS setting (`prefers-reduced-motion`) asking sites to remove non-essential animation; ripples and transitions are switched off under it | Eng |
