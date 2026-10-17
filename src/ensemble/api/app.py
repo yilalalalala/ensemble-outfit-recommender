@@ -217,6 +217,17 @@ def _has_image(article_id: int) -> bool:
     return (IMAGES / s[:3] / f"{s}.jpg").exists()
 
 
+def _swatches(ids: list[int]) -> dict[int, str]:
+    """Fabric swatch data URIs (ensemble.serving.swatches) for these articles; empty if the store is not built."""
+    import base64
+    path = cfg.path("swatch_db")
+    if not ids or not path.exists():
+        return {}
+    with sqlite3.connect(f"file:{path}?mode=ro", uri=True) as db:
+        rows = db.execute(f"SELECT article_id, jpeg FROM swatches WHERE article_id IN ({','.join('?' * len(ids))})", ids)
+        return {a: "data:image/jpeg;base64," + base64.b64encode(j).decode() for a, j in rows}
+
+
 @app.get("/api/catalog/families")
 def catalog_families(articles: str = ""):
     """Shop UI: the product family (real ``product_code``), its photographed colourways and the
@@ -238,12 +249,14 @@ def catalog_families(articles: str = ""):
                         department_name, index_group_name FROM articles
                  WHERE product_code IN ({','.join('?' * len(codes))}) ORDER BY article_id""", codes)
     families: dict[str, dict] = {}
+    swatch = _swatches([r["article_id"] for r in rows])
     for r in rows:
         f = families.setdefault(r["product_code"], {"product_code": r["product_code"], "price_usd": merch.price_usd(r),
                                                     "variants": []})   # first row = canonical (lowest article_id)
         if r["article_id"] in code_of or _has_image(r["article_id"]):
             f["variants"].append({"article_id": r["article_id"], "prod_name": r["prod_name"],
-                                  "colour_group_name": r["colour_group_name"], "image": image_url(r["article_id"])})
+                                  "colour_group_name": r["colour_group_name"], "image": image_url(r["article_id"]),
+                                  "swatch": swatch.get(r["article_id"])})
     return {"articles": {str(a): c for a, c in code_of.items()}, "families": families}
 
 
@@ -359,6 +372,9 @@ def assistant_session(body: SessionIn):
     return {"session_id": s["id"], "backend": os.environ.get("ENSEMBLE_LLM", "ollama")}
 
 
+ASSISTANT_MAX_CARDS = 4   # shopper UI: four products per answer, in the order the stylist cited them
+
+
 @app.post("/api/assistant/{sid}/message")
 def assistant_message(sid: str, text: str = Form(...), photo: UploadFile | None = File(None)):
     from ensemble.assistant.agent import run_turn
@@ -367,7 +383,7 @@ def assistant_message(sid: str, text: str = Form(...), photo: UploadFile | None 
         raise HTTPException(404, "unknown session")
     r = run_turn(s["llm"], s, text, _image(photo) if photo is not None and photo.filename else None)
     return {**{k: r[k] for k in ("answer", "trace", "latency_s", "cost_usd", "hallucinated")},
-            "cards": _cards(r["cited"])}
+            "cards": _cards(r["cited"][:ASSISTANT_MAX_CARDS])}
 
 
 # --- Human gold labels for the visual-search judge (D-019) -------------------------------------------
