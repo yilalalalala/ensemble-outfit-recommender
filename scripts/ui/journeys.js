@@ -253,6 +253,7 @@ async function auditCards(p, scope = 'main') {
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
     ok('click events logged (card + product page)', p._events.some(e => e.event === 'click' && e.surface === 'for_you') && p._events.some(e => e.event === 'click' && e.surface === 'product_page'), '');
     const secs = await p.$$eval('main h2.section-title', hs => hs.map(h => h.textContent.trim()));
+    ok('product page: exactly four similar items', (await p.$$('section[aria-labelledby="s-sim"] .card')).length === 4, '');
     ok('product page: Similar items only; no Complete the look, no Other colours gallery', secs.includes('Similar items') && !secs.includes('Complete the look') && !secs.includes('Other colours')
        && !p._failed.concat(p._events.map(e => e.surface)).some(x => /complete.the.look/.test(String(x))), secs.join(' / '));
     const fam = await p.evaluate(async () => (await (await fetch(`${document.querySelector('meta[name="ensemble-api-base"]')?.content || ''}/api/catalog/families?articles=922037001`)).json()).families['0922037']);

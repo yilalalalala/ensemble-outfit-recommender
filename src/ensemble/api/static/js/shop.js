@@ -14,6 +14,7 @@ const EDITS = {
 const editTitle = m => EDITS[m.id]?.title || m.title;
 
 const ids = list => list.map(it => it.article_id);
+const SIMILAR_SHOWN = 4;   // product page: "Similar items" shows one row of four
 
 // ---- Collections ---------------------------------------------------------------------------------------
 export async function collections(ctx) {
@@ -71,7 +72,7 @@ export async function product(ctx) {
 
   const page = newPageGroups();
   page.claim(a.article_id);   // the product itself owns its family: its colourways are swatches, never cards
-  const similar = page.take(d.similar);
+  const similar = page.take(d.similar).slice(0, SIMILAR_SHOWN);   // one row of four, after family grouping
 
   const {family, list} = variantsFor(a);
   const cur = list.find(x => x.article_id === a.article_id);
