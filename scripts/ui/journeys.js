@@ -429,10 +429,14 @@ async function auditCards(p, scope = 'main') {
     const gw = await p.evaluate(() => {
       const s = document.querySelector('.gateway'), t = document.querySelector('.gateway__choices').getBoundingClientRect();
       const r = s.getBoundingClientRect(), mid = r.left + r.width / 2;
+      const bs = [...s.querySelectorAll('.gw-choice__btn')].map(b => b.getBoundingClientRect());
       return {imgs: s.querySelectorAll('img').length, solid: s.querySelectorAll('.gw-choice__btn.btn--solid').length,
+        sameSize: bs.length === 2 && Math.abs(bs[0].width - bs[1].width) < 1 && Math.abs(bs[0].height - bs[1].height) < 1,
+        fits: [...s.querySelectorAll('.gw-choice__btn')].every(b => b.scrollWidth <= b.clientWidth && b.getBoundingClientRect().width <= b.parentElement.getBoundingClientRect().width + 0.5),
         centred: Math.abs(t.left + t.width / 2 - mid) < 4, overflow: document.documentElement.scrollWidth > innerWidth};
     });
     ok('gateway is plain: no imagery, two solid buttons, centred, no horizontal scroll', !gw.imgs && gw.solid === 2 && gw.centred && !gw.overflow, JSON.stringify(gw));
+    ok('both gateway buttons are the same size and their labels fit', gw.sameSize && gw.fits, JSON.stringify(gw));
     const box = await p.$eval('.gateway', s => { const r = s.getBoundingClientRect(); return {x: r.left + 40, y: r.top + 40}; });
     await p.mouse.move(box.x, box.y); await p.mouse.down();
     const rip = await p.$$eval('.gateway > .ripple', rs => rs.length); await p.mouse.up();

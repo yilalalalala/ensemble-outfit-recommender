@@ -584,8 +584,8 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
 .gateway__choices { list-style: none; margin: var(--s-5) 0 0; padding: 0; width: min(100%, 47.5rem);
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gateway__choices > li + li { border-left: var(--hair); }
-.gw-choice { display: grid; justify-items: center; gap: var(--s-3); padding: var(--s-4) var(--s-6); }
-.gw-choice__btn { position: relative; overflow: hidden; min-height: 3rem; padding-inline: 2.5rem; letter-spacing: .18em; white-space: nowrap; }
+.gw-choice { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: var(--s-3); padding: var(--s-4) var(--s-5); }
+.gw-choice__btn { position: relative; overflow: hidden; min-height: 3rem; width: 20rem; max-width: 100%; padding-inline: 1.25rem; letter-spacing: .18em; white-space: nowrap; }   /* both choices the same size */
 .gw-choice__line { margin: 0; color: var(--muted); max-width: 17.5rem; text-wrap: balance; }
 .ripple { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0; }
 .gateway > .ripple { background: radial-gradient(circle, rgb(27 25 22 / .07) 0 30%, transparent 31% 52%, rgb(27 25 22 / .10) 54%, transparent 62%); }
@@ -743,6 +743,10 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
 @media (max-width: 600px) {
   .gateway__choices { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
   .gateway__choices > li + li { border-left: 0; border-top: var(--hair); padding-top: var(--s-5); }
+  .gw-choice { padding-inline: 0; }
+}
+@media (max-width: 400px) {
+  .gw-choice__btn { letter-spacing: .1em; padding-inline: .75rem; }
 }
 @media (max-width: 480px) {
   .steps { display: none; }
