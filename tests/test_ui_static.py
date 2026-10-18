@@ -104,15 +104,17 @@ def test_no_remote_dependencies_or_build_artifacts():
 
 
 def test_frontend_keeps_every_api_contract_and_event():
+    # /api/v2/complete-the-look stays on the server (the product page no longer shows it, D-049).
     # /api/snap stays on the server for existing consumers (tests/test_stylist_api.py); the UI now uses the staged
     # /api/stylist/detect + /api/stylist/edit flow so the shopper reviews what was detected.
     src = js_source()
     for path in ["/api/customers", "/api/home/", "/api/product/", "/api/explain/", "/api/metrics", "/api/events",
                  "/api/visual-search", "/api/assistant/session", "/api/assistant/", "/api/label/tasks",
-                 '"/api/label"', "/api/v2/complete-the-look", "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families",
+                 '"/api/label"', "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families",
                  "/api/stylist/detect", "/api/stylist/edit"]:
         assert path in src, path
-    for event in ['"impression"', '"click"', '"not_for_me"', '"add_to_cart"']:
+    # "Not for me" was removed from the shop (D-048); the API still accepts the event for existing logs.
+    for event in ['"impression"', '"click"', '"add_to_cart"']:
         assert event in src, event
     for route in ['"product"', '"assistant"', '"ds"', '"label"', '"studio"', '"collections"', '"shop"', '"stylist"',
                   '"ask"', '"find"', '"look"']:
@@ -168,6 +170,13 @@ def test_shoppers_get_no_footer_links_or_wordmark(tree):
     assert not [e for e in foot if e["tag"] == "a"] and not any("footer__mark" in (e["attrs"].get("class") or "") for e in foot)
     css = (STATIC / "css" / "ensemble.css").read_text()
     assert re.search(r"^\.footer \{ display: none;", css, re.M) and "body.studio .footer { display: block; }" in css
+
+
+def test_no_not_for_me_and_no_complete_the_look_on_product_pages():
+    src = js_source()
+    assert "Not for me" not in src and "data-nfm" not in src and "notforme" not in src
+    shop = (STATIC / "js" / "shop.js").read_text()
+    assert "Complete the look" not in shop and "/api/v2/complete-the-look" not in shop
 
 
 def test_cart_drawer_and_masthead_control(tree):

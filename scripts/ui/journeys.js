@@ -137,16 +137,9 @@ async function auditCards(p, scope = 'main') {
     ok('home: no Why this / category metadata / hide (×) on cards', a.meta === 0 && !(await p.$('main .tile__meta')), '');
     const imps = p._events.filter(e => e.event === 'impression');
     ok('impressions logged once per shown card, for this customer', imps.length === a.n && imps.every(e => e.customer_idx === DEFAULT), `${imps.length} impressions, ${a.n} cards`);
-    // Not for me: logs not_for_me, confirms in place, and is remembered for this profile
-    await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
-    ok('no hide (×) control on cards', !(await p.$('main [data-hide], main .card__hide')), '');
-    const fam = await p.$eval('main .grid > li:nth-child(2) [data-card]', c => c.dataset.family);
-    await p.click('main .grid > li:nth-child(2) [data-nfm]'); await p.waitForTimeout(200);
-    const st = await p.$eval('main .grid > li:nth-child(2) [data-card]', c => ({dim: c.classList.contains('is-dismissed'), note: c.querySelector('.card__nfm-note').textContent, dis: c.querySelector('[data-nfm]').disabled}));
-    ok('Not for me logs the event and says it will be remembered', st.dim && st.dis && /remember that next time/.test(st.note) && p._events.some(e => e.event === 'not_for_me'), JSON.stringify(st));
-    await p.reload(); await settle(p);
-    ok('Not for me is remembered: that product is gone after reload', !(await p.$$eval('main [data-card]', (cs, f) => cs.some(c => c.dataset.family === f), fam)), fam);
-    await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
+    ok('no hide (×) and no Not for me on cards', !(await p.$('main [data-hide], main .card__hide, main [data-nfm]')) && !/Not for me/.test(await p.$eval('main', m => m.innerText)), '');
+    const chips = await p.$$eval('main .swatch', ss => ss.map(x => ({fabric: x.classList.contains('is-fabric'), sw: getComputedStyle(x).getPropertyValue('--sw').trim()})));
+    ok('swatches come from the photos: a colour-card chip or a fabric crop on every swatch', chips.length > 0 && chips.every(c => c.fabric || /^#[0-9a-f]{6}$/i.test(c.sw)), JSON.stringify(chips.slice(0, 3)));
     await p.screenshot({path: `${SHOTS}/home.png`});
     clean(p, 'home');
     await ctx.close();
@@ -260,7 +253,8 @@ async function auditCards(p, scope = 'main') {
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
     ok('click events logged (card + product page)', p._events.some(e => e.event === 'click' && e.surface === 'for_you') && p._events.some(e => e.event === 'click' && e.surface === 'product_page'), '');
     const secs = await p.$$eval('main h2.section-title', hs => hs.map(h => h.textContent.trim()));
-    ok('product page: Complete the look and Similar items; no Other colours gallery', secs.includes('Complete the look') && secs.includes('Similar items') && !secs.includes('Other colours'), secs.join(' / '));
+    ok('product page: Similar items only; no Complete the look, no Other colours gallery', secs.includes('Similar items') && !secs.includes('Complete the look') && !secs.includes('Other colours')
+       && !p._failed.concat(p._events.map(e => e.surface)).some(x => /complete.the.look/.test(String(x))), secs.join(' / '));
     const fam = await p.evaluate(async () => (await (await fetch(`${document.querySelector('meta[name="ensemble-api-base"]')?.content || ''}/api/catalog/families?articles=922037001`)).json()).families['0922037']);
     const sw = await p.$$eval('.pdp .swatch', s => s.map(x => x.dataset.swatch));
     ok('product page shows every real colourway as a swatch', sw.length === fam.variants.length && fam.variants.every(v => sw.includes(String(v.article_id))), `${sw.length} / ${fam.variants.length}`);
@@ -279,10 +273,10 @@ async function auditCards(p, scope = 'main') {
     const btn = await p.$eval('.pdp [data-add]', b => { const c = getComputedStyle(b); return [c.backgroundColor, c.color, b.innerText.trim()]; });
     ok('product Add to cart is black with white text, same wording', btn[0] === 'rgb(0, 0, 0)' && btn[1] === 'rgb(255, 255, 255)' && /^add to cart$/i.test(btn[2]), btn.join(' '));
     await p.screenshot({path: `${SHOTS}/product.png`});
-    const ctl = await p.$('#s-ctl ~ * .card__name a, section[aria-labelledby="s-ctl"] .card__name a');
-    const ctlId = await ctl.getAttribute('data-open');
-    await ctl.click(); await settle(p);
-    ok('Complete the look card opens its product, click carries the anchor', p.url().endsWith('/product/' + ctlId) && p._events.some(e => e.event === 'click' && e.surface === 'complete_the_look' && e.anchor != null), p.url());
+    const sim = await p.$('section[aria-labelledby="s-sim"] .card__name a');
+    const simId = await sim.getAttribute('data-open');
+    await sim.click(); await settle(p);
+    ok('Similar item card opens its product', p.url().endsWith('/product/' + simId) && p._events.some(e => e.event === 'click' && e.surface === 'similar'), p.url());
     await p.click('[data-back]'); await settle(p);
     ok('Back returns to the product', /\/product\/\d+$/.test(p.url()), p.url());
     await p.goto(BASE + '#/ds'); await settle(p);
@@ -410,10 +404,6 @@ async function auditCards(p, scope = 'main') {
     await p.unroute('**/api/product/**');
     await p.click('[data-retry]'); await settle(p);
     ok('retry recovers', !!(await p.$('.pdp')), '');
-    await p.route('**/api/v2/complete-the-look**', r => r.fulfill({status: 503, contentType: 'application/json', body: '{"error":{"code":"not_ready","message":"bundle not loaded"}}'}));
-    await p.reload(); await settle(p);
-    const t2 = await shopperText(p);
-    ok('live outfit failure falls back quietly (no service/storage wording)', /Complete the look/.test(t2) && !bannedIn(t2).length, bannedIn(t2).join(','));
     await ctx.close();
   }
 

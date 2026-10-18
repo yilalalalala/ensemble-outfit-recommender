@@ -30,7 +30,7 @@ In machine learning, it also means several models combined. This project is both
 | route | page |
 | --- | --- |
 | `#/` | gateway: *Shop your edit* or *Style with AI* (and a quiet link to DS Studio) |
-| `#/collections[/<tab>]`, `#/product/:id` | Collections: Selected for you (the ranker) · Buy it again · Trending as tabs (old `#/shop` links redirect here); product pages with Complete the Look |
+| `#/collections[/<tab>]`, `#/product/:id` | Collections: Selected for you (the ranker) · Buy it again · Trending as tabs (old `#/shop` links redirect here); product pages with colour-card / fabric swatches and Similar items (Complete the Look lives in the AI Stylist, D-049) |
 | `#/stylist` | AI Stylist hub with three tasks |
 | `#/stylist/ask` | Ask the stylist — conversation with optional photo; products only from tool results |
 | `#/stylist/find` | Find this piece — photo → frame (or whole photo) → visually similar pieces |

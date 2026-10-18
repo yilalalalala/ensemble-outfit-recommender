@@ -13,7 +13,6 @@ const EDITS = {
 };
 const editTitle = m => EDITS[m.id]?.title || m.title;
 
-const ctlCard = it => ({...it.card});
 const ids = list => list.map(it => it.article_id);
 
 // ---- Collections ---------------------------------------------------------------------------------------
@@ -62,26 +61,16 @@ export async function product(ctx) {
   const id = +ctx.route.parts[1];
   ctx.render(`<div class="crumbs"><span class="skeleton-line short" style="width:10rem"></span></div>
     <div class="pdp" aria-busy="true"><div class="pdp__media skeleton"></div><div class="pdp__info"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>`);
-  const customer = state.customer;
-  const [d, v] = await Promise.all([
-    api(`/api/product/${id}`),
-    api(`/api/v2/complete-the-look?anchor=${id}&k=8${customer != null ? `&customer=${customer}` : ""}`)
-      .catch(err => { console.warn("Complete the Look (live) unavailable, using stored suggestions:", err.message); return null; }),
-  ]);
+  const d = await api(`/api/product/${id}`);
   if (!ctx.current()) return;
   const a = d.article;
-  // Live suggestions when available; otherwise the stored table, without announcing the difference to shoppers.
-  const lookMods = v?.modules?.some(m => m.items.length)
-    ? v.modules.filter(m => m.items.length).map(m => ({title: m.title, items: m.items.map(ctlCard)}))
-    : d.complete_the_look.map(m => ({title: m.title, items: m.items}));
-  await loadFamilies([a.article_id, ...lookMods.flatMap(m => ids(m.items)), ...ids(d.similar)]);
+  await loadFamilies([a.article_id, ...ids(d.similar)]);
   if (!ctx.current()) return;
   ctx.setTitle(a.prod_name);
   logEvent("click", "product_page", a.article_id);
 
   const page = newPageGroups();
   page.claim(a.article_id);   // the product itself owns its family: its colourways are swatches, never cards
-  const look = lookMods.map(m => ({...m, items: page.take(m.items)})).filter(m => m.items.length);
   const similar = page.take(d.similar);
 
   const {family, list} = variantsFor(a);
@@ -113,16 +102,10 @@ export async function product(ctx) {
         <dl class="facts">${facts.map(([k, val, cls]) => `<dt>${esc(k)}</dt><dd ${cls ? `class="${cls}"` : ""}>${esc(val)}</dd>`).join("")}</dl>
       </div>
     </div>
-    ${look.length ? `<section class="section" aria-labelledby="s-ctl">
-      <div class="section__head"><div><p class="eyebrow">Outfit</p><h2 class="section-title" id="s-ctl">Complete the look</h2>
-        <p class="lede">Pieces that go with this one.</p></div></div>
-      <div class="look-groups">${look.map(m => `<div class="look__slot reveal"><h3 class="look__title">${esc(m.title)}</h3>
-        ${cardGrid(m.items, "complete_the_look", {cls: "grid--4", anchor: a.article_id})}</div>`).join("")}</div></section>` : ""}
     ${similar.length ? `<section class="section" aria-labelledby="s-sim">
       <div class="section__head"><div><p class="eyebrow">You may also like</p><h2 class="section-title" id="s-sim">Similar items</h2></div></div>
       ${cardGrid(similar, "similar", {cls: "grid--4"})}</section>` : ""}`);
   if (!root) return;
-  look.forEach(m => impressions(m.items, "complete_the_look", a.article_id));
   impressions(similar, "similar");
 
   $("[data-back]", root).addEventListener("click", () => {

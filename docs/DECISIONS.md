@@ -1386,3 +1386,39 @@ is not reflected in the frozen M7b evaluation numbers; re-run `assistant-eval` b
 **Revisit if:** usability testing shows shoppers miss the editorial "Your edit" home; swatch crops land on backdrop for a
 measurable share of a category (spot-check accessories and white garments first); or detection latency on the
 hosted Claude path makes the Choose step feel slow (show the photo immediately and stream the pieces in).
+
+### D-049 — Swatches show the garment's main colour from a clean patch; "Not for me" and the product page's Complete the Look are removed
+
+**Date:** 2026-10-18. **Status:** accepted; refines the swatch part of D-048.
+
+**Context.** D-048's swatches cropped the photo around the garment's centre. On coats, shirts and blazers the centre
+is where buttons, plackets, lapels and labels are, so the chip showed those instead of the fabric (reported on the
+Stark Fur Coat). The product owner also asked for a simpler shop: no "Not for me" control on cards and no Complete
+the Look section on product pages.
+
+**Decision.**
+- **Main colour, clean patch** (`ensemble.serving.swatches`): garment mask from the backdrop; k-means (k = 4) in
+  CIELAB over garment pixels; the largest cluster is the main colour; a window (16 % of the photo width) is chosen
+  that lies on the garment and is made almost only of that colour, so buttons and prints are avoided wherever they
+  sit. The colour is the mean of the patch's 40th–90th lightness percentile (lit fibres, not texture shadows).
+- **Plain pieces → standard colour card.** The colour is snapped to a card of 69 named shades (the shop's 39
+  colour-group colours plus standard fashion shades such as olive, khaki, camel, taupe, charcoal, navy, burgundy),
+  with lightness weighted half (CMC l:c = 2:1). The snap stays inside the catalogue colour name's family (people
+  name the hue, the photo gives the shade), and the catalogue colour itself wins when the photo is within ΔE 8 of
+  it, so chip and colour name agree.
+- **Patterned pieces → fabric crop.** A piece is a pattern when the catalogue says so (stripe, check, dot, all-over
+  pattern, jacquard, argyle, colour blocking, mixed) and the photo agrees (a second colour ≥ ΔE 15 away covers
+  ≥ 12 % of the garment); its swatch is the window whose colour mix best matches the whole garment's.
+- `/api/catalog/families` returns `swatch: {kind, hex[, image]}` per colourway (the field D-048 added; the colour
+  group fill remains the fallback).
+- **Removed:** "Not for me" (button, note, per-profile hiding); the product page's Complete the Look section and its
+  `/api/v2/complete-the-look` call. Outfit completion (Track B) stays in the AI Stylist's Complete my look and in the
+  API; the product page keeps Similar items.
+
+**Evidence.** A 63-photo contact sheet (stratified by catalogue appearance, plus the Stark Fur Coat and MC Chestnut
+strap) checked by eye: the patch avoids buttons and plackets, dark olive/green pieces no longer snap to grey, prints
+show as fabric, and both Stark Fur Coats read Light Beige.
+
+**Revisit if:** a spot check finds a category where the patch lands on backdrop (white-on-white, jewellery), or the
+catalogue colour names prove unreliable enough that the family constraint hides real colours; or the product owner
+wants outfit suggestions back on product pages (the API and serving bundle are unchanged).

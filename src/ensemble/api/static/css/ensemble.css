@@ -233,11 +233,6 @@ h1[tabindex="-1"]:focus, h1[tabindex="-1"]:focus-visible { box-shadow: none; out
 .card__colours { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .6rem; }
 .card__colour { font-size: var(--fs-meta); color: var(--muted); }
 .card__price { font-size: .9rem; font-variant-numeric: tabular-nums; color: var(--ink); }
-.card__row { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; }
-.card__nfm { min-height: 1.75rem; padding: 0; font-size: var(--fs-meta); }
-.card__nfm-note { font-size: var(--fs-meta); color: var(--ink); }
-.card.is-dismissed .card__media img { opacity: .35; filter: grayscale(1); }
-.card.is-dismissed .card__name a { color: var(--muted); }
 .card__note { font-size: var(--fs-meta); color: var(--muted); }
 
 /* swatches: real buttons; selection shown by a black ring and aria-pressed, not by colour alone */
@@ -252,7 +247,7 @@ h1[tabindex="-1"]:focus, h1[tabindex="-1"]:focus-visible { box-shadow: none; out
 }
 .swatch.is-neutral::before { background: repeating-linear-gradient(45deg, #d9d9d9 0 3px, #f4f4f4 3px 6px); }
 .swatch.is-clear::before { background: conic-gradient(#e8e8e8 25%, #fff 0 50%, #e8e8e8 0 75%, #fff 0) 0 0 / 6px 6px; }
-/* Fabric swatch: a crop of the colourway's own photo, so prints, stripes and checks show as themselves. */
+/* Pattern swatch: a crop of the colourway's own fabric, so prints, stripes and checks show as themselves. */
 .swatch.is-fabric::before { background: var(--swi) center / cover no-repeat, var(--sw, #ddd); }
 .swatch[aria-pressed="true"] { box-shadow: 0 0 0 1.5px var(--ink); }
 .swatch[aria-pressed="true"]::after {
@@ -387,7 +382,6 @@ body.studio .footer__studio { display: block; }
 
 /* ---------------------------------------------------------------- shop: Your edit */
 .section__head .link-btn { font-size: .9rem; }
-.look-groups { display: grid; gap: var(--s-7); }
 .look__title { font: 400 1.15rem/1.2 var(--serif); margin-bottom: var(--s-4); }
 .collection-head { padding: clamp(2rem, 1rem + 3vw, 3.5rem) 0 var(--s-4); }
 

@@ -266,6 +266,9 @@ industry standard and are named as such wherever they appear.
 
 | term | meaning | audience |
 | --- | --- | --- |
+| **Standard colour card** | A fixed set of named colour chips (Pantone-style) that a measured colour is snapped to, so similar colours look identical across the shop | PM |
+| **Dominant colour extraction** | Finding a garment's main colour from its photo: cluster the garment's pixels (k-means in CIELAB) and take the largest cluster | DS |
+| **CIELAB / ΔE** | A colour space built so that distances match perceived difference; ΔE is that distance (≈ 2 just noticeable) | DS |
 | **Fabric swatch** (pattern swatch) | A colour chip that shows a small crop of the colourway's own fabric instead of a flat colour, so prints, stripes and checks are recognisable; how most fashion retailers render colour choices | PM |
 | **Self-hosted web fonts** | Font files shipped with the site rather than loaded from a font CDN: no third-party request, works offline, same rendering everywhere; open-licence (SIL OFL) fonts allow it | Eng |
 | **Ripple effect** (ink ripple) | A short expanding ring drawn from the point a user touches, confirming the touch (popularised by Material Design) | PM |
