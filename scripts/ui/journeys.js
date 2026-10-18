@@ -116,12 +116,13 @@ async function auditCards(p, scope = 'main') {
     ok('ask intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for. We'll help you find pieces that feel right."), '');
     await p.goto(BASE + '#/stylist'); await settle(p);
     ok('hub copy and three tasks, no eyebrow above the question', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3 && !(await p.$('.hub__head .eyebrow')), '');
-    const fonts = await p.evaluate(() => ({h: getComputedStyle(document.querySelector('.hub__title')).fontFamily, body: getComputedStyle(document.querySelector('.lede')).fontFamily,
+    ok('hub is just the question and three cards: no lede, no one-line summaries, all in the page sans',
+       !(await p.$('.hub__head .lede, .task-card__line')) && (await p.$$eval('.hub__title, .task-card__title, .task-card__n', es => es.every(e => /^Inter/.test(getComputedStyle(e).fontFamily)))), '');
+    const fonts = await p.evaluate(() => ({body: getComputedStyle(document.querySelector('.task-card__detail')).fontFamily,
       nav: getComputedStyle(document.querySelector('#primary-nav a')).fontFamily, wm: getComputedStyle(document.querySelector('#wordmark')).fontFamily,
       loaded: [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family)}));
-    ok('canvas typefaces: Tiro Gurmukhi headings, Inter text, Poppins navigation, Segoe UI wordmark (self-hosted)',
-       /^"Tiro Gurmukhi"/.test(fonts.h) && /^Inter/.test(fonts.body) && /^Poppins/.test(fonts.nav) && /^"Segoe UI"/.test(fonts.wm)
-       && ['Tiro Gurmukhi', 'Inter', 'Poppins'].every(f => fonts.loaded.includes(f)), JSON.stringify(fonts));
+    ok('canvas typefaces: Inter text, Poppins navigation, Segoe UI wordmark (self-hosted)', /^Inter/.test(fonts.body) && /^Poppins/.test(fonts.nav) && /^"Segoe UI"/.test(fonts.wm)
+       && ['Inter', 'Poppins'].every(f => fonts.loaded.includes(f)), JSON.stringify(fonts));
     clean(p, 'copy');
     await ctx.close();
   }

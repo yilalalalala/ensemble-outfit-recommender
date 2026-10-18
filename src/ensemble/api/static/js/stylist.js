@@ -4,11 +4,11 @@ import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies
 import {downscale, stage, toBlob, validate} from "./photo.js";
 
 export const TASKS = [
-  {id: "ask", href: "#/stylist/ask", title: "Ask the stylist", line: "Tell us what you need in your own words.",
+  {id: "ask", href: "#/stylist/ask", title: "Ask the stylist",
    detail: "Advice for an occasion, a piece you own, or a style you want to try."},
-  {id: "find", href: "#/stylist/find", title: "Find this piece", line: "Seen something you like? Show us a photo.",
+  {id: "find", href: "#/stylist/find", title: "Find this piece",
    detail: "Tap the piece you like and we will find the four closest in our collection."},
-  {id: "look", href: "#/stylist/look", title: "Complete my look", line: "Share an outfit and we will finish it.",
+  {id: "look", href: "#/stylist/look", title: "Complete my look",
    detail: "Check what we spotted, choose a direction, and get a short, considered edit."},
 ];
 
@@ -65,13 +65,11 @@ export async function hub(ctx) {
   const root = ctx.render(`<div class="hub">
     <header class="hub__head">
       <h1 class="display hub__title" tabindex="-1">What can we help with?</h1>
-      <p class="lede">Pick one task. Each takes a minute or two, and you can switch at any point.</p>
     </header>
     <ul class="hub__tasks" role="list">${TASKS.map((t, i) => `<li>
       <a class="task-card" href="${t.href}">
         <span class="task-card__n" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
         <span class="task-card__title">${esc(t.title)}</span>
-        <span class="task-card__line">${esc(t.line)}</span>
         <span class="task-card__detail">${esc(t.detail)}</span>
         <span class="task-card__go" aria-hidden="true">Start →</span>
       </a></li>`).join("")}</ul>
