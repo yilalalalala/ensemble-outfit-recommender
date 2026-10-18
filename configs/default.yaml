@@ -176,9 +176,9 @@ serving:
   # Request-time serving bundle (ensemble.serving.bundle, D-041): compatibility top-P pool per
   # (anchor, target slot) that the personalized ranker re-orders at request time.
   bundle: {pool: 100}
-  # Fabric swatches (ensemble.serving.swatches): a small crop of each colourway's own photo, so a printed or
-  # striped colourway is shown as its pattern, not as its catalogue colour group.
-  swatch: {size: 32, crop_frac: 0.16, bg_threshold: 40, erode: [11, 9, 7, 5, 3]}
+  # Colour swatches read from each colourway's photo (ensemble.serving.swatches): plain pieces snap the main colour
+  # of a clean garment patch to the standard card; patterned pieces show a crop of a representative patch.
+  swatch: {size: 32, bg_threshold: 40, window: 0.16, pattern_share: 0.12, pattern_delta: 15.0, agree: 8.0}
 
 rerank:
   # Re-ranking layer (src/ensemble/ranking/rerank.py), evaluated separately from the ranker.

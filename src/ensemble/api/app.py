@@ -217,15 +217,18 @@ def _has_image(article_id: int) -> bool:
     return (IMAGES / s[:3] / f"{s}.jpg").exists()
 
 
-def _swatches(ids: list[int]) -> dict[int, str]:
-    """Fabric swatch data URIs (ensemble.serving.swatches) for these articles; empty if the store is not built."""
+def _swatches(ids: list[int]) -> dict[int, dict]:
+    """Colour swatches read from each colourway's photo (ensemble.serving.swatches): {"kind": "plain", "hex"} — the
+    main colour snapped to the standard colour card — or {"kind": "pattern", "hex", "image"} with a fabric crop.
+    Empty if the store is not built (the UI then falls back to the colour group)."""
     import base64
     path = cfg.path("swatch_db")
     if not ids or not path.exists():
         return {}
     with sqlite3.connect(f"file:{path}?mode=ro", uri=True) as db:
-        rows = db.execute(f"SELECT article_id, jpeg FROM swatches WHERE article_id IN ({','.join('?' * len(ids))})", ids)
-        return {a: "data:image/jpeg;base64," + base64.b64encode(j).decode() for a, j in rows}
+        rows = db.execute(f"SELECT article_id, kind, hex, jpeg FROM swatches WHERE article_id IN ({','.join('?' * len(ids))})", ids)
+        return {a: {"kind": k, "hex": h, **({"image": "data:image/jpeg;base64," + base64.b64encode(j).decode()} if j else {})}
+                for a, k, h, j in rows}
 
 
 @app.get("/api/catalog/families")

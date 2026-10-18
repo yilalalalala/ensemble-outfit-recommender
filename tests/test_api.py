@@ -139,21 +139,22 @@ def test_same_name_products_from_different_families_are_not_merged(client, cfg):
     assert len(d["families"]) == 2
 
 
-def test_families_return_a_fabric_swatch_per_colourway(client, cfg):
-    """Each colourway carries a fabric swatch cut from its own photo (ensemble.serving.swatches), so two
-    colourways in one colour group (e.g. plain black and a black print) no longer look identical."""
+def test_families_return_a_photo_swatch_per_colourway(client, cfg):
+    """Each colourway carries a swatch read from its own photo (ensemble.serving.swatches): MC Chestnut strap's two
+    "Black" colourways are a plain black (a colour-card chip) and a black print (a fabric crop)."""
     if not cfg.path("swatch_db").exists():
         pytest.skip("swatch store not built; run `make swatches`")
     import base64
     import io
 
     from PIL import Image
-    d = client.get("/api/catalog/families?articles=751866001").json()
-    vs = d["families"]["0751866"]["variants"]
-    assert len(vs) >= 2 and all(v["swatch"].startswith("data:image/jpeg;base64,") for v in vs)
-    imgs = [Image.open(io.BytesIO(base64.b64decode(v["swatch"].split(",", 1)[1]))) for v in vs]
-    assert all(im.size == (32, 32) for im in imgs)
-    assert len({im.tobytes() for im in imgs}) == len(imgs)        # same colour group, different swatches
+
+    from ensemble.serving.swatches import CARD, FAMILIES
+    vs = {v["article_id"]: v["swatch"] for v in client.get("/api/catalog/families?articles=751866001").json()["families"]["0751866"]["variants"]}
+    plain, printed = vs[751866001], vs[751866002]
+    assert plain["kind"] == "plain" and plain["hex"] in {CARD[n] for n in FAMILIES["black"]} and "image" not in plain
+    assert printed["kind"] == "pattern" and printed["image"].startswith("data:image/jpeg;base64,")
+    assert Image.open(io.BytesIO(base64.b64decode(printed["image"].split(",", 1)[1]))).size == (32, 32)
 
 
 def test_families_endpoint_validation(client):
