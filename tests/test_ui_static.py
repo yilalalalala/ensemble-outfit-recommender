@@ -22,12 +22,28 @@ def js_source() -> str:
     return "\n".join(p.read_text() for p in JS)
 
 
-def test_frontend_files_are_revalidated_so_updates_show_on_reload(client):
-    """Unbundled ES modules keep fixed names, so every page file must be revalidated (no-cache + ETag); otherwise a
-    browser keeps running removed features after an update. Fonts never change and may be cached."""
-    for path in ["/", "/static/js/core.js", "/static/css/ensemble.css"]:
-        assert client.get(path).headers["cache-control"] == "no-cache", path
-    assert "max-age" in client.get("/static/fonts/inter-var.woff2").headers["cache-control"]
+def test_frontend_files_have_versioned_addresses_so_updates_always_show(client):
+    """Cache busting: the page links its files under static/v-<fingerprint>/, the fingerprint changes when any file
+    changes, versioned files are immutable and the page itself is always revalidated. A browser can therefore never
+    combine a new page with an old cached script (it did: removed features kept showing after an update)."""
+    r = client.get("/")
+    assert r.headers["cache-control"] == "no-cache"
+    m = re.search(r'src="static/(v-[0-9a-f]{10})/js/app\.js"', r.text)
+    assert m and f'href="static/{m.group(1)}/css/ensemble.css"' in r.text
+    v = m.group(1)
+    for path in ["js/app.js", "js/core.js", "css/ensemble.css", "fonts/inter-var.woff2"]:
+        res = client.get(f"/static/{v}/{path}")
+        assert res.status_code == 200 and "immutable" in res.headers["cache-control"], path
+    assert client.get("/static/js/core.js").headers["cache-control"] == "no-cache"   # old addresses still work
+
+
+def test_the_fingerprint_changes_when_a_file_changes(tmp_path, monkeypatch):
+    import ensemble.api.app as appmod
+    (tmp_path / "a.js").write_text("one")
+    monkeypatch.setattr(appmod, "STATIC", tmp_path)
+    before = appmod._static_version()
+    (tmp_path / "a.js").write_text("two!")
+    assert appmod._static_version() != before
 
 
 def test_index_and_static_assets_are_served(client):

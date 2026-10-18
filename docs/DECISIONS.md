@@ -1411,8 +1411,11 @@ the Look section on product pages.
   second photo colour and so called the houndstooth Hanoi Oversize Blazer "plain" (fine patterns blur into one colour
   at analysis resolution). The swatch is cut from the full-resolution photo (8 % of its width) at the window whose
   colour mix best matches the whole garment's.
-- **Frontend caching.** Static files are served with `Cache-Control: no-cache` (revalidated by ETag; fonts cached a
-  week): the unbundled ES modules have fixed names, and a browser kept running removed features after an update.
+- **Frontend caching (cache busting).** After an update a browser kept running cached old ES modules next to the
+  new page and stylesheet, so removed features (Not for me, flat swatches) still showed; `no-cache` headers alone did
+  not help a browser that already held copies. The page now links its files under `static/v-<fingerprint>/` (a hash
+  of every frontend file's name, size and modification time); relative module imports inherit the versioned
+  directory, versioned files are `immutable`, and the page itself is `no-cache`. Plain `static/…` URLs still work.
 - `/api/catalog/families` returns `swatch: {kind, hex[, image]}` per colourway (the field D-048 added; the colour
   group fill remains the fallback).
 - **Removed:** "Not for me" (button, note, per-profile hiding); the product page's Complete the Look section and its

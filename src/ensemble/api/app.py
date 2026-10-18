@@ -14,7 +14,7 @@ from functools import lru_cache
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -1029,20 +1029,36 @@ def image(article_id: int):
     return FileResponse(path, headers={"Cache-Control": "max-age=86400"})
 
 
+def _static_version() -> str:
+    """A fingerprint of every frontend file (name, size, modification time): it changes whenever any file changes."""
+    import hashlib
+    h = hashlib.sha1()
+    for f in sorted(STATIC.rglob("*")):
+        if f.is_file():
+            st = f.stat()
+            h.update(f"{f.relative_to(STATIC)}:{st.st_size}:{st.st_mtime_ns};".encode())
+    return h.hexdigest()[:10]
+
+
 @app.get("/")
 def index():
-    return FileResponse(STATIC / "index.html", headers={"Cache-Control": "no-cache"})
+    """The page links its files under a versioned path (static/v-<fingerprint>/…). The frontend is unbundled ES
+    modules with fixed names and relative imports, so the version in the directory carries through every import:
+    after an update every file has a new address and no browser can run a stale cached copy (cache busting)."""
+    html = (STATIC / "index.html").read_text().replace('"static/', f'"static/v-{_static_version()}/')
+    return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
 
 
-class _RevalidatedStatic(StaticFiles):
-    """The frontend is unbundled ES modules with fixed names, so a browser's heuristic cache kept serving old modules
-    after an update (a reload showed removed features). ``no-cache`` makes it revalidate every file (a cheap 304 via
-    ETag when unchanged); the self-hosted fonts never change and are cached for a week."""
+class _VersionedStatic(StaticFiles):
+    """Serves static/v-<fingerprint>/<file> as static/<file>, cached as immutable (the address changes with the
+    content); plain static/<file> URLs keep working and are revalidated on every load."""
 
     async def get_response(self, path, scope):
-        r = await super().get_response(path, scope)
-        r.headers["Cache-Control"] = "public, max-age=604800" if path.startswith("fonts/") else "no-cache"
+        head, _, rest = path.partition("/")
+        versioned = head.startswith("v-") and len(head) == 12 and rest
+        r = await super().get_response(rest if versioned else path, scope)
+        r.headers["Cache-Control"] = "public, max-age=31536000, immutable" if versioned else "no-cache"
         return r
 
 
-app.mount("/static", _RevalidatedStatic(directory=STATIC), name="static")
+app.mount("/static", _VersionedStatic(directory=STATIC), name="static")
