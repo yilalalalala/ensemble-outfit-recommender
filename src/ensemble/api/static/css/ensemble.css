@@ -586,19 +586,22 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
 .gw-choice__btn > .ripple { background: radial-gradient(circle, rgb(255 255 255 / .28) 0 45%, transparent 70%); }
 
 /* ---------------------------------------------------------------- AI Stylist hub */
-.hub { padding: clamp(2rem, 1rem + 4vw, 4.5rem) 0 var(--s-8); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
-.hub__head { display: grid; gap: var(--s-3); max-width: 44rem; }
-/* The hub reads in the page's sans (Inter), like the task details below it. */
-.hub__title { font: 500 clamp(2rem, 1.4rem + 2.4vw, 3.25rem)/1.1 var(--sans); letter-spacing: -.02em; }
-.hub__tasks { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
-.task-card { display: grid; grid-template-rows: auto auto 1fr auto; gap: .55rem; height: 100%; padding: var(--s-5);
-  border: var(--hair); background: var(--ivory); text-decoration: none; color: var(--ink);
+/* Centred under the masthead like the gateway. Headings use Poppins (the canvas's display sans, also used for the
+   navigation): the same clean style as the Inter text below them, but a different face. */
+.hub { min-height: max(28rem, calc(100svh - 16rem)); padding: var(--s-7) 0; display: grid; grid-template-columns: minmax(0, 66rem);
+  place-content: center; justify-items: center; gap: var(--s-6); text-align: center; }
+.hub__head { display: grid; gap: var(--s-3); justify-items: center; }
+.hub__title { font: 500 clamp(2rem, 1.5rem + 2vw, 3rem)/1.15 var(--label); letter-spacing: -.01em; text-wrap: balance; }
+.hub__tasks { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
+.task-card { display: grid; grid-template-rows: auto auto 1fr auto; justify-items: center; gap: .6rem; height: 100%; padding: var(--s-6) var(--s-5);
+  border: var(--hair); border-radius: 18px; background: var(--ivory); text-decoration: none; color: var(--ink);
   transition: border-color var(--t-fast), background var(--t-fast); }
 .task-card:hover, .task-card:focus-visible { border-color: var(--ink); background: var(--canvas); }
-.task-card__n { font: 400 var(--fs-meta)/1 var(--sans); color: var(--accent); letter-spacing: .04em; }
-.task-card__title { font: 500 clamp(1.3rem, 1.15rem + .5vw, 1.6rem)/1.2 var(--sans); letter-spacing: -.01em; }
-.task-card__detail { font-size: var(--fs-meta); color: var(--muted); }
-.task-card__go { font-size: var(--fs-meta); letter-spacing: .12em; text-transform: uppercase; padding-top: var(--s-3); }
+.task-card:focus-visible { border-radius: 18px; }
+.task-card__n { font: 400 var(--fs-meta)/1 var(--label); color: var(--accent); letter-spacing: .08em; }
+.task-card__title { font: 500 clamp(1.25rem, 1.1rem + .5vw, 1.5rem)/1.25 var(--label); }
+.task-card__detail { font-size: var(--fs-meta); color: var(--muted); max-width: 18rem; text-wrap: balance; }
+.task-card__go { font: 400 var(--fs-meta)/1 var(--label); letter-spacing: .12em; text-transform: uppercase; padding-top: var(--s-3); }
 .hub__resume { font-size: var(--fs-meta); }
 
 /* ---------------------------------------------------------------- task shell */

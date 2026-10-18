@@ -116,8 +116,13 @@ async function auditCards(p, scope = 'main') {
     ok('ask intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for. We'll help you find pieces that feel right."), '');
     await p.goto(BASE + '#/stylist'); await settle(p);
     ok('hub copy and three tasks, no eyebrow above the question', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3 && !(await p.$('.hub__head .eyebrow')), '');
-    ok('hub is just the question and three cards: no lede, no one-line summaries, all in the page sans',
-       !(await p.$('.hub__head .lede, .task-card__line')) && (await p.$$eval('.hub__title, .task-card__title, .task-card__n', es => es.every(e => /^Inter/.test(getComputedStyle(e).fontFamily)))), '');
+    ok('hub is just the question and three cards: no lede, no one-line summaries; headings in Poppins, details in Inter',
+       !(await p.$('.hub__head .lede, .task-card__line')) && (await p.$$eval('.hub__title, .task-card__title', es => es.every(e => /^Poppins/.test(getComputedStyle(e).fontFamily))))
+       && /^Inter/.test(await p.$eval('.task-card__detail', e => getComputedStyle(e).fontFamily)), '');
+    const hub = await p.evaluate(() => { const v = document.querySelector('.hub').getBoundingClientRect(), t = document.querySelector('.hub__title').getBoundingClientRect(),
+      l = document.querySelector('.hub__tasks').getBoundingClientRect(), c = document.querySelector('.task-card');
+      return {title: Math.abs(t.left + t.width / 2 - (v.left + v.width / 2)) < 4, cards: Math.abs(l.left + l.width / 2 - (v.left + v.width / 2)) < 4, radius: parseFloat(getComputedStyle(c).borderTopLeftRadius)}; });
+    ok('hub question and cards are centred; cards have rounded corners', hub.title && hub.cards && hub.radius >= 12, JSON.stringify(hub));
     const fonts = await p.evaluate(() => ({body: getComputedStyle(document.querySelector('.task-card__detail')).fontFamily,
       nav: getComputedStyle(document.querySelector('#primary-nav a')).fontFamily, wm: getComputedStyle(document.querySelector('#wordmark')).fontFamily,
       loaded: [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family)}));
