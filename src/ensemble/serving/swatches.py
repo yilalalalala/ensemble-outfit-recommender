@@ -11,10 +11,11 @@ swatch is therefore read from the photo:
    almost only of the main colour, so buttons, lapels, seams, labels and prints are avoided wherever they sit
    (the photo's centre is often exactly where they are).
 4. **Plain or pattern.** A piece is a *pattern* when the catalogue says so (stripe, check, dot, all-over pattern,
-   jacquard, argyle, colour blocking, mixed) *and* the photo agrees (a second colour, clearly different, covers a
-   real share of the garment). A *plain* piece is shown as one flat colour: the patch colour snapped to the nearest
+   jacquard, argyle, colour blocking, mixed); fine patterns blur into one colour at analysis resolution, so the
+   photo is not asked to confirm. A *plain* piece is shown as one flat colour: the patch colour snapped to the nearest
    colour on a standard colour card (``CARD``, the shop's swatch palette). A *pattern* is shown as a crop of the
-   window whose colour mix is closest to the whole garment's, so the swatch looks like the fabric. The snap stays
+   window whose colour mix is closest to the whole garment's, cut from the full-resolution photo so the swatch
+   looks like the fabric. The snap stays
    inside the catalogue colour name's family (``FAMILIES``): people name the hue, the photo gives the shade.
 
 Stored in its own SQLite file; /api/catalog/families returns it inline per colourway.
@@ -153,7 +154,7 @@ def kmeans(x: np.ndarray, k: int = 4, iters: int = 12, seed: int = 0) -> tuple[n
 
 # ---- one photo -------------------------------------------------------------------------------------------------
 def analyse(img: Image.Image, appearance: str | None, colour_group: str | None = None, bg_threshold: int = 40, window: float = 0.16,
-            pattern_share: float = 0.12, pattern_delta: float = 15.0, agree: float = 8.0) -> dict:
+            agree: float = 8.0) -> dict:
     """{kind: plain|pattern, card, hex, box (fractions of the image)} for one product photo."""
     small = img.resize(GRID)
     rgb = np.asarray(small, dtype=np.int16)
@@ -170,9 +171,9 @@ def analyse(img: Image.Image, appearance: str | None, colour_group: str | None =
     labels[mask] = np.argmin(((pts[:, None] - centres[None]) ** 2).sum(-1), 1)
     share = np.bincount(labels[mask], minlength=len(centres)) / mask.sum()
     main = int(np.argmax(share))
-    second = [j for j in range(len(centres)) if j != main and share[j] >= pattern_share
-              and np.sqrt(((centres[j] - centres[main]) ** 2).sum()) > pattern_delta]
-    kind = "pattern" if appearance in PATTERNED and second else "plain"
+    # The catalogue says whether a piece is patterned. The photo is not asked to agree: fine patterns (houndstooth,
+    # pin-stripes, micro-checks) average into one colour at analysis resolution and would read as plain.
+    kind = "pattern" if appearance in PATTERNED else "plain"
 
     # Windows lying on the garment: the main colour's share (plain) or the colour-mix distance (pattern).
     w = max(6, int(window * GRID[0]))
@@ -208,17 +209,21 @@ def analyse(img: Image.Image, appearance: str | None, colour_group: str | None =
             "box": (x / GRID[0], y / GRID[1], (x + w) / GRID[0], (y + w) / GRID[1])}
 
 
-def swatch(path: Path, appearance: str | None, colour_group: str | None, size: int, **params) -> tuple[str, str | None, str, bytes | None]:
+def swatch(path: Path, appearance: str | None, colour_group: str | None, size: int, crop: float = 0.08,
+           **params) -> tuple[str, str | None, str, bytes | None]:
     """(kind, card colour name or None, hex, JPEG crop for patterns or None)."""
     img = Image.open(path)
-    img.draft("RGB", (img.width // 4, img.height // 4))   # decode at 1/4 scale: fast, still sharp at 32 px
+    img.draft("RGB", (img.width // 4, img.height // 4))   # analysis at 1/4 scale: fast
     img = img.convert("RGB")
     r = analyse(img, appearance, colour_group, **params)
     jpeg = None
     if r["kind"] == "pattern":
+        # The crop is cut from the full-resolution photo, narrower than the analysis window, so fine patterns
+        # (houndstooth, pin-stripes) stay legible at swatch size.
+        full = Image.open(path).convert("RGB")
         x0, y0, x1, y1 = r["box"]
-        # GRID has the photo's 2:3 shape, so a square window on the grid is a square on the photo.
-        crop = img.crop((int(x0 * img.width), int(y0 * img.height), int(x1 * img.width), int(y1 * img.height)))
+        cx, cy, half = (x0 + x1) / 2 * full.width, (y0 + y1) / 2 * full.height, crop * full.width / 2
+        crop = full.crop((int(cx - half), int(cy - half), int(cx + half), int(cy + half)))
         buf = io.BytesIO()
         crop.resize((size, size), Image.LANCZOS).save(buf, format="JPEG", quality=80, optimize=True)
         jpeg = buf.getvalue()

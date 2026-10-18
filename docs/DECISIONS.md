@@ -1407,8 +1407,12 @@ the Look section on product pages.
   name the hue, the photo gives the shade), and the catalogue colour itself wins when the photo is within ΔE 8 of
   it, so chip and colour name agree.
 - **Patterned pieces → fabric crop.** A piece is a pattern when the catalogue says so (stripe, check, dot, all-over
-  pattern, jacquard, argyle, colour blocking, mixed) and the photo agrees (a second colour ≥ ΔE 15 away covers
-  ≥ 12 % of the garment); its swatch is the window whose colour mix best matches the whole garment's.
+  pattern, jacquard, argyle, colour blocking, mixed). The photo is not asked to confirm: a first version required a
+  second photo colour and so called the houndstooth Hanoi Oversize Blazer "plain" (fine patterns blur into one colour
+  at analysis resolution). The swatch is cut from the full-resolution photo (8 % of its width) at the window whose
+  colour mix best matches the whole garment's.
+- **Frontend caching.** Static files are served with `Cache-Control: no-cache` (revalidated by ETag; fonts cached a
+  week): the unbundled ES modules have fixed names, and a browser kept running removed features after an update.
 - `/api/catalog/families` returns `swatch: {kind, hex[, image]}` per colourway (the field D-048 added; the colour
   group fill remains the fallback).
 - **Removed:** "Not for me" (button, note, per-profile hiding); the product page's Complete the Look section and its

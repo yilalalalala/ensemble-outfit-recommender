@@ -1031,7 +1031,18 @@ def image(article_id: int):
 
 @app.get("/")
 def index():
-    return FileResponse(STATIC / "index.html")
+    return FileResponse(STATIC / "index.html", headers={"Cache-Control": "no-cache"})
 
 
-app.mount("/static", StaticFiles(directory=STATIC), name="static")
+class _RevalidatedStatic(StaticFiles):
+    """The frontend is unbundled ES modules with fixed names, so a browser's heuristic cache kept serving old modules
+    after an update (a reload showed removed features). ``no-cache`` makes it revalidate every file (a cheap 304 via
+    ETag when unchanged); the self-hosted fonts never change and are cached for a week."""
+
+    async def get_response(self, path, scope):
+        r = await super().get_response(path, scope)
+        r.headers["Cache-Control"] = "public, max-age=604800" if path.startswith("fonts/") else "no-cache"
+        return r
+
+
+app.mount("/static", _RevalidatedStatic(directory=STATIC), name="static")

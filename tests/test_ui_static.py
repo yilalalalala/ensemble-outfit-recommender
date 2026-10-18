@@ -22,6 +22,14 @@ def js_source() -> str:
     return "\n".join(p.read_text() for p in JS)
 
 
+def test_frontend_files_are_revalidated_so_updates_show_on_reload(client):
+    """Unbundled ES modules keep fixed names, so every page file must be revalidated (no-cache + ETag); otherwise a
+    browser keeps running removed features after an update. Fonts never change and may be cached."""
+    for path in ["/", "/static/js/core.js", "/static/css/ensemble.css"]:
+        assert client.get(path).headers["cache-control"] == "no-cache", path
+    assert "max-age" in client.get("/static/fonts/inter-var.woff2").headers["cache-control"]
+
+
 def test_index_and_static_assets_are_served(client):
     r = client.get("/")
     assert r.status_code == 200 and "text/html" in r.headers["content-type"]

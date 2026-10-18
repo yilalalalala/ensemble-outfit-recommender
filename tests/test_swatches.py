@@ -54,6 +54,19 @@ def test_a_pattern_is_shown_as_its_fabric_when_catalogue_and_photo_agree(tmp_pat
     assert np.asarray(im.convert("L")).std() > 40                         # the stripes survive the crop
 
 
+def test_a_fine_houndstooth_check_is_still_a_pattern(tmp_path):
+    """A micro-pattern averages into one colour at analysis resolution; the catalogue's "Check" keeps it a pattern,
+    and the full-resolution crop keeps the pattern visible (the Hanoi Oversize Blazer case)."""
+    a = np.zeros((H, W, 3), np.uint8); a[:] = BACKDROP
+    yy, xx = np.mgrid[150:800, 150:450]
+    a[150:800, 150:450] = np.where((((yy // 3) + (xx // 3)) % 2 == 0)[..., None], (60, 45, 40), (225, 215, 200))
+    p = tmp_path / "houndstooth.jpg"
+    Image.fromarray(a).save(p, quality=95)
+    kind, card, hx, jpeg = swatch(p, "Check", "Dark Orange", 32)
+    assert kind == "pattern" and card is None
+    assert np.asarray(Image.open(io.BytesIO(jpeg)).convert("L")).std() > 25
+
+
 def test_catalogue_says_solid_so_a_stripy_photo_still_gets_one_colour():
     r = analyse(shot((20, 20, 20), stripes=(60, 60, 60)), "Solid", "Black")
     assert r["kind"] == "plain" and r["card"] in FAMILIES["black"]
