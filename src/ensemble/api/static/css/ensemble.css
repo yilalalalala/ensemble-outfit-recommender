@@ -481,16 +481,20 @@ dialog.cart .dialog__body { flex: 1; overflow-y: auto; align-content: start; }
 }
 .stylist-head .lede em { font-style: italic; }
 /* Suggested questions: the most expressive type in the conversation — black Didone italic in curly quotes. */
-.suggestions { display: grid; gap: .15rem; margin-top: .25rem; justify-items: start; }
+.suggestions { display: grid; gap: clamp(.4rem, .2rem + .6vw, .9rem); margin-top: .25rem; justify-items: start; }
 .suggestion {
-  border: 0; background: none; padding: .3rem 0 .3rem .42em; text-indent: -.42em; text-align: left; color: var(--ink); cursor: pointer;
-  font: 400 clamp(1.05rem, 1rem + .3vw, 1.2rem)/1.4 var(--sans);   /* the page's text face (Inter), like the lede */
+  border: 0; background: none; padding: .3rem 0 .3rem .5em; text-indent: -.5em; text-align: left; color: var(--ink); cursor: pointer;
+  /* Large, friendly starter questions in the page's display face (Poppins), quotes in the accent colour. */
+  font: 500 clamp(1.45rem, 1.1rem + 1.4vw, 2.3rem)/1.25 var(--label); letter-spacing: -.01em;
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   transition: background-size var(--t-med) var(--ease);
 }
-.suggestion::before { content: "\201C"; }   /* hanging opening quote */
-.suggestion::after { content: "\201D"; }
+.suggestion::before { content: "\201C"; color: var(--accent); }   /* hanging opening quote */
+.suggestion::after { content: "\201D"; color: var(--accent); }
 .suggestion:hover, .suggestion:focus-visible { background-size: 100% 1px; }
+.suggestion { text-wrap: balance; }
+/* The example in an empty message box stays on one line (ellipsis on narrow phones) instead of being cut mid-line. */
+#chat-in::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .composer { display: grid; grid-template-columns: auto 1fr auto; gap: .5rem; align-items: end; border: 1px solid var(--line-strong); padding: .35rem; background: var(--surface); }
 .composer textarea { border: 0; background: none; resize: none; min-height: 2.75rem; max-height: 8rem; padding: .6rem .4rem; line-height: 1.4; }
 .composer textarea:focus-visible { box-shadow: none; }
@@ -622,9 +626,9 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
 .steps__compact { display: none; font-size: var(--fs-meta); color: var(--muted); }
 .task__head { display: grid; gap: var(--s-2); max-width: 46rem; }
 /* AI Stylist headings use Poppins, like the hub, over Inter text. */
-.task__title { font: 500 clamp(1.8rem, 1.4rem + 1.5vw, 2.6rem)/1.15 var(--label); letter-spacing: -.01em; }
-.task__lede { font: 400 clamp(1.05rem, 1rem + .3vw, 1.2rem)/1.5 var(--sans); color: var(--muted); }
-.task__lede em { font-style: normal; font-weight: 500; color: var(--ink); }
+.task__title { font: 500 clamp(2rem, 1.5rem + 1.8vw, 3rem)/1.12 var(--label); letter-spacing: -.015em; }
+.task__lede { font: 400 clamp(1.05rem, .98rem + .35vw, 1.25rem)/1.5 var(--label); color: var(--muted); }
+.task__lede em { font-style: normal; font-weight: 500; color: var(--accent); }
 .task__body { display: grid; gap: var(--s-5); }
 .task__status:empty { display: none; }
 .task__actions { display: flex; justify-content: space-between; align-items: center; gap: var(--s-4); flex-wrap: wrap;
