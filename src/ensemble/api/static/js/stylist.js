@@ -155,9 +155,7 @@ export async function ask(ctx) {
     log.innerHTML = refine
       ? `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p><p class="msg__text">I have your outfit and your edit. What would you like to change?</p>
          ${chips(["Make it more formal", "Show me other colours", "Something less expensive"])}</div>`
-      : `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
-         <p class="msg__text">I can find pieces, style something you own, or help you dress for a moment. What are you dressing for?</p>
-         ${chips(SUGGESTIONS)}</div>`;
+      : `<div class="msg msg--bot" data-empty>${chips(SUGGESTIONS)}</div>`;   // just the three starter questions
     try {
       s = await createSession(customer);
       sessions.set(key, s);

@@ -590,6 +590,10 @@ async function auditCards(p, scope = 'main') {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
     ok('ask: starter prompts and one dominant action', (await p.$$('.suggestion')).length === 3 && (await p.$$('#composer .btn--solid')).length === 1, '');
+    const askPage = await p.evaluate(() => ({intro: !!document.querySelector('.msg--bot[data-empty] .msg__text, .msg--bot[data-empty] .msg__who'),
+      title: getComputedStyle(document.querySelector('.task__title')).fontFamily, sug: getComputedStyle(document.querySelector('.suggestion')).fontFamily,
+      italic: getComputedStyle(document.querySelector('.suggestion')).fontStyle}));
+    ok('ask: only the title, the lede and three starter questions; Poppins title, Inter questions', !askPage.intro && /^Poppins/.test(askPage.title) && /^Inter/.test(askPage.sug) && askPage.italic === 'normal', JSON.stringify(askPage));
     await p.click('.suggestion');
     await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
     const a1 = await auditCards(p, '.msg--bot:last-child');
