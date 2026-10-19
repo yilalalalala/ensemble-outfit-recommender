@@ -113,7 +113,7 @@ async function auditCards(p, scope = 'main') {
     ok('shopper header has no service status', (await p.$eval('#utility-note', e => e.innerText)) === '', '');
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
     const a = await p.$eval('main', m => m.innerText);
-    ok('ask intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for. We'll help you find pieces that feel right."), '');
+    ok('ask greeting copy', a.replace(/[’]/g, "'").includes("Hi! What are you dressing for today?") && a.replace(/[’]/g, "'").includes("I'll find pieces that feel right."), '');
     await p.goto(BASE + '#/stylist'); await settle(p);
     ok('hub copy and three tasks, no eyebrow above the question', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3 && !(await p.$('.hub__head .eyebrow')), '');
     ok('hub is just the question and three cards: no lede, no one-line summaries; headings in Poppins, details in Inter',
@@ -589,13 +589,15 @@ async function auditCards(p, scope = 'main') {
   if (want('ask') || want('recovery')) {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
-    ok('ask: starter prompts and one dominant action', (await p.$$('.suggestion')).length === 3 && (await p.$$('#composer .btn--solid')).length === 1, '');
-    const askPage = await p.evaluate(() => ({intro: !!document.querySelector('.msg--bot[data-empty] .msg__text, .msg--bot[data-empty] .msg__who'),
-      title: getComputedStyle(document.querySelector('.task__title')).fontFamily, sug: getComputedStyle(document.querySelector('.suggestion')).fontFamily,
-      italic: getComputedStyle(document.querySelector('.suggestion')).fontStyle}));
-    ok('ask: only the title, the lede and three large starter questions, all in Poppins', !askPage.intro && /^Poppins/.test(askPage.title) && /^Poppins/.test(askPage.sug) && askPage.italic === 'normal'
-       && parseFloat(await p.$eval('.suggestion', e => getComputedStyle(e).fontSize)) >= 22, JSON.stringify(askPage));
-    await p.click('.suggestion');
+    ok('ask: greeting bubble, three reply bubbles and one dominant action', !!(await p.$('.greet .bubble')) && (await p.$$('.reply')).length === 3 && (await p.$$('#composer .btn--solid')).length === 1, '');
+    await p.waitForFunction(() => [...document.querySelectorAll('.reply__img')].every(i => i.complete && i.naturalWidth > 0), null, {timeout: 15000}).catch(() => {});
+    const askPage = await p.evaluate(() => ({thumbs: [...document.querySelectorAll('.reply__img')].filter(i => i.naturalWidth > 0).length,
+      title: getComputedStyle(document.querySelector('.task__title')).fontFamily, reply: getComputedStyle(document.querySelector('.reply')).borderTopLeftRadius,
+      orbs: [...document.querySelectorAll('.orb')].filter(o => getComputedStyle(o).display !== 'none').map(o => getComputedStyle(o).backgroundColor), composer: getComputedStyle(document.querySelector('#composer')).borderTopLeftRadius,
+      scroll: document.documentElement.scrollWidth > innerWidth}));
+    ok('ask: real photos in the reply bubbles, rounded shapes, dark Morandi orbs, pill composer, no sideways scroll', askPage.thumbs === 3 && /^Poppins/.test(askPage.title) && parseFloat(askPage.reply) >= 20
+       && askPage.orbs.length >= 1 && askPage.orbs.every(c => ['rgb(111, 95, 102)', 'rgb(95, 107, 98)'].includes(c)) && parseFloat(askPage.composer) > 100 && !askPage.scroll, JSON.stringify(askPage));
+    await p.click('.reply');
     await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
     const a1 = await auditCards(p, '.msg--bot:last-child');
     ok('grounded answer with consistent product cards', a1.bad.length === 0 && a1.dupFamilies === 0, JSON.stringify(a1));

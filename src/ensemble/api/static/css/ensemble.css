@@ -499,6 +499,40 @@ dialog.cart .dialog__body { flex: 1; overflow-y: auto; align-content: start; }
 .composer textarea { border: 0; background: none; resize: none; min-height: 2.75rem; max-height: 8rem; padding: .6rem .4rem; line-height: 1.4; }
 .composer textarea:focus-visible { box-shadow: none; }
 .composer:focus-within { box-shadow: var(--ring); }
+/* ---- Ask the stylist: a conversation that has already started (bubbles, round shapes, dark Morandi accents) */
+:root { --morandi-plum: #6f5f66; --morandi-sage: #5f6b62; --morandi-mist: #ece7e3; }
+.task[data-task="ask"] { position: relative; }
+main { overflow-x: clip; }   /* decorative shapes may reach the window edge without causing sideways scroll */
+.task[data-task="ask"] .task__head { justify-items: center; text-align: center; max-width: none; }
+.task[data-task="ask"] .chat { margin-inline: auto; width: 100%; max-width: 48rem; position: relative; z-index: 1; }
+.orb { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
+.orb--plum { width: 15rem; height: 15rem; right: -11rem; top: 7rem; background: var(--morandi-plum); }
+.orb--sage { width: 9rem; height: 9rem; left: -9rem; top: 25rem; background: var(--morandi-sage); }
+.greet { display: grid; gap: var(--s-5); }
+.greet__row { display: flex; align-items: flex-end; gap: .75rem; }
+.avatar { flex: none; width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center; background: var(--accent);
+  color: #fff; font: 400 1.4rem/1 var(--wordmark); padding-bottom: .15rem; }
+.bubble { background: var(--ivory); border-radius: 26px 26px 26px 8px; padding: 1rem 1.4rem; box-shadow: 0 10px 30px -22px rgb(0 0 0 / .4); }
+.bubble__title { font: 500 1.2rem/1.35 var(--label); }
+.bubble__text { margin-top: .25rem; color: var(--muted); }
+.bubble__text em { font-style: normal; font-weight: 500; color: var(--accent); }
+.replies { display: flex; flex-direction: column; align-items: flex-end; gap: .7rem; }
+.reply { display: inline-flex; align-items: center; gap: .75rem; padding: .45rem 1.25rem .45rem .45rem; text-align: left;
+  border: var(--hair); border-radius: 24px 24px 8px 24px; background: var(--canvas); color: var(--ink); cursor: pointer;
+  font: 400 1rem/1.3 var(--label); transition: border-color var(--t-fast), background var(--t-fast); }
+.reply:hover, .reply:focus-visible { border-color: var(--morandi-plum); background: var(--morandi-mist); }
+.reply:focus-visible { border-radius: 24px 24px 8px 24px; }
+.reply__img { flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; object-position: 50% 30%; background: var(--photo); }
+.task[data-task="ask"] .msg__who { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.task[data-task="ask"] .msg--user .msg__text { background: var(--morandi-mist); border: 0; border-radius: 24px 24px 8px 24px; padding: .7rem 1.1rem; font-family: var(--label); }
+.task[data-task="ask"] .msg--bot .msg__text { background: var(--ivory); border-radius: 26px 26px 26px 8px; padding: .9rem 1.3rem; font: 400 1rem/1.6 var(--sans); }
+.task[data-task="ask"] .composer { border-radius: 999px; padding: .4rem .4rem .4rem .5rem; background: var(--canvas); border-color: var(--line);
+  box-shadow: 0 10px 30px -18px rgb(0 0 0 / .35); align-items: center; grid-template-columns: auto 1fr auto; }
+.task[data-task="ask"] .composer:focus-within { box-shadow: var(--ring), 0 10px 30px -18px rgb(0 0 0 / .35); border-radius: 999px; }
+.task[data-task="ask"] .composer textarea { padding: .65rem .5rem; }
+.task[data-task="ask"] #attach-btn { border-radius: 50%; background: var(--ivory); }
+.composer__send { width: 2.75rem; min-width: 2.75rem; min-height: 2.75rem; padding: 0; border-radius: 50%; }
+.composer__send svg { width: 1.15rem; height: 1.15rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .attachment { display: flex; align-items: center; gap: .6rem; font-size: var(--fs-meta); color: var(--muted); }
 .attachment img { width: 2.6rem; height: 2.6rem; object-fit: cover; background: var(--photo); }
 
@@ -832,6 +866,11 @@ table.data th[scope="row"] { font-weight: 400; font-variant-numeric: tabular-num
   .shap__row { grid-template-columns: minmax(6.5rem, 9rem) 1fr 3.6rem; }
   .composer { grid-template-columns: auto 1fr; }
   .composer .btn--solid { grid-column: 1 / -1; }
+  .task[data-task="ask"] .composer { grid-template-columns: auto 1fr auto; }
+  .task[data-task="ask"] .composer .btn--solid { grid-column: auto; }
+  .orb--plum { width: 5.5rem; height: 5.5rem; right: -3rem; top: 4.25rem; }
+  .orb--sage { display: none; }
+  .reply { font-size: .95rem; }
   dialog { width: calc(100vw - 1rem); max-height: calc(100vh - 1rem); }
   .dialog__head, .dialog__body { padding-left: var(--s-4); padding-right: var(--s-4); }
 }

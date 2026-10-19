@@ -1,6 +1,6 @@
 // AI Stylist: the hub, the shared task shell, and "Ask the stylist" (docs/AI_STYLIST_PRODUCT_FLOW.md).
 // Products shown here come only from tool / endpoint responses; the assistant's text never adds products.
-import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
+import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state, variantsFor} from "./core.js";
 import {downscale, stage, toBlob, validate} from "./photo.js";
 
 export const TASKS = [
@@ -112,6 +112,30 @@ function renderAnswer(r, cards) {
 const chips = list => `<div class="suggestions">${list.map(t =>
   `<button class="suggestion" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div>`;
 
+// The opening of a new conversation: the stylist greets the shopper in a speech bubble and the starter questions
+// are reply bubbles, each with a small round photo of a real catalogue piece.
+const SUGGESTION_THUMBS = [922037001, 917290001, 898287001];   // wide-leg trousers, a knit, a summer dress
+const greeting = () => `<div class="greet" data-empty>
+    <div class="greet__row"><span class="avatar" aria-hidden="true">e</span>
+      <div class="bubble"><p class="bubble__title">Hi! What are you dressing for today?</p>
+        <p class="bubble__text">Tell me in your own words, or pick one to start. I’ll find pieces that <em>feel right</em>.</p></div></div>
+    <div class="replies" role="group" aria-label="Start with a question">${SUGGESTIONS.map((t, i) =>
+      `<button class="reply" type="button" data-suggest="${esc(t)}"><img class="reply__img" data-thumb="${SUGGESTION_THUMBS[i]}" alt="" width="40" height="40">${esc(t)}</button>`).join("")}</div>
+  </div>`;
+
+// Fill the reply bubbles' photos from the catalogue (the image address differs locally and when hosted).
+async function fillThumbs(log) {
+  const imgs = $$("img[data-thumb]:not([src])", log);
+  if (!imgs.length) return;
+  try {
+    await loadFamilies(imgs.map(i => +i.dataset.thumb));
+    imgs.forEach(img => {
+      const id = +img.dataset.thumb, v = variantsFor({article_id: id}).list.find(x => x.article_id === id);
+      if (v?.image) img.src = v.image;
+    });
+  } catch { /* the bubbles read fine without their photos */ }
+}
+
 export async function ask(ctx) {
   ctx.setTitle("Ask the stylist");
   const customer = state.customer;
@@ -125,9 +149,9 @@ export async function ask(ctx) {
     </aside>` : "";
   const root = ctx.render(shell({
     task: "ask", title: refine ? "Refine your edit" : "Ask the stylist", back: refine ? "#/stylist/look?step=edit" : "#/stylist",
-    lede: refine ? "Tell the stylist what to change: more formal, a different colour, a lower price…"
-                 : "Tell us what you’re looking for. We’ll help you find pieces that <em>feel right</em>.",
-    body: `${contextCard}<section class="chat" aria-label="Conversation">
+    lede: refine ? "Tell the stylist what to change: more formal, a different colour, a lower price…" : "",
+    body: `${contextCard}<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>
+      <section class="chat" aria-label="Conversation">
         <div class="chatlog" id="chatlog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>
         <div class="attachment" id="chat-attach" hidden></div>
         <form class="composer" id="composer" novalidate>
@@ -138,7 +162,8 @@ export async function ask(ctx) {
           <input type="file" id="chat-file" accept="image/jpeg,image/png,image/webp" hidden>
           <label class="sr-only" for="chat-in">Message the stylist</label>
           <textarea id="chat-in" rows="1" placeholder="e.g. What goes with a beige trench?" aria-describedby="chat-err"></textarea>
-          <button class="btn btn--solid" type="submit" id="chat-send">Send</button>
+          <button class="btn btn--solid composer__send" type="submit" id="chat-send">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg><span class="sr-only">Send</span></button>
         </form>
         <p class="inline-status is-error" id="chat-err" role="alert"></p>
       </section>`,
@@ -148,15 +173,15 @@ export async function ask(ctx) {
   const log = $("#chatlog", root);
   const key = refine ? `${customer}:look` : customer;   // a refinement is its own conversation
   let s = sessions.get(key);
-  if (s) {
+  if (s?.log) {   // a conversation already under way: restore it
     log.innerHTML = s.log;
     log.scrollTop = log.scrollHeight;
-  } else {
+  } else {        // nothing sent yet (first visit, or back again before asking): the opening greeting
     log.innerHTML = refine
       ? `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p><p class="msg__text">I have your outfit and your edit. What would you like to change?</p>
          ${chips(["Make it more formal", "Show me other colours", "Something less expensive"])}</div>`
-      : `<div class="msg msg--bot" data-empty>${chips(SUGGESTIONS)}</div>`;   // just the three starter questions
-    try {
+      : greeting();
+    if (!s) try {
       s = await createSession(customer);
       sessions.set(key, s);
       s.context = refine?.text || null;
@@ -169,6 +194,7 @@ export async function ask(ctx) {
     }
     if (!ctx.current()) return;
   }
+  fillThumbs(log);
   const chat = conversation(root, customer, key);
   if (anchor && !s.sentAnchors.has(anchor)) { s.sentAnchors.add(anchor); chat.send(`What goes with article ${anchor}?`); }
 }
