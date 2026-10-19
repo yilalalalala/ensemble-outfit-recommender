@@ -28,7 +28,9 @@ export function shell({task, title, lede, steps = null, step = 0, back = null, b
        <span class="steps__n" aria-hidden="true">${i + 1}</span><span class="steps__label">${esc(s)}</span>
        ${i < step ? `<span class="sr-only">, completed</span>` : ""}</li>`).join("")}</ol>
      <p class="steps__compact" aria-hidden="true">Step ${step + 1} of ${steps.length} · ${esc(steps[step])}</p>` : "";
-  return `<div class="task" data-task="${task}">
+  // Ask and Find carry two soft dark-Morandi circles in the page margins (decorative).
+  const orbs = ["ask", "find"].includes(task) ? `<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>` : "";
+  return `<div class="task" data-task="${task}">${orbs}
     <nav class="task__bar" aria-label="AI Stylist">
       <a class="link-btn task__back" href="${back || "#/stylist"}">← Back</a>
       <span class="task__crumb"><a href="#/stylist">AI Stylist</a><span aria-hidden="true"> / </span><span>${esc(t.title)}</span></span>
@@ -150,8 +152,7 @@ export async function ask(ctx) {
   const root = ctx.render(shell({
     task: "ask", title: refine ? "Refine your edit" : "Ask the stylist", back: refine ? "#/stylist/look?step=edit" : "#/stylist",
     lede: refine ? "Tell the stylist what to change: more formal, a different colour, a lower price…" : "",
-    body: `${contextCard}<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>
-      <section class="chat" aria-label="Conversation">
+    body: `${contextCard}<section class="chat" aria-label="Conversation">
         <div class="chatlog" id="chatlog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>
         <div class="attachment" id="chat-attach" hidden></div>
         <form class="composer" id="composer" novalidate>

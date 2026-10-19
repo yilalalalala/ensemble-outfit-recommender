@@ -77,14 +77,6 @@ async function photoStep(ctx, s) {
   btn.addEventListener("click", () => load().photo && go("frame"));
 }
 
-// A small crop of the shopper's own photo, used as the piece's thumbnail.
-const thumb = (p, photo) => {
-  if (!p.box) return `<span class="piece__thumb is-empty" aria-hidden="true"></span>`;
-  const [x0, y0, x1, y1] = p.box, w = Math.max(x1 - x0, .02), h = Math.max(y1 - y0, .02);
-  const size = `${100 / w}% ${100 / h}%`, pos = `${w < 1 ? (x0 / (1 - w)) * 100 : 0}% ${h < 1 ? (y0 / (1 - h)) * 100 : 0}%`;
-  return `<span class="piece__thumb" aria-hidden="true" style="background-image:url('${photo.dataUrl}');background-size:${size};background-position:${pos}"></span>`;
-};
-
 async function chooseStep(ctx, s) {
   const root = frame(ctx, 1, {
     title: "Which piece?", back: "#/stylist/find?step=photo",
@@ -111,7 +103,10 @@ async function chooseStep(ctx, s) {
   const persist = () => save({pieces, chosen: [...chosen], results: null});
 
   const paint = () => {
-    boxes.innerHTML = pieces.filter(p => p.box).map(p => {
+    // Every spotted piece is a tap target on the photo, but only chosen pieces show a frame. Larger areas first,
+    // so where pieces overlap the smaller one is on top and gets the tap.
+    const area = b => (b[2] - b[0]) * (b[3] - b[1]);
+    boxes.innerHTML = pieces.filter(p => p.box).sort((a, b) => area(b.box) - area(a.box)).map(p => {
       const [x0, y0, x1, y1] = p.box, on = chosen.has(p.id);
       return `<button class="picker__box${on ? " is-on" : ""}" type="button" data-pid="${esc(p.id)}" aria-pressed="${on}"
         aria-label="${esc(pieceLabel(p))}" style="left:${x0 * 100}%;top:${y0 * 100}%;width:${(x1 - x0) * 100}%;height:${(y1 - y0) * 100}%"></button>`;
@@ -119,7 +114,7 @@ async function chooseStep(ctx, s) {
     list.innerHTML = pieces.map(p => {
       const on = chosen.has(p.id), cats = {...CATEGORIES, ...(CATEGORIES[p.category] ? {} : {[p.category]: p.category})};
       return `<li class="piece${on ? " is-on" : ""}" data-pid="${esc(p.id)}">
-        <button class="piece__pick" type="button" aria-pressed="${on}">${thumb(p, s.photo)}
+        <button class="piece__pick" type="button" aria-pressed="${on}">
           <span class="piece__name">${esc(pieceLabel(p))}</span><span class="piece__tick" aria-hidden="true"></span></button>
         ${on ? `<label class="piece__kind"><span class="sr-only">What is the ${esc(pieceLabel(p))}?</span>
           <select data-kind>${Object.entries(cats).map(([k, v]) => `<option value="${esc(k)}" ${k === p.category ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></label>` : ""}
@@ -148,7 +143,8 @@ async function chooseStep(ctx, s) {
       const r = await api("/api/stylist/detect", {method: "POST", body: fd});
       if (!ctx.current()) return;
       pieces = r.garments.map(g => ({id: g.id, category: g.category, colour: g.colour || "", description: g.description || "", box: g.box}));
-      chosen = new Set(pieces.length === 1 ? [pieces[0].id] : []);
+      pieces.forEach(p => { p.home = p.box; });   // where it was spotted: frames can be moved, matching uses this
+      chosen = new Set();                         // nothing framed until the shopper picks
       status.innerHTML = pieces.length ? "" : `<p class="meta">We couldn't pick out the pieces. Drag around the one you want.</p>`;
     } catch (e) {
       if (!ctx.current()) return;
@@ -161,7 +157,7 @@ async function chooseStep(ctx, s) {
   }
   paint();
 
-  let dragged = false;   // a drag that started on a spotted piece frames a new area instead of toggling that piece
+  let dragged = false;   // a drag (draw or move) is not also a tap
   boxes.addEventListener("click", e => {
     const b = e.target.closest("[data-pid]");
     if (b && !dragged) toggle(b.dataset.pid, "photo");
@@ -184,37 +180,67 @@ async function chooseStep(ctx, s) {
     $(`[data-pid="${CSS.escape(p.id)}"] [data-kind]`, list)?.focus();
   });
 
-  // Drag anywhere to frame a piece the spotting missed (a tap, not a drag, on a spotted piece chooses it instead).
+  // The spotted pieces where they were found (frames may have been moved since): what a framed area is matched to.
+  const spotted = except => pieces.filter(p => !p.added && p.home && p.id !== except).map(p => ({...p, box: p.home}));
+  // A frame drawn or moved onto a spotted piece chooses that piece (it is never listed twice); elsewhere it is the
+  // shopper's own piece, named after the spotted piece it covers or their last choice.
+  function place(boxIn, moving = null) {
+    const last = pieces.find(p => chosen.has(p.id) && p !== moving);
+    const guess = categoryFor(boxIn, spotted(moving?.id), last?.category || "top");
+    const match = guess.match && pieces.find(p => p.id === guess.match.id);
+    if (match) {
+      if (moving && moving !== match) {
+        if (moving.added) pieces = pieces.filter(p => p !== moving); else { chosen.delete(moving.id); moving.box = moving.home; }
+      }
+      match.box = boxIn; chosen.add(match.id);
+      return match;
+    }
+    if (moving) { moving.box = boxIn; return moving; }
+    const p = {id: `f${Date.now().toString(36)}`, category: guess.category, colour: "", description: "", box: boxIn, added: true};
+    pieces.push(p); chosen.add(p.id);
+    return p;
+  }
+
+  // Drag on the photo to frame a piece; drag a frame to move it. A tap (no drag) chooses or un-chooses a piece.
   const at = e => { const r = img.getBoundingClientRect();
     return [Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1), Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1)]; };
-  let start = null, box = null;
+  const show = (node, b) => Object.assign(node.style, {left: b[0] * 100 + "%", top: b[1] * 100 + "%", width: (b[2] - b[0]) * 100 + "%", height: (b[3] - b[1]) * 100 + "%"});
+  let start = null, box = null, moving = null, moveNode = null;
   el.addEventListener("pointerdown", e => {
     if (e.button > 0) return;
     start = at(e); box = null; dragged = false;
+    const hit = e.target.closest(".picker__box.is-on");
+    moving = hit ? pieces.find(p => p.id === hit.dataset.pid) : null;
+    moveNode = hit;
   });
   el.addEventListener("pointermove", e => {
     if (!start) return;
     const p = at(e);
     if (!box && Math.hypot(p[0] - start[0], p[1] - start[1]) < 0.02) return;   // still a tap
     if (!box) el.setPointerCapture(e.pointerId);
-    box = [Math.min(start[0], p[0]), Math.min(start[1], p[1]), Math.max(start[0], p[0]), Math.max(start[1], p[1])];
-    drag.hidden = false;
-    Object.assign(drag.style, {left: box[0] * 100 + "%", top: box[1] * 100 + "%", width: (box[2] - box[0]) * 100 + "%", height: (box[3] - box[1]) * 100 + "%"});
+    if (moving) {
+      const [x0, y0, x1, y1] = moving.box, w = x1 - x0, h = y1 - y0;
+      const nx = Math.min(Math.max(x0 + p[0] - start[0], 0), 1 - w), ny = Math.min(Math.max(y0 + p[1] - start[1], 0), 1 - h);
+      box = [nx, ny, nx + w, ny + h];
+      show(moveNode, box);
+    } else {
+      box = [Math.min(start[0], p[0]), Math.min(start[1], p[1]), Math.max(start[0], p[0]), Math.max(start[1], p[1])];
+      drag.hidden = false;
+      show(drag, box);
+    }
   });
   const end = () => {
     if (!start) return;
     start = null; drag.hidden = true;
-    if (!box || box[2] - box[0] < 0.04 || box[3] - box[1] < 0.04) return;   // a tap, not a drag
+    if (!box || box[2] - box[0] < 0.04 || box[3] - box[1] < 0.04) { moving = null; return; }   // a tap, not a drag
     dragged = true; setTimeout(() => { dragged = false; });
-    const last = pieces.find(p => chosen.has(p.id));
-    const guess = categoryFor(box, pieces, last?.category || "top");
-    const p = {id: `f${Date.now().toString(36)}`, category: guess.category, colour: guess.colour, description: guess.description, box, added: true};
-    pieces.push(p); chosen.add(p.id);
+    const p = place(box, moving);
+    moving = null;
     persist(); paint();
     announce(`Framed: ${pieceLabel(p)}. Change what it is if that is not right.`);
   };
   el.addEventListener("pointerup", end);
-  el.addEventListener("pointercancel", () => { start = null; drag.hidden = true; });
+  el.addEventListener("pointercancel", () => { start = null; moving = null; drag.hidden = true; paint(); });
 
   btn.addEventListener("click", async () => {
     const picked = pieces.filter(p => chosen.has(p.id));
@@ -251,14 +277,12 @@ async function resultsStep(ctx, s) {
   if (!ctx.current()) return;
   const sections = s.results.map((r, i) => ({...r, items: groups[i].slice(0, PER_PIECE)})).filter(r => r.items.length);
   const first = sections[0]?.items[0];
-  const many = sections.length > 1;
   const root = frame(ctx, 2, {
     title: sections.length ? "Pieces that look similar" : "No close matches",
     back: "#/stylist/find?step=frame",
-    lede: sections.length ? (many ? "The four closest for each piece you chose." : `The four closest to your ${esc(sections[0].label.toLowerCase())}.`)
-                          : "Try choosing the piece again, or change what it is.",
+    lede: sections.length ? "" : "Try choosing the piece again, or change what it is.",
     body: sections.map(r => `<section class="find-group" aria-label="Like your ${esc(r.label)}">
-        ${many ? `<h2 class="find-group__title">Like your ${esc(r.label.toLowerCase())}</h2>` : ""}
+        <h2 class="find-group__title"><span class="find-group__like">Like your</span> ${esc(r.label.toLowerCase())}</h2>
         ${cardGrid(r.items, "visual_search", {cls: "grid--4"})}</section>`).join(""),
     primary: first ? `<a class="btn btn--solid" href="#/stylist/ask?anchor=${first.article_id}">Ask the stylist what goes with it</a>`
                    : `<a class="btn btn--solid" href="#/stylist/find?step=frame">Choose again</a>`,

@@ -554,29 +554,45 @@ async function auditCards(p, scope = 'main') {
     await p.evaluate(() => sessionStorage.clear()); await p.reload(); await settle(p);
     await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
     await p.click('#find-next'); await p.waitForSelector('.piece'); await settle(p);
-    ok('choose step lists the spotted pieces, none chosen yet, no radio buttons or category dropdown up front',
-       (await heading(p)) === 'Which piece?' && (await p.$$('.piece')).length === 3 && !(await p.$('.piece.is-on')) && !(await p.$('input[type=radio]')) && !(await p.$('[data-kind]'))
-       && await p.$eval('#find-go', b => b.disabled), '');
+    ok('choose step lists the spotted pieces (no thumbnails), none chosen, no frames on the photo yet, no radio buttons or category dropdown up front',
+       (await heading(p)) === 'Which piece?' && (await p.$$('.piece')).length === 3 && !(await p.$('.piece.is-on')) && !(await p.$('.piece__thumb')) && !(await p.$('input[type=radio]')) && !(await p.$('[data-kind]'))
+       && await p.$$eval('.picker__box', bs => bs.every(b => getComputedStyle(b).borderTopWidth === '0px')) && await p.$eval('#find-go', b => b.disabled), '');
     await p.click('.picker__box[data-pid=g1]');
     await p.locator('.piece[data-pid=g2] .piece__pick').click();
     const on = await p.$$eval('.piece.is-on', rs => rs.map(r => ({id: r.dataset.pid, kind: r.querySelector('[data-kind]')?.value})));
-    ok('tapping a piece on the photo or in the list chooses it and shows what it is', JSON.stringify(on) === '[{"id":"g1","kind":"top"},{"id":"g2","kind":"bottom"}]', JSON.stringify(on));
+    ok('tapping a piece on the photo or in the list chooses it, shows its frame and what it is', JSON.stringify(on) === '[{"id":"g1","kind":"top"},{"id":"g2","kind":"bottom"}]'
+       && await p.$eval('.picker__box[data-pid=g1]', b => b.classList.contains('is-on') && getComputedStyle(b).borderTopWidth !== '0px'), JSON.stringify(on));
     ok('focus stays on the tapped row', await p.evaluate(() => document.activeElement?.closest('.piece')?.dataset.pid === 'g2'), '');
     await p.selectOption('.piece[data-pid=g1] [data-kind]', 'knitwear');
-    ok('the shopper can correct what a piece is', (await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)) === 'beige Knitwear' || /knitwear/i.test(await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)), '');
+    ok('the shopper can correct what a piece is', /knitwear/i.test(await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)), '');
     await p.locator('.piece[data-pid=g2] .piece__pick').click();
-    ok('tapping again un-chooses it', !(await p.$('.piece[data-pid=g2].is-on')), '');
+    ok('tapping again un-chooses it and hides its frame', !(await p.$('.piece[data-pid=g2].is-on')) && !(await p.$('.picker__box[data-pid=g2].is-on')), '');
     const fr = await (await p.$('#picker img')).boundingBox();
+    // drawing over a spotted piece chooses it, never a second copy
     await p.mouse.move(fr.x + fr.width * .3, fr.y + fr.height * .6); await p.mouse.down();
     await p.mouse.move(fr.x + fr.width * .7, fr.y + fr.height * .9, {steps: 6}); await p.mouse.up();
-    const added = await p.$$eval('.piece.is-on', rs => rs.map(r => r.querySelector('[data-kind]')?.value));
-    ok('dragging frames a new piece and its category follows the spotted piece it covers', added.length === 2 && added[1] === 'bottom', JSON.stringify(added));
+    ok('drawing a frame over a spotted piece chooses that piece instead of listing it twice', (await p.$$('.piece')).length === 3 && !!(await p.$('.piece[data-pid=g2].is-on')), '');
+    // moving a frame keeps one entry and follows it
+    const g1 = await (await p.$('.picker__box[data-pid=g1]')).boundingBox();
+    await p.mouse.move(g1.x + g1.width / 2, g1.y + g1.height / 2); await p.mouse.down();
+    await p.mouse.move(g1.x + g1.width / 2 + 20, g1.y + g1.height / 2 - 15, {steps: 6}); await p.mouse.up();
+    const moved = await (await p.$('.picker__box[data-pid=g1]')).boundingBox();
+    ok('a chosen frame can be dragged to move it', Math.abs(moved.x - g1.x - 20) < 3 && (await p.$$('.piece')).length === 3, JSON.stringify({before: g1.x, after: moved.x}));
+    // drawing where nothing was spotted adds the shopper's own piece, which can be removed
+    await p.$eval('#picker img', i => i.scrollIntoView({block: 'center'}));
+    const fr2 = await (await p.$('#picker img')).boundingBox();
+    // (start inside the rounded corner's clip, not on the very corner pixel)
+    await p.mouse.move(fr2.x + fr2.width * .03, fr2.y + fr2.height * .06); await p.mouse.down();
+    await p.mouse.move(fr2.x + fr2.width * .09, fr2.y + fr2.height * .16, {steps: 6}); await p.mouse.up();
+    ok('drawing where nothing was spotted adds your own piece', (await p.$$('.piece')).length === 4 && !!(await p.$('.piece:last-child.is-on')), '');
     await p.click('.piece:last-child [data-remove]');
     ok('a framed piece can be removed', (await p.$$('.piece')).length === 3, '');
+    await p.locator('.piece[data-pid=g2] .piece__pick').click();
     await p.click('#find-go');
     await p.waitForFunction(() => location.hash.includes('step=results'), null, {timeout: 300000}); await settle(p);
     const counts = await p.$$eval('.find-group', g => g.map(x => x.querySelectorAll('.card').length));
     ok('one search per chosen piece with the corrected category', searches.length === 1 && /knitwear/.test(searches[0]), String(searches.length));
+    ok('results: no lede sentence, a friendly title per piece', !(await p.$('.task__lede')) && /like your/i.test(await p.$eval('.find-group__title', e => e.textContent)), '');
     ok('the four closest per chosen piece', counts.length === 1 && counts[0] === 4, JSON.stringify(counts));
     const a = await auditCards(p, '.task__body');
     ok('real visually similar results with prices and cart', a.n === 4 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
