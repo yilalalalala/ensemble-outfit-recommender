@@ -34,7 +34,7 @@ In machine learning, it also means several models combined. This project is both
 | `#/stylist` | AI Stylist hub with three tasks |
 | `#/stylist/ask` | Ask the stylist — conversation with optional photo; products only from tool results |
 | `#/stylist/find` | Find this piece — photo → frame (or whole photo) → visually similar pieces |
-| `#/stylist/look` | Complete my look — Photo → **Review what we spotted** → Direction → Your edit → Refine with the stylist |
+| `#/stylist/look` | Complete my look — Photo → **Review what we spotted** → Your edit (four mixed picks) → Refine with the stylist |
 | `#/studio…` | DS Studio: offline evaluation, serving status, recommendation inspection |
 
 Old `#/assistant` links redirect to `#/stylist/ask`.

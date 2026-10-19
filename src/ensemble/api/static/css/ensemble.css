@@ -499,28 +499,44 @@ dialog.cart .dialog__body { flex: 1; overflow-y: auto; align-content: start; }
 .composer textarea { border: 0; background: none; resize: none; min-height: 2.75rem; max-height: 8rem; padding: .6rem .4rem; line-height: 1.4; }
 .composer textarea:focus-visible { box-shadow: none; }
 .composer:focus-within { box-shadow: var(--ring); }
-/* ---- Find this piece: the same rounded, Morandi-accented look as Ask */
-.task[data-task="find"] .task__head { justify-items: center; text-align: center; max-width: none; }
-.task[data-task="find"] .btn, .task[data-task="find"] .btn-cart { border-radius: 999px; }
-.task[data-task="find"] .steps__step { border-top: 0; padding-top: .95rem; position: relative; }
-.task[data-task="find"] .steps__step::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; border-radius: 999px; background: var(--line); }
-.task[data-task="find"] .steps__step.is-done::before { background: var(--morandi-plum); }
-.task[data-task="find"] .steps__step.is-done .steps__n { background: var(--morandi-plum); border-color: var(--morandi-plum); }
-.task[data-task="find"] .steps__step[aria-current="step"]::before { background: var(--ink); }
-.task[data-task="find"] .look-photo { width: 100%; max-width: 44rem; margin-inline: auto; }
-.task[data-task="find"] .privacy { text-align: center; }
-.task[data-task="find"] .dropzone { min-height: 17rem; gap: .75rem; border-radius: 28px; border: 1.5px dashed rgb(111 95 102 / .5); background: var(--ivory); }
-.task[data-task="find"] .dropzone:hover, .task[data-task="find"] .dropzone.is-over { border-color: var(--morandi-plum); background: var(--morandi-mist); }
-.task[data-task="find"] .dropzone:focus-within { border-radius: 28px; }
-.task[data-task="find"] .dropzone__icon { display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 50%; background: var(--morandi-blue); color: #fff; }
-.task[data-task="find"] .dropzone__icon svg { width: 1.8rem; height: 1.8rem; stroke: currentColor; fill: none; stroke-width: 1.4; }
-.task[data-task="find"] .dropzone__title { font: 500 1.45rem/1.2 var(--label); }
-.task[data-task="find"] .dropzone .btn { background: var(--ink); border-color: var(--ink); color: #fff; padding-inline: 1.6rem; }
-.task[data-task="find"] .photo-preview { justify-items: center; }
-.task[data-task="find"] .photo-preview img, .task[data-task="find"] .picker__frame { border-radius: 24px; overflow: hidden; }
-.task[data-task="find"] .card__media { border-radius: 20px; }
-.task[data-task="find"] .card__name { font-family: var(--label); font-weight: 500; }
-.task[data-task="find"] .picker__photo { text-align: center; }
+/* ---- Find this piece and Complete my look: the same rounded, Morandi-accented look as Ask */
+.task:is([data-task="find"], [data-task="look"]) .task__head { justify-items: center; text-align: center; max-width: none; }
+.task:is([data-task="find"], [data-task="look"]) .btn, .task:is([data-task="find"], [data-task="look"]) .btn-cart { border-radius: 999px; }
+.task:is([data-task="find"], [data-task="look"]) .steps__step { border-top: 0; padding-top: .95rem; position: relative; }
+.task:is([data-task="find"], [data-task="look"]) .steps__step::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; border-radius: 999px; background: var(--line); }
+.task:is([data-task="find"], [data-task="look"]) .steps__step.is-done::before { background: var(--morandi-plum); }
+.task:is([data-task="find"], [data-task="look"]) .steps__step.is-done .steps__n { background: var(--morandi-plum); border-color: var(--morandi-plum); }
+.task:is([data-task="find"], [data-task="look"]) .steps__step[aria-current="step"]::before { background: var(--ink); }
+.task:is([data-task="find"], [data-task="look"]) .look-photo { width: 100%; max-width: 44rem; margin-inline: auto; }
+.task:is([data-task="find"], [data-task="look"]) .privacy { text-align: center; }
+.task:is([data-task="find"], [data-task="look"]) .dropzone { min-height: 17rem; gap: .75rem; border-radius: 28px; border: 1.5px dashed rgb(111 95 102 / .5); background: var(--ivory); }
+.task:is([data-task="find"], [data-task="look"]) .dropzone:hover, .task:is([data-task="find"], [data-task="look"]) .dropzone.is-over { border-color: var(--morandi-plum); background: var(--morandi-mist); }
+.task:is([data-task="find"], [data-task="look"]) .dropzone:focus-within { border-radius: 28px; }
+.task:is([data-task="find"], [data-task="look"]) .dropzone__icon { display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 50%; background: var(--morandi-blue); color: #fff; }
+.task:is([data-task="find"], [data-task="look"]) .dropzone__icon svg { width: 1.8rem; height: 1.8rem; stroke: currentColor; fill: none; stroke-width: 1.4; }
+.task:is([data-task="find"], [data-task="look"]) .dropzone__title { font: 500 1.45rem/1.2 var(--label); }
+.task:is([data-task="find"], [data-task="look"]) .dropzone .btn { background: var(--ink); border-color: var(--ink); color: #fff; padding-inline: 1.6rem; }
+.task:is([data-task="find"], [data-task="look"]) .photo-preview { justify-items: center; }
+.task:is([data-task="find"], [data-task="look"]) .photo-preview img, .task:is([data-task="find"], [data-task="look"]) .picker__frame { border-radius: 24px; overflow: hidden; }
+.task:is([data-task="find"], [data-task="look"]) .card__media { border-radius: 20px; }
+.task:is([data-task="find"], [data-task="look"]) .card__name { font-family: var(--label); font-weight: 500; }
+.task:is([data-task="find"], [data-task="look"]) .picker__photo { text-align: center; }
+
+/* Complete my look · Review: rounded frames with round number badges, rounded piece cards, pill fields */
+.task[data-task="look"] .review__frame { border-radius: 24px; }
+.task[data-task="look"] .review__frame img { border-radius: 24px; }
+.task[data-task="look"] .review__box { border: 2.5px solid #fff; border-radius: 14px; background: rgb(255 255 255 / .08); box-shadow: 0 0 0 1.5px rgb(17 17 17 / .5); }
+.task[data-task="look"] .review__box span { top: -.7rem; left: -.7rem; min-width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--morandi-blue); color: #fff;
+  font: 500 .78rem/1 var(--label); }
+.task[data-task="look"] .garments { gap: .7rem; }
+.task[data-task="look"] .garment { border: var(--hair); border-radius: 22px; padding: var(--s-4) var(--s-4) var(--s-4) var(--s-3); background: var(--canvas); }
+.task[data-task="look"] .garment:first-child { border-top: var(--hair); }
+.task[data-task="look"] .garment__n { border-radius: 50%; background: var(--morandi-blue); font-family: var(--label); }
+.task[data-task="look"] .garment__name { font: 500 1.1rem/1.3 var(--label); }
+.task[data-task="look"] .garment .input, .task[data-task="look"] .garment select.input { border-radius: 999px; padding-inline: 1rem; }
+.task[data-task="look"] .review__add { border-radius: 999px; }
+.task[data-task="look"] .review { align-items: start; }
+.task[data-task="look"] .look-edit { background: var(--ivory); border-radius: 28px; padding: clamp(1rem, .4rem + 2vw, 2rem); }
 
 /* ---- Ask the stylist: a conversation that has already started (bubbles, round shapes, dark Morandi accents) */
 :root { --morandi-plum: #6f5f66; --morandi-sage: #5f6b62; --morandi-blue: #66737f; --morandi-mist: #ece7e3; }

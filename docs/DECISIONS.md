@@ -1429,3 +1429,26 @@ show as fabric, and both Stark Fur Coats read Light Beige.
 **Revisit if:** a spot check finds a category where the patch lands on backdrop (white-on-white, jewellery), or the
 catalogue colour names prove unreliable enough that the family constraint hides real colours; or the product owner
 wants outfit suggestions back on product pages (the API and serving bundle are unchanged).
+
+### D-050 — Complete my look has one direction and a mixed edit of four; shoppers never see article numbers
+
+**Date:** 2026-10-19. **Status:** accepted; supersedes the Direction step of docs/AI_STYLIST_PRODUCT_FLOW.md §4.
+
+**Context.** Complete my look offered three directions after Review. Two duplicated other tasks — "Dress for an
+occasion" is what Ask the stylist does, "Find similar pieces" is Find this piece — leaving one real choice, a
+page with one answer. The edit showed 4–6 picks plus "More options", and an outfit missing only shoes got four
+pairs of shoes. The stylist chat showed raw article numbers ("What goes with article 883726003?").
+
+**Decision.**
+- Steps are Photo → Review → Your edit; Review's primary action builds the edit (`goal=complete`). Old
+  `step=direction` links land on Review. The API keeps the `occasion` and `similar` goals for existing callers.
+- `goal=complete` returns exactly four picks, round-robin over the missing slots **then** the complementary slots
+  the outfit does not fill yet (shoes, accessories), so the edit mixes kinds of piece; "More options" and "Try
+  another direction" are removed from the page.
+- The chat shows product names: a message started from a product says "What goes with the Sammy cross bag?"
+  while the stylist still receives the article id for grounding; numbers the stylist writes in prose are replaced
+  by the cited product's name (or "this piece").
+- Complete my look takes the rounded, dark-Morandi look of Ask and Find.
+
+**Revisit if:** shoppers look for occasion styling inside Complete my look (add it back as a lede prompt rather than
+a step), or the complementary slots produce weak pairings for some anchors (measure on the Track B folds).

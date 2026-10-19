@@ -28,8 +28,8 @@ export function shell({task, title, lede, steps = null, step = 0, back = null, b
        <span class="steps__n" aria-hidden="true">${i + 1}</span><span class="steps__label">${esc(s)}</span>
        ${i < step ? `<span class="sr-only">, completed</span>` : ""}</li>`).join("")}</ol>
      <p class="steps__compact" aria-hidden="true">Step ${step + 1} of ${steps.length} · ${esc(steps[step])}</p>` : "";
-  // Ask and Find carry two soft dark-Morandi circles in the page margins (decorative).
-  const orbs = ["ask", "find"].includes(task) ? `<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>` : "";
+  // Ask, Find and Complete my look carry two soft dark-Morandi circles in the page margins (decorative).
+  const orbs = ["ask", "find", "look"].includes(task) ? `<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>` : "";
   return `<div class="task" data-task="${task}">${orbs}
     <nav class="task__bar" aria-label="AI Stylist">
       <a class="link-btn task__back" href="${back || "#/stylist"}">← Back</a>
@@ -104,8 +104,27 @@ function lookContext() {
     `You suggested: ${picks}. Use these article ids with your tools if helpful.`};
 }
 
+// A product's name as shoppers read it: "Juan vest top", or just the name when it already says what it is.
+export async function productName(id) {
+  try {
+    const a = (await api(`/api/product/${id}`)).article;
+    const type = (a.product_type_name || "").toLowerCase();
+    return !type || type === "unknown" || a.prod_name.toLowerCase().includes(type) ? a.prod_name : `${a.prod_name} ${type}`;
+  } catch { return null; }
+}
+
+// Shoppers never see article numbers: a number the stylist wrote in prose becomes the product's name (from the
+// cards it cited) or "this piece".
+export function humanize(answer, cards) {
+  const names = new Map(cards.map(c => [String(+c.article_id), c.prod_name]));
+  const nameOf = id => names.get(String(+id));
+  return String(answer).replace(/\s*\[\[(\d+)\]\]/g, "")
+    .replace(/\b(?:the\s+)?article\s*(?:no\.?|number|#)?\s*(\d{6,10})\b/gi, (m, id) => nameOf(id) ? `the ${nameOf(id)}` : "this piece")
+    .replace(/\b\d{9,10}\b/g, id => nameOf(id) || "this piece");
+}
+
 function renderAnswer(r, cards) {
-  const text = esc(r.answer).replace(/\s*\[\[(\d+)\]\]/g, "");
+  const text = esc(humanize(r.answer, cards));
   const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
   return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
     ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}</div>`;
@@ -197,7 +216,13 @@ export async function ask(ctx) {
   }
   fillThumbs(log);
   const chat = conversation(root, customer, key);
-  if (anchor && !s.sentAnchors.has(anchor)) { s.sentAnchors.add(anchor); chat.send(`What goes with article ${anchor}?`); }
+  if (anchor && !s.sentAnchors.has(anchor)) {
+    s.sentAnchors.add(anchor);
+    // Shoppers see the product's name; the stylist also gets the article id so it can ground its answer.
+    const name = await productName(anchor);
+    if (!ctx.current()) return;
+    chat.send(name ? `What goes with the ${name}?` : "What goes with this piece?", `What goes with article ${anchor}${name ? ` (${name})` : ""}?`);
+  }
 }
 
 function conversation(root, customer, key) {
@@ -237,7 +262,8 @@ function conversation(root, customer, key) {
     return r;
   }
 
-  async function send(text) {
+  // `text` is what the shopper sees; `payload` (default: the same) is what is sent, e.g. with an article id added.
+  async function send(text, payload = text) {
     text = text.trim();
     if (busy) return;
     if (!text) { err.textContent = photo ? "Add a short message to go with the photo." : "Type a message first."; input.focus(); return; }
@@ -255,7 +281,7 @@ function conversation(root, customer, key) {
     try {
       let r;
       try {
-        r = await post(s, text, sent);
+        r = await post(s, payload, sent);
       } catch (e) {
         if (!(e instanceof ApiError && e.status === 404)) throw e;
         // The server forgot the session (e.g. it restarted): start a new one, replay what it needs, resend.
@@ -263,11 +289,11 @@ function conversation(root, customer, key) {
         s = await createSession(customer, s);
         sessions.set(key, s);
         s.replay = replay || null;
-        r = await post(s, text, sent);
+        r = await post(s, payload, sent);
         log.insertAdjacentHTML("beforeend", `<p class="meta chat__note">We reconnected you to the stylist and kept your conversation.</p>`);
       }
       // Keep the product ids ([[id]]) in the replayable history so a recovered session can still refer to them.
-      s.history.push({role: "user", text}, {role: "assistant", text: String(r.answer).slice(0, 500)});
+      s.history.push({role: "user", text: payload}, {role: "assistant", text: String(r.answer).slice(0, 500)});
       const [cards] = await grouped([r.cards]);
       $("#pending", log)?.remove();
       log.insertAdjacentHTML("beforeend", renderAnswer(r, cards));

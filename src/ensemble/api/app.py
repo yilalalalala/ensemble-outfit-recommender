@@ -912,10 +912,13 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
         main = main or next((g for g in matched if g["ids"]), None)
         missing = gaps(pieces)
         complete_outfit = not missing   # nothing is missing: offer pairings rather than invent a gap
+        # The edit mixes kinds of piece: the missing slots first, then the complementary slots the outfit does not
+        # fill yet (shoes, accessories), so one gap never turns the whole edit into four pairs of shoes.
+        slots = missing + [sl for sl in ("shoes", "accessories") if sl not in missing]
         modules = []
         if main is not None:
             anchor = main["ids"][0]
-            modules = _stylist_ctl(anchor, missing or ["shoes", "accessories"], customer)
+            modules = _stylist_ctl(anchor, slots, customer)
         if goal == "occasion" and modules:
             from ensemble.vision import clip
             from ensemble.vision.outfit import catalogue
@@ -924,17 +927,19 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
             q = clip.embed_texts([f"{occasion} outfit"])[0]
             for m in modules:   # reorder each slot's pool by fit to the occasion (stable for unknown ids)
                 m["ids"] = sorted(m["ids"], key=lambda a: -float(emb[row[a]] @ q) if a in row else 0.0)
-        # Round-robin across the slots, one product per family, until 4-6 picks (fewer only if the pools run out).
+        # Round-robin across the slots, one product per family. "complete" is exactly four picks (the shop shows one
+        # row of four); the other goals keep 4-6. Fewer only if the pools run out.
+        limit = 4 if goal == "complete" else 6
         cursors = [0] * len(modules)
         rounds = 0
-        while len(picks) < 6 and any(c < len(m["ids"]) for c, m in zip(cursors, modules)):
+        while len(picks) < limit and any(c < len(m["ids"]) for c, m in zip(cursors, modules)):
             for i, m in enumerate(modules):
-                while cursors[i] < len(m["ids"]) and len(picks) < 6:
+                while cursors[i] < len(m["ids"]) and len(picks) < limit:
                     a = m["ids"][cursors[i]]
                     cursors[i] += 1
                     word = SLOT_WORDS.get(m["slot"], m["slot"])
                     if take(a, f"Works for {occasion}" if goal == "occasion" else
-                            f"Pairs with your {name(main)}" if complete_outfit else
+                            f"Pairs with your {name(main)}" if complete_outfit or m["slot"] not in missing else
                             f"Finishes the look with {word}", m["slot"]):
                         break
             rounds += 1
