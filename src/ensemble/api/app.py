@@ -385,7 +385,13 @@ def assistant_message(sid: str, text: str = Form(...), photo: UploadFile | None 
     s = SESSIONS.get(sid)
     if s is None:
         raise HTTPException(404, "unknown session")
-    r = run_turn(s["llm"], s, text, _image(photo) if photo is not None and photo.filename else None)
+    from ensemble.llm.client import GPUUnavailable
+    n = len(s["messages"])
+    try:
+        r = run_turn(s["llm"], s, text, _image(photo) if photo is not None and photo.filename else None)
+    except GPUUnavailable:
+        del s["messages"][n:]   # undo the half-run turn, so the shopper's retry is not a duplicate
+        raise HTTPException(503, "the stylist is waking up, please try again") from None
     return {**{k: r[k] for k in ("answer", "trace", "latency_s", "cost_usd", "hallucinated")},
             "cards": _cards(r["cited"][:ASSISTANT_MAX_CARDS])}
 
@@ -789,11 +795,17 @@ SLOT_WORDS = {"upper": "top", "lower": "bottoms", "full": "dress", "shoes": "sho
 @app.post("/api/stylist/detect")
 def stylist_detect(photo: UploadFile = File(...)):
     """Step 1 → 2: the garments in the photo, for the shopper to review. Boxes are fractions of the image."""
-    from ensemble.llm.client import BudgetExceeded, get_client
+    from ensemble.llm.client import BudgetExceeded, GPUUnavailable, get_client
     from ensemble.vision.outfit import CATEGORIES, detect
     img = _image(photo)
     try:
-        garments, small = detect(img, get_client("vision"), purpose="stylist_detect")
+        try:
+            garments, small = detect(img, get_client("vision"), purpose="stylist_detect")
+        except GPUUnavailable:
+            # No GPU in time (cloud capacity, cold start): this photo is read by Claude, framed by clothes parsing (D-051),
+            # rather than leaving the shopper with an error. Logged so the fallback rate is visible.
+            LOG.warning("stylist detect: GPU unavailable, falling back to Claude")
+            garments, small = detect(img, get_client("vision", backend="claude"), purpose="stylist_detect_fallback")
     except BudgetExceeded:
         raise
     except Exception as e:  # noqa: BLE001 - the detector is a remote/optional model: degrade explicitly

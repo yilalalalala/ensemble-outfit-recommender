@@ -40,8 +40,10 @@ app = modal.App("ensemble-recommender")
 # opens the AI Stylist), stays up 5 minutes after the last request, and bills its own uptime into a Modal Dict;
 # past GPU_MONTHLY_BUDGET_USD the API refuses GPU requests and the stylist features rest until the next month.
 OLLAMA_MODELS = ["qwen2.5vl:7b", "qwen3-vl:8b-instruct"]
-GPU = "L4"
-GPU_USD_PER_SECOND = 0.80 / 3600 + 0.00003   # L4 list price plus CPU/memory, rounded up
+# L4 first; when Modal has no L4 free (it happens), A10G, then L40S: all three hold both models. Billed per type.
+GPU = ["L4", "A10G", "L40S"]
+GPU_USD_PER_HOUR = {"L4": 0.80, "A10G": 1.10, "L40S": 1.95}
+EXTRA_USD_PER_SECOND = 0.00003                # CPU and memory, rounded up
 GPU_MONTHLY_BUDGET_USD = 25   # under the $30 free monthly credits with the web backend; Modal spend limit $5 behind it
 models_volume = modal.Volume.from_name("ensemble-ollama-models", create_if_missing=True)
 ollama_image = (
@@ -102,6 +104,10 @@ class OllamaGPU:
         import time
         import urllib.request
         self.started = self.billed = time.time()
+        name = subprocess.run(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"], capture_output=True, text=True).stdout
+        kind = next((k for k in GPU_USD_PER_HOUR if k in name.replace(" ", "")), "L40S")   # unknown: bill the dearest
+        self.usd_per_second = GPU_USD_PER_HOUR[kind] / 3600 + EXTRA_USD_PER_SECOND
+        print(f"[gpu start] running on {kind} ({name.strip()})", flush=True)
         lap = lambda what: print(f"[gpu start] {what}: {time.time() - self.started:.1f}s", flush=True)
         self.proc = subprocess.Popen(["ollama", "serve"])
         for _ in range(120):
@@ -137,7 +143,7 @@ class OllamaGPU:
         now = time.time()
         d = modal.Dict.from_name("ensemble-gpu-spend", create_if_missing=True)
         key = time.strftime("%Y-%m", time.gmtime())
-        d[key] = float(d.get(key, 0.0)) + (now - self.billed) * GPU_USD_PER_SECOND
+        d[key] = float(d.get(key, 0.0)) + (now - self.billed) * self.usd_per_second
         self.billed = now
 
     @modal.method()
