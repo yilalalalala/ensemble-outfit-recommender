@@ -113,15 +113,21 @@ async function auditCards(p, scope = 'main') {
     ok('shopper header has no service status', (await p.$eval('#utility-note', e => e.innerText)) === '', '');
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
     const a = await p.$eval('main', m => m.innerText);
-    ok('ask intro copy', a.replace(/[’]/g, "'").includes("Tell us what you're looking for. We'll help you find pieces that feel right."), '');
+    ok('ask greeting copy', a.replace(/[’]/g, "'").includes("Hi! What are you dressing for today?") && a.replace(/[’]/g, "'").includes("I'll find pieces that feel right."), '');
     await p.goto(BASE + '#/stylist'); await settle(p);
     ok('hub copy and three tasks, no eyebrow above the question', (await p.$eval('main', m => m.innerText)).includes('What can we help with?') && (await p.$$('.task-card')).length === 3 && !(await p.$('.hub__head .eyebrow')), '');
-    const fonts = await p.evaluate(() => ({h: getComputedStyle(document.querySelector('.hub__title')).fontFamily, body: getComputedStyle(document.querySelector('.lede')).fontFamily,
+    ok('hub is just the question and three cards: no lede, no one-line summaries; headings in Poppins, details in Inter',
+       !(await p.$('.hub__head .lede, .task-card__line')) && (await p.$$eval('.hub__title, .task-card__title', es => es.every(e => /^Poppins/.test(getComputedStyle(e).fontFamily))))
+       && /^Inter/.test(await p.$eval('.task-card__detail', e => getComputedStyle(e).fontFamily)), '');
+    const hub = await p.evaluate(() => { const v = document.querySelector('.hub').getBoundingClientRect(), t = document.querySelector('.hub__title').getBoundingClientRect(),
+      l = document.querySelector('.hub__tasks').getBoundingClientRect(), c = document.querySelector('.task-card');
+      return {title: Math.abs(t.left + t.width / 2 - (v.left + v.width / 2)) < 4, cards: Math.abs(l.left + l.width / 2 - (v.left + v.width / 2)) < 4, radius: parseFloat(getComputedStyle(c).borderTopLeftRadius)}; });
+    ok('hub question and cards are centred; cards have rounded corners', hub.title && hub.cards && hub.radius >= 12, JSON.stringify(hub));
+    const fonts = await p.evaluate(() => ({body: getComputedStyle(document.querySelector('.task-card__detail')).fontFamily,
       nav: getComputedStyle(document.querySelector('#primary-nav a')).fontFamily, wm: getComputedStyle(document.querySelector('#wordmark')).fontFamily,
       loaded: [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family)}));
-    ok('canvas typefaces: Tiro Gurmukhi headings, Inter text, Poppins navigation, Segoe UI wordmark (self-hosted)',
-       /^"Tiro Gurmukhi"/.test(fonts.h) && /^Inter/.test(fonts.body) && /^Poppins/.test(fonts.nav) && /^"Segoe UI"/.test(fonts.wm)
-       && ['Tiro Gurmukhi', 'Inter', 'Poppins'].every(f => fonts.loaded.includes(f)), JSON.stringify(fonts));
+    ok('canvas typefaces: Inter text, Poppins navigation, Segoe UI wordmark (self-hosted)', /^Inter/.test(fonts.body) && /^Poppins/.test(fonts.nav) && /^"Segoe UI"/.test(fonts.wm)
+       && ['Inter', 'Poppins'].every(f => fonts.loaded.includes(f)), JSON.stringify(fonts));
     clean(p, 'copy');
     await ctx.close();
   }
@@ -137,16 +143,9 @@ async function auditCards(p, scope = 'main') {
     ok('home: no Why this / category metadata / hide (×) on cards', a.meta === 0 && !(await p.$('main .tile__meta')), '');
     const imps = p._events.filter(e => e.event === 'impression');
     ok('impressions logged once per shown card, for this customer', imps.length === a.n && imps.every(e => e.customer_idx === DEFAULT), `${imps.length} impressions, ${a.n} cards`);
-    // Not for me: logs not_for_me, confirms in place, and is remembered for this profile
-    await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
-    ok('no hide (×) control on cards', !(await p.$('main [data-hide], main .card__hide')), '');
-    const fam = await p.$eval('main .grid > li:nth-child(2) [data-card]', c => c.dataset.family);
-    await p.click('main .grid > li:nth-child(2) [data-nfm]'); await p.waitForTimeout(200);
-    const st = await p.$eval('main .grid > li:nth-child(2) [data-card]', c => ({dim: c.classList.contains('is-dismissed'), note: c.querySelector('.card__nfm-note').textContent, dis: c.querySelector('[data-nfm]').disabled}));
-    ok('Not for me logs the event and says it will be remembered', st.dim && st.dis && /remember that next time/.test(st.note) && p._events.some(e => e.event === 'not_for_me'), JSON.stringify(st));
-    await p.reload(); await settle(p);
-    ok('Not for me is remembered: that product is gone after reload', !(await p.$$eval('main [data-card]', (cs, f) => cs.some(c => c.dataset.family === f), fam)), fam);
-    await p.evaluate(() => localStorage.removeItem('ensemble.notforme.168058'));
+    ok('no hide (×) and no Not for me on cards', !(await p.$('main [data-hide], main .card__hide, main [data-nfm]')) && !/Not for me/.test(await p.$eval('main', m => m.innerText)), '');
+    const chips = await p.$$eval('main .swatch', ss => ss.map(x => ({fabric: x.classList.contains('is-fabric'), sw: getComputedStyle(x).getPropertyValue('--sw').trim()})));
+    ok('swatches come from the photos: a colour-card chip or a fabric crop on every swatch', chips.length > 0 && chips.every(c => c.fabric || /^#[0-9a-f]{6}$/i.test(c.sw)), JSON.stringify(chips.slice(0, 3)));
     await p.screenshot({path: `${SHOTS}/home.png`});
     clean(p, 'home');
     await ctx.close();
@@ -260,7 +259,9 @@ async function auditCards(p, scope = 'main') {
     ok('product deep link from card', /#\/product\/922037001/.test(p.url()), p.url());
     ok('click events logged (card + product page)', p._events.some(e => e.event === 'click' && e.surface === 'for_you') && p._events.some(e => e.event === 'click' && e.surface === 'product_page'), '');
     const secs = await p.$$eval('main h2.section-title', hs => hs.map(h => h.textContent.trim()));
-    ok('product page: Complete the look and Similar items; no Other colours gallery', secs.includes('Complete the look') && secs.includes('Similar items') && !secs.includes('Other colours'), secs.join(' / '));
+    ok('product page: exactly four similar items', (await p.$$('section[aria-labelledby="s-sim"] .card')).length === 4, '');
+    ok('product page: Similar items only; no Complete the look, no Other colours gallery', secs.includes('Similar items') && !secs.includes('Complete the look') && !secs.includes('Other colours')
+       && !p._failed.concat(p._events.map(e => e.surface)).some(x => /complete.the.look/.test(String(x))), secs.join(' / '));
     const fam = await p.evaluate(async () => (await (await fetch(`${document.querySelector('meta[name="ensemble-api-base"]')?.content || ''}/api/catalog/families?articles=922037001`)).json()).families['0922037']);
     const sw = await p.$$eval('.pdp .swatch', s => s.map(x => x.dataset.swatch));
     ok('product page shows every real colourway as a swatch', sw.length === fam.variants.length && fam.variants.every(v => sw.includes(String(v.article_id))), `${sw.length} / ${fam.variants.length}`);
@@ -279,10 +280,10 @@ async function auditCards(p, scope = 'main') {
     const btn = await p.$eval('.pdp [data-add]', b => { const c = getComputedStyle(b); return [c.backgroundColor, c.color, b.innerText.trim()]; });
     ok('product Add to cart is black with white text, same wording', btn[0] === 'rgb(0, 0, 0)' && btn[1] === 'rgb(255, 255, 255)' && /^add to cart$/i.test(btn[2]), btn.join(' '));
     await p.screenshot({path: `${SHOTS}/product.png`});
-    const ctl = await p.$('#s-ctl ~ * .card__name a, section[aria-labelledby="s-ctl"] .card__name a');
-    const ctlId = await ctl.getAttribute('data-open');
-    await ctl.click(); await settle(p);
-    ok('Complete the look card opens its product, click carries the anchor', p.url().endsWith('/product/' + ctlId) && p._events.some(e => e.event === 'click' && e.surface === 'complete_the_look' && e.anchor != null), p.url());
+    const sim = await p.$('section[aria-labelledby="s-sim"] .card__name a');
+    const simId = await sim.getAttribute('data-open');
+    await sim.click(); await settle(p);
+    ok('Similar item card opens its product', p.url().endsWith('/product/' + simId) && p._events.some(e => e.event === 'click' && e.surface === 'similar'), p.url());
     await p.click('[data-back]'); await settle(p);
     ok('Back returns to the product', /\/product\/\d+$/.test(p.url()), p.url());
     await p.goto(BASE + '#/ds'); await settle(p);
@@ -410,10 +411,6 @@ async function auditCards(p, scope = 'main') {
     await p.unroute('**/api/product/**');
     await p.click('[data-retry]'); await settle(p);
     ok('retry recovers', !!(await p.$('.pdp')), '');
-    await p.route('**/api/v2/complete-the-look**', r => r.fulfill({status: 503, contentType: 'application/json', body: '{"error":{"code":"not_ready","message":"bundle not loaded"}}'}));
-    await p.reload(); await settle(p);
-    const t2 = await shopperText(p);
-    ok('live outfit failure falls back quietly (no service/storage wording)', /Complete the look/.test(t2) && !bannedIn(t2).length, bannedIn(t2).join(','));
     await ctx.close();
   }
 
@@ -429,10 +426,14 @@ async function auditCards(p, scope = 'main') {
     const gw = await p.evaluate(() => {
       const s = document.querySelector('.gateway'), t = document.querySelector('.gateway__choices').getBoundingClientRect();
       const r = s.getBoundingClientRect(), mid = r.left + r.width / 2;
+      const bs = [...s.querySelectorAll('.gw-choice__btn')].map(b => b.getBoundingClientRect());
       return {imgs: s.querySelectorAll('img').length, solid: s.querySelectorAll('.gw-choice__btn.btn--solid').length,
+        sameSize: bs.length === 2 && Math.abs(bs[0].width - bs[1].width) < 1 && Math.abs(bs[0].height - bs[1].height) < 1,
+        fits: [...s.querySelectorAll('.gw-choice__btn')].every(b => b.scrollWidth <= b.clientWidth && b.getBoundingClientRect().width <= b.parentElement.getBoundingClientRect().width + 0.5),
         centred: Math.abs(t.left + t.width / 2 - mid) < 4, overflow: document.documentElement.scrollWidth > innerWidth};
     });
     ok('gateway is plain: no imagery, two solid buttons, centred, no horizontal scroll', !gw.imgs && gw.solid === 2 && gw.centred && !gw.overflow, JSON.stringify(gw));
+    ok('both gateway buttons are the same size and their labels fit', gw.sameSize && gw.fits, JSON.stringify(gw));
     const box = await p.$eval('.gateway', s => { const r = s.getBoundingClientRect(); return {x: r.left + 40, y: r.top + 40}; });
     await p.mouse.move(box.x, box.y); await p.mouse.down();
     const rip = await p.$$eval('.gateway > .ripple', rs => rs.length); await p.mouse.up();
@@ -501,22 +502,18 @@ async function auditCards(p, scope = 'main') {
     await p.reload(); await settle(p);
     const restored = await p.$$eval('.garment', g => g.map(x => [x.querySelector('[data-field=category]').value, x.querySelector('[data-field=colour]').value]));
     ok('refresh restores the step and the corrections', JSON.stringify(edited) === JSON.stringify(restored) && edited[0][1] === 'navy' && edited.at(-1)[0] === 'belt', JSON.stringify(restored));
-    await p.click('#review-next'); await settle(p);
-    ok('step 3: direction choices, one dominant action', (await heading(p)) === 'What would you like?' && (await p.$$('.choice')).length === 3 && (await oneCta(p)) === 1, '');
-    await p.check('input[name=goal][value=occasion]');
-    await p.click('#dir-next');
-    ok('occasion requires minimal context', /occasion/i.test(await p.$eval('#dir-err', e => e.textContent)), '');
-    await p.click('[data-occ="a wedding"]');
-    await p.click('#dir-next');
+    ok('three steps (no Direction step); Review builds the edit directly', JSON.stringify(await p.$$eval('.steps__label', l => l.map(x => x.textContent))) === '["Photo","Review","Your edit"]'
+       && /Complete my look/i.test(await p.$eval('#review-next', e => e.textContent)), '');
+    await p.click('#review-next');
     await p.waitForFunction(() => location.hash.includes('step=edit'), null, {timeout: 600000}); await settle(p);
     await p.waitForSelector('.look-edit__picks .card', {timeout: 60000}).catch(() => {});
     const sent = JSON.parse((editPayload || '').match(/name="garments"\r\n\r\n([^\r]*)/)?.[1] || '[]');
-    ok('edit request carries exactly the confirmed pieces', sent.length === edited.length && sent[0].colour === 'navy' && sent.at(-1).category === 'belt' && /name="goal"\r\n\r\noccasion/.test(editPayload), JSON.stringify(sent));
+    ok('edit request carries exactly the confirmed pieces', sent.length === edited.length && sent[0].colour === 'navy' && sent.at(-1).category === 'belt' && /name="goal"\r\n\r\ncomplete/.test(editPayload), JSON.stringify(sent));
     const a = await auditCards(p, '.look-edit__picks');
-    ok('step 4: 4–6 priority picks with price, swatches and black Add to cart, one family each', a.n >= 4 && a.n <= 6 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
-    ok('alternatives sit behind a quiet control', !(await p.$eval('.look-edit__more', d => d.open).catch(() => false)), '');
+    ok('your edit: exactly four picks with price, swatches and Add to cart, one family each', a.n === 4 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
+    ok('no "More options" and no "Try another direction"', !(await p.$('.look-edit__more')) && !/More options|Try another direction/.test(await p.$eval('main', m => m.innerText)), '');
     ok('pick reasons are consumer phrases', await p.$$eval('.look-edit__picks .card__note', n => n.length > 0 && n.every(x => x.textContent.length > 5)), '');
-    ok('step 4 has exactly one dominant action (Refine this edit)', (await oneCta(p)) === 1 && /Refine this edit/.test(await p.$eval('.task__actions .btn--solid', e => e.textContent)), '');
+    ok('your edit has exactly one dominant action (Refine this edit)', (await oneCta(p)) === 1 && /Refine this edit/.test(await p.$eval('.task__actions .btn--solid', e => e.textContent)), '');
     await imagesReady(p); await p.screenshot({path: `${SHOTS}/look_edit.png`});
     const t = await shopperText(p);
     ok('no technical copy anywhere in the flow', !bannedIn(t).length, bannedIn(t).join(','));
@@ -553,29 +550,55 @@ async function auditCards(p, scope = 'main') {
     await p.evaluate(() => sessionStorage.clear()); await p.reload(); await settle(p);
     await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
     await p.click('#find-next'); await p.waitForSelector('.piece'); await settle(p);
-    ok('choose step lists the spotted pieces, none chosen yet, no radio buttons or category dropdown up front',
-       (await heading(p)) === 'Which piece?' && (await p.$$('.piece')).length === 3 && !(await p.$('.piece.is-on')) && !(await p.$('input[type=radio]')) && !(await p.$('[data-kind]'))
-       && await p.$eval('#find-go', b => b.disabled), '');
+    ok('choose step lists the spotted pieces (no thumbnails), none chosen, no frames on the photo yet, no radio buttons or category dropdown up front',
+       (await heading(p)) === 'Which piece?' && (await p.$$('.piece')).length === 3 && !(await p.$('.piece.is-on')) && !(await p.$('.piece__thumb')) && !(await p.$('input[type=radio]')) && !(await p.$('[data-kind]'))
+       && await p.$$eval('.picker__box', bs => bs.every(b => getComputedStyle(b).borderTopWidth === '0px')) && await p.$eval('#find-go', b => b.disabled), '');
     await p.click('.picker__box[data-pid=g1]');
     await p.locator('.piece[data-pid=g2] .piece__pick').click();
     const on = await p.$$eval('.piece.is-on', rs => rs.map(r => ({id: r.dataset.pid, kind: r.querySelector('[data-kind]')?.value})));
-    ok('tapping a piece on the photo or in the list chooses it and shows what it is', JSON.stringify(on) === '[{"id":"g1","kind":"top"},{"id":"g2","kind":"bottom"}]', JSON.stringify(on));
+    ok('tapping a piece on the photo or in the list chooses it, shows its frame and what it is', JSON.stringify(on) === '[{"id":"g1","kind":"top"},{"id":"g2","kind":"bottom"}]'
+       && await p.$eval('.picker__box[data-pid=g1]', b => b.classList.contains('is-on') && getComputedStyle(b).borderTopWidth !== '0px'), JSON.stringify(on));
     ok('focus stays on the tapped row', await p.evaluate(() => document.activeElement?.closest('.piece')?.dataset.pid === 'g2'), '');
     await p.selectOption('.piece[data-pid=g1] [data-kind]', 'knitwear');
-    ok('the shopper can correct what a piece is', (await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)) === 'beige Knitwear' || /knitwear/i.test(await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)), '');
+    ok('the shopper can correct what a piece is', /knitwear/i.test(await p.$eval('.piece[data-pid=g1] .piece__name', e => e.textContent)), '');
     await p.locator('.piece[data-pid=g2] .piece__pick').click();
-    ok('tapping again un-chooses it', !(await p.$('.piece[data-pid=g2].is-on')), '');
+    ok('tapping again un-chooses it and hides its frame', !(await p.$('.piece[data-pid=g2].is-on')) && !(await p.$('.picker__box[data-pid=g2].is-on')), '');
     const fr = await (await p.$('#picker img')).boundingBox();
+    // drawing over a spotted piece chooses it, never a second copy
     await p.mouse.move(fr.x + fr.width * .3, fr.y + fr.height * .6); await p.mouse.down();
     await p.mouse.move(fr.x + fr.width * .7, fr.y + fr.height * .9, {steps: 6}); await p.mouse.up();
-    const added = await p.$$eval('.piece.is-on', rs => rs.map(r => r.querySelector('[data-kind]')?.value));
-    ok('dragging frames a new piece and its category follows the spotted piece it covers', added.length === 2 && added[1] === 'bottom', JSON.stringify(added));
+    ok('drawing a frame over a spotted piece chooses that piece instead of listing it twice', (await p.$$('.piece')).length === 3 && !!(await p.$('.piece[data-pid=g2].is-on')), '');
+    // moving a frame keeps one entry and follows it
+    const g1 = await (await p.$('.picker__box[data-pid=g1]')).boundingBox();
+    await p.mouse.move(g1.x + g1.width / 2, g1.y + g1.height / 2); await p.mouse.down();
+    await p.mouse.move(g1.x + g1.width / 2 + 20, g1.y + g1.height / 2 - 15, {steps: 6}); await p.mouse.up();
+    const moved = await (await p.$('.picker__box[data-pid=g1]')).boundingBox();
+    ok('a chosen frame can be dragged to move it', Math.abs(moved.x - g1.x - 20) < 3 && (await p.$$('.piece')).length === 3, JSON.stringify({before: g1.x, after: moved.x}));
+    // drawing where nothing was spotted adds the shopper's own piece, which can be removed
+    await p.$eval('#picker img', i => i.scrollIntoView({block: 'center'}));
+    const fr2 = await (await p.$('#picker img')).boundingBox();
+    // (start inside the rounded corner's clip, not on the very corner pixel)
+    await p.mouse.move(fr2.x + fr2.width * .03, fr2.y + fr2.height * .06); await p.mouse.down();
+    await p.mouse.move(fr2.x + fr2.width * .09, fr2.y + fr2.height * .16, {steps: 6}); await p.mouse.up();
+    ok('drawing where nothing was spotted adds your own piece', (await p.$$('.piece')).length === 4 && !!(await p.$('.piece:last-child.is-on')), '');
     await p.click('.piece:last-child [data-remove]');
     ok('a framed piece can be removed', (await p.$$('.piece')).length === 3, '');
+    // a piece spotted without a box (small accessories): ticking it asks for a frame, and the frame you draw is that piece
+    await p.locator('.piece[data-pid=g3] .piece__pick').click();
+    ok('ticking a piece with no box asks you to frame it', /drag around/i.test(await p.$eval('#picker-hint', e => e.textContent)), '');
+    await p.$eval('#picker img', i => i.scrollIntoView({block: 'center'}));
+    const fr3 = await (await p.$('#picker img')).boundingBox();
+    await p.mouse.move(fr3.x + fr3.width * .03, fr3.y + fr3.height * .06); await p.mouse.down();
+    await p.mouse.move(fr3.x + fr3.width * .09, fr3.y + fr3.height * .16, {steps: 6}); await p.mouse.up();
+    ok('the frame you draw becomes that piece (never a second entry)', (await p.$$('.piece')).length === 3 && !!(await p.$('.picker__box[data-pid=g3].is-on')), '');
+    await p.locator('.piece[data-pid=g3] .piece__pick').click();
+    await p.locator('.piece[data-pid=g2] .piece__pick').click();
     await p.click('#find-go');
     await p.waitForFunction(() => location.hash.includes('step=results'), null, {timeout: 300000}); await settle(p);
     const counts = await p.$$eval('.find-group', g => g.map(x => x.querySelectorAll('.card').length));
     ok('one search per chosen piece with the corrected category', searches.length === 1 && /knitwear/.test(searches[0]), String(searches.length));
+    ok('results: no lede sentence; the whole "Like your …" title in one dusty-blue pill', !(await p.$('.task__lede')) && /^like your /i.test(await p.$eval('.find-group__title', e => e.textContent.trim()))
+       && await p.$eval('.find-group__title', e => getComputedStyle(e).backgroundColor === 'rgb(102, 115, 127)' && parseFloat(getComputedStyle(e).borderTopLeftRadius) > 100), '');
     ok('the four closest per chosen piece', counts.length === 1 && counts[0] === 4, JSON.stringify(counts));
     const a = await auditCards(p, '.task__body');
     ok('real visually similar results with prices and cart', a.n === 4 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));
@@ -588,8 +611,15 @@ async function auditCards(p, scope = 'main') {
   if (want('ask') || want('recovery')) {
     const {ctx, p} = await newPage(b);
     await p.goto(BASE + '#/stylist/ask'); await settle(p);
-    ok('ask: starter prompts and one dominant action', (await p.$$('.suggestion')).length === 3 && (await p.$$('#composer .btn--solid')).length === 1, '');
-    await p.click('.suggestion');
+    ok('ask: greeting bubble, three reply bubbles and one dominant action', !!(await p.$('.greet .bubble')) && (await p.$$('.reply')).length === 3 && (await p.$$('#composer .btn--solid')).length === 1, '');
+    await p.waitForFunction(() => [...document.querySelectorAll('.reply__img')].every(i => i.complete && i.naturalWidth > 0), null, {timeout: 15000}).catch(() => {});
+    const askPage = await p.evaluate(() => ({thumbs: [...document.querySelectorAll('.reply__img')].filter(i => i.naturalWidth > 0).length,
+      title: getComputedStyle(document.querySelector('.task__title')).fontFamily, reply: getComputedStyle(document.querySelector('.reply')).borderTopLeftRadius,
+      orbs: [...document.querySelectorAll('.orb')].filter(o => getComputedStyle(o).display !== 'none').map(o => getComputedStyle(o).backgroundColor), composer: getComputedStyle(document.querySelector('#composer')).borderTopLeftRadius,
+      scroll: document.documentElement.scrollWidth > innerWidth}));
+    ok('ask: real photos in the reply bubbles, rounded shapes, dark Morandi orbs, pill composer, no sideways scroll', askPage.thumbs === 3 && /^Poppins/.test(askPage.title) && parseFloat(askPage.reply) >= 20
+       && askPage.orbs.length >= 1 && askPage.orbs.every(c => ['rgb(111, 95, 102)', 'rgb(95, 107, 98)'].includes(c)) && parseFloat(askPage.composer) > 100 && !askPage.scroll, JSON.stringify(askPage));
+    await p.click('.reply');
     await p.waitForSelector('#pending', {state: 'detached', timeout: 600000});
     const a1 = await auditCards(p, '.msg--bot:last-child');
     ok('grounded answer with consistent product cards', a1.bad.length === 0 && a1.dupFamilies === 0, JSON.stringify(a1));

@@ -10,11 +10,12 @@ from pathlib import Path
 
 import io
 import os
+import re
 from functools import lru_cache
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -217,15 +218,18 @@ def _has_image(article_id: int) -> bool:
     return (IMAGES / s[:3] / f"{s}.jpg").exists()
 
 
-def _swatches(ids: list[int]) -> dict[int, str]:
-    """Fabric swatch data URIs (ensemble.serving.swatches) for these articles; empty if the store is not built."""
+def _swatches(ids: list[int]) -> dict[int, dict]:
+    """Colour swatches read from each colourway's photo (ensemble.serving.swatches): {"kind": "plain", "hex"} — the
+    main colour snapped to the standard colour card — or {"kind": "pattern", "hex", "image"} with a fabric crop.
+    Empty if the store is not built (the UI then falls back to the colour group)."""
     import base64
     path = cfg.path("swatch_db")
     if not ids or not path.exists():
         return {}
     with sqlite3.connect(f"file:{path}?mode=ro", uri=True) as db:
-        rows = db.execute(f"SELECT article_id, jpeg FROM swatches WHERE article_id IN ({','.join('?' * len(ids))})", ids)
-        return {a: "data:image/jpeg;base64," + base64.b64encode(j).decode() for a, j in rows}
+        rows = db.execute(f"SELECT article_id, kind, hex, jpeg FROM swatches WHERE article_id IN ({','.join('?' * len(ids))})", ids)
+        return {a: {"kind": k, "hex": h, **({"image": "data:image/jpeg;base64," + base64.b64encode(j).decode()} if j else {})}
+                for a, k, h, j in rows}
 
 
 @app.get("/api/catalog/families")
@@ -862,10 +866,10 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
                            int(g["box"][2] * small.width), int(g["box"][3] * small.height)] if g["box"] else None}
         m = match(gp, small, "text_rerank_image", 6)
         matched.append({**g, "ids": m.article_id.astype(int).tolist()})
-    def name(g: dict) -> str:   # "black strappy sandals", never "black black strappy sandals"
+    def name(g: dict) -> str:   # "black strappy sandals", never "black black…" or "yellow mustard yellow…"
         what = g["description"] or g["category"]
         c = g["colour"].strip()
-        return what if not c or what.lower().startswith(c.lower()) else f"{c} {what}"
+        return what if not c or re.search(rf"\b{re.escape(c)}\b", what, re.I) else f"{c} {what}"
 
     def listing(gs: list[dict]) -> str:
         names = [name(g) for g in gs]
@@ -909,10 +913,13 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
         main = main or next((g for g in matched if g["ids"]), None)
         missing = gaps(pieces)
         complete_outfit = not missing   # nothing is missing: offer pairings rather than invent a gap
+        # The edit mixes kinds of piece: the missing slots first, then the complementary slots the outfit does not
+        # fill yet (shoes, accessories), so one gap never turns the whole edit into four pairs of shoes.
+        slots = missing + [sl for sl in ("shoes", "accessories") if sl not in missing]
         modules = []
         if main is not None:
             anchor = main["ids"][0]
-            modules = _stylist_ctl(anchor, missing or ["shoes", "accessories"], customer)
+            modules = _stylist_ctl(anchor, slots, customer)
         if goal == "occasion" and modules:
             from ensemble.vision import clip
             from ensemble.vision.outfit import catalogue
@@ -921,17 +928,19 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
             q = clip.embed_texts([f"{occasion} outfit"])[0]
             for m in modules:   # reorder each slot's pool by fit to the occasion (stable for unknown ids)
                 m["ids"] = sorted(m["ids"], key=lambda a: -float(emb[row[a]] @ q) if a in row else 0.0)
-        # Round-robin across the slots, one product per family, until 4-6 picks (fewer only if the pools run out).
+        # Round-robin across the slots, one product per family. "complete" is exactly four picks (the shop shows one
+        # row of four); the other goals keep 4-6. Fewer only if the pools run out.
+        limit = 4 if goal == "complete" else 6
         cursors = [0] * len(modules)
         rounds = 0
-        while len(picks) < 6 and any(c < len(m["ids"]) for c, m in zip(cursors, modules)):
+        while len(picks) < limit and any(c < len(m["ids"]) for c, m in zip(cursors, modules)):
             for i, m in enumerate(modules):
-                while cursors[i] < len(m["ids"]) and len(picks) < 6:
+                while cursors[i] < len(m["ids"]) and len(picks) < limit:
                     a = m["ids"][cursors[i]]
                     cursors[i] += 1
                     word = SLOT_WORDS.get(m["slot"], m["slot"])
                     if take(a, f"Works for {occasion}" if goal == "occasion" else
-                            f"Pairs with your {name(main)}" if complete_outfit else
+                            f"Pairs with your {name(main)}" if complete_outfit or m["slot"] not in missing else
                             f"Finishes the look with {word}", m["slot"]):
                         break
             rounds += 1
@@ -1026,9 +1035,36 @@ def image(article_id: int):
     return FileResponse(path, headers={"Cache-Control": "max-age=86400"})
 
 
+def _static_version() -> str:
+    """A fingerprint of every frontend file (name, size, modification time): it changes whenever any file changes."""
+    import hashlib
+    h = hashlib.sha1()
+    for f in sorted(STATIC.rglob("*")):
+        if f.is_file():
+            st = f.stat()
+            h.update(f"{f.relative_to(STATIC)}:{st.st_size}:{st.st_mtime_ns};".encode())
+    return h.hexdigest()[:10]
+
+
 @app.get("/")
 def index():
-    return FileResponse(STATIC / "index.html")
+    """The page links its files under a versioned path (static/v-<fingerprint>/…). The frontend is unbundled ES
+    modules with fixed names and relative imports, so the version in the directory carries through every import:
+    after an update every file has a new address and no browser can run a stale cached copy (cache busting)."""
+    html = (STATIC / "index.html").read_text().replace('"static/', f'"static/v-{_static_version()}/')
+    return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
 
 
-app.mount("/static", StaticFiles(directory=STATIC), name="static")
+class _VersionedStatic(StaticFiles):
+    """Serves static/v-<fingerprint>/<file> as static/<file>, cached as immutable (the address changes with the
+    content); plain static/<file> URLs keep working and are revalidated on every load."""
+
+    async def get_response(self, path, scope):
+        head, _, rest = path.partition("/")
+        versioned = head.startswith("v-") and len(head) == 12 and rest
+        r = await super().get_response(rest if versioned else path, scope)
+        r.headers["Cache-Control"] = "public, max-age=31536000, immutable" if versioned else "no-cache"
+        return r
+
+
+app.mount("/static", _VersionedStatic(directory=STATIC), name="static")

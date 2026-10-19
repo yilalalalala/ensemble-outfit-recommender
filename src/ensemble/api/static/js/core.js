@@ -1,6 +1,6 @@
 // Shared state, API access, event logging, the shopper product card, dialogs and motion.
 // Everything shown is rendered from API responses; nothing here invents product data.
-import {colourName, createPageGroups, familyKey, money, swatchStyle, variantLabels} from "./catalog.js";
+import {colourName, createPageGroups, money, swatchStyle, variantLabels} from "./catalog.js";
 
 
 // The local app is same-origin.  A hosted static build declares its Modal endpoint
@@ -87,16 +87,7 @@ export async function loadFamilies(ids) {
     for (const [a, code] of Object.entries(d.articles)) familyOfArticle.set(+a, code);
   }
 }
-// "Not for me": remembered per profile on this device and applied to every page rendered afterwards.
-const nfmKey = () => `ensemble.notforme.${state.customer}`;
-export function notForMeSet() {
-  try { return new Set(JSON.parse(localStorage.getItem(nfmKey()) || "[]")); } catch { return new Set(); }
-}
-function rememberNotForMe(key) {
-  const s = notForMeSet(); s.add(key);
-  try { localStorage.setItem(nfmKey(), JSON.stringify([...s])); return true; } catch { return false; }
-}
-export const newPageGroups = () => createPageGroups(familyOf, notForMeSet());
+export const newPageGroups = () => createPageGroups(familyOf);
 
 // ---- events (DESIGN §7.6: impression, click, add_to_cart, not_for_me) --------------------------------
 export function logEvent(event, surface, article_id, anchor = null) {
@@ -156,10 +147,14 @@ export function swatchButtons(it, list, max = Infinity) {
   const more = list.length - shown.length;
   const btns = shown.map(v => {
     const s = swatchStyle(v.colour_group_name), on = v === sel;
-    // Prefer the fabric swatch cut from this colourway's photo; the colour-group fill shows while it decodes.
-    const fabric = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(v.swatch || "");
-    const style = [s.fill && `--sw:${s.fill}`, fabric && `--swi:url(${v.swatch})`].filter(Boolean).join(";");
-    return `<button class="swatch${fabric ? " is-fabric" : s.pattern ? ` is-${s.pattern}` : ""}" type="button" data-swatch="${v.article_id}"
+    // Prefer the swatch read from this colourway's photo: a plain piece's main colour (standard colour card), or a
+    // crop of a patterned piece's fabric. Without it, the colour group's fill.
+    const sw = v.swatch || {};
+    const hex = /^#[0-9a-f]{6}$/i.test(sw.hex || "") ? sw.hex : null;
+    const fabric = sw.kind === "pattern" && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(sw.image || "");
+    const fill = hex || s.fill;
+    const style = [fill && `--sw:${fill}`, fabric && `--swi:url(${sw.image})`].filter(Boolean).join(";");
+    return `<button class="swatch${fabric ? " is-fabric" : hex ? "" : s.pattern ? ` is-${s.pattern}` : ""}" type="button" data-swatch="${v.article_id}"
       aria-pressed="${on}" aria-label="${esc(v.label)}${on ? ", selected" : ""}" title="${esc(v.label)}"
       ${style ? `style="${style}"` : ""}></button>`;
   }).join("");
@@ -186,9 +181,7 @@ export function card(it, surface, o = {}) {
           ? `<a class="swatch-more" href="#/product/${id}" data-open="${id}" data-s="${esc(surface)}" ${anchorAttr} aria-label="${more} more colours">+${more}</a>` : ""}</div>
         <span class="card__colour">${esc(v.label)}</span>
       </div>
-      <div class="card__row"><p class="card__price">${esc(money(price))}</p>
-        ${o.nfm === false ? "" : `<button class="link-btn card__nfm" type="button" data-nfm aria-label="Not for me: ${esc(v.prod_name)}">Not for me</button>`}</div>
-      <p class="card__nfm-note" role="status" hidden></p>
+      <p class="card__price">${esc(money(price))}</p>
       ${o.note ? `<p class="card__note">${o.note}</p>` : ""}
       <button class="btn-cart" type="button" data-add aria-label="Add ${esc(v.prod_name)}, ${esc(v.label)}, to cart" ${price == null ? "disabled" : ""}>Add to cart</button>
     </div>
@@ -214,7 +207,6 @@ export function selectSwatch(btn) {
   const nameLink = $(".card__name a", el); if (nameLink) nameLink.textContent = v.prod_name;
   $(".card__colour", el).textContent = v.label;
   $(".card__price", el).textContent = money(family?.price_usd);
-  const nfm = $("[data-nfm]", el); if (nfm && !nfm.disabled) nfm.setAttribute("aria-label", `Not for me: ${v.prod_name}`);
   $("[data-add]", el).setAttribute("aria-label", `Add ${v.prod_name}, ${v.label}, to cart`);
   $$(".swatch", el).forEach(s => {
     const o = list.find(x => x.article_id === +s.dataset.swatch);
@@ -232,23 +224,6 @@ export function cardTarget(el) {
   const v = list.find(x => x.article_id === id);
   return {article_id: id, family: family?.product_code ?? null, name: v.prod_name, colour: v.label, image: v.image,
           price: family?.price_usd, surface: el.dataset.s, anchor: el.dataset.anchor ?? null};
-}
-
-// "Not for me": keeps the existing not_for_me event, dims the card in place (no layout jump), and is
-// remembered for this profile so the product family is left out of every page rendered afterwards.
-export function notForMe(btn) {
-  const el = btn.closest("[data-card]");
-  if (!el || btn.disabled) return;
-  logEvent("not_for_me", el.dataset.s, el.dataset.article, el.dataset.anchor ?? null);
-  const saved = rememberNotForMe(el.dataset.family ? `f:${el.dataset.family}` : familyKey(familyOf, el.dataset.article));
-  const name = $(".card__name a", el)?.textContent || "Item";
-  el.classList.add("is-dismissed");
-  btn.disabled = true;
-  btn.textContent = "Noted";
-  const note = $(".card__nfm-note", el);
-  note.hidden = false;
-  note.textContent = saved ? "Got it. We'll remember that next time." : "Got it. We'll keep that in mind.";
-  announce(`${name}: got it, we'll remember that next time.`);
 }
 
 // ---- reasons and SHAP: DS Studio only -------------------------------------------------------------------

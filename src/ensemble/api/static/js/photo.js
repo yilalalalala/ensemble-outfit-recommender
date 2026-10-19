@@ -59,6 +59,7 @@ export function photoPicker(slot, {photo = null, help, onChange}) {
   function empty(error = "") {
     slot.innerHTML = `<label class="dropzone">
         <input type="file" accept="${ACCEPT.join(",")}" aria-describedby="${errId}-help ${errId}">
+        <span class="dropzone__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></span>
         <span class="dropzone__title">Choose a photo</span>
         <span class="meta" id="${errId}-help">${esc(help)}</span>
         <span class="btn btn--quiet" aria-hidden="true">Browse files</span>

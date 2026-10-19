@@ -73,20 +73,41 @@ def parse_items(text: str, w: int, h: int) -> list[dict]:
         if cat not in CATEGORIES:
             continue
         box = it.get("box")
+        # Garments fill a real share of the photo; accessories (sunglasses, earrings, belts) can be tiny, so they
+        # only need a box a few pixels across — dropping their box left them unframeable in the UI.
+        small_ok = CATEGORIES[cat][0] in ("accessories", "socks")
+        min_area = (0.0004 if small_ok else 0.005) * w * h
         valid = (isinstance(box, list) and len(box) == 4 and all(isinstance(v, (int, float)) for v in box)
                  and 0 <= box[0] < box[2] <= w * 1.02 and 0 <= box[1] < box[3] <= h * 1.02
-                 and (box[2] - box[0]) * (box[3] - box[1]) >= 0.005 * w * h)
+                 and box[2] - box[0] >= 6 and box[3] - box[1] >= 6
+                 and (box[2] - box[0]) * (box[3] - box[1]) >= min_area)
         out.append({"category": cat, "colour": str(it.get("colour", "")), "description": str(it.get("description", "")),
                     "box": [int(v) for v in box] if valid else None})
     return out
 
 
+NORMALISED = "Box coordinates are integers from 0 to 1000, relative to the image width (x) and height (y)."
+
+
 def detect(image: Image.Image, llm, purpose: str = "detect") -> tuple[list[dict], Image.Image]:
     data, small = _resize_bytes(image)
+    # Qwen-VL answers in the pixels of the image it was given (sized for it above). Claude places boxes better in
+    # normalised 0-1000 coordinates than in pixels (pixel boxes came back shrunk towards the top-left corner).
+    normalised = type(llm).__name__ == "ClaudeClient"
     prompt = DETECT_PROMPT.format(w=small.width, h=small.height, cats=", ".join(CATEGORIES))
+    if normalised:
+        prompt = prompt.replace("Box coordinates are integer pixels in this image.", NORMALISED)
     r = llm.chat("Return only valid JSON.", [{"role": "user", "content": prompt, "images": [data]}],
                  max_tokens=1500, json_mode=True, purpose=purpose)
-    return parse_items(r.text, small.width, small.height), small
+    if not normalised:
+        return parse_items(r.text, small.width, small.height), small
+    items = parse_items(r.text, 1000, 1000)
+    for it in items:
+        if it["box"]:
+            x1, y1, x2, y2 = it["box"]
+            it["box"] = [round(x1 * small.width / 1000), round(y1 * small.height / 1000),
+                         round(x2 * small.width / 1000), round(y2 * small.height / 1000)]
+    return items, small
 
 
 @lru_cache(maxsize=1)

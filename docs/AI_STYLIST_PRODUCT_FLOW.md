@@ -46,7 +46,7 @@ Unknown routes keep the not-found state. Redirects use `history.replaceState`, s
 | Stylist hub | pick the kind of help I need | one card per task |
 | Ask the stylist | get advice in my words | Send |
 | Find this piece | find a product like one in my photo | Photo → **tap the pieces** (spotted for you; or drag around one) → the four closest per piece |
-| Complete my look | finish an outfit I am wearing | Photo → **Review** → **Direction** → **Your edit** |
+| Complete my look | finish an outfit I am wearing | Photo → **Review** → **Your edit** (four picks of mixed kinds; D-050) |
 
 ## 4. Complete my look — state machine
 

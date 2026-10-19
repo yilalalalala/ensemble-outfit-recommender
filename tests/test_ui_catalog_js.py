@@ -20,3 +20,9 @@ def test_catalog_js():
 def test_find_pieces_js():
     r = subprocess.run(["node", str(ROOT / "tests" / "js" / "find.test.mjs")], capture_output=True, text=True, cwd=ROOT, timeout=120)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node is not installed")
+def test_stylist_chat_js():
+    r = subprocess.run(["node", str(ROOT / "tests" / "js" / "stylist.test.mjs")], capture_output=True, text=True, cwd=ROOT, timeout=120)
+    assert r.returncode == 0, r.stdout + r.stderr

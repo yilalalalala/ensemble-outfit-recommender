@@ -1,14 +1,14 @@
 // AI Stylist: the hub, the shared task shell, and "Ask the stylist" (docs/AI_STYLIST_PRODUCT_FLOW.md).
 // Products shown here come only from tool / endpoint responses; the assistant's text never adds products.
-import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state} from "./core.js";
+import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, loadFamilies, newPageGroups, state, variantsFor} from "./core.js";
 import {downscale, stage, toBlob, validate} from "./photo.js";
 
 export const TASKS = [
-  {id: "ask", href: "#/stylist/ask", title: "Ask the stylist", line: "Tell us what you need in your own words.",
+  {id: "ask", href: "#/stylist/ask", title: "Ask the stylist",
    detail: "Advice for an occasion, a piece you own, or a style you want to try."},
-  {id: "find", href: "#/stylist/find", title: "Find this piece", line: "Seen something you like? Show us a photo.",
-   detail: "Frame one piece and we will find the closest pieces in our collection."},
-  {id: "look", href: "#/stylist/look", title: "Complete my look", line: "Share an outfit and we will finish it.",
+  {id: "find", href: "#/stylist/find", title: "Find this piece",
+   detail: "Tap the piece you like and we will find the four closest in our collection."},
+  {id: "look", href: "#/stylist/look", title: "Complete my look",
    detail: "Check what we spotted, choose a direction, and get a short, considered edit."},
 ];
 
@@ -28,7 +28,9 @@ export function shell({task, title, lede, steps = null, step = 0, back = null, b
        <span class="steps__n" aria-hidden="true">${i + 1}</span><span class="steps__label">${esc(s)}</span>
        ${i < step ? `<span class="sr-only">, completed</span>` : ""}</li>`).join("")}</ol>
      <p class="steps__compact" aria-hidden="true">Step ${step + 1} of ${steps.length} · ${esc(steps[step])}</p>` : "";
-  return `<div class="task" data-task="${task}">
+  // Ask, Find and Complete my look carry two soft dark-Morandi circles in the page margins (decorative).
+  const orbs = ["ask", "find", "look"].includes(task) ? `<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>` : "";
+  return `<div class="task" data-task="${task}">${orbs}
     <nav class="task__bar" aria-label="AI Stylist">
       <a class="link-btn task__back" href="${back || "#/stylist"}">← Back</a>
       <span class="task__crumb"><a href="#/stylist">AI Stylist</a><span aria-hidden="true"> / </span><span>${esc(t.title)}</span></span>
@@ -64,15 +66,12 @@ export async function hub(ctx) {
   const look = stage("ensemble.look.v1").get();
   const root = ctx.render(`<div class="hub">
     <header class="hub__head">
-      <p class="eyebrow">AI Stylist</p>
       <h1 class="display hub__title" tabindex="-1">What can we help with?</h1>
-      <p class="lede">Pick one task. Each takes a minute or two, and you can switch at any point.</p>
     </header>
     <ul class="hub__tasks" role="list">${TASKS.map((t, i) => `<li>
       <a class="task-card" href="${t.href}">
         <span class="task-card__n" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
         <span class="task-card__title">${esc(t.title)}</span>
-        <span class="task-card__line">${esc(t.line)}</span>
         <span class="task-card__detail">${esc(t.detail)}</span>
         <span class="task-card__go" aria-hidden="true">Start →</span>
       </a></li>`).join("")}</ul>
@@ -105,8 +104,28 @@ function lookContext() {
     `You suggested: ${picks}. Use these article ids with your tools if helpful.`};
 }
 
+// A product's name as shoppers read it: "Juan vest top", or just the name when it already says what it is.
+export async function productName(id) {
+  try {
+    const a = (await api(`/api/product/${id}`)).article;
+    const type = (a.product_type_name || "").toLowerCase();
+    return !type || type === "unknown" || a.prod_name.toLowerCase().includes(type) ? a.prod_name : `${a.prod_name} ${type}`;
+  } catch { return null; }
+}
+
+// Shoppers never see article numbers: a number the stylist wrote in prose becomes the product's name (from the
+// cards it cited) or "this piece".
+export function humanize(answer, cards) {
+  const names = new Map(cards.map(c => [String(+c.article_id), c.prod_name]));
+  const nameOf = id => names.get(String(+id));
+  return String(answer).replace(/\s*\[\[(\d+)\]\]/g, "")
+    .replace(/^(\s*(?:\d+\.|[-*•]))\s*[–—-]\s+/gm, "$1 ")   // "1. [[id]] – Name" leaves "1. – Name"
+    .replace(/\b(?:the\s+)?article\s*(?:no\.?|number|#)?\s*(\d{6,10})\b/gi, (m, id) => nameOf(id) ? `the ${nameOf(id)}` : "this piece")
+    .replace(/\b\d{9,10}\b/g, id => nameOf(id) || "this piece");
+}
+
 function renderAnswer(r, cards) {
-  const text = esc(r.answer).replace(/\s*\[\[(\d+)\]\]/g, "");
+  const text = esc(humanize(r.answer, cards));
   const html = text.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
   return `<div class="msg msg--bot"><p class="msg__who">Stylist</p><p class="msg__text">${html}</p>
     ${cards.length ? cardGrid(cards, "assistant", {cls: "grid--compact"}) : ""}</div>`;
@@ -114,6 +133,30 @@ function renderAnswer(r, cards) {
 
 const chips = list => `<div class="suggestions">${list.map(t =>
   `<button class="suggestion" type="button" data-suggest="${esc(t)}">${esc(t)}</button>`).join("")}</div>`;
+
+// The opening of a new conversation: the stylist greets the shopper in a speech bubble and the starter questions
+// are reply bubbles, each with a small round photo of a real catalogue piece.
+const SUGGESTION_THUMBS = [922037001, 917290001, 898287001];   // wide-leg trousers, a knit, a summer dress
+const greeting = () => `<div class="greet" data-empty>
+    <div class="greet__row"><span class="avatar" aria-hidden="true">e</span>
+      <div class="bubble"><p class="bubble__title">Hi! What are you dressing for today?</p>
+        <p class="bubble__text">Tell me in your own words, or pick one to start. I’ll find pieces that <em>feel right</em>.</p></div></div>
+    <div class="replies" role="group" aria-label="Start with a question">${SUGGESTIONS.map((t, i) =>
+      `<button class="reply" type="button" data-suggest="${esc(t)}"><img class="reply__img" data-thumb="${SUGGESTION_THUMBS[i]}" alt="" width="40" height="40">${esc(t)}</button>`).join("")}</div>
+  </div>`;
+
+// Fill the reply bubbles' photos from the catalogue (the image address differs locally and when hosted).
+async function fillThumbs(log) {
+  const imgs = $$("img[data-thumb]:not([src])", log);
+  if (!imgs.length) return;
+  try {
+    await loadFamilies(imgs.map(i => +i.dataset.thumb));
+    imgs.forEach(img => {
+      const id = +img.dataset.thumb, v = variantsFor({article_id: id}).list.find(x => x.article_id === id);
+      if (v?.image) img.src = v.image;
+    });
+  } catch { /* the bubbles read fine without their photos */ }
+}
 
 export async function ask(ctx) {
   ctx.setTitle("Ask the stylist");
@@ -128,8 +171,7 @@ export async function ask(ctx) {
     </aside>` : "";
   const root = ctx.render(shell({
     task: "ask", title: refine ? "Refine your edit" : "Ask the stylist", back: refine ? "#/stylist/look?step=edit" : "#/stylist",
-    lede: refine ? "Tell the stylist what to change: more formal, a different colour, a lower price…"
-                 : "Tell us what you’re looking for. We’ll help you find pieces that <em>feel right</em>.",
+    lede: refine ? "Tell the stylist what to change: more formal, a different colour, a lower price…" : "",
     body: `${contextCard}<section class="chat" aria-label="Conversation">
         <div class="chatlog" id="chatlog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>
         <div class="attachment" id="chat-attach" hidden></div>
@@ -141,7 +183,8 @@ export async function ask(ctx) {
           <input type="file" id="chat-file" accept="image/jpeg,image/png,image/webp" hidden>
           <label class="sr-only" for="chat-in">Message the stylist</label>
           <textarea id="chat-in" rows="1" placeholder="e.g. What goes with a beige trench?" aria-describedby="chat-err"></textarea>
-          <button class="btn btn--solid" type="submit" id="chat-send">Send</button>
+          <button class="btn btn--solid composer__send" type="submit" id="chat-send">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg><span class="sr-only">Send</span></button>
         </form>
         <p class="inline-status is-error" id="chat-err" role="alert"></p>
       </section>`,
@@ -151,17 +194,15 @@ export async function ask(ctx) {
   const log = $("#chatlog", root);
   const key = refine ? `${customer}:look` : customer;   // a refinement is its own conversation
   let s = sessions.get(key);
-  if (s) {
+  if (s?.log) {   // a conversation already under way: restore it
     log.innerHTML = s.log;
     log.scrollTop = log.scrollHeight;
-  } else {
+  } else {        // nothing sent yet (first visit, or back again before asking): the opening greeting
     log.innerHTML = refine
       ? `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p><p class="msg__text">I have your outfit and your edit. What would you like to change?</p>
          ${chips(["Make it more formal", "Show me other colours", "Something less expensive"])}</div>`
-      : `<div class="msg msg--bot" data-empty><p class="msg__who">Stylist</p>
-         <p class="msg__text">I can find pieces, style something you own, or help you dress for a moment. What are you dressing for?</p>
-         ${chips(SUGGESTIONS)}</div>`;
-    try {
+      : greeting();
+    if (!s) try {
       s = await createSession(customer);
       sessions.set(key, s);
       s.context = refine?.text || null;
@@ -174,8 +215,15 @@ export async function ask(ctx) {
     }
     if (!ctx.current()) return;
   }
+  fillThumbs(log);
   const chat = conversation(root, customer, key);
-  if (anchor && !s.sentAnchors.has(anchor)) { s.sentAnchors.add(anchor); chat.send(`What goes with article ${anchor}?`); }
+  if (anchor && !s.sentAnchors.has(anchor)) {
+    s.sentAnchors.add(anchor);
+    // Shoppers see the product's name; the stylist also gets the article id so it can ground its answer.
+    const name = await productName(anchor);
+    if (!ctx.current()) return;
+    chat.send(name ? `What goes with the ${name}?` : "What goes with this piece?", `What goes with article ${anchor}${name ? ` (${name})` : ""}?`);
+  }
 }
 
 function conversation(root, customer, key) {
@@ -215,7 +263,8 @@ function conversation(root, customer, key) {
     return r;
   }
 
-  async function send(text) {
+  // `text` is what the shopper sees; `payload` (default: the same) is what is sent, e.g. with an article id added.
+  async function send(text, payload = text) {
     text = text.trim();
     if (busy) return;
     if (!text) { err.textContent = photo ? "Add a short message to go with the photo." : "Type a message first."; input.focus(); return; }
@@ -233,7 +282,7 @@ function conversation(root, customer, key) {
     try {
       let r;
       try {
-        r = await post(s, text, sent);
+        r = await post(s, payload, sent);
       } catch (e) {
         if (!(e instanceof ApiError && e.status === 404)) throw e;
         // The server forgot the session (e.g. it restarted): start a new one, replay what it needs, resend.
@@ -241,11 +290,11 @@ function conversation(root, customer, key) {
         s = await createSession(customer, s);
         sessions.set(key, s);
         s.replay = replay || null;
-        r = await post(s, text, sent);
+        r = await post(s, payload, sent);
         log.insertAdjacentHTML("beforeend", `<p class="meta chat__note">We reconnected you to the stylist and kept your conversation.</p>`);
       }
       // Keep the product ids ([[id]]) in the replayable history so a recovered session can still refer to them.
-      s.history.push({role: "user", text}, {role: "assistant", text: String(r.answer).slice(0, 500)});
+      s.history.push({role: "user", text: payload}, {role: "assistant", text: String(r.answer).slice(0, 500)});
       const [cards] = await grouped([r.cards]);
       $("#pending", log)?.remove();
       log.insertAdjacentHTML("beforeend", renderAnswer(r, cards));

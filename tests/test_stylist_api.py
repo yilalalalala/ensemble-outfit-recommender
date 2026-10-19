@@ -90,6 +90,16 @@ def test_edit_returns_priority_picks_with_consumer_reasons(client, goal):
         assert d["anchor"] is not None
 
 
+def test_complete_is_four_picks_of_more_than_one_kind(client):
+    """An outfit missing only shoes (top, bottoms, sunglasses) still gets a mixed edit of exactly four — not four
+    pairs of shoes — by adding the complementary slots it does not fill yet."""
+    worn = GARMENTS + [{"category": "sunglasses", "colour": "black", "description": "sunglasses", "box": [0.4, 0.05, 0.6, 0.1]}]
+    d = client.post("/api/stylist/edit", files={"photo": ("o.jpg", _photo(), "image/jpeg")},
+                    data={"garments": json.dumps(worn), "goal": "complete"}).json()
+    assert len(d["picks"]) == 4
+    assert len({p["group"] for p in d["picks"]}) >= 2
+
+
 def test_edit_uses_the_confirmed_garments(client):
     """Changing a confirmed piece changes what is matched: the shopper's correction is honoured."""
     a = client.post("/api/stylist/edit", files={"photo": ("o.jpg", _photo(), "image/jpeg")},

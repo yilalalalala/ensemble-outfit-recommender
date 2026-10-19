@@ -1386,3 +1386,69 @@ is not reflected in the frozen M7b evaluation numbers; re-run `assistant-eval` b
 **Revisit if:** usability testing shows shoppers miss the editorial "Your edit" home; swatch crops land on backdrop for a
 measurable share of a category (spot-check accessories and white garments first); or detection latency on the
 hosted Claude path makes the Choose step feel slow (show the photo immediately and stream the pieces in).
+
+### D-049 — Swatches show the garment's main colour from a clean patch; "Not for me" and the product page's Complete the Look are removed
+
+**Date:** 2026-10-18. **Status:** accepted; refines the swatch part of D-048.
+
+**Context.** D-048's swatches cropped the photo around the garment's centre. On coats, shirts and blazers the centre
+is where buttons, plackets, lapels and labels are, so the chip showed those instead of the fabric (reported on the
+Stark Fur Coat). The product owner also asked for a simpler shop: no "Not for me" control on cards and no Complete
+the Look section on product pages.
+
+**Decision.**
+- **Main colour, clean patch** (`ensemble.serving.swatches`): garment mask from the backdrop; k-means (k = 4) in
+  CIELAB over garment pixels; the largest cluster is the main colour; a window (16 % of the photo width) is chosen
+  that lies on the garment and is made almost only of that colour, so buttons and prints are avoided wherever they
+  sit. The colour is the mean of the patch's 40th–90th lightness percentile (lit fibres, not texture shadows).
+- **Plain pieces → standard colour card.** The colour is snapped to a card of 69 named shades (the shop's 39
+  colour-group colours plus standard fashion shades such as olive, khaki, camel, taupe, charcoal, navy, burgundy),
+  with lightness weighted half (CMC l:c = 2:1). The snap stays inside the catalogue colour name's family (people
+  name the hue, the photo gives the shade), and the catalogue colour itself wins when the photo is within ΔE 8 of
+  it, so chip and colour name agree.
+- **Patterned pieces → fabric crop.** A piece is a pattern when the catalogue says so (stripe, check, dot, all-over
+  pattern, jacquard, argyle, colour blocking, mixed). The photo is not asked to confirm: a first version required a
+  second photo colour and so called the houndstooth Hanoi Oversize Blazer "plain" (fine patterns blur into one colour
+  at analysis resolution). The swatch is cut from the full-resolution photo (8 % of its width) at the window whose
+  colour mix best matches the whole garment's.
+- **Frontend caching (cache busting).** After an update a browser kept running cached old ES modules next to the
+  new page and stylesheet, so removed features (Not for me, flat swatches) still showed; `no-cache` headers alone did
+  not help a browser that already held copies. The page now links its files under `static/v-<fingerprint>/` (a hash
+  of every frontend file's name, size and modification time); relative module imports inherit the versioned
+  directory, versioned files are `immutable`, and the page itself is `no-cache`. Plain `static/…` URLs still work.
+- `/api/catalog/families` returns `swatch: {kind, hex[, image]}` per colourway (the field D-048 added; the colour
+  group fill remains the fallback).
+- **Removed:** "Not for me" (button, note, per-profile hiding); the product page's Complete the Look section and its
+  `/api/v2/complete-the-look` call. Outfit completion (Track B) stays in the AI Stylist's Complete my look and in the
+  API; the product page keeps Similar items.
+
+**Evidence.** A 63-photo contact sheet (stratified by catalogue appearance, plus the Stark Fur Coat and MC Chestnut
+strap) checked by eye: the patch avoids buttons and plackets, dark olive/green pieces no longer snap to grey, prints
+show as fabric, and both Stark Fur Coats read Light Beige.
+
+**Revisit if:** a spot check finds a category where the patch lands on backdrop (white-on-white, jewellery), or the
+catalogue colour names prove unreliable enough that the family constraint hides real colours; or the product owner
+wants outfit suggestions back on product pages (the API and serving bundle are unchanged).
+
+### D-050 — Complete my look has one direction and a mixed edit of four; shoppers never see article numbers
+
+**Date:** 2026-10-19. **Status:** accepted; supersedes the Direction step of docs/AI_STYLIST_PRODUCT_FLOW.md §4.
+
+**Context.** Complete my look offered three directions after Review. Two duplicated other tasks — "Dress for an
+occasion" is what Ask the stylist does, "Find similar pieces" is Find this piece — leaving one real choice, a
+page with one answer. The edit showed 4–6 picks plus "More options", and an outfit missing only shoes got four
+pairs of shoes. The stylist chat showed raw article numbers ("What goes with article 883726003?").
+
+**Decision.**
+- Steps are Photo → Review → Your edit; Review's primary action builds the edit (`goal=complete`). Old
+  `step=direction` links land on Review. The API keeps the `occasion` and `similar` goals for existing callers.
+- `goal=complete` returns exactly four picks, round-robin over the missing slots **then** the complementary slots
+  the outfit does not fill yet (shoes, accessories), so the edit mixes kinds of piece; "More options" and "Try
+  another direction" are removed from the page.
+- The chat shows product names: a message started from a product says "What goes with the Sammy cross bag?"
+  while the stylist still receives the article id for grounding; numbers the stylist writes in prose are replaced
+  by the cited product's name (or "this piece").
+- Complete my look takes the rounded, dark-Morandi look of Ask and Find.
+
+**Revisit if:** shoppers look for occasion styling inside Complete my look (add it back as a lede prompt rather than
+a step), or the complementary slots produce weak pairings for some anchors (measure on the Track B folds).

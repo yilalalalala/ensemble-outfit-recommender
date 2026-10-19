@@ -22,6 +22,30 @@ def js_source() -> str:
     return "\n".join(p.read_text() for p in JS)
 
 
+def test_frontend_files_have_versioned_addresses_so_updates_always_show(client):
+    """Cache busting: the page links its files under static/v-<fingerprint>/, the fingerprint changes when any file
+    changes, versioned files are immutable and the page itself is always revalidated. A browser can therefore never
+    combine a new page with an old cached script (it did: removed features kept showing after an update)."""
+    r = client.get("/")
+    assert r.headers["cache-control"] == "no-cache"
+    m = re.search(r'src="static/(v-[0-9a-f]{10})/js/app\.js"', r.text)
+    assert m and f'href="static/{m.group(1)}/css/ensemble.css"' in r.text
+    v = m.group(1)
+    for path in ["js/app.js", "js/core.js", "css/ensemble.css", "fonts/inter-var.woff2"]:
+        res = client.get(f"/static/{v}/{path}")
+        assert res.status_code == 200 and "immutable" in res.headers["cache-control"], path
+    assert client.get("/static/js/core.js").headers["cache-control"] == "no-cache"   # old addresses still work
+
+
+def test_the_fingerprint_changes_when_a_file_changes(tmp_path, monkeypatch):
+    import ensemble.api.app as appmod
+    (tmp_path / "a.js").write_text("one")
+    monkeypatch.setattr(appmod, "STATIC", tmp_path)
+    before = appmod._static_version()
+    (tmp_path / "a.js").write_text("two!")
+    assert appmod._static_version() != before
+
+
 def test_index_and_static_assets_are_served(client):
     r = client.get("/")
     assert r.status_code == 200 and "text/html" in r.headers["content-type"]
@@ -104,15 +128,17 @@ def test_no_remote_dependencies_or_build_artifacts():
 
 
 def test_frontend_keeps_every_api_contract_and_event():
+    # /api/v2/complete-the-look stays on the server (the product page no longer shows it, D-049).
     # /api/snap stays on the server for existing consumers (tests/test_stylist_api.py); the UI now uses the staged
     # /api/stylist/detect + /api/stylist/edit flow so the shopper reviews what was detected.
     src = js_source()
     for path in ["/api/customers", "/api/home/", "/api/product/", "/api/explain/", "/api/metrics", "/api/events",
                  "/api/visual-search", "/api/assistant/session", "/api/assistant/", "/api/label/tasks",
-                 '"/api/label"', "/api/v2/complete-the-look", "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families",
+                 '"/api/label"', "/readyz", "/api/v2/meta", "/api/v2/metrics", "/api/catalog/families",
                  "/api/stylist/detect", "/api/stylist/edit"]:
         assert path in src, path
-    for event in ['"impression"', '"click"', '"not_for_me"', '"add_to_cart"']:
+    # "Not for me" was removed from the shop (D-048); the API still accepts the event for existing logs.
+    for event in ['"impression"', '"click"', '"add_to_cart"']:
         assert event in src, event
     for route in ['"product"', '"assistant"', '"ds"', '"label"', '"studio"', '"collections"', '"shop"', '"stylist"',
                   '"ask"', '"find"', '"look"']:
@@ -168,6 +194,13 @@ def test_shoppers_get_no_footer_links_or_wordmark(tree):
     assert not [e for e in foot if e["tag"] == "a"] and not any("footer__mark" in (e["attrs"].get("class") or "") for e in foot)
     css = (STATIC / "css" / "ensemble.css").read_text()
     assert re.search(r"^\.footer \{ display: none;", css, re.M) and "body.studio .footer { display: block; }" in css
+
+
+def test_no_not_for_me_and_no_complete_the_look_on_product_pages():
+    src = js_source()
+    assert "Not for me" not in src and "data-nfm" not in src and "notforme" not in src
+    shop = (STATIC / "js" / "shop.js").read_text()
+    assert "Complete the look" not in shop and "/api/v2/complete-the-look" not in shop
 
 
 def test_cart_drawer_and_masthead_control(tree):

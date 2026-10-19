@@ -1,6 +1,6 @@
 // Router, masthead navigation, experience switch and demo-profile selector.
 import {$, $$, HOSTED, api, announce, esc, errorState, initDialogs, initImageFallback, initMotion, logEvent,
-        notForMe, openDialog, probe, profileDetail, profileName, selectSwatch, state} from "./core.js";
+        openDialog, probe, profileDetail, profileName, selectSwatch, state} from "./core.js";
 import {addToCart, initCart, loadCart} from "./cart.js";
 import * as find from "./find.js";
 import * as gateway from "./gateway.js";
@@ -11,7 +11,7 @@ import * as studio from "./studio.js";
 
 const STORE_KEY = "ensemble.profile";
 const NAV = {
-  shop: [["Your edit", "#/shop"], ["Collections", "#/collections"], ["AI Stylist", "#/stylist"]],
+  shop: [["Collections", "#/collections"], ["AI Stylist", "#/stylist"]],
   // Label writes the human gold labels to disk and reads private outfit photos, so the hosted shop
   // does not offer it (the API refuses it too); its route still resolves and explains itself (studio.js).
   studio: [["Evaluation", "#/studio"], ["Serving", "#/studio/serving"], ["Inspect", "#/studio/inspect"],
@@ -32,13 +32,14 @@ function redirect(r) {
     const a = r.params.get("anchor");
     return `#/stylist/ask${a ? `?anchor=${encodeURIComponent(a)}` : ""}`;
   }
+  // The "Your edit" page was removed; old #/shop[/<tab>] links land on Collections.
+  if (r.parts[0] === "shop") return `#/collections${r.parts[1] ? `/${encodeURIComponent(r.parts[1])}` : ""}`;
   return null;
 }
 
 function resolve(r) {
   const [a, b] = r.parts;
   if (!a) return {exp: "shop", nav: null, view: gateway.view};
-  if (a === "shop") return {exp: "shop", nav: "#/shop", view: shop.home};
   if (a === "collections") return {exp: "shop", nav: "#/collections", view: shop.collections};
   if (a === "product" && /^\d+$/.test(b || "")) return {exp: "shop", nav: null, view: shop.product};
   if (a === "stylist" && !b) return {exp: "shop", nav: "#/stylist", view: stylist.hub};
@@ -71,7 +72,6 @@ async function route({focus = true} = {}) {
   state.navCount = navCount;
   current = res;
   setNav(res);
-  if (res.exp === "shop") gateway.remember(location.hash);
   const main = $("#main");
   const ctx = {
     route: r, exp: res.exp,
@@ -231,8 +231,6 @@ function wire() {
     if (sw) { selectSwatch(sw); return; }
     const add = e.target.closest("[data-add]");
     if (add) { addToCart(add); return; }
-    const nfm = e.target.closest("[data-nfm]");
-    if (nfm) { notForMe(nfm); return; }
     if (e.target.closest("[data-retry]")) route({focus: false});
   });
 
