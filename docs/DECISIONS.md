@@ -1452,3 +1452,36 @@ pairs of shoes. The stylist chat showed raw article numbers ("What goes with art
 
 **Revisit if:** shoppers look for occasion styling inside Complete my look (add it back as a lede prompt rather than
 a step), or the complementary slots produce weak pairings for some anchors (measure on the Track B folds).
+
+### D-051 — Garment boxes: clothes parsing for Claude's detections, Qwen-VL keeps its own
+
+**Date:** 2026-10-19. **Status:** accepted.
+
+**Context.** On the hosted site the vision LLM (Claude Haiku) names worn items well but places them loosely: on
+Review and Find the frames sat beside or above the garments. Asking for 0–1000 normalised boxes instead of pixels
+helped only a little. Vision LLMs recognise; detectors and segmenters localise.
+
+**Decision.** Keep the LLM for *what* (category, colour, description) and take *where* from human parsing:
+SegFormer-B2 fine-tuned for clothes parsing on ATR (`mattmdjaga/segformer_b2_clothes`, CPU, ~0.8 s per photo).
+Each item's category maps to parsing classes (top → upper-clothes, bottom → pants/skirt, shoes → both shoes,
+dress → dress else upper + skirt/pants, bag, sunglasses, hat, belt, scarf); its box is the bounding box of the
+mask regions near the LLM's own box (so in a group photo it stays on the right person). Jewellery and socks,
+which the parser has no class for, keep the LLM's box. The parser's weights are baked into the Modal image.
+
+**Evidence** (`python -m ensemble.vision.eval_boxes`, 40 DeepFashion2 validation street photos, 56 garments,
+ground-truth boxes; `reports/m7a/box_localisation_*.json`):
+
+| detector | own boxes: mean IoU · hit@0.5 | parsed boxes: mean IoU · hit@0.5 |
+| --- | --- | --- |
+| Claude Haiku (hosted) | 0.28 · 17% | **0.65 · 70%** |
+| Qwen2.5-VL 8B (local) | **0.88 · 96%** | 0.74 · 85% |
+
+So `serving.parse_boxes: auto` parses for Claude and keeps Qwen-VL's own boxes (a grounded VLM trained to localise);
+`true`/`false` force it.
+
+**Licence.** The parser's card lists its licence as "other" and it was trained on ATR, a research dataset. That
+suits this non-commercial portfolio (which already runs on Kaggle competition data); a commercial deployment would
+need a licensed or self-trained parser.
+
+**Revisit if:** jewellery localisation matters (add a small-object detector), the hosted detector moves to a
+grounded VLM, or the parser's latency hurts the cold path.
