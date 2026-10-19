@@ -20,11 +20,9 @@ async function find(p) {
   await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
   await p.click('#find-next');
   await p.waitForSelector('.piece', {timeout: 300000}); await settle(p);
-  // Frame the shirt dress by dragging around it, as a shopper does (the detector's boxes can be loose).
-  await p.$eval('#picker img', i => i.scrollIntoView({block: 'center'}));
-  const r = await (await p.$('#picker img')).boundingBox();
-  await p.mouse.move(r.x + r.width * .37, r.y + r.height * .2); await p.mouse.down();
-  await p.mouse.move(r.x + r.width * .57, r.y + r.height * .62, {steps: 8}); await p.mouse.up();
+  // Choose the main garment as a shopper does: tap it (its box comes from clothes parsing, D-051).
+  const id = await p.$$eval('.picker__box', bs => bs.map(b => b.dataset.pid).sort()[0]).catch(() => null);
+  await p.click(id ? `.piece[data-pid="${id}"] .piece__pick` : '.piece__pick');
   await shot(p, 'find_choose');
   await p.click('#find-go');
   await p.waitForFunction(() => location.hash.includes('step=results'), null, {timeout: 300000}); await settle(p);

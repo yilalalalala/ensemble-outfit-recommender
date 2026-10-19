@@ -53,13 +53,13 @@ All screenshots are the live site (Pages + Modal). The stylist flows use a CC0 s
 <td><img src="docs/assets/ask_answer.png" alt="The stylist answers with four shoes for wide-leg trousers, named in the text and shown as product cards"><br>
 <b>A grounded answer.</b> At most four products, each one a catalogue item a tool returned, named, never numbered.</td>
 <td><img src="docs/assets/find_choose.png" alt="Find this piece: the shopper frames the shirt dress on the photo; the spotted pieces are listed on the side"><br>
-<b>Find this piece · choose.</b> The photo stays clean until you tap or drag; each chosen piece shows what it is and can be corrected.</td>
+<b>Find this piece · choose.</b> The photo stays clean until you tap a piece or drag around one; each chosen piece shows what it is and can be corrected.</td>
 </tr>
 <tr>
 <td><img src="docs/assets/find_results.png" alt="Find results: the four closest pieces to the framed top"><br>
 <b>Find this piece · results.</b> The four closest catalogue pieces for each chosen piece (FashionCLIP + street-to-shop adapter).</td>
 <td><img src="docs/assets/look_review.png" alt="Complete my look review: detected pieces numbered on the photo and listed for correction"><br>
-<b>Complete my look · review.</b> The vision model's detections, for the shopper to fix before anything is recommended.</td>
+<b>Complete my look · review.</b> Claude names each piece; a clothes-parsing model (SegFormer) frames it. The shopper fixes anything before it is used.</td>
 </tr>
 <tr>
 <td><img src="docs/assets/look_edit.png" alt="Complete my look: an edit of four pieces of different kinds that pair with the outfit"><br>
@@ -77,8 +77,8 @@ All screenshots are the live site (Pages + Modal). The stylist flows use a CC0 s
 
 <p align="center"><em>Photo in the stylist flows:
 <a href="https://commons.wikimedia.org/wiki/File:New_York_Street_Fashion_(Unsplash).jpg">New York Street Fashion</a>,
-Yegide Matthews, CC0. The live detector (Claude) places boxes loosely; shoppers correct them in Review or by
-framing the piece themselves.</em></p>
+Yegide Matthews, CC0. Garment frames come from clothes parsing (SegFormer), not from the language model: on
+40 DeepFashion2 street photos this lifts the live detector's box accuracy from mean IoU 0.28 to 0.65 (D-051).</em></p>
 
 **Ensemble recommends clothing the way a stylist would:**
 - what *you* will likely buy next;
@@ -99,6 +99,7 @@ Every result is evaluated offline with temporal splits, a popularity baseline an
 | **Next-purchase ranking** (H&M Kaggle task, MAP@12) | **0.0333 private leaderboard** (late submission; MVP 0.0319), above the ~0.030 silver line of 3,006 teams. The Phase 2 upgrade adds **+7.5% [+6.9, +8.2]** MAP@12 over the MVP across a 4-week backtest (+53% over a strong rule baseline) and raises candidate recall from 13% to 18–20% ([report](reports/PHASE2_UPGRADE_REPORT.md)) |
 | **Complete the Look** (outfit completion) | **+56% Recall@12** over popularity on the held-out week; FashionCLIP image features add +4 points |
 | **Visual search** (street photo → product) | Street-to-shop adapters trained on DeepFashion2 raise exact-item **Recall@1 from 0.40 to 0.59** on 154 real outfit-post pairs, and from 0.38 to 0.59 on DeepFashion2 |
+| **Garment localisation** (where each piece is) | Clothes parsing (SegFormer) lifts the hosted detector's box accuracy from **mean IoU 0.28 to 0.65** (hit@0.5 17% → 70%) on 40 DeepFashion2 street photos; the local Qwen-VL keeps its own boxes (IoU 0.88) ([D-051](docs/DECISIONS.md)) |
 | **Shopping assistant** (LLM + tools) | **100% tool accuracy, 0% hallucinated products** over a 24-turn eval, on a free local model (Qwen3-VL) and on Claude Opus 5 |
 | **Evaluation you can trust** | The LLM judge is calibrated against 200 human labels: 81% agreement (κ 0.57) on a held-out set |
 
@@ -276,7 +277,8 @@ reimplemented for the web.
   (`deploy/modal_app.py`, `make modal-deploy`). GitHub Pages serves the static files from `main`; Modal runs
   the FastAPI app (CPU, scales to zero, one container) with the serving store, the versioned serving bundle
   and the FashionCLIP index on a Modal Volume; catalogue photos are served from a Cloudflare R2 bucket.
-  Outfit analysis and the assistant call the Claude API (Haiku) under a monthly budget cap. The local-only
+  Outfit analysis and the assistant call the Claude API (Haiku) under a monthly budget cap; the garments it names
+  are framed by a SegFormer clothes parser baked into the image (D-051). The local-only
   research tool **Label** is not offered by the hosted shop, and the hosted API refuses it.
 - **Fresh after every release** — both builds link the frontend under a content-versioned folder
   (`static/v-<hash>/`), so a browser or CDN can never mix a new page with old cached scripts. The colour

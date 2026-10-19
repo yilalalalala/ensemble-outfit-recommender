@@ -34,8 +34,28 @@ def test_claude_detection_uses_normalised_boxes_scaled_to_the_image():
         def chat(self, system, messages, **kw):
             assert outfit.NORMALISED in messages[0]["content"]
             return LLMResponse(text='{"items": [{"category": "top", "colour": "red", "description": "tee", "box": [250, 100, 750, 500]}]}')
-    items, small = outfit.detect(Image.new("RGB", (1200, 800), "white"), ClaudeClient())
+    items, small = outfit.detect(Image.new("RGB", (1200, 800), "white"), ClaudeClient(), parse_boxes=False)
     assert items[0]["box"] == [round(.25 * small.width), round(.1 * small.height), round(.75 * small.width), round(.5 * small.height)]
+
+
+def test_boxes_are_parsed_for_claude_but_not_for_qwen(monkeypatch):
+    """D-051: clothes parsing replaces Claude's loose boxes; Qwen-VL keeps its own (they score higher)."""
+    from PIL import Image
+
+    from ensemble.vision import outfit, parsing
+    calls = []
+    monkeypatch.setattr(parsing, "refine", lambda items, img: calls.append(len(items)) or items)
+    reply = '{"items": [{"category": "top", "colour": "red", "description": "tee", "box": [250, 100, 750, 500]}]}'
+
+    class ClaudeClient:
+        def chat(self, *a, **k): return LLMResponse(text=reply)
+
+    class OllamaClient:
+        def chat(self, *a, **k): return LLMResponse(text=reply)
+    img = Image.new("RGB", (1200, 800), "white")
+    outfit.detect(img, ClaudeClient())
+    outfit.detect(img, OllamaClient())
+    assert calls == [1]
 
 
 def test_parse_items_tolerates_garbage():

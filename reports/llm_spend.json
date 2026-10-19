@@ -1,10 +1,14 @@
 {
-  "total_usd": 4.570652,
+  "total_usd": 4.660052,
   "by_purpose": {
     "visual_judge": 1.935333,
     "detect": 0.591915,
     "judge": 0.650745,
     "assistant": 0.942918,
-    "judge_calibration": 0.449748
+    "judge_calibration": 0.449748,
+    "eval_boxes": 0.0894
+  },
+  "by_month": {
+    "2026-10": 0.0894
   }
 }

@@ -274,3 +274,11 @@ industry standard and are named as such wherever they appear.
 | **Ripple effect** (ink ripple) | A short expanding ring drawn from the point a user touches, confirming the touch (popularised by Material Design) | PM |
 | **Exit transition** | An animation that plays as a view leaves (here: the gateway fades and blurs before the next view enters) | PM |
 | **Reduced-motion preference** | The OS setting (`prefers-reduced-motion`) asking sites to remove non-essential animation; ripples and transitions are switched off under it | Eng |
+
+## Garment localisation (added with D-051)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Human parsing** / **clothes segmentation** | Labelling every pixel of a photo of a person (upper clothes, pants, shoes, bag…); the masks give tight garment boxes | DS |
+| **IoU (intersection over union)** | Overlap of a predicted and a true box: shared area ÷ combined area; 1 is perfect, ≥ 0.5 is the usual "hit" | DS |
+| **Localisation vs recognition** | *Where* an object is vs *what* it is; vision LLMs recognise well and localise loosely, so pipelines pair them with a detector or segmenter | Both |

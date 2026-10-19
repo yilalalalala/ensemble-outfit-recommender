@@ -62,7 +62,10 @@ image = (
     .run_commands(
         "python -c \"from transformers import CLIPModel, CLIPProcessor; "
         "name='patrickjohncyh/fashion-clip'; "
-        "CLIPModel.from_pretrained(name); CLIPProcessor.from_pretrained(name)\""
+        "CLIPModel.from_pretrained(name); CLIPProcessor.from_pretrained(name)\"",
+        # The clothes parser that localises detected garments (vision/parsing.py, D-051), baked in for the same reason.
+        "python -c \"from transformers import AutoModelForSemanticSegmentation; "
+        "AutoModelForSemanticSegmentation.from_pretrained('mattmdjaga/segformer_b2_clothes')\"",
     )
     .add_local_dir(str(ROOT / "src"), remote_path="/root/src")
     .add_local_dir(str(ROOT / "configs"), remote_path="/root/configs")
