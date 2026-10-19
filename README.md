@@ -11,48 +11,74 @@ In machine learning, it also means several models combined. This project is both
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Run locally](#quickstart)
 
-![Ensemble: "How would you like to shop today?" with two choices, Shop your edit and Style with AI](docs/assets/home_desktop.png)
+![Ensemble: the first page — "Welcome back", View your collections or Style with AI](docs/assets/home_desktop.png)
 
 > **The live demo is the real application.** GitHub Pages serves the same HTML, CSS and JavaScript that
 > `make serve` serves locally, and every request goes to the FastAPI backend running on Modal: live
-> recommendations and Complete the Look, photo upload with FashionCLIP visual search, outfit analysis and
-> the grounded Style Assistant (Claude). Catalogue photos come from Cloudflare R2. Nothing is pre-recorded.
-> The backend scales to zero when idle, so the first visit after a quiet period takes about 20–30 seconds.
+> recommendations, photo upload with FashionCLIP visual search, outfit analysis and the grounded AI stylist
+> (Claude). Catalogue photos come from Cloudflare R2. Nothing is pre-recorded. The backend scales to zero when
+> idle, so the first visit after a quiet period takes about 20–30 seconds.
 
-<p align="center">
-  <img src="docs/assets/assistant_desktop.png" alt="Complete my look, step 4: an edit of four pieces that pair with the outfit, each with colours, price and Add to cart" width="67%">
-  <img src="docs/assets/home_mobile.png" alt="The gateway on a phone" width="25%">
-</p>
-
-**How it is organised for shoppers** — pages follow the decision you are making, not the model behind it
+**How it is organised for shoppers**: pages follow the decision you are making, not the model behind it
 ([product-flow spec](docs/AI_STYLIST_PRODUCT_FLOW.md)):
 
 | route | page |
 | --- | --- |
-| `#/` | gateway: *Shop your edit* or *Style with AI* (and a quiet link to DS Studio) |
-| `#/collections[/<tab>]`, `#/product/:id` | Collections: Selected for you (the ranker) · Buy it again · Trending as tabs (old `#/shop` links redirect here); product pages with colour-card / fabric swatches and Similar items (Complete the Look lives in the AI Stylist, D-049) |
+| `#/` | first page: *View your collections* or *Style with AI* (touch ripple, fade on choice) |
+| `#/collections[/<tab>]`, `#/product/:id` | Collections: Selected for you (the ranker) · Buy it again · Trending; product pages with photo-read colour swatches and four similar items |
 | `#/stylist` | AI Stylist hub with three tasks |
-| `#/stylist/ask` | Ask the stylist — conversation with optional photo; products only from tool results |
-| `#/stylist/find` | Find this piece — photo → frame (or whole photo) → visually similar pieces |
-| `#/stylist/look` | Complete my look — Photo → **Review what we spotted** → Your edit (four mixed picks) → Refine with the stylist |
+| `#/stylist/ask` | Ask the stylist: a conversation (optional photo); products only from tool results, shown by name |
+| `#/stylist/find` | Find this piece: photo → tap or frame the pieces → the four closest per piece |
+| `#/stylist/look` | Complete my look: photo → **review what we spotted** → your edit of four (mixed kinds) → refine with the stylist |
 | `#/studio…` | DS Studio: offline evaluation, serving status, recommendation inspection |
 
-Old `#/assistant` links redirect to `#/stylist/ask`.
+### A tour of the live site
 
-![Ensemble DS Studio offline evaluation](docs/assets/studio_desktop.png)
+All screenshots are the live site (Pages + Modal). The stylist flows use a CC0 street-style photo (credit below).
+
+<table>
+<tr>
+<td width="50%"><img src="docs/assets/collections_desktop.png" alt="Collections: Selected for you, Buy it again and Trending as tabs, with category filters and product cards"><br>
+<b>Collections.</b> The ranker's <i>Selected for you</i>, <i>Buy it again</i> and <i>Trending</i>, one card per product family.</td>
+<td width="50%"><img src="docs/assets/product_desktop.png" alt="Product page for a houndstooth blazer whose colour swatch shows the houndstooth fabric"><br>
+<b>Product page.</b> Swatches are read from each colourway's photo: plain pieces get a colour-card chip, patterns (here a houndstooth) show their fabric.</td>
+</tr>
+<tr>
+<td><img src="docs/assets/stylist_hub.png" alt="AI Stylist hub: What can we help with? Ask the stylist, Find this piece, Complete my look"><br>
+<b>AI Stylist.</b> Three tasks, each with its own route.</td>
+<td><img src="docs/assets/ask_start.png" alt="Ask the stylist opens as a conversation: a greeting bubble and three reply bubbles with product photos"><br>
+<b>Ask the stylist.</b> Opens as a conversation; tap a reply bubble or type your own.</td>
+</tr>
+<tr>
+<td><img src="docs/assets/ask_answer.png" alt="The stylist answers with four shoes for wide-leg trousers, named in the text and shown as product cards"><br>
+<b>A grounded answer.</b> At most four products, each one a catalogue item a tool returned, named, never numbered.</td>
+<td><img src="docs/assets/find_choose.png" alt="Find this piece: the shopper frames the shirt dress on the photo; the spotted pieces are listed on the side"><br>
+<b>Find this piece · choose.</b> The photo stays clean until you tap or drag; each chosen piece shows what it is and can be corrected.</td>
+</tr>
+<tr>
+<td><img src="docs/assets/find_results.png" alt="Find results: the four closest pieces to the framed top"><br>
+<b>Find this piece · results.</b> The four closest catalogue pieces for each chosen piece (FashionCLIP + street-to-shop adapter).</td>
+<td><img src="docs/assets/look_review.png" alt="Complete my look review: detected pieces numbered on the photo and listed for correction"><br>
+<b>Complete my look · review.</b> The vision model's detections, for the shopper to fix before anything is recommended.</td>
+</tr>
+<tr>
+<td><img src="docs/assets/look_edit.png" alt="Complete my look: an edit of four pieces of different kinds that pair with the outfit"><br>
+<b>Complete my look · your edit.</b> Four picks of different kinds from Complete the Look (Track B) for the confirmed outfit.</td>
+<td><img src="docs/assets/studio_desktop.png" alt="DS Studio offline evaluation tables"><br>
+<b>DS Studio.</b> The data-science view: offline evaluation, serving, inspection.</td>
+</tr>
+</table>
 
 <p align="center">
-  <img src="docs/assets/style_assistant_interaction.png"
-       alt="Complete my look on a phone: reviewing the detected pieces, the edit, and refining it with the stylist"
-       width="78%">
+  <img src="docs/assets/home_mobile.png" alt="The first page on a phone" width="30%">
+  &nbsp;
+  <img src="docs/assets/ask_mobile.png" alt="Ask the stylist on a phone" width="30%">
 </p>
 
-<p align="center"><em>Complete my look on the live site (phone). <b>Review:</b> the vision model's detections are
-shown on the photo and the shopper corrects them before anything is recommended (here a shirt dress the model
-called a "top" is changed to a dress). <b>Your edit:</b> pieces from Complete the Look for the confirmed outfit.
-<b>Refine:</b> a conversation preloaded with the look; the stylist may only cite products a tool returned. Photo:
+<p align="center"><em>Photo in the stylist flows:
 <a href="https://commons.wikimedia.org/wiki/File:New_York_Street_Fashion_(Unsplash).jpg">New York Street Fashion</a>,
-Yegide Matthews, CC0.</em></p>
+Yegide Matthews, CC0. The live detector (Claude) places boxes loosely; shoppers correct them in Review or by
+framing the piece themselves.</em></p>
 
 **Ensemble recommends clothing the way a stylist would:**
 - what *you* will likely buy next;
@@ -252,6 +278,9 @@ reimplemented for the web.
   and the FashionCLIP index on a Modal Volume; catalogue photos are served from a Cloudflare R2 bucket.
   Outfit analysis and the assistant call the Claude API (Haiku) under a monthly budget cap. The local-only
   research tool **Label** is not offered by the hosted shop, and the hosted API refuses it.
+- **Fresh after every release** — both builds link the frontend under a content-versioned folder
+  (`static/v-<hash>/`), so a browser or CDN can never mix a new page with old cached scripts. The colour
+  swatches (`make swatches`) live in their own SQLite file next to the serving store on the Modal Volume.
 
 Every number in DS Studio is the stored evaluation report and **offline**: historical data, not production
 traffic. A launch decision would need an online A/B test. See D-047 in
@@ -259,6 +288,8 @@ traffic. A launch decision would need an online A/B test. See D-047 in
 
 ```bash
 make serve                                   # the real application, http://localhost:8010
+make swatches                                # colour swatches from the product photos (~3 min)
+modal volume put ensemble-serving-data data/processed/swatches.sqlite processed/swatches.sqlite
 make modal-deploy                            # deploy the API to Modal (deploy venv with the modal CLI)
 make pages                                   # rebuild portfolio/ pointed at the Modal API; push to publish
 make pages-preview                           # serve portfolio/ at the GitHub project subpath
