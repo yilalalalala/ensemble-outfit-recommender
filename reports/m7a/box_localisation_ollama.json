@@ -4,12 +4,14 @@
     "images": 40,
     "garments": 56,
     "detected": 46,
-    "mean_iou_llm": 0.8784,
+    "mean_iou_llm": 0.8783,
     "mean_iou_parsed": 0.7378,
+    "mean_iou_filled": 0.8783,
     "hit_rate@0.5_llm": 0.9565,
     "hit_rate@0.5_parsed": 0.8478,
+    "hit_rate@0.5_filled": 0.9565,
     "parser": "mattmdjaga/segformer_b2_clothes",
-    "seconds": 572
+    "seconds": 248
   },
   "rows": [
     {
@@ -17,392 +19,448 @@
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.8339,
-      "iou_parsed": 0.8219
+      "iou_parsed": 0.8219,
+      "iou_filled": 0.8339
     },
     {
       "image": "010192.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.744,
-      "iou_parsed": 0.7437
+      "iou_parsed": 0.7437,
+      "iou_filled": 0.744
     },
     {
       "image": "003772.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9405,
-      "iou_parsed": 0.9426
+      "iou_parsed": 0.9426,
+      "iou_filled": 0.9405
     },
     {
       "image": "003772.jpg",
       "category": "skirt",
       "detected": true,
       "iou_llm": 0.9472,
-      "iou_parsed": 0.8568
+      "iou_parsed": 0.8568,
+      "iou_filled": 0.9472
     },
     {
       "image": "009724.jpg",
       "category": "long sleeve top",
       "detected": true,
       "iou_llm": 0.9824,
-      "iou_parsed": 0.8689
+      "iou_parsed": 0.8689,
+      "iou_filled": 0.9824
     },
     {
       "image": "009451.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.8779,
-      "iou_parsed": 0.8893
+      "iou_parsed": 0.8893,
+      "iou_filled": 0.8779
     },
     {
       "image": "009451.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.9426,
-      "iou_parsed": 0.9171
+      "iou_parsed": 0.9171,
+      "iou_filled": 0.9426
     },
     {
       "image": "000754.jpg",
       "category": "sling dress",
       "detected": true,
       "iou_llm": 0.9548,
-      "iou_parsed": 0.9034
+      "iou_parsed": 0.9034,
+      "iou_filled": 0.9548
     },
     {
       "image": "001071.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.9311,
-      "iou_parsed": 0.7014
+      "iou_parsed": 0.7014,
+      "iou_filled": 0.9311
     },
     {
       "image": "010066.jpg",
       "category": "shorts",
       "detected": true,
       "iou_llm": 0.8898,
-      "iou_parsed": 0.6557
+      "iou_parsed": 0.6557,
+      "iou_filled": 0.8898
     },
     {
       "image": "010066.jpg",
       "category": "vest",
       "detected": true,
       "iou_llm": 0.7062,
-      "iou_parsed": 0.6811
+      "iou_parsed": 0.6811,
+      "iou_filled": 0.7062
     },
     {
       "image": "001318.jpg",
       "category": "vest dress",
       "detected": true,
       "iou_llm": 0.9389,
-      "iou_parsed": 0.947
+      "iou_parsed": 0.947,
+      "iou_filled": 0.9389
     },
     {
       "image": "007163.jpg",
       "category": "long sleeve dress",
       "detected": true,
       "iou_llm": 0.9205,
-      "iou_parsed": 0.7813
+      "iou_parsed": 0.7813,
+      "iou_filled": 0.9205
     },
     {
       "image": "006954.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.9437,
-      "iou_parsed": 0.9437
+      "iou_parsed": 0.9437,
+      "iou_filled": 0.9437
     },
     {
       "image": "008300.jpg",
       "category": "long sleeve dress",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "006597.jpg",
       "category": "skirt",
       "detected": true,
       "iou_llm": 0.9657,
-      "iou_parsed": 0.9657
+      "iou_parsed": 0.9657,
+      "iou_filled": 0.9657
     },
     {
       "image": "009463.jpg",
       "category": "skirt",
       "detected": true,
       "iou_llm": 0.947,
-      "iou_parsed": 0.9374
+      "iou_parsed": 0.9374,
+      "iou_filled": 0.947
     },
     {
       "image": "009463.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9293,
-      "iou_parsed": 0.8082
+      "iou_parsed": 0.8082,
+      "iou_filled": 0.9293
     },
     {
       "image": "009866.jpg",
       "category": "short sleeve dress",
       "detected": true,
-      "iou_llm": 0.9539,
-      "iou_parsed": 0.7195
+      "iou_llm": 0.951,
+      "iou_parsed": 0.7195,
+      "iou_filled": 0.951
     },
     {
       "image": "001337.jpg",
       "category": "vest dress",
       "detected": true,
       "iou_llm": 0.9635,
-      "iou_parsed": 0.9685
+      "iou_parsed": 0.9685,
+      "iou_filled": 0.9635
     },
     {
       "image": "000067.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.2787,
-      "iou_parsed": 0.272
+      "iou_parsed": 0.272,
+      "iou_filled": 0.2787
     },
     {
       "image": "000067.jpg",
       "category": "long sleeve top",
       "detected": true,
       "iou_llm": 0.755,
-      "iou_parsed": 0.7543
+      "iou_parsed": 0.7543,
+      "iou_filled": 0.755
     },
     {
       "image": "002553.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.8565,
-      "iou_parsed": 0.5101
+      "iou_parsed": 0.5101,
+      "iou_filled": 0.8565
     },
     {
       "image": "002553.jpg",
       "category": "long sleeve top",
       "detected": true,
       "iou_llm": 0.9928,
-      "iou_parsed": 0.9433
+      "iou_parsed": 0.9433,
+      "iou_filled": 0.9928
     },
     {
       "image": "002931.jpg",
       "category": "short sleeve dress",
       "detected": true,
       "iou_llm": 0.872,
-      "iou_parsed": 0.0168
+      "iou_parsed": 0.0168,
+      "iou_filled": 0.872
     },
     {
       "image": "007363.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.9412,
-      "iou_parsed": 0.411
+      "iou_parsed": 0.411,
+      "iou_filled": 0.9412
     },
     {
       "image": "006202.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.7261,
-      "iou_parsed": 0.1455
+      "iou_parsed": 0.1455,
+      "iou_filled": 0.7261
     },
     {
       "image": "006202.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9568,
-      "iou_parsed": 0.6298
+      "iou_parsed": 0.6298,
+      "iou_filled": 0.9568
     },
     {
       "image": "006896.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.6864,
-      "iou_parsed": 0.6727
+      "iou_parsed": 0.6727,
+      "iou_filled": 0.6864
     },
     {
       "image": "006896.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9895,
-      "iou_parsed": 0.7069
+      "iou_parsed": 0.7069,
+      "iou_filled": 0.9895
     },
     {
       "image": "009496.jpg",
       "category": "short sleeve top",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "009496.jpg",
       "category": "vest dress",
       "detected": true,
       "iou_llm": 0.9816,
-      "iou_parsed": 0.9638
+      "iou_parsed": 0.9638,
+      "iou_filled": 0.9816
     },
     {
       "image": "007837.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.6442,
-      "iou_parsed": 0.5643
+      "iou_parsed": 0.5643,
+      "iou_filled": 0.6442
     },
     {
       "image": "007837.jpg",
       "category": "long sleeve outwear",
       "detected": true,
       "iou_llm": 0.7022,
-      "iou_parsed": 0.6738
+      "iou_parsed": 0.6738,
+      "iou_filled": 0.7022
     },
     {
       "image": "003321.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.7316,
-      "iou_parsed": 0.6417
+      "iou_parsed": 0.6417,
+      "iou_filled": 0.7316
     },
     {
       "image": "003321.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9915,
-      "iou_parsed": 0.9504
+      "iou_parsed": 0.9504,
+      "iou_filled": 0.9915
     },
     {
       "image": "002041.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.7299,
-      "iou_parsed": 0.7051
+      "iou_parsed": 0.7051,
+      "iou_filled": 0.7299
     },
     {
       "image": "002041.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9671,
-      "iou_parsed": 0.9653
+      "iou_parsed": 0.9653,
+      "iou_filled": 0.9671
     },
     {
       "image": "008097.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9989,
-      "iou_parsed": 0.2785
+      "iou_parsed": 0.2785,
+      "iou_filled": 0.9989
     },
     {
       "image": "005330.jpg",
       "category": "vest dress",
       "detected": true,
       "iou_llm": 0.9749,
-      "iou_parsed": 0.9567
+      "iou_parsed": 0.9567,
+      "iou_filled": 0.9749
     },
     {
       "image": "001660.jpg",
       "category": "long sleeve outwear",
       "detected": true,
       "iou_llm": 0.9975,
-      "iou_parsed": 0.8577
+      "iou_parsed": 0.8577,
+      "iou_filled": 0.9975
     },
     {
       "image": "001430.jpg",
       "category": "long sleeve top",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "007079.jpg",
       "category": "long sleeve top",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "007079.jpg",
       "category": "sling dress",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "009027.jpg",
       "category": "short sleeve dress",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "004085.jpg",
       "category": "short sleeve top",
       "detected": true,
       "iou_llm": 0.9571,
-      "iou_parsed": 0.463
+      "iou_parsed": 0.463,
+      "iou_filled": 0.9571
     },
     {
       "image": "009761.jpg",
       "category": "short sleeve top",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "009761.jpg",
       "category": "skirt",
       "detected": true,
       "iou_llm": 0.9804,
-      "iou_parsed": 0.4832
+      "iou_parsed": 0.4832,
+      "iou_filled": 0.9804
     },
     {
       "image": "006710.jpg",
       "category": "short sleeve top",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "006710.jpg",
       "category": "skirt",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "002799.jpg",
       "category": "vest dress",
       "detected": true,
       "iou_llm": 0.4987,
-      "iou_parsed": 0.5614
+      "iou_parsed": 0.5614,
+      "iou_filled": 0.4987
     },
     {
       "image": "009022.jpg",
       "category": "short sleeve dress",
       "detected": false,
       "iou_llm": 0.0,
-      "iou_parsed": 0.0
+      "iou_parsed": 0.0,
+      "iou_filled": 0.0
     },
     {
       "image": "004482.jpg",
       "category": "short sleeve dress",
       "detected": true,
       "iou_llm": 0.967,
-      "iou_parsed": 0.848
+      "iou_parsed": 0.848,
+      "iou_filled": 0.967
     },
     {
       "image": "009488.jpg",
       "category": "trousers",
       "detected": true,
       "iou_llm": 0.9416,
-      "iou_parsed": 0.9467
+      "iou_parsed": 0.9467,
+      "iou_filled": 0.9416
     },
     {
       "image": "004209.jpg",
       "category": "short sleeve dress",
       "detected": true,
       "iou_llm": 0.988,
-      "iou_parsed": 0.9767
+      "iou_parsed": 0.9767,
+      "iou_filled": 0.988
     },
     {
       "image": "001842.jpg",
       "category": "skirt",
       "detected": true,
       "iou_llm": 0.9869,
-      "iou_parsed": 0.9869
+      "iou_parsed": 0.9869,
+      "iou_filled": 0.9869
     }
   ]
 }

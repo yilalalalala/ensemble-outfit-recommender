@@ -114,13 +114,25 @@ def box_for(labels: np.ndarray, category: str, llm_box: list[int] | None) -> lis
     return None
 
 
-def refine(items: list[dict], img: Image.Image) -> list[dict]:
-    """Replace each item's box with its parsed box where the parser has the class (boxes in ``img`` pixels)."""
+def _iou(a, b) -> float:
+    w = max(0, min(a[2], b[2]) - max(a[0], b[0])); h = max(0, min(a[3], b[3]) - max(a[1], b[1]))
+    u = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - w * h
+    return w * h / u if u > 0 else 0.0
+
+
+def refine(items: list[dict], img: Image.Image, mode: str = "replace") -> list[dict]:
+    """Garment boxes from the parse (boxes in ``img`` pixels).
+
+    ``replace``: every item the parser has a class for takes its parsed box (for an LLM that places boxes loosely).
+    ``fill``: the LLM's boxes are kept and only a missing box is filled from the parse — for a grounded VLM whose
+    boxes beat the parser's (replacing Qwen-VL's boxes where the two disagree lowered mean IoU from 0.88 to 0.80)."""
     if not any(it["category"] in FOR_CATEGORY for it in items):
         return items
     labels = segment(img)
     out = []
     for it in items:
         b = box_for(labels, it["category"], it.get("box"))
-        out.append({**it, "box": b} if b else it)
+        own = it.get("box")
+        use = b if b and (mode == "replace" or not own) else own
+        out.append({**it, "box": use})
     return out

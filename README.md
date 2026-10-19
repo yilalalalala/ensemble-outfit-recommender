@@ -99,7 +99,7 @@ Every result is evaluated offline with temporal splits, a popularity baseline an
 | **Next-purchase ranking** (H&M Kaggle task, MAP@12) | **0.0333 private leaderboard** (late submission; MVP 0.0319), above the ~0.030 silver line of 3,006 teams. The Phase 2 upgrade adds **+7.5% [+6.9, +8.2]** MAP@12 over the MVP across a 4-week backtest (+53% over a strong rule baseline) and raises candidate recall from 13% to 18–20% ([report](reports/PHASE2_UPGRADE_REPORT.md)) |
 | **Complete the Look** (outfit completion) | **+56% Recall@12** over popularity on the held-out week; FashionCLIP image features add +4 points |
 | **Visual search** (street photo → product) | Street-to-shop adapters trained on DeepFashion2 raise exact-item **Recall@1 from 0.40 to 0.59** on 154 real outfit-post pairs, and from 0.38 to 0.59 on DeepFashion2 |
-| **Garment localisation** (where each piece is) | Clothes parsing (SegFormer) lifts the hosted detector's box accuracy from **mean IoU 0.28 to 0.65** (hit@0.5 17% → 70%) on 40 DeepFashion2 street photos; the local Qwen-VL keeps its own boxes (IoU 0.88) ([D-051](docs/DECISIONS.md)) |
+| **Garment localisation** (where each piece is) | Clothes parsing (SegFormer) lifts the hosted detector's box accuracy from **mean IoU 0.28 to 0.65** (hit@0.5 17% → 70%) on 40 DeepFashion2 street photos; the local Qwen-VL keeps its own, more accurate boxes (IoU 0.88), and the parser only fills the ones it leaves out ([D-051](docs/DECISIONS.md)) |
 | **Shopping assistant** (LLM + tools) | **100% tool accuracy, 0% hallucinated products** over a 24-turn eval, on a free local model (Qwen3-VL) and on Claude Opus 5 |
 | **Evaluation you can trust** | The LLM judge is calibrated against 200 human labels: 81% agreement (κ 0.57) on a held-out set |
 
