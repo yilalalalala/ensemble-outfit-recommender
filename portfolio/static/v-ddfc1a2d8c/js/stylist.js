@@ -28,6 +28,7 @@ export function shell({task, title, lede, steps = null, step = 0, back = null, b
        <span class="steps__n" aria-hidden="true">${i + 1}</span><span class="steps__label">${esc(s)}</span>
        ${i < step ? `<span class="sr-only">, completed</span>` : ""}</li>`).join("")}</ol>
      <p class="steps__compact" aria-hidden="true">Step ${step + 1} of ${steps.length} · ${esc(steps[step])}</p>` : "";
+  warmStylist();
   // Ask, Find and Complete my look carry two soft dark-Morandi circles in the page margins (decorative).
   const orbs = ["ask", "find", "look"].includes(task) ? `<span class="orb orb--plum" aria-hidden="true"></span><span class="orb orb--sage" aria-hidden="true"></span>` : "";
   return `<div class="task" data-task="${task}">${orbs}
@@ -60,8 +61,33 @@ export function stagedStatus(el, labels, every = 4500) {
   return () => clearInterval(timer);
 }
 
+// The hosted stylist runs on a GPU that sleeps when idle: wake it as soon as a shopper opens the AI Stylist, so it is
+// ready by the time they send a photo or a question (best effort, at most once a minute; a no-op locally).
+let warmedAt = 0;
+export function warmStylist() {
+  if (Date.now() - warmedAt < 60000) return;
+  warmedAt = Date.now();
+  api("/api/stylist/warm", {method: "POST"}).catch(() => {});
+}
+
+// A request to the stylist's models. If the GPU was asleep the first try can time out while it starts (about a
+// minute); then say so and try once more — by then it is awake. Budget refusals and bad input are not retried.
+export async function gpuApi(path, opts, onWaking) {
+  try {
+    return await api(path, opts);
+  } catch (e) {
+    const asleep = !(e instanceof ApiError) || (e.status >= 500 && e.code !== "ai_budget_reached");
+    if (!asleep) throw e;
+    onWaking?.("Waking up the stylist — about a minute…");
+    warmedAt = 0; warmStylist();
+    await new Promise(r => setTimeout(r, 3000));
+    return api(path, opts);
+  }
+}
+
 // ---- hub ----------------------------------------------------------------------------------------------------
 export async function hub(ctx) {
+  warmStylist();
   ctx.setTitle("AI Stylist");
   const look = stage("ensemble.look.v1").get();
   const root = ctx.render(`<div class="hub">
@@ -257,7 +283,8 @@ function conversation(root, customer, key) {
     const fd = new FormData();
     fd.append("text", outgoing(s, text));
     if (sent) fd.append("photo", toBlob(sent.dataUrl), sent.name || "photo.jpg");
-    const r = await api(`/api/assistant/${s.sid}/message`, {method: "POST", body: fd});
+    const r = await gpuApi(`/api/assistant/${s.sid}/message`, {method: "POST", body: fd},
+      msg => { const l = $("#pending span"); if (l) l.textContent = msg; });
     s.contextSent = true;
     s.replay = null;
     return r;

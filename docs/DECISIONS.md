@@ -1487,3 +1487,26 @@ need a licensed or self-trained parser.
 
 **Revisit if:** jewellery localisation matters (add a small-object detector), the hosted detector moves to a
 grounded VLM, or the parser's latency hurts the cold path.
+
+### D-052 — The live demo runs the local site's models on a scale-to-zero GPU
+
+**Date:** 2026-10-19. **Status:** accepted; replaces Claude as the hosted stylist backend (D-047 kept Claude for cost).
+
+**Context.** The local site (Qwen2.5-VL 7B for detection, Qwen3-VL 8B for the tool-calling stylist, via Ollama)
+localises garments better than the hosted Claude path (DeepFashion2 mean IoU 0.88 vs 0.65 with parsing, D-051), and
+the product owner wants the live demo to be the same system, with a larger budget.
+
+**Decision.** `deploy/modal_app.py` adds `OllamaGPU`: Ollama serving both models on one L4 GPU (models in the
+`ensemble-ollama-models` Volume), `scaledown_window=300`, one container. The API uses `ENSEMBLE_LLM=ollama-modal`
+(`ModalOllamaClient`: the same requests as the local `OllamaClient`, sent to the GPU class). Opening any AI Stylist
+page calls `/api/stylist/warm`, which starts the GPU ahead of the first photo or question. The container bills its
+own uptime (idle included) into the Modal Dict `ensemble-gpu-spend`; at **$25/month** the API refuses GPU requests
+and the stylist rests until the next month. Behind it the Modal workspace spend limit is **$5** above the $30 monthly
+free credits, so the web backend never stops.
+
+**Cost.** L4 ≈ $0.80/h only while awake; at portfolio traffic a few dollars a month, inside the free credits. The
+industry alternatives were weighed in the conversation: hosted APIs win below roughly 115k photos/month; an
+always-warm GPU (≈ $580/month) is what a product with a latency SLO would run.
+
+**Revisit if:** cold starts hurt (keep one GPU warm during set hours), the budget is hit regularly, or traffic makes
+an always-warm GPU or a managed open-model endpoint cheaper.

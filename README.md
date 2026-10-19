@@ -15,9 +15,11 @@ In machine learning, it also means several models combined. This project is both
 
 > **The live demo is the real application.** GitHub Pages serves the same HTML, CSS and JavaScript that
 > `make serve` serves locally, and every request goes to the FastAPI backend running on Modal: live
-> recommendations, photo upload with FashionCLIP visual search, outfit analysis and the grounded AI stylist
-> (Claude). Catalogue photos come from Cloudflare R2. Nothing is pre-recorded. The backend scales to zero when
-> idle, so the first visit after a quiet period takes about 20–30 seconds.
+> recommendations, photo upload with FashionCLIP visual search, outfit analysis and the grounded AI stylist —
+> on **the same open models as the local site** (Qwen2.5-VL and Qwen3-VL, served by Ollama on a Modal GPU).
+> Catalogue photos come from Cloudflare R2. Nothing is pre-recorded. Both the API and the GPU scale to zero when
+> idle: the first visit after a quiet period takes about 20–30 seconds, and the stylist's GPU about a minute more
+> (it is woken as soon as you open the AI Stylist).
 
 **How it is organised for shoppers**: pages follow the decision you are making, not the model behind it
 ([product-flow spec](docs/AI_STYLIST_PRODUCT_FLOW.md)):
@@ -32,16 +34,17 @@ In machine learning, it also means several models combined. This project is both
 | `#/stylist/look` | Complete my look: photo → **review what we spotted** → your edit of four (mixed kinds) → refine with the stylist |
 | `#/studio…` | DS Studio: offline evaluation, serving status, recommendation inspection |
 
-### A tour of the live site
+### A tour of the site
 
-All screenshots are the live site (Pages + Modal). The stylist flows use a CC0 street-style photo (credit below).
+Screenshots from the local site, which runs the same system as the live demo. The shop pages show the profile
+"Shopper, 22"; the stylist flows use two photos of the author.
 
 <table>
 <tr>
 <td width="50%"><img src="docs/assets/collections_desktop.png" alt="Collections: Selected for you, Buy it again and Trending as tabs, with category filters and product cards"><br>
 <b>Collections.</b> The ranker's <i>Selected for you</i>, <i>Buy it again</i> and <i>Trending</i>, one card per product family.</td>
 <td width="50%"><img src="docs/assets/product_desktop.png" alt="Product page for a houndstooth blazer whose colour swatch shows the houndstooth fabric"><br>
-<b>Product page.</b> Swatches are read from each colourway's photo: plain pieces get a colour-card chip, patterns (here a houndstooth) show their fabric.</td>
+<b>Product page.</b> The first piece in this shopper's edit. Swatches are read from each colourway's photo: plain pieces get a colour-card chip, patterns show their fabric.</td>
 </tr>
 <tr>
 <td><img src="docs/assets/stylist_hub.png" alt="AI Stylist hub: What can we help with? Ask the stylist, Find this piece, Complete my look"><br>
@@ -53,17 +56,17 @@ All screenshots are the live site (Pages + Modal). The stylist flows use a CC0 s
 <td><img src="docs/assets/ask_answer.png" alt="The stylist answers with four shoes for wide-leg trousers, named in the text and shown as product cards"><br>
 <b>A grounded answer.</b> At most four products, each one a catalogue item a tool returned, named, never numbered.</td>
 <td><img src="docs/assets/find_choose.png" alt="Find this piece: the shopper frames the shirt dress on the photo; the spotted pieces are listed on the side"><br>
-<b>Find this piece · choose.</b> The photo stays clean until you tap a piece or drag around one; each chosen piece shows what it is and can be corrected.</td>
+<b>Find this piece · choose.</b> The pieces in the photo are spotted and listed; tap one (here the white blouse) or drag around it, and correct what it is if needed.</td>
 </tr>
 <tr>
 <td><img src="docs/assets/find_results.png" alt="Find results: the four closest pieces to the framed top"><br>
-<b>Find this piece · results.</b> The four closest catalogue pieces for each chosen piece (FashionCLIP + street-to-shop adapter).</td>
+<b>Find this piece · results.</b> The four closest catalogue pieces to the chosen blouse (FashionCLIP + street-to-shop adapter).</td>
 <td><img src="docs/assets/look_review.png" alt="Complete my look review: detected pieces numbered on the photo and listed for correction"><br>
-<b>Complete my look · review.</b> Claude names each piece; a clothes-parsing model (SegFormer) frames it. The shopper fixes anything before it is used.</td>
+<b>Complete my look · review.</b> The vision model's detections, for the shopper to fix before anything is used; here only the white dress is kept.</td>
 </tr>
 <tr>
 <td><img src="docs/assets/look_edit.png" alt="Complete my look: an edit of four pieces of different kinds that pair with the outfit"><br>
-<b>Complete my look · your edit.</b> Four picks of different kinds from Complete the Look (Track B) for the confirmed outfit.</td>
+<b>Complete my look · your edit.</b> Four picks of different kinds (shoes, a belt, boots, a bag) from Complete the Look (Track B) for the dress.</td>
 <td><img src="docs/assets/studio_desktop.png" alt="DS Studio offline evaluation tables"><br>
 <b>DS Studio.</b> The data-science view: offline evaluation, serving, inspection.</td>
 </tr>
@@ -75,10 +78,9 @@ All screenshots are the live site (Pages + Modal). The stylist flows use a CC0 s
   <img src="docs/assets/ask_mobile.png" alt="Ask the stylist on a phone" width="30%">
 </p>
 
-<p align="center"><em>Photo in the stylist flows:
-<a href="https://commons.wikimedia.org/wiki/File:New_York_Street_Fashion_(Unsplash).jpg">New York Street Fashion</a>,
-Yegide Matthews, CC0. Garment frames come from clothes parsing (SegFormer), not from the language model: on
-40 DeepFashion2 street photos this lifts the live detector's box accuracy from mean IoU 0.28 to 0.65 (D-051).</em></p>
+<p align="center"><em>Garment frames: the vision model's own boxes, with a clothes-parsing model (SegFormer) filling in
+any it leaves out; for a loose detector such as Claude it replaces them, lifting box accuracy from mean IoU 0.28 to
+0.65 on 40 DeepFashion2 street photos (D-051).</em></p>
 
 **Ensemble recommends clothing the way a stylist would:**
 - what *you* will likely buy next;
@@ -277,8 +279,10 @@ reimplemented for the web.
   (`deploy/modal_app.py`, `make modal-deploy`). GitHub Pages serves the static files from `main`; Modal runs
   the FastAPI app (CPU, scales to zero, one container) with the serving store, the versioned serving bundle
   and the FashionCLIP index on a Modal Volume; catalogue photos are served from a Cloudflare R2 bucket.
-  Outfit analysis and the assistant call the Claude API (Haiku) under a monthly budget cap; the garments it names
-  are framed by a SegFormer clothes parser baked into the image (D-051). The local-only
+  Outfit analysis and the stylist run **the local site's models**: Qwen2.5-VL 7B (detection) and Qwen3-VL 8B
+  (tool-calling chat) under Ollama on one Modal L4 GPU that scales to zero, is woken when a shopper opens the AI
+  Stylist, and stops at a $25 monthly GPU budget (D-052). Claude remains a supported backend (`ENSEMBLE_LLM=claude`),
+  with a SegFormer clothes parser framing its loose boxes (D-051). The local-only
   research tool **Label** is not offered by the hosted shop, and the hosted API refuses it.
 - **Fresh after every release** — both builds link the frontend under a content-versioned folder
   (`static/v-<hash>/`), so a browser or CDN can never mix a new page with old cached scripts. The colour

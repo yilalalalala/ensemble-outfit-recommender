@@ -1,12 +1,14 @@
-// README screenshots of the real app on the live backend (no mock-ups, no generated imagery).
-//   PLAYWRIGHT=/path/to/playwright node scripts/ui/readme_shots.js [base-url]
-// Default base: `make pages-preview` (the Pages build, calling the live Modal API). The stylist flows use the CC0
-// photo data/raw/outfit_photos/full_03.jpg (credited in CREDITS.csv), never a private photo.
+// README screenshots of the real app (no mock-ups, no generated imagery).
+//   PLAYWRIGHT=/path/to/playwright PHOTO_FIND=… PHOTO_LOOK=… node scripts/ui/readme_shots.js [base-url]
+// Default base: the local site (`make serve`, port 8010). The shop pages show the profile PROFILE ("Shopper, 22").
+// The stylist flows use PHOTO_FIND and PHOTO_LOOK: photos of the repository owner, used with her consent (defaults:
+// the CC0 photo data/raw/outfit_photos/full_03.jpg, credited in CREDITS.csv). Never a third party's private photo.
 const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
-const BASE = process.argv[2] || 'http://localhost:8040/ensemble-outfit-recommender/';
+const BASE = process.argv[2] || 'http://localhost:8010/';
 const OUT = 'docs/assets';
-const PHOTO = 'data/raw/outfit_photos/full_03.jpg';
-const PRODUCT = '898713001';   // Hanoi Oversize Blazer: a houndstooth, so its swatch is a fabric crop
+const PHOTO_FIND = process.env.PHOTO_FIND || 'data/raw/outfit_photos/full_03.jpg';
+const PHOTO_LOOK = process.env.PHOTO_LOOK || 'data/raw/outfit_photos/full_03.jpg';
+const PROFILE = process.env.PROFILE || '133835';   // the first "Shopper, 22" in the profile list
 
 const ready = p => p.waitForFunction(() => [...document.images].filter(i => { const r = i.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.width > 0; })
   .every(i => i.complete && i.naturalWidth > 0), null, {timeout: 60000}).catch(() => {});
@@ -17,7 +19,7 @@ const fresh = async (p, hash) => { await p.goto(BASE + hash); await settle(p); a
 async function find(p) {
   await fresh(p, '#/stylist/find');
   await shot(p, 'find_photo');
-  await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
+  await p.setInputFiles('.dropzone input', PHOTO_FIND); await p.waitForSelector('.photo-preview img');
   await p.click('#find-next');
   await p.waitForSelector('.piece', {timeout: 300000}); await settle(p);
   // Choose the main garment as a shopper does: tap it (its box comes from clothes parsing, D-051).
@@ -31,13 +33,17 @@ async function find(p) {
 
 async function look(p) {
   await fresh(p, '#/stylist/look');
-  await p.setInputFiles('.dropzone input', PHOTO); await p.waitForSelector('.photo-preview img');
+  await p.setInputFiles('.dropzone input', PHOTO_LOOK); await p.waitForSelector('.photo-preview img');
   await p.click('#look-detect');
   await p.waitForFunction(() => location.hash.includes('step=review'), null, {timeout: 300000}); await settle(p);
-  // The model may call a shirt dress a "top": correct it in Review, as a shopper would.
-  const first = await p.$('.garment:first-child [data-field="category"]');
-  const desc = await p.$eval('.garment:first-child .garment__name', e => e.textContent.toLowerCase());
-  if (/dress/.test(desc)) await first.selectOption('dress');
+  // Keep only the dress, as a shopper would (Complete my look then finishes the outfit around it): remove every
+  // other spotted piece; if the dress was called a "top", correct its category.
+  const names = await p.$$eval('.garment', gs => gs.map(g => [g.querySelector('[data-field=category]').value, g.querySelector('.garment__name').textContent.toLowerCase()]));
+  let keep = names.findIndex(([c, n]) => c === 'dress' || /dress/.test(n));
+  if (keep < 0) keep = 0;
+  for (let i = names.length - 1; i >= 0; i--) if (i !== keep) await p.click(`.garment:nth-child(${i + 1}) [data-remove]`);
+  const cat = await p.$('.garment [data-field="category"]');
+  if ((await cat.inputValue()) !== 'dress') await cat.selectOption('dress');
   await shot(p, 'look_review', {fullPage: true});
   await p.click('#review-next');
   await p.waitForFunction(() => location.hash.includes('step=edit'), null, {timeout: 300000}); await settle(p);
@@ -58,12 +64,15 @@ async function ask(p) {
 
 (async () => {
   const b = await chromium.launch({channel: 'chrome'});
-  const desk = await (await b.newContext({viewport: {width: 1440, height: 900}})).newPage();
+  const ctxOpts = {viewport: {width: 1440, height: 900}};
+  const desk = await (await b.newContext(ctxOpts)).newPage();
+  await desk.addInitScript(id => { try { localStorage.setItem('ensemble.profile', id); } catch {} }, PROFILE);
   await desk.goto(BASE + '#/'); await settle(desk);
   await shot(desk, 'home_desktop');
   await desk.goto(BASE + '#/collections'); await desk.waitForSelector('main .grid .card', {timeout: 120000}); await settle(desk);
   await shot(desk, 'collections_desktop');
-  await desk.goto(BASE + `#/product/${PRODUCT}`); await desk.waitForSelector('.pdp [data-add]', {timeout: 120000}); await settle(desk);
+  // The product page: the first piece in this shopper's edit, opened from Collections as a shopper would.
+  await desk.click('main .grid > li:first-child .card__name a'); await desk.waitForSelector('.pdp [data-add]', {timeout: 120000}); await settle(desk);
   await shot(desk, 'product_desktop');
   await desk.goto(BASE + '#/stylist'); await settle(desk);
   await shot(desk, 'stylist_hub');
@@ -73,6 +82,7 @@ async function ask(p) {
   await desk.goto(BASE + '#/studio'); await desk.waitForSelector('table.data tbody tr', {timeout: 120000}); await settle(desk);
   await shot(desk, 'studio_desktop');
   const phone = await (await b.newContext({viewport: {width: 390, height: 844}, deviceScaleFactor: 2})).newPage();
+  await phone.addInitScript(id => { try { localStorage.setItem('ensemble.profile', id); } catch {} }, PROFILE);
   await phone.goto(BASE + '#/'); await settle(phone);
   await shot(phone, 'home_mobile');
   await phone.goto(BASE + '#/stylist/ask'); await settle(phone);

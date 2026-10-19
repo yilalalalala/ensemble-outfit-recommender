@@ -19,6 +19,7 @@ const tests = [
     assert.equal(pieceLabel({category: "shoes", colour: "black", description: "black flats"}), "black flats");
     assert.equal(pieceLabel({category: "bag", colour: "", description: ""}), "Bag");
     assert.equal(pieceLabel({category: "top", colour: "yellow", description: "mustard yellow shirt"}), "mustard yellow shirt");
+    assert.equal(pieceLabel({category: "dress", colour: "white", description: "a sleeveless white dress"}), "sleeveless white dress");
   }],
   ["a framed area takes the category of the spotted piece it mostly covers", () => {
     assert.equal(categoryFor([0.3, 0.6, 0.7, 0.9], spotted).category, "bottom");

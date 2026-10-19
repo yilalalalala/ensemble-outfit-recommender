@@ -282,3 +282,11 @@ industry standard and are named as such wherever they appear.
 | **Human parsing** / **clothes segmentation** | Labelling every pixel of a photo of a person (upper clothes, pants, shoes, bag…); the masks give tight garment boxes | DS |
 | **IoU (intersection over union)** | Overlap of a predicted and a true box: shared area ÷ combined area; 1 is perfect, ≥ 0.5 is the usual "hit" | DS |
 | **Localisation vs recognition** | *Where* an object is vs *what* it is; vision LLMs recognise well and localise loosely, so pipelines pair them with a detector or segmenter | Both |
+
+## Hosting open models (added with D-052)
+
+| term | meaning | audience |
+| --- | --- | --- |
+| **Scale to zero** | A service that shuts its servers down when idle and starts them on the next request: no cost while idle, a cold start after | Eng |
+| **Cold start** / **pre-warming** | The delay while an idle service (here a GPU and its models) starts; pre-warming starts it ahead of the request that needs it | Eng |
+| **Build vs buy (models)** | Self-hosting open-weights models vs paying per call for a hosted API; decided by traffic, latency targets, privacy and cost | Both |

@@ -848,6 +848,28 @@ def _stylist_ctl(anchor: int, slots: list[str], customer: int | None, k: int = 8
             for sl, g in rows.groupby("slot")]
 
 
+_last_warm = 0.0
+
+
+@app.post("/api/stylist/warm")
+def stylist_warm():
+    """Start the stylist's GPU ahead of the shopper's first request (hosted only; at most once a minute).
+    Locally, and when the GPU's monthly budget is spent, it does nothing."""
+    import time as _t
+    global _last_warm
+    from ensemble.llm.client import warm_gpu
+    if _t.time() - _last_warm < 60:
+        return {"warming": True}
+    try:
+        started = warm_gpu()
+    except Exception as e:  # noqa: BLE001 - warming is best-effort; the request itself will start the GPU
+        LOG.warning("gpu warm failed: %s", type(e).__name__)
+        started = False
+    if started:
+        _last_warm = _t.time()
+    return {"warming": started}
+
+
 @app.post("/api/stylist/edit")
 def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal: str = Form("complete"),
                  occasion: str = Form(""), customer: int | None = Form(None)):
@@ -867,7 +889,7 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
         m = match(gp, small, "text_rerank_image", 6)
         matched.append({**g, "ids": m.article_id.astype(int).tolist()})
     def name(g: dict) -> str:   # "black strappy sandals", never "black black…" or "yellow mustard yellow…"
-        what = g["description"] or g["category"]
+        what = re.sub(r"^(a|an|the)\s+", "", (g["description"] or g["category"]).strip(), flags=re.I)   # "your a dress"
         c = g["colour"].strip()
         return what if not c or re.search(rf"\b{re.escape(c)}\b", what, re.I) else f"{c} {what}"
 
