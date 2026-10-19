@@ -147,6 +147,11 @@ class OllamaClient:
 GPU_APP = os.environ.get("ENSEMBLE_GPU_APP", "ensemble-recommender")
 GPU_SPEND_DICT = os.environ.get("ENSEMBLE_GPU_SPEND_DICT", "ensemble-gpu-spend")
 GPU_MONTHLY_BUDGET_USD = float(os.environ.get("ENSEMBLE_GPU_MONTHLY_BUDGET_USD", "25"))
+GPU_WAIT_S = float(os.environ.get("ENSEMBLE_GPU_WAIT_S", "100"))   # longer, and the request is better served elsewhere
+
+
+class GPUUnavailable(RuntimeError):
+    """The GPU did not answer in time (no capacity, or still starting); callers may fall back or ask to retry."""
 
 
 def gpu_month_spend() -> float:
@@ -163,7 +168,12 @@ class ModalOllamaClient(OllamaClient):
         if gpu_month_spend() >= GPU_MONTHLY_BUDGET_USD:
             raise BudgetExceeded(f"monthly GPU budget of ${GPU_MONTHLY_BUDGET_USD:.0f} reached")
         import modal
-        return modal.Cls.from_name(GPU_APP, "OllamaGPU")().chat.remote(body)
+        call = modal.Cls.from_name(GPU_APP, "OllamaGPU")().chat.spawn(body)
+        try:
+            return call.get(timeout=GPU_WAIT_S)
+        except (TimeoutError, modal.exception.TimeoutError, modal.exception.OutputExpiredError):
+            call.cancel()
+            raise GPUUnavailable(f"GPU did not answer within {GPU_WAIT_S:.0f}s") from None
 
 
 def warm_gpu() -> bool:

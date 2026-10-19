@@ -1508,5 +1508,12 @@ free credits, so the web backend never stops.
 industry alternatives were weighed in the conversation: hosted APIs win below roughly 115k photos/month; an
 always-warm GPU (≈ $580/month) is what a product with a latency SLO would run.
 
+**GPU capacity (found in production, same day).** Modal sometimes has no L4 free ("waiting to be scheduled on a
+GPU_L4 worker"); requests then queued until they failed (Find showed no pieces, Complete my look an error). Fixes:
+the class accepts `["L4", "A10G", "L40S"]` (all hold both models; uptime is billed at the type actually used); a GPU
+request waits at most 100 s (`ENSEMBLE_GPU_WAIT_S`), after which detection falls back to Claude + clothes parsing for
+that photo (logged), and a chat turn is undone and answered 503 so the frontend's retry is not a duplicate.
+Measured after the fix: cold detection ~98 s, warm 4–8 s.
+
 **Revisit if:** cold starts hurt (keep one GPU warm during set hours), the budget is hit regularly, or traffic makes
 an always-warm GPU or a managed open-model endpoint cheaper.
