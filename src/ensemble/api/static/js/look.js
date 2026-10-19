@@ -3,7 +3,7 @@
 // direction (complete the look): dressing for an occasion is what Ask does, and similar pieces is Find.
 import {$, $$, ApiError, announce, api, cardGrid, esc, impressions, state} from "./core.js";
 import {photoPicker, stage, toBlob} from "./photo.js";
-import {focusHeading, grouped, shell, stagedStatus} from "./stylist.js";
+import {focusHeading, gpuApi, grouped, shell, stagedStatus} from "./stylist.js";
 
 const STEPS = ["Photo", "Review", "Your edit"];
 const KEYS = ["photo", "review", "edit"];
@@ -76,7 +76,8 @@ async function photoStep(ctx, s) {
     try {
       const fd = new FormData();
       fd.append("photo", toBlob(cur.photo.dataUrl), "outfit.jpg");
-      const r = await api("/api/stylist/detect", {method: "POST", body: fd});
+      const r = await gpuApi("/api/stylist/detect", {method: "POST", body: fd},
+        msg => { const l = $("span", status); if (l) l.textContent = msg; });
       if (!ctx.current()) return;
       save({garments: r.garments.map(g => ({...g, source: "detected"})), reviewed: false, result: null, detectedAt: Date.now()});
       go("review");
@@ -97,7 +98,8 @@ async function photoStep(ctx, s) {
 // "black strappy sandals", never "black black strappy sandals" when the description already names the colour.
 const label = g => {
   const c = (g.colour || "").trim();
-  const what = g.description || (c ? (CATEGORY_LABELS[g.category] || g.category).toLowerCase() : CATEGORY_LABELS[g.category] || g.category);
+  const what = (g.description || (c ? (CATEGORY_LABELS[g.category] || g.category).toLowerCase() : CATEGORY_LABELS[g.category] || g.category))
+    .replace(/^(a|an|the)\s+/i, "");   // "a sleeveless white dress" reads as "sleeveless white dress"
   return !c || new RegExp(`\\b${c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(what) ? what : `${c} ${what}`;
 };
 

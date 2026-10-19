@@ -33,6 +33,24 @@ OTHER = [r for r in _reqs if not r.startswith("torch")]
 IMAGE_BASE_URL = os.environ.get("ENSEMBLE_IMAGE_BASE_URL", "")
 
 app = modal.App("ensemble-recommender")
+
+# ---- the local site's models on a GPU (D-052) ------------------------------------------------------------------
+# Ollama serves the two models the local site uses: Qwen2.5-VL 7B (garment detection) and Qwen3-VL 8B (the
+# stylist's tool-calling chat). One L4 holds both. The container starts on demand (the site warms it when a shopper
+# opens the AI Stylist), stays up 5 minutes after the last request, and bills its own uptime into a Modal Dict;
+# past GPU_MONTHLY_BUDGET_USD the API refuses GPU requests and the stylist features rest until the next month.
+OLLAMA_MODELS = ["qwen2.5vl:7b", "qwen3-vl:8b-instruct"]
+GPU = "L4"
+GPU_USD_PER_SECOND = 0.80 / 3600 + 0.00003   # L4 list price plus CPU/memory, rounded up
+GPU_MONTHLY_BUDGET_USD = 25   # under the $30 free monthly credits with the web backend; Modal spend limit $5 behind it
+models_volume = modal.Volume.from_name("ensemble-ollama-models", create_if_missing=True)
+ollama_image = (
+    modal.Image.debian_slim(python_version="3.11")
+    .apt_install("curl", "ca-certificates", "zstd")
+    .run_commands("curl -fsSL https://ollama.com/install.sh | sh")
+    .env({"OLLAMA_MODELS": "/models", "OLLAMA_HOST": "127.0.0.1:11434", "OLLAMA_MAX_LOADED_MODELS": "2",
+          "OLLAMA_KEEP_ALIVE": "-1", "OLLAMA_NUM_PARALLEL": "2"})
+)
 data = modal.Volume.from_name("ensemble-serving-data", create_if_missing=True)
 
 image = (
@@ -44,7 +62,9 @@ image = (
         "HF_HOME": "/root/.cache/huggingface",
         "TOKENIZERS_PARALLELISM": "false",
         "ENSEMBLE_PATH_REPORTS": "/root/data/reports",
-        "ENSEMBLE_LLM": "claude",
+        # The live site runs the same models as the local site: Ollama on a Modal GPU (OllamaGPU below, D-052).
+        "ENSEMBLE_LLM": "ollama-modal",
+        "ENSEMBLE_GPU_MONTHLY_BUDGET_USD": str(GPU_MONTHLY_BUDGET_USD),
         "ENSEMBLE_ASSISTANT_MODEL": "claude-haiku-4-5",
         "ENSEMBLE_VISION_MODEL": "claude-haiku-4-5",
         "ENSEMBLE_LLM_BUDGET_USD": "10",
@@ -70,6 +90,72 @@ image = (
     .add_local_dir(str(ROOT / "src"), remote_path="/root/src")
     .add_local_dir(str(ROOT / "configs"), remote_path="/root/configs")
 )
+
+
+@app.cls(image=ollama_image, gpu=GPU, volumes={"/models": models_volume}, timeout=900,
+         scaledown_window=300, max_containers=1)
+@modal.concurrent(max_inputs=4)
+class OllamaGPU:
+    @modal.enter()
+    def start(self):
+        import subprocess
+        import time
+        import urllib.request
+        self.started = self.billed = time.time()
+        lap = lambda what: print(f"[gpu start] {what}: {time.time() - self.started:.1f}s", flush=True)
+        self.proc = subprocess.Popen(["ollama", "serve"])
+        for _ in range(120):
+            try:
+                urllib.request.urlopen("http://127.0.0.1:11434/api/version", timeout=2)
+                break
+            except Exception:  # noqa: BLE001 - the server is still starting
+                time.sleep(0.5)
+        lap("ollama serving")
+        pulled = False
+        for m in OLLAMA_MODELS:   # first start only: download into the volume
+            if subprocess.run(["ollama", "show", m], capture_output=True).returncode != 0:
+                subprocess.run(["ollama", "pull", m], check=True)
+                pulled = True
+        if pulled:
+            models_volume.commit()
+        for m in OLLAMA_MODELS:   # load both into GPU memory now, so the first request does not wait for it
+            self._call({"model": m, "messages": [{"role": "user", "content": "hi"}], "stream": False,
+                        "options": {"num_predict": 1}})
+            lap(f"{m} loaded")
+        self._bill()
+
+    def _call(self, body: dict) -> dict:
+        import json
+        import urllib.request
+        req = urllib.request.Request("http://127.0.0.1:11434/api/chat", data=json.dumps(body).encode(),
+                                     headers={"Content-Type": "application/json"})
+        return json.load(urllib.request.urlopen(req, timeout=600))
+
+    def _bill(self):
+        """Add the uptime since the last bill to this month's GPU spend (idle time included: it is billed too)."""
+        import time
+        now = time.time()
+        d = modal.Dict.from_name("ensemble-gpu-spend", create_if_missing=True)
+        key = time.strftime("%Y-%m", time.gmtime())
+        d[key] = float(d.get(key, 0.0)) + (now - self.billed) * GPU_USD_PER_SECOND
+        self.billed = now
+
+    @modal.method()
+    def chat(self, body: dict) -> dict:
+        try:
+            return self._call(body)
+        finally:
+            self._bill()
+
+    @modal.method()
+    def warm(self) -> bool:
+        self._bill()
+        return True
+
+    @modal.exit()
+    def stop(self):
+        self._bill()
+        self.proc.terminate()
 
 
 @app.function(

@@ -128,15 +128,53 @@ class OllamaClient:
         if self.model.startswith("qwen3"):
             body["think"] = self.think       # thinking off by default: latency matters in chat
         t = time.time()
-        req = urllib.request.Request(f"{self.host}/api/chat", data=json.dumps(body).encode(),
-                                     headers={"Content-Type": "application/json"})
-        out = json.load(urllib.request.urlopen(req, timeout=600))
+        out = self._post(body)
         msg = out.get("message", {})
         calls = [{"id": f"call_{i}", "name": c["function"]["name"], "arguments": c["function"].get("arguments", {})}
                  for i, c in enumerate(msg.get("tool_calls") or [])]
         return LLMResponse(text=msg.get("content", ""), tool_calls=calls,
                            input_tokens=out.get("prompt_eval_count", 0), output_tokens=out.get("eval_count", 0),
                            latency_s=time.time() - t)
+
+
+    def _post(self, body: dict) -> dict:
+        req = urllib.request.Request(f"{self.host}/api/chat", data=json.dumps(body).encode(),
+                                     headers={"Content-Type": "application/json"})
+        return json.load(urllib.request.urlopen(req, timeout=600))
+
+
+# ---- the hosted copy of the local models: Ollama on a Modal GPU (D-052) -----------------------------------------
+GPU_APP = os.environ.get("ENSEMBLE_GPU_APP", "ensemble-recommender")
+GPU_SPEND_DICT = os.environ.get("ENSEMBLE_GPU_SPEND_DICT", "ensemble-gpu-spend")
+GPU_MONTHLY_BUDGET_USD = float(os.environ.get("ENSEMBLE_GPU_MONTHLY_BUDGET_USD", "25"))
+
+
+def gpu_month_spend() -> float:
+    import modal
+    return float(modal.Dict.from_name(GPU_SPEND_DICT, create_if_missing=True).get(time.strftime("%Y-%m", time.gmtime()), 0.0))
+
+
+class ModalOllamaClient(OllamaClient):
+    """The same models and requests as OllamaClient, served by Ollama on a Modal GPU that scales to zero.
+    The GPU container bills its own uptime into a Modal Dict; past the monthly budget, requests stop."""
+    name = "ollama-modal"
+
+    def _post(self, body: dict) -> dict:
+        if gpu_month_spend() >= GPU_MONTHLY_BUDGET_USD:
+            raise BudgetExceeded(f"monthly GPU budget of ${GPU_MONTHLY_BUDGET_USD:.0f} reached")
+        import modal
+        return modal.Cls.from_name(GPU_APP, "OllamaGPU")().chat.remote(body)
+
+
+def warm_gpu() -> bool:
+    """Start the GPU container ahead of a request (non-blocking). False when not hosted on a GPU or over budget."""
+    if os.environ.get("ENSEMBLE_LLM") != "ollama-modal":
+        return False
+    import modal
+    if gpu_month_spend() >= GPU_MONTHLY_BUDGET_USD:
+        return False
+    modal.Cls.from_name(GPU_APP, "OllamaGPU")().warm.spawn()
+    return True
 
 
 class ClaudeClient:
@@ -210,6 +248,8 @@ LOCAL_MODELS = {"assistant": "qwen3-vl:8b-instruct",  # vision + tool calling, n
 def get_client(role: str = "assistant", backend: str | None = None, model: str | None = None):
     """``role`` is "assistant" (tool calling) or "vision" (garment detection)."""
     backend = backend or os.environ.get("ENSEMBLE_LLM", "ollama")
+    if backend == "ollama-modal":
+        return ModalOllamaClient(model or LOCAL_MODELS[role])
     if backend == "claude":
         # Production defaults to Haiku for a responsive, inexpensive portfolio demo;
         # either role can still be upgraded independently without changing code.

@@ -4,7 +4,7 @@
 // every chosen piece gets its four closest matches from the visual search endpoint.
 import {$, ApiError, announce, api, cardGrid, esc, impressions} from "./core.js";
 import {photoPicker, stage, toBlob} from "./photo.js";
-import {focusHeading, grouped, shell, stagedStatus} from "./stylist.js";
+import {focusHeading, gpuApi, grouped, shell, stagedStatus} from "./stylist.js";
 
 const STEPS = ["Photo", "Choose", "Results"];
 const KEYS = ["photo", "frame", "results"];
@@ -21,7 +21,7 @@ const reachable = s => (s.results ? 2 : s.photo ? 1 : 0);
 
 // "beige sweatshirt", never "beige beige sweatshirt"; a piece the shopper framed reads as its category.
 export function pieceLabel(p) {
-  const what = (p.description || (CATEGORIES[p.category] || p.category)).trim();
+  const what = (p.description || (CATEGORIES[p.category] || p.category)).trim().replace(/^(a|an|the)\s+/i, "");
   const c = (p.colour || "").trim();
   return !c || new RegExp(`\\b${c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(what) ? what : `${c} ${what}`;
 }
@@ -142,7 +142,8 @@ async function chooseStep(ctx, s) {
     try {
       const fd = new FormData();
       fd.append("photo", toBlob(s.photo.dataUrl), "piece.jpg");
-      const r = await api("/api/stylist/detect", {method: "POST", body: fd});
+      const r = await gpuApi("/api/stylist/detect", {method: "POST", body: fd},
+        msg => { const l = $("span", status); if (l) l.textContent = msg; });
       if (!ctx.current()) return;
       pieces = r.garments.map(g => ({id: g.id, category: g.category, colour: g.colour || "", description: g.description || "", box: g.box}));
       pieces.forEach(p => { p.home = p.box; });   // where it was spotted: frames can be moved, matching uses this
