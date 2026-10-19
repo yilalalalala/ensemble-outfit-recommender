@@ -105,6 +105,7 @@ async function auditCards(p, scope = 'main') {
       ok(`no prohibited technical/demo copy on ${r}`, !bannedIn(t).length, bannedIn(t).join(', '));
     }
     await p.goto(BASE + '#/collections'); await settle(p);
+    await p.waitForSelector('main .grid .card', {timeout: 60000}).catch(() => {});   // a remote API can be slower than "idle"
     const t = await p.$eval('main', m => m.innerText);
     ok('Collections: the three edits as tabs, no Your edit page', /^collections/i.test(t) && !/Your edit/.test(t) && ['Selected for you', 'Buy it again', 'Trending this week'].every(x => t.includes(x)), t.slice(0, 120));
     ok('Collections has no item counts or profile suffix', !/Selected for you · \d+|\d+ pieces|for Shopper/.test(t), '');
