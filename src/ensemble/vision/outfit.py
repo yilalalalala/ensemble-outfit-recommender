@@ -73,9 +73,14 @@ def parse_items(text: str, w: int, h: int) -> list[dict]:
         if cat not in CATEGORIES:
             continue
         box = it.get("box")
+        # Garments fill a real share of the photo; accessories (sunglasses, earrings, belts) can be tiny, so they
+        # only need a box a few pixels across — dropping their box left them unframeable in the UI.
+        small_ok = CATEGORIES[cat][0] in ("accessories", "socks")
+        min_area = (0.0004 if small_ok else 0.005) * w * h
         valid = (isinstance(box, list) and len(box) == 4 and all(isinstance(v, (int, float)) for v in box)
                  and 0 <= box[0] < box[2] <= w * 1.02 and 0 <= box[1] < box[3] <= h * 1.02
-                 and (box[2] - box[0]) * (box[3] - box[1]) >= 0.005 * w * h)
+                 and box[2] - box[0] >= 6 and box[3] - box[1] >= 6
+                 and (box[2] - box[0]) * (box[3] - box[1]) >= min_area)
         out.append({"category": cat, "colour": str(it.get("colour", "")), "description": str(it.get("description", "")),
                     "box": [int(v) for v in box] if valid else None})
     return out

@@ -587,12 +587,22 @@ async function auditCards(p, scope = 'main') {
     ok('drawing where nothing was spotted adds your own piece', (await p.$$('.piece')).length === 4 && !!(await p.$('.piece:last-child.is-on')), '');
     await p.click('.piece:last-child [data-remove]');
     ok('a framed piece can be removed', (await p.$$('.piece')).length === 3, '');
+    // a piece spotted without a box (small accessories): ticking it asks for a frame, and the frame you draw is that piece
+    await p.locator('.piece[data-pid=g3] .piece__pick').click();
+    ok('ticking a piece with no box asks you to frame it', /drag around/i.test(await p.$eval('#picker-hint', e => e.textContent)), '');
+    await p.$eval('#picker img', i => i.scrollIntoView({block: 'center'}));
+    const fr3 = await (await p.$('#picker img')).boundingBox();
+    await p.mouse.move(fr3.x + fr3.width * .03, fr3.y + fr3.height * .06); await p.mouse.down();
+    await p.mouse.move(fr3.x + fr3.width * .09, fr3.y + fr3.height * .16, {steps: 6}); await p.mouse.up();
+    ok('the frame you draw becomes that piece (never a second entry)', (await p.$$('.piece')).length === 3 && !!(await p.$('.picker__box[data-pid=g3].is-on')), '');
+    await p.locator('.piece[data-pid=g3] .piece__pick').click();
     await p.locator('.piece[data-pid=g2] .piece__pick').click();
     await p.click('#find-go');
     await p.waitForFunction(() => location.hash.includes('step=results'), null, {timeout: 300000}); await settle(p);
     const counts = await p.$$eval('.find-group', g => g.map(x => x.querySelectorAll('.card').length));
     ok('one search per chosen piece with the corrected category', searches.length === 1 && /knitwear/.test(searches[0]), String(searches.length));
-    ok('results: no lede sentence, a friendly title per piece', !(await p.$('.task__lede')) && /like your/i.test(await p.$eval('.find-group__title', e => e.textContent)), '');
+    ok('results: no lede sentence; the whole "Like your …" title in one dusty-blue pill', !(await p.$('.task__lede')) && /^like your /i.test(await p.$eval('.find-group__title', e => e.textContent.trim()))
+       && await p.$eval('.find-group__title', e => getComputedStyle(e).backgroundColor === 'rgb(102, 115, 127)' && parseFloat(getComputedStyle(e).borderTopLeftRadius) > 100), '');
     ok('the four closest per chosen piece', counts.length === 1 && counts[0] === 4, JSON.stringify(counts));
     const a = await auditCards(p, '.task__body');
     ok('real visually similar results with prices and cart', a.n === 4 && a.bad.length === 0 && a.dupFamilies === 0, JSON.stringify(a));

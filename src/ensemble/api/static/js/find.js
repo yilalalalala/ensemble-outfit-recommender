@@ -88,6 +88,7 @@ async function chooseStep(ctx, s) {
         <div class="picker__side">
           <div class="task__status" id="find-status" aria-live="polite"></div>
           <ul class="pieces" id="pieces" role="list" aria-label="Pieces in your photo"></ul>
+          <p class="picker__hint" id="picker-hint" aria-live="polite"></p>
           <p class="inline-status is-error" id="find-err" role="alert"></p>
         </div>
       </div>`,
@@ -98,7 +99,7 @@ async function chooseStep(ctx, s) {
   focusHeading(root);
   wireStartOver(root);
   const status = $("#find-status", root), list = $("#pieces", root), boxes = $("#picker-boxes", root), err = $("#find-err", root);
-  const el = $("#picker", root), img = $("img", el), drag = $("#picker-drag", root), btn = $("#find-go", root);
+  const el = $("#picker", root), img = $("img", el), drag = $("#picker-drag", root), btn = $("#find-go", root), hint = $("#picker-hint", root);
   let pieces = s.pieces || [], chosen = new Set(s.chosen || []);
   const persist = () => save({pieces, chosen: [...chosen], results: null});
 
@@ -130,6 +131,7 @@ async function chooseStep(ctx, s) {
     err.textContent = "";
     persist(); paint();
     if (from) $(`[data-pid="${CSS.escape(id)}"]${from === "list" ? " .piece__pick" : ""}`, from === "list" ? list : boxes)?.focus();
+    hint.textContent = chosen.has(id) && !p.box ? `Drag around the ${pieceLabel(p).toLowerCase()} on the photo to frame it.` : "";
     announce(`${pieceLabel(p)} ${chosen.has(id) ? "chosen" : "removed from your choice"}.`);
   };
 
@@ -196,6 +198,10 @@ async function chooseStep(ctx, s) {
       return match;
     }
     if (moving) { moving.box = boxIn; return moving; }
+    // A piece that was spotted without a box (it happens with small accessories) and that the shopper ticked:
+    // the frame they draw is that piece, not a new one.
+    const unframed = [...chosen].reverse().map(id => pieces.find(p => p.id === id)).find(p => p && !p.box && !p.added);
+    if (unframed) { unframed.box = boxIn; unframed.home = boxIn; return unframed; }
     const p = {id: `f${Date.now().toString(36)}`, category: guess.category, colour: "", description: "", box: boxIn, added: true};
     pieces.push(p); chosen.add(p.id);
     return p;
@@ -236,6 +242,7 @@ async function chooseStep(ctx, s) {
     dragged = true; setTimeout(() => { dragged = false; });
     const p = place(box, moving);
     moving = null;
+    hint.textContent = "";
     persist(); paint();
     announce(`Framed: ${pieceLabel(p)}. Change what it is if that is not right.`);
   };
@@ -282,7 +289,7 @@ async function resultsStep(ctx, s) {
     back: "#/stylist/find?step=frame",
     lede: sections.length ? "" : "Try choosing the piece again, or change what it is.",
     body: sections.map(r => `<section class="find-group" aria-label="Like your ${esc(r.label)}">
-        <h2 class="find-group__title"><span class="find-group__like">Like your</span> ${esc(r.label.toLowerCase())}</h2>
+        <h2 class="find-group__title">Like your ${esc(r.label.toLowerCase())}</h2>
         ${cardGrid(r.items, "visual_search", {cls: "grid--4"})}</section>`).join(""),
     primary: first ? `<a class="btn btn--solid" href="#/stylist/ask?anchor=${first.article_id}">Ask the stylist what goes with it</a>`
                    : `<a class="btn btn--solid" href="#/stylist/find?step=frame">Choose again</a>`,

@@ -14,6 +14,16 @@ def test_parse_items_validates_boxes_and_categories():
     assert items[0]["box"] == [10, 10, 60, 60] and items[1]["box"] is None
 
 
+def test_parse_items_keeps_small_accessory_boxes_but_not_tiny_garment_boxes():
+    """Sunglasses on a full-length photo cover ~0.2% of it: their box must survive (it is what frames them in the
+    UI); a garment box that small is a detection error and is still dropped."""
+    text = '{"items": [{"category": "sunglasses", "colour": "black", "description": "sunglasses", "box": [450, 300, 510, 325]},' \
+           ' {"category": "top", "colour": "grey", "description": "tee", "box": [450, 300, 510, 325]},' \
+           ' {"category": "jewellery", "colour": "gold", "description": "earring", "box": [100, 100, 103, 104]}]}'
+    items = parse_items(text, 1000, 750)
+    assert [i["box"] for i in items] == [[450, 300, 510, 325], None, None]
+
+
 def test_parse_items_tolerates_garbage():
     assert parse_items("not json at all", 100, 100) == []
 
