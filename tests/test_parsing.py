@@ -49,3 +49,15 @@ def test_no_parsing_class_keeps_the_llm_box():
     lab = labels(("Upper-clothes", 100, 80, 200, 220))
     assert box_for(lab, "jewellery", [120, 90, 130, 100]) is None      # no class for jewellery
     assert box_for(lab, "bag", [10, 10, 50, 50]) is None                # no bag pixels
+
+
+def test_fill_keeps_every_llm_box_and_only_fills_missing_ones(monkeypatch):
+    from PIL import Image
+
+    from ensemble.vision import parsing
+    lab = labels(("Upper-clothes", 100, 80, 200, 220), ("Left-shoe", 110, 380, 140, 395), ("Right-shoe", 160, 380, 190, 396))
+    monkeypatch.setattr(parsing, "segment", lambda img: lab)
+    items = [{"category": "top", "box": [10, 60, 205, 230]},       # kept even where it disagrees (Qwen is usually right)
+             {"category": "shoes", "box": None}]                   # missing: filled from the parse
+    out = parsing.refine(items, Image.new("RGB", (W, H)), "fill")
+    assert out[0]["box"] == [10, 60, 205, 230] and close(out[1]["box"], [110, 380, 190, 396])

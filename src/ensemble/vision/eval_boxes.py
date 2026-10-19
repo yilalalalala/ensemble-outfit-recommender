@@ -68,21 +68,28 @@ def evaluate(n: int = 40, backend: str = "claude", log=print) -> dict:
         labels = parsing.segment(small)
         sx, sy = small.width / img.width, small.height / img.height
         for it in items:
-            it["parsed"] = parsing.box_for(labels, it["category"], it.get("box")) or it.get("box")
+            parsed = parsing.box_for(labels, it["category"], it.get("box"))
+            own = it.get("box")
+            it["parsed"] = parsed or own
+            # "fill": keep the LLM's box, take the parse only where the LLM gave none (what auto does for Qwen-VL)
+            it["filled"] = own or parsed
         for g in gt:
             gb = [g["bounding_box"][0] * sx, g["bounding_box"][1] * sy, g["bounding_box"][2] * sx, g["bounding_box"][3] * sy]
             cands = [it for it in items if it["category"] in COMPATIBLE[g["category_name"]]]
-            best = max(cands, key=lambda it: max(iou(gb, it.get("box")), iou(gb, it["parsed"])), default=None)
+            best = max(cands, key=lambda it: max(iou(gb, it.get("box")), iou(gb, it["parsed"]), iou(gb, it["filled"])), default=None)
             rows.append({"image": path.name, "category": g["category_name"], "detected": best is not None,
                          "iou_llm": round(iou(gb, best.get("box")) if best else 0.0, 4),
-                         "iou_parsed": round(iou(gb, best["parsed"]) if best else 0.0, 4)})
+                         "iou_parsed": round(iou(gb, best["parsed"]) if best else 0.0, 4),
+                         "iou_filled": round(iou(gb, best["filled"]) if best else 0.0, 4)})
         log(f"  {path.name}: {len(items)} items · {time.time() - t0:.0f}s")
     det = [r for r in rows if r["detected"]]
     mean = lambda xs: round(sum(xs) / len(xs), 4) if xs else None
     summary = {
         "backend": backend, "images": n, "garments": len(rows), "detected": len(det),
         "mean_iou_llm": mean([r["iou_llm"] for r in det]), "mean_iou_parsed": mean([r["iou_parsed"] for r in det]),
+        "mean_iou_filled": mean([r["iou_filled"] for r in det]),
         "hit_rate@0.5_llm": mean([r["iou_llm"] >= 0.5 for r in det]), "hit_rate@0.5_parsed": mean([r["iou_parsed"] >= 0.5 for r in det]),
+        "hit_rate@0.5_filled": mean([r["iou_filled"] >= 0.5 for r in det]),
         "parser": parsing.MODEL, "seconds": round(time.time() - t0),
     }
     return {"summary": summary, "rows": rows}

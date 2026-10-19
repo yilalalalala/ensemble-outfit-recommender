@@ -1476,8 +1476,10 @@ ground-truth boxes; `reports/m7a/box_localisation_*.json`):
 | Claude Haiku (hosted) | 0.28 · 17% | **0.65 · 70%** |
 | Qwen2.5-VL 8B (local) | **0.88 · 96%** | 0.74 · 85% |
 
-So `serving.parse_boxes: auto` parses for Claude and keeps Qwen-VL's own boxes (a grounded VLM trained to localise);
-`true`/`false` force it.
+So `serving.parse_boxes: auto` replaces Claude's boxes and keeps Qwen-VL's own (a grounded VLM trained to localise),
+filling in only the boxes Qwen leaves out (e.g. shoes on a street photo had none). Replacing Qwen's garment boxes where
+they disagree with the parse was tried and rejected: mean IoU 0.88 → 0.80 (when they disagree, Qwen is usually right).
+Fill-only leaves Qwen's score unchanged (0.88 · 96%) and adds frames for missing pieces. `true`/`false` force it.
 
 **Licence.** The parser's card lists its licence as "other" and it was trained on ATR, a research dataset. That
 suits this non-commercial portfolio (which already runs on Kaggle competition data); a commercial deployment would

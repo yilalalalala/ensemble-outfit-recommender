@@ -38,13 +38,13 @@ def test_claude_detection_uses_normalised_boxes_scaled_to_the_image():
     assert items[0]["box"] == [round(.25 * small.width), round(.1 * small.height), round(.75 * small.width), round(.5 * small.height)]
 
 
-def test_boxes_are_parsed_for_claude_but_not_for_qwen(monkeypatch):
-    """D-051: clothes parsing replaces Claude's loose boxes; Qwen-VL keeps its own (they score higher)."""
+def test_boxes_are_replaced_for_claude_and_filled_for_qwen(monkeypatch):
+    """D-051: clothes parsing replaces Claude's loose boxes; Qwen-VL's are kept and only missing ones are filled."""
     from PIL import Image
 
     from ensemble.vision import outfit, parsing
     calls = []
-    monkeypatch.setattr(parsing, "refine", lambda items, img: calls.append(len(items)) or items)
+    monkeypatch.setattr(parsing, "refine", lambda items, img, how: calls.append(how) or items)
     reply = '{"items": [{"category": "top", "colour": "red", "description": "tee", "box": [250, 100, 750, 500]}]}'
 
     class ClaudeClient:
@@ -55,7 +55,7 @@ def test_boxes_are_parsed_for_claude_but_not_for_qwen(monkeypatch):
     img = Image.new("RGB", (1200, 800), "white")
     outfit.detect(img, ClaudeClient())
     outfit.detect(img, OllamaClient())
-    assert calls == [1]
+    assert calls == ["replace", "fill"]
 
 
 def test_parse_items_tolerates_garbage():
