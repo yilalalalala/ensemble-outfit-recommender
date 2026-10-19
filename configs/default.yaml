@@ -176,6 +176,9 @@ serving:
   # Request-time serving bundle (ensemble.serving.bundle, D-041): compatibility top-P pool per
   # (anchor, target slot) that the personalized ranker re-orders at request time.
   bundle: {pool: 100}
+  # Garment boxes from clothes parsing (SegFormer, vision/parsing.py) where the vision LLM's own boxes are loose
+  # (D-051): "auto" = for Claude (hosted), not for Qwen-VL (local, its boxes are better); true / false force it.
+  parse_boxes: auto
   # Colour swatches read from each colourway's photo (ensemble.serving.swatches): plain pieces snap the main colour
   # of a clean garment patch to the standard card; patterned pieces show a crop of a representative patch.
   swatch: {size: 32, crop: 0.08, bg_threshold: 40, window: 0.16, agree: 8.0}

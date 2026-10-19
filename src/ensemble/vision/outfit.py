@@ -89,7 +89,24 @@ def parse_items(text: str, w: int, h: int) -> list[dict]:
 NORMALISED = "Box coordinates are integers from 0 to 1000, relative to the image width (x) and height (y)."
 
 
-def detect(image: Image.Image, llm, purpose: str = "detect") -> tuple[list[dict], Image.Image]:
+def detect(image: Image.Image, llm, purpose: str = "detect", parse_boxes: bool | str | None = None) -> tuple[list[dict], Image.Image]:
+    """Items (category, colour, description, box in ``small`` pixels) and the resized image they refer to. The
+    LLM names the items; where its boxes are loose, they come from clothes parsing (vision/parsing.py, D-051).
+    ``serving.parse_boxes``: "auto" (default) parses for Claude, whose boxes are loose (DeepFashion2 mean IoU 0.28
+    vs 0.65 parsed), and keeps Qwen-VL's own, which are better than the parser's (0.88 vs 0.74); true/false force it."""
+    items, small = _detect_llm(image, llm, purpose)
+    mode = parse_boxes if parse_boxes is not None else load_config().serving.get("parse_boxes", "auto")
+    if mode is True or (mode == "auto" and type(llm).__name__ == "ClaudeClient"):
+        try:
+            from ensemble.vision import parsing
+            items = parsing.refine(items, small)
+        except Exception as e:  # noqa: BLE001 - the parser is an optional model: keep the LLM's boxes, say so
+            import logging
+            logging.getLogger(__name__).warning("clothes parsing unavailable, using the LLM's boxes: %s", type(e).__name__)
+    return items, small
+
+
+def _detect_llm(image: Image.Image, llm, purpose: str) -> tuple[list[dict], Image.Image]:
     data, small = _resize_bytes(image)
     # Qwen-VL answers in the pixels of the image it was given (sized for it above). Claude places boxes better in
     # normalised 0-1000 coordinates than in pixels (pixel boxes came back shrunk towards the top-left corner).
