@@ -119,6 +119,7 @@ export function humanize(answer, cards) {
   const names = new Map(cards.map(c => [String(+c.article_id), c.prod_name]));
   const nameOf = id => names.get(String(+id));
   return String(answer).replace(/\s*\[\[(\d+)\]\]/g, "")
+    .replace(/^(\s*(?:\d+\.|[-*•]))\s*[–—-]\s+/gm, "$1 ")   // "1. [[id]] – Name" leaves "1. – Name"
     .replace(/\b(?:the\s+)?article\s*(?:no\.?|number|#)?\s*(\d{6,10})\b/gi, (m, id) => nameOf(id) ? `the ${nameOf(id)}` : "this piece")
     .replace(/\b\d{9,10}\b/g, id => nameOf(id) || "this piece");
 }

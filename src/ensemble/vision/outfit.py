@@ -86,12 +86,28 @@ def parse_items(text: str, w: int, h: int) -> list[dict]:
     return out
 
 
+NORMALISED = "Box coordinates are integers from 0 to 1000, relative to the image width (x) and height (y)."
+
+
 def detect(image: Image.Image, llm, purpose: str = "detect") -> tuple[list[dict], Image.Image]:
     data, small = _resize_bytes(image)
+    # Qwen-VL answers in the pixels of the image it was given (sized for it above). Claude places boxes better in
+    # normalised 0-1000 coordinates than in pixels (pixel boxes came back shrunk towards the top-left corner).
+    normalised = type(llm).__name__ == "ClaudeClient"
     prompt = DETECT_PROMPT.format(w=small.width, h=small.height, cats=", ".join(CATEGORIES))
+    if normalised:
+        prompt = prompt.replace("Box coordinates are integer pixels in this image.", NORMALISED)
     r = llm.chat("Return only valid JSON.", [{"role": "user", "content": prompt, "images": [data]}],
                  max_tokens=1500, json_mode=True, purpose=purpose)
-    return parse_items(r.text, small.width, small.height), small
+    if not normalised:
+        return parse_items(r.text, small.width, small.height), small
+    items = parse_items(r.text, 1000, 1000)
+    for it in items:
+        if it["box"]:
+            x1, y1, x2, y2 = it["box"]
+            it["box"] = [round(x1 * small.width / 1000), round(y1 * small.height / 1000),
+                         round(x2 * small.width / 1000), round(y2 * small.height / 1000)]
+    return items, small
 
 
 @lru_cache(maxsize=1)

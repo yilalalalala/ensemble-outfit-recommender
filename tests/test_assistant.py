@@ -24,6 +24,20 @@ def test_parse_items_keeps_small_accessory_boxes_but_not_tiny_garment_boxes():
     assert [i["box"] for i in items] == [[450, 300, 510, 325], None, None]
 
 
+def test_claude_detection_uses_normalised_boxes_scaled_to_the_image():
+    """Claude is asked for 0-1000 boxes, which are converted to the pixels of the image the API holds."""
+    from PIL import Image
+
+    from ensemble.vision import outfit
+
+    class ClaudeClient:   # the detector only looks at the client's type name
+        def chat(self, system, messages, **kw):
+            assert outfit.NORMALISED in messages[0]["content"]
+            return LLMResponse(text='{"items": [{"category": "top", "colour": "red", "description": "tee", "box": [250, 100, 750, 500]}]}')
+    items, small = outfit.detect(Image.new("RGB", (1200, 800), "white"), ClaudeClient())
+    assert items[0]["box"] == [round(.25 * small.width), round(.1 * small.height), round(.75 * small.width), round(.5 * small.height)]
+
+
 def test_parse_items_tolerates_garbage():
     assert parse_items("not json at all", 100, 100) == []
 

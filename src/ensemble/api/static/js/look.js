@@ -98,7 +98,7 @@ async function photoStep(ctx, s) {
 const label = g => {
   const c = (g.colour || "").trim();
   const what = g.description || (c ? (CATEGORY_LABELS[g.category] || g.category).toLowerCase() : CATEGORY_LABELS[g.category] || g.category);
-  return !c || what.toLowerCase().startsWith(c.toLowerCase()) ? what : `${c} ${what}`;
+  return !c || new RegExp(`\\b${c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(what) ? what : `${c} ${what}`;
 };
 
 function garmentRow(g, i) {

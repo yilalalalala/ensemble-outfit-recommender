@@ -10,6 +10,7 @@ from pathlib import Path
 
 import io
 import os
+import re
 from functools import lru_cache
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
@@ -865,10 +866,10 @@ def stylist_edit(photo: UploadFile = File(...), garments: str = Form(...), goal:
                            int(g["box"][2] * small.width), int(g["box"][3] * small.height)] if g["box"] else None}
         m = match(gp, small, "text_rerank_image", 6)
         matched.append({**g, "ids": m.article_id.astype(int).tolist()})
-    def name(g: dict) -> str:   # "black strappy sandals", never "black black strappy sandals"
+    def name(g: dict) -> str:   # "black strappy sandals", never "black black…" or "yellow mustard yellow…"
         what = g["description"] or g["category"]
         c = g["colour"].strip()
-        return what if not c or what.lower().startswith(c.lower()) else f"{c} {what}"
+        return what if not c or re.search(rf"\b{re.escape(c)}\b", what, re.I) else f"{c} {what}"
 
     def listing(gs: list[dict]) -> str:
         names = [name(g) for g in gs]

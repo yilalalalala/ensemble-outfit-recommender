@@ -14,6 +14,7 @@ const cases = [
   ["Try 0751866001 for evenings.", "Try MC Chestnut strap for evenings."],
   ["Article no. 123456789 is sold out.", "this piece is sold out."],
   ["Three tops under $20.", "Three tops under $20."],
+  ["1. [[883726003]] – **Juan** (Black)\n2. [[751866001]] — **MC Chestnut strap**", "1. **Juan** (Black)\n2. **MC Chestnut strap**"],
 ];
 let failed = 0;
 for (const [input, want] of cases) {

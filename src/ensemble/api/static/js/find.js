@@ -23,7 +23,7 @@ const reachable = s => (s.results ? 2 : s.photo ? 1 : 0);
 export function pieceLabel(p) {
   const what = (p.description || (CATEGORIES[p.category] || p.category)).trim();
   const c = (p.colour || "").trim();
-  return !c || what.toLowerCase().startsWith(c.toLowerCase()) ? what : `${c} ${what}`;
+  return !c || new RegExp(`\\b${c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(what) ? what : `${c} ${what}`;
 }
 
 // What a framed area most likely is: the spotted piece it overlaps most (share of the framed area), if any.
